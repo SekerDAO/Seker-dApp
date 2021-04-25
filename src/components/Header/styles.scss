@@ -21,6 +21,36 @@
 				width: 100%;
 				margin: 0;
 			}
-		}	
+		}
+
+		.name {
+			position: absolute;
+			margin-left: 100px; 
+		}
+
+		.navigation {
+			position: absolute;
+			top: 50%; right: 10px;
+			-webkit-transform: translateY(-50%);
+			-moz-transform: translateY(-50%);
+			transform: translateY(-50%);
+
+			ul, li {
+				margin: 0;
+				padding: 0;
+			}
+
+			li {
+				list-style-type: none; 
+
+				a {
+					font-size: 18px;
+					line-height: 1;
+					color: black;
+					text-decoration: none;
+					text-transform: uppercase;
+				}
+			}
+		}
 	}
 }
