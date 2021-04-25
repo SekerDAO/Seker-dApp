@@ -2,8 +2,11 @@ import React from 'react'
 import './styles.scss'
 import logo from '../../assets/logo.png'
 import { Link } from 'react-router-dom'
+import { auth } from './../../firebase/utils'
 
 const Header = props => {
+	const { currentUser } = props
+
 	return (
 		<header className="header">
 			<div className="wrap">
@@ -16,17 +19,39 @@ const Header = props => {
 					<h3>TOKEN WALK</h3>
 				</div>
 				<div className="navigation">
-					<ul>
-						<li>
-							<Link to="/learn">
-								Learn
-							</Link>
-						</li>
-					</ul>
+					{currentUser && [
+						<ul>
+							<li>
+								<span onClick={() => auth.signOut()}>
+									<h4>LogOut</h4>
+								</span>
+							</li>
+						</ul>
+
+					]}
+					{!currentUser && [
+						<ul>
+							<li>
+								<Link to="/learn">
+									<h4> Learn </h4>
+								</Link>
+							</li>
+							<li>
+								<Link to="/login">
+									<h4> Connect Wallet </h4>
+								</Link>
+							</li>
+						</ul>
+					]}
+
 				</div>
 			</div>
 		</header>
 	)
+}
+
+Header.defaultProp = {
+	currentUser: null
 }
 
 export default Header;

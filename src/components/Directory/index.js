@@ -1,6 +1,7 @@
 import React from 'react'
 import Gallery from './../../assets/gallery.jpeg'
 import Exhibit from './../../assets/exhibit.jpg'
+import { Link } from 'react-router-dom'
 import './styles.scss'
 
 const Directory = props => {
@@ -13,9 +14,9 @@ const Directory = props => {
 						backgroundImage: `url(${Gallery})`
 					}}
 				>
-					<a>
+					<Link to="/galleries" className="a">
 						View Galleries
-					</a>
+					</Link>
 				</div>
 				<div 
 					className="gallery"

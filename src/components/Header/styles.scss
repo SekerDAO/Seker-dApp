@@ -25,7 +25,7 @@
 
 		.name {
 			position: absolute;
-			margin-left: 100px; 
+			margin-left: 80px; 
 		}
 
 		.navigation {
@@ -41,14 +41,21 @@
 			}
 
 			li {
-				list-style-type: none; 
+				display: inline-block;
+				list-style-type: none;
+				margin-right: 1.5rem;
 
-				a {
+				&:last-child {
+					margin-right: 0;
+				}
+
+				a, span {
 					font-size: 18px;
 					line-height: 1;
 					color: black;
 					text-decoration: none;
 					text-transform: uppercase;
+					cursor: pointer;
 				}
 			}
 		}
