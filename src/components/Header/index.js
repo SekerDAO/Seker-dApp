@@ -16,7 +16,7 @@ const Header = props => {
 					</Link>
 				</div>
 				<div className="name">
-					<h3>TOKEN WALK</h3>
+					<h3>TokenWalk</h3>
 				</div>
 				<div className="navigation">
 					{currentUser && [
@@ -34,6 +34,11 @@ const Header = props => {
 							<li>
 								<Link to="/learn">
 									<h4> Learn </h4>
+								</Link>
+							</li>
+							<li>
+								<Link to="/registration">
+								  <h4>Register</h4>
 								</Link>
 							</li>
 							<li>
