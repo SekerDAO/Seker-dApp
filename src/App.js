@@ -10,6 +10,7 @@ import Learn from './pages/Learn'
 import Login from './pages/Login'
 import Registration from './pages/Registration'
 import Galleries from './pages/Galleries'
+import Recovery from './pages/Recovery'
 import './default.scss'
 
 const initialState = {
@@ -71,16 +72,21 @@ class App extends Component {
                 <MainLayout currentUser={currentUser}>
                   <Registration />
                 </MainLayout>  
-              )} />
+            )} />
             <Route path="/login" 
               render={() => currentUser? <Redirect to="/" /> : (
                 <MainLayout currentUser={currentUser}>
                   <Login />
                 </MainLayout>  
-              )} />
+            )} />
             <Route path="/galleries" render={() => (
               <MainLayout>
                 <Galleries />
+              </MainLayout>  
+            )} />
+            <Route path="/recovery" render={() => (
+              <MainLayout>
+                <Recovery />
               </MainLayout>  
             )} />
           </Switch>
