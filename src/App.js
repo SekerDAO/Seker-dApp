@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { connect } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import { auth, handleUserProfile } from './firebase/utils'
 import { setCurrentUser } from './redux/User/user.actions'
@@ -20,7 +20,7 @@ import Dashboard from './pages/Dashboard'
 import './default.scss'
 
 const App = props => {
-  const { setCurrentUser, currentUser } = props
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const authListener = auth.onAuthStateChanged(async userAuth => {
@@ -28,13 +28,13 @@ const App = props => {
       if(userAuth) {
         const userRef = await handleUserProfile(userAuth)
         userRef.onSnapshot(snapshot => {
-          setCurrentUser({
+          dispatch(setCurrentUser({
             id: snapshot.id,
             ...snapshot.data()
-          })
+          }))
         })
       }
-      setCurrentUser(userAuth)
+      dispatch(setCurrentUser(userAuth))
     })
 
     return () => {
@@ -46,24 +46,24 @@ const App = props => {
     <div className="App">
         <Switch>
           <Route exact path="/" render={() => (
-            <HomepageLayout currentUser={currentUser}>
+            <HomepageLayout>
               <Homepage />
             </HomepageLayout>  
           )} />
           <Route path="/learn" render={() => (
-            <MainLayout currentUser={currentUser}>
+            <MainLayout>
               <Learn />
             </MainLayout>  
           )} />
           <Route path="/registration" 
             render={() => (
-              <MainLayout currentUser={currentUser}>
+              <MainLayout>
                 <Registration />
               </MainLayout>  
           )} />
           <Route path="/login" 
             render={() => (
-              <MainLayout currentUser={currentUser}>
+              <MainLayout>
                 <Login />
               </MainLayout>  
           )} />
@@ -89,12 +89,4 @@ const App = props => {
   )
 }
 
-const mapStateToProps = ({ user }) => ({
-  currentUser: user.currentUser
-})
-
-const mapDispatchToProps = dispatch => ({
-  setCurrentUser: user => dispatch(setCurrentUser(user))
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App
