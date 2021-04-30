@@ -4,7 +4,7 @@ import './styles.scss'
 class Learn extends Component {
 	render() {
 		return (
-			<div>
+			<div className="learn">
 				<h1>
 					About
 				</h1>

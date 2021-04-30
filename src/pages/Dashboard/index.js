@@ -3,7 +3,10 @@ import './styles.scss'
 
 const Dashboard = props => {
 	return (
-		<h1>Restricted Area</h1>
+		<div>
+			<h1>My Gallery Editor</h1>
+			<div>This is can be duplicated and similar for Galleries and Exhibits</div>
+		</div>
 	)
 }
 
