@@ -19,6 +19,7 @@ export const handleFetchNFTs = () => {
 	return new Promise((resolve, reject) => {
 		firestore
 			.collection('nfts')
+			.orderBy('createdDate')
 			.get()
 			.then(snapshot => {
 				const nftsArray = snapshot.docs.map(doc => {

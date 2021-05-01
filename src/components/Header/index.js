@@ -42,6 +42,16 @@ const Header = props => {
 								</Link>
 							</li>
 							<li>
+								<Link to="/galleries">
+								    Search Galleries
+								</Link>
+							</li>
+							<li>
+								<Link to="/galleries">
+								    Search Exhibits
+								</Link>
+							</li>
+							<li>
 								<span onClick={() => signOut()}>
 									LogOut
 								</span>
@@ -59,6 +69,16 @@ const Header = props => {
 							<li>
 								<Link to="/registration">
 								    Register
+								</Link>
+							</li>
+							<li>
+								<Link to="/galleries">
+								    Search Galleries
+								</Link>
+							</li>
+							<li>
+								<Link to="/galleries">
+								    Search Exhibits
 								</Link>
 							</li>
 							<li>
