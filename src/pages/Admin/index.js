@@ -100,11 +100,11 @@ const Admin = props => {
             <FormSelect
               label="Category"
               options={[{
-                value: "art",
-                name: "Art"
+                value: "gallery",
+                name: "Gallery"
               }, {
-                value: "arttype",
-                name: "Art Type"
+                value: "exhibit",
+                name: "Exhibit"
               }]}
               handleChange={e => setNFTCategory(e.target.value)}
             />

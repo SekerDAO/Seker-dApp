@@ -43,12 +43,12 @@ const Header = props => {
 							</li>
 							<li>
 								<Link to="/galleries">
-								    Search Galleries
+								    Galleries
 								</Link>
 							</li>
 							<li>
 								<Link to="/galleries">
-								    Search Exhibits
+								    Exhibits
 								</Link>
 							</li>
 							<li>
@@ -73,12 +73,12 @@ const Header = props => {
 							</li>
 							<li>
 								<Link to="/galleries">
-								    Search Galleries
+								    Galleries
 								</Link>
 							</li>
 							<li>
 								<Link to="/galleries">
-								    Search Exhibits
+								    Exhibits
 								</Link>
 							</li>
 							<li>

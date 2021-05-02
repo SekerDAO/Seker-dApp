@@ -57,7 +57,9 @@ export function* onAddNFTStart() {
 
 export function* fetchNFts({ payload }) {
   try {
-    const nfts = yield handleFetchNFTs();
+    const nfts = yield handleFetchNFTs(payload);
+    console.log('weee')
+    console.log(nfts)
     yield put(
       setNFTs(nfts)
     );

@@ -15,11 +15,13 @@ export const handleAddNFT = nft => {
 	})
 }
 
-export const handleFetchNFTs = () => {
+export const handleFetchNFTs = ({ filterType }) => {
 	return new Promise((resolve, reject) => {
-		firestore
-			.collection('nfts')
-			.orderBy('createdDate')
+
+		let ref = firestore.collection('nfts').orderBy('createdDate')
+		if(filterType) ref = ref.where('nftCategory', '==', filterType)
+			
+		ref
 			.get()
 			.then(snapshot => {
 				const nftsArray = snapshot.docs.map(doc => {

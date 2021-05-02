@@ -62,7 +62,12 @@ const App = props => {
                 <Login />
               </MainLayout>  
           )} />
-          <Route path="/galleries" render={() => (
+          <Route exact path="/galleries" render={() => (
+            <MainLayout>
+              <Galleries />
+            </MainLayout>  
+          )} />
+          <Route path="/galleries/:filterType" render={() => (
             <MainLayout>
               <Galleries />
             </MainLayout>  
