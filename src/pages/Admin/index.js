@@ -162,7 +162,7 @@ const Admin = props => {
               <td>
                 <table className="results" border="0" cellPadding="10" cellSpacing="0">
                   <tbody>
-                    {(Array.isArray(nfts) && nfts.length > 0) && nfts.map((nft, index) => {
+                    {(Array.isArray(data) && data.length > 0) && data.map((nft, index) => {
                       const {
                         nftName,
                         nftThumbnail,

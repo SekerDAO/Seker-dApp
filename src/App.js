@@ -26,6 +26,7 @@ import Galleries from './pages/Galleries'
 import Recovery from './pages/Recovery'
 import Dashboard from './pages/Dashboard'
 import Admin from './pages/Admin'
+import NFTDetails from './pages/NFTDetails'
 import './default.scss'
 
 const App = props => {
@@ -70,6 +71,11 @@ const App = props => {
           <Route path="/galleries/:filterType" render={() => (
             <MainLayout>
               <Galleries />
+            </MainLayout>  
+          )} />
+          <Route path="/nft/:nftID" render={() => (
+            <MainLayout>
+              <NFTDetails />
             </MainLayout>  
           )} />
           <Route path="/recovery" render={() => (

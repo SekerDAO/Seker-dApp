@@ -4,6 +4,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import { fetchNFTsStart } from './../../redux/NFTs/nft.actions'
 import Gallery from './Gallery'
 import FormSelect from './../Forms/FormSelect'
+import LoadMore from './../LoadMore'
 import './styles.scss'
 
 const mapState = ({ nftData }) => ({
@@ -16,6 +17,13 @@ const GalleriesSearch = () => {
 	const { filterType } = useParams()
 	const { nfts } = useSelector(mapState)
 
+	const { data, queryDoc } = nfts
+
+	// doesnt work
+	useEffect(() => {
+	  window.scrollTo(0, 0)
+	}, [])
+
 	useEffect(() => {
 		dispatch(
 			fetchNFTsStart({ filterType })
@@ -27,8 +35,9 @@ const GalleriesSearch = () => {
 		history.push(`/galleries/${nextFilter}`)
 	}
 
-	//if(Array.isArray(nfts)) return null
+	//if(Array.isArray(data)) return null
 
+	// this is all broken
 	if(nfts.length < 1) {
 		return (
 			<p> No Search Results </p>
@@ -50,6 +59,16 @@ const GalleriesSearch = () => {
 		handleChange: handleFilter
 	}
 
+	const handleLoadMore = () => {
+		dispatch(
+			fetchNFTsStart({ filterType, startAfterDoc: queryDoc })
+		)
+	}
+
+	const configLoadMore = {
+		onLoadMoreEvt: handleLoadMore
+	}
+
 	return (
 		<div className="galleries">
 			<div className="galleryResults">
@@ -59,19 +78,20 @@ const GalleriesSearch = () => {
 
 				<FormSelect {...configFilters} />
 
-				{nfts.map((nft, pos) => {
+				{data.map((nft, pos) => {
 					const { nftThumbnail, nftName, nftPrice, nftCategory } = nft
 					if(!nftThumbnail || !nftName || typeof nftPrice === 'undefined') return null
 					const configGallery = {
-						nftThumbnail,
-						nftName,
-						nftPrice
+						...nft
 					}
 					return(
 						<Gallery {...configGallery} />
 					)
 				})}
 			</div>
+
+			<LoadMore {...configLoadMore} />
+
 		</div>
 	)
 }
