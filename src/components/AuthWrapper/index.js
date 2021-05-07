@@ -8,7 +8,7 @@ const AuthWrapper = ({ headline, children }) => {
 				{headline && <h2>{headline}</h2>}
 
 				<div className="children">
-					{children && children}
+					{children}
 				</div>
 			</div>
 		</div>

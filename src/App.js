@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
-import { auth, handleUserProfile } from './firebase/utils'
 import { checkUserSession } from './redux/User/user.actions'
 
 // components
