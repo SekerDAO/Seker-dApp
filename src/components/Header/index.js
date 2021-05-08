@@ -1,20 +1,13 @@
 import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { signOutUserStart } from './../../redux/User/user.actions'
 import './styles.scss'
 import logo from '../../assets/logo.png'
 import { Link } from 'react-router-dom'
 
-const mapState = ({ user }) => ({
-	currentUser: user.currentUser
-})
-
-const Header = props => {
-	const dispatch = useDispatch()
-	const { currentUser } = useSelector(mapState)
+const Header = () => {
+	const currentUser  = null // TODO
 
 	const signOut = () => {
-		dispatch(signOutUserStart())
+		// dispatch(signOutUserStart())
 	}
 
 	return (

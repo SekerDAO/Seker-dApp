@@ -7,7 +7,7 @@ import Header from './../components/Header';
 import VerticalNav from './../components/VerticalNav';
 import Footer from './../components/Footer';
 
-const AdminLayout = props => {
+const AdminLayout = ({children}) => {
   const dispatch = useDispatch();
 
   const signOut = () => {
@@ -16,7 +16,7 @@ const AdminLayout = props => {
 
   return (
     <div className="adminLayout">
-      <Header {...props} />
+      <Header />
       <div className="controlPanel">
         <div className="sidebar">
           <VerticalNav>
@@ -35,7 +35,7 @@ const AdminLayout = props => {
           </VerticalNav>
         </div>
         <div className="content">
-          {props.children}
+          {children}
         </div>
       </div>
       <Footer />

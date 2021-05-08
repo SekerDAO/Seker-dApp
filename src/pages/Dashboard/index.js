@@ -1,7 +1,7 @@
 import React from 'react'
 import './styles.scss'
 
-const Dashboard = props => {
+const Dashboard = () => {
 	return (
 		<div>
 			<h1>My Gallery Editor</h1>

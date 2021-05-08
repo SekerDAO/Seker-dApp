@@ -3,12 +3,12 @@ import Header from './../components/Header'
 import Footer from './../components/Footer'
 import MainTop from './../components/MainTop'
 
-const HomepageLayout = props => {
+const HomepageLayout = ({children}) => {
 	return (
 		<div className="fullHeight">
-			<Header {...props} />
+			<Header />
 			<MainTop />
-			{props.children}
+			{children}
 			<Footer />
 		</div>
 	)

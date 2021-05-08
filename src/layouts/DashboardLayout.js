@@ -7,7 +7,7 @@ import Header from './../components/Header';
 import VerticalNav from './../components/VerticalNav';
 import Footer from './../components/Footer';
 
-const DashBoardLayout = props => {
+const DashBoardLayout = ({children}) => {
   const dispatch = useDispatch();
 
   const signOut = () => {
@@ -16,7 +16,7 @@ const DashBoardLayout = props => {
 
   return (
     <div className="dashboardLayout">
-      <Header {...props} />
+      <Header />
       <div className="controlPanel">
         <div className="sidebar">
           <VerticalNav>
@@ -35,7 +35,7 @@ const DashBoardLayout = props => {
           </VerticalNav>
         </div>
         <div className="content">
-          {props.children}
+          {children}
         </div>
       </div>
       <Footer />
