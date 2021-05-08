@@ -1,84 +1,90 @@
 .top {
-	height: 100%;
+  height: 100%;
 
-		.topImage {
-			position: relative;
-			width: 100%;
-			height: 100%; /*100% isn't working?*/
-			background-position: center;
-			background-repeat: no-repeat;
-			background-size: cover;
-			margin-top: -70px;
-			/*z-index: -1;*/
+  .topImage {
+    position: relative;
+    width: 100%;
+    height: 100%; /* 100% isn't working? */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-top: -70px;
 
-			&::after {
-				content:'';
-				position: absolute;
-				top: 0; left: 0;
-				/*background: rgba(0,0,0,0.3);*/
-				width: 100%;
-				height: 100%;
-			}
-		}
-	.welcomeTo {
-		position: relative;
-		top: 40%;
-		margin: 0 75px;
-		font-size: 7.5rem;
-		color: white;
-	}
+    /* z-index: -1; */
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      /* background: rgba(0,0,0,0.3); */
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .welcomeTo {
+    position: relative;
+    top: 40%;
+    margin: 0 75px;
+    font-size: 7.5rem;
+    color: white;
+  }
 }
 
 .topButton1 {
-	position: relative;
-	width: 7.5rem;
-	top: 45%;
-	margin: 0 110px;
-	z-index: 1;
+  position: relative;
+  width: 7.5rem;
+  top: 45%;
+  margin: 0 110px;
+  z-index: 1;
 
-	.a {
-		position: absolute;
-		width: 150px;
-		top: 50%; left: 50%;
-		-webkit-transform: translate(-50%, -50%);
-		-moz-transform: translate(-50%, -50%);
-		transform: translate(-50%, -50%);
-		font-size: 1.8rem;
-		line-height: 1;
-		font-weight: 400;
-		text-transform: uppercase;
-		text-align: center;
-		color: white;
-		background: black;
-		padding: 1rem 10px; /*added 10px padding to right and left*/
-		margin: 0 auto;
-		border: 0;
-		outline: none;
-	}
+  .a {
+    position: absolute;
+    width: 150px;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    font-size: 1.8rem;
+    line-height: 1;
+    font-weight: 400;
+    text-transform: uppercase;
+    text-align: center;
+    color: white;
+    background: black;
+    padding: 1rem 10px; /* added 10px padding to right and left */
+    margin: 0 auto;
+    border: 0;
+    outline: none;
+  }
 }
 
 .topButton2 {
-	position: relative;
-	top: 45%;
-	margin: 0 27rem;
-	width: 7.5rem;
-	z-index: 1;
+  position: relative;
+  top: 45%;
+  margin: 0 27rem;
+  width: 7.5rem;
+  z-index: 1;
 
-		a {
-			position: absolute;
-			width: 150px;
-			top: 50%; left: 50%;
-			-webkit-transform: translate(-50%, -50%);
-			-moz-transform: translate(-50%, -50%);
-			transform: translate(-50%, -50%);
-			font-size: 1.8rem;
-			line-height: 1;
-			font-weight: 400;
-			text-transform: uppercase;
-			text-align: center;
-			background: white;
-			padding: 10px 10px;
-			border: 1px solid black;
-			color: inherit;
-		}
+  a {
+    position: absolute;
+    width: 150px;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    font-size: 1.8rem;
+    line-height: 1;
+    font-weight: 400;
+    text-transform: uppercase;
+    text-align: center;
+    background: white;
+    padding: 10px 10px;
+    border: 1px solid black;
+    color: inherit;
+  }
 }

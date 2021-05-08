@@ -16,7 +16,9 @@ body,
   height: 100%;
 }
 
-*, ::before, ::after {
+*,
+::before,
+::after {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -34,13 +36,13 @@ h1 {
   width: 100%;
   padding: 0;
   margin: 0 auto 2rem;
-  font-size: 3.0rem;
+  font-size: 3rem;
   line-height: 3.2rem;
-  color: #000000;
+  color: #000;
   text-align: left;
   font-weight: 400;
   text-transform: uppercase;
-  border-bottom: #d3d3d3;
+  border-bottom: #D3D3D3;
 }
 
 h2 {
@@ -50,11 +52,11 @@ h2 {
   margin: 0 auto 2rem;
   font-size: 2.5rem;
   line-height: 2.7rem;
-  color: #000000;
+  color: #000;
   text-align: left;
   font-weight: 400;
   text-transform: uppercase;
-  border-bottom: #d3d3d3;
+  border-bottom: #D3D3D3;
 }
 
 a {
@@ -62,10 +64,11 @@ a {
   cursor: pointer;
 }
 
-a, a:hover {
-  -webkit-transition: all .4s ease-in-out;
-  -moz-transition: all .4s ease-in-out;
-  transition: all .4s ease-in-out;
+a,
+a:hover {
+  -webkit-transition: all 0.4s ease-in-out;
+  -moz-transition: all 0.4s ease-in-out;
+  transition: all 0.4s ease-in-out;
 }
 
 .main {
@@ -74,7 +77,8 @@ a, a:hover {
   max-width: 1450px;
   padding: 0 10px;
   margin: 0 auto;
-/*  margin: 3rem 75px 0;*/
+
+  /*  margin: 3rem 75px 0; */
 }
 
 .controlPanel {
@@ -82,16 +86,17 @@ a, a:hover {
   display: inline-block;
   width: 100%;
   min-height: 100%;
-  padding: 3rem 0 6rem 25.0rem;
-  border-bottom: 1px solid #d3d3d3;
+  padding: 3rem 0 6rem 25rem;
+  border-bottom: 1px solid #D3D3D3;
 
   .sidebar {
     position: absolute;
-    top: 0; left: 0;
-    width: 25.0rem;
+    top: 0;
+    left: 0;
+    width: 25rem;
     height: 100%;
     z-index: 1;
-    border-right: 1px solid #d3d3d3;
+    border-right: 1px solid #D3D3D3;
   }
 
   .content {

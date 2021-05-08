@@ -1,0 +1,50 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      // Allows for the parsing of JSX
+      "jsx": true
+    }
+  },
+  "plugins": ["import"],
+  "ignorePatterns": ["node_modules/**/*"],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "extends": [
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:prettier/recommended",
+    "prettier"
+  ],
+  "rules": {
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "prettier/prettier": ["error", {
+      "semi": false,
+      "singleQuote": false,
+      "printWidth": 120,
+      "trailingComma": "none",
+      "arrowParens": "avoid"
+    }],
+    // Can break code with auto-fix option, we are checking it separately (see package.json lint-hooks script)
+    "react-hooks/exhaustive-deps": 0,
+    "no-console": [
+      0,
+      {
+        "allow": ["error"]
+      }
+    ],
+    "no-alert": "error",
+    "no-debugger": "error",
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": false }],
+    "react/prop-types": 0,
+    "@typescript-eslint/no-non-null-assertion": 0,
+    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/no-explicit-any": "warn"
+  }
+}

@@ -1,39 +1,40 @@
 .admintoolbar {
-	display: inline-block;
-	width: 100%;
-	background-color: black;
-	height: auto;
-	margin: 0 auto;
-	padding: 0 10px;
+  display: inline-block;
+  width: 100%;
+  background-color: black;
+  height: auto;
+  margin: 0 auto;
+  padding: 0 10px;
 
-	ul, li {
-		list-style-type: none;
-		margin: 0;
-		padding: 0;
-	}
+  ul,
+  li {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
 
-	ul {
-		float: right;
+  ul {
+    float: right;
 
-		li {
-			display: inline-block;
+    li {
+      display: inline-block;
 
-			a {
-				display: block;
-				font-size: 1.6rem;
-				line-height: 1;
-				color: white;
-				padding: 10px;
-				transition: all .4s ease-in-out;
+      a {
+        display: block;
+        font-size: 1.6rem;
+        line-height: 1;
+        color: white;
+        padding: 10px;
+        transition: all 0.4s ease-in-out;
 
-				&:hover {
-					background-color: rgba(255,255,255, .6);
-					color: black;
-					transition: all .4s ease-in-out;
-				}
-			}
-		}
-	}
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.6);
+          color: black;
+          transition: all 0.4s ease-in-out;
+        }
+      }
+    }
+  }
 }
 
 .admin {
@@ -45,7 +46,8 @@
     padding: 0;
     margin: 0 auto;
 
-    ul, li {
+    ul,
+    li {
       margin: 0;
       padding: 0;
       list-style-type: none;
@@ -54,31 +56,26 @@
     ul {
       li {
         display: inline-block;
-
       }
     }
-
   }
 }
 
 .manageNFTs {
-
   h1 {
     margin-top: 1.5rem;
   }
 
   table.results {
     tr {
-
       &:nth-child(even) {
-        background-color: #d3d3d3;
+        background-color: #D3D3D3;
       }
 
       .thumb {
-        width: 15.0rem;
+        width: 15rem;
         margin: 0 auto;
       }
-
     }
   }
 }

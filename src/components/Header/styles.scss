@@ -1,65 +1,70 @@
 .header {
-	height: 6.5rem;
-	/*box-shadow: 0 2px 4px 0 rgba(0,0,0,.1);*/
+  height: 6.5rem;
 
-	.wrap {
-		position: relative;
-		height: 100%;
-		max-width: 1450px;
-		margin: 0 auto;
-		z-index: 1;
+  /* box-shadow: 0 2px 4px 0 rgba(0,0,0,.1); */
 
-		.logo {
-			width: 6.0rem;
-			position: absolute;
-			top: 70%; left: 25px;
-			-webkit-transform: translateY(-50%);
-			-moz-transform: translateY(-50%);
-			transform: translateY(-50%);
+  .wrap {
+    position: relative;
+    height: 100%;
+    max-width: 1450px;
+    margin: 0 auto;
+    z-index: 1;
 
-			img {
-				display: block;
-				width: 100%;
-				margin: 0;
-			}
-		}
+    .logo {
+      width: 6rem;
+      position: absolute;
+      top: 70%;
+      left: 25px;
+      -webkit-transform: translateY(-50%);
+      -moz-transform: translateY(-50%);
+      transform: translateY(-50%);
 
-		.name {
-			position: absolute;
-			margin-left: 95px;
-			margin-top: 10px;
-		}
+      img {
+        display: block;
+        width: 100%;
+        margin: 0;
+      }
+    }
 
-		.navigation {
-			position: absolute;
-			top: 70%; right: 25px;
-			-webkit-transform: translateY(-50%);
-			-moz-transform: translateY(-50%);
-			transform: translateY(-50%);
+    .name {
+      position: absolute;
+      margin-left: 95px;
+      margin-top: 10px;
+    }
 
-			ul, li {
-				margin: 0;
-				padding: 0;
-			}
+    .navigation {
+      position: absolute;
+      top: 70%;
+      right: 25px;
+      -webkit-transform: translateY(-50%);
+      -moz-transform: translateY(-50%);
+      transform: translateY(-50%);
 
-			li {
-				/*display: inline-block;*/
-				list-style-type: none;
-				margin-right: 1.5rem;
+      ul,
+      li {
+        margin: 0;
+        padding: 0;
+      }
 
-				&:last-child {
-					margin-right: 0;
-				}
+      li {
+        /* display: inline-block; */
+        list-style-type: none;
+        margin-right: 1.5rem;
 
-				a, span {
-					font-size: 14px;
-					line-height: 1;
-					color: black;
-					text-decoration: none;
-					text-transform: uppercase;
-					cursor: pointer;
-				}
-			}
-		}
-	}
+        &:last-child {
+          margin-right: 0;
+        }
+
+        a,
+        span {
+          font-size: 14px;
+          line-height: 1;
+          color: black;
+          text-decoration: none;
+          text-transform: uppercase;
+          cursor: pointer;
+        }
+      }
+    }
+  }
 }
