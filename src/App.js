@@ -28,7 +28,7 @@ import Admin from './pages/Admin'
 import NFTDetails from './pages/NFTDetails'
 import './default.scss'
 
-const App = props => {
+const App = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -67,12 +67,12 @@ const App = props => {
               <Galleries />
             </MainLayout>  
           )} />
-          <Route path="/galleries/:filterType" render={() => (
+          <Route path="/galleries/:filters" render={() => (
             <MainLayout>
               <Galleries />
             </MainLayout>  
           )} />
-          <Route path="/nft/:nftID" render={() => (
+          <Route path="/nft/:id" render={() => (
             <MainLayout>
               <NFTDetails />
             </MainLayout>  

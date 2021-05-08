@@ -29,7 +29,7 @@ const Header = props => {
 					<h3>TokenWalk</h3>
 				</div>
 				<div className="navigation">
-					{currentUser && [
+					{currentUser ? <>
 						<ul>
 							<li>
 								<Link to="/learn">
@@ -57,9 +57,7 @@ const Header = props => {
 								</span>
 							</li>
 						</ul>
-
-					]}
-					{!currentUser && [
+						</> : <>
 						<ul>
 							<li>
 								<Link to="/learn">
@@ -87,7 +85,7 @@ const Header = props => {
 								</Link>
 							</li>
 						</ul>
-					]}
+					</>}
 
 				</div>
 			</div>

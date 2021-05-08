@@ -1,21 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { addNFTStart, fetchNFTsStart, deleteNFTStart } from './../../redux/NFTs/nft.actions';
+import React, { useState } from 'react';
 import Modal from './../../components/Modal';
 import FormInput from './../../components/Forms/FormInput';
 import FormSelect from './../../components/Forms/FormSelect';
 import Button from './../../components/Forms/Button';
-import LoadMore from './../../components/LoadMore';
 import CKEditor from 'ckeditor4-react';
 import './styles.scss';
 
-const mapState = ({ nftData }) => ({
-  nfts: nftData.nfts
-});
-
 const Admin = props => {
-  const { nfts } = useSelector(mapState);
-  const dispatch = useDispatch();
+  // const { nfts } = useSelector(mapState);
+  // const dispatch = useDispatch();
   const [hideModal, setHideModal] = useState(true);
   const [nftCategory, setNFTCategory] = useState('art');
   const [nftName, setNFTName] = useState('');
@@ -23,13 +16,13 @@ const Admin = props => {
   const [nftPrice, setNFTPrice] = useState(0);
   const [nftDesc, setNFTDesc] = useState('');
 
-  const { data, queryDoc, isLastPage } = nfts;
-
-  useEffect(() => {
-    dispatch(
-      fetchNFTsStart()
-    );
-  }, []);
+  // const { data, queryDoc, isLastPage } = nfts;
+	//
+  // useEffect(() => {
+  //   dispatch(
+  //     fetchNFTsStart()
+  //   );
+  // }, []);
 
   const toggleModal = () => setHideModal(!hideModal);
 
@@ -50,30 +43,26 @@ const Admin = props => {
   const handleSubmit = e => {
     e.preventDefault();
 
-    dispatch(
-      addNFTStart({
-        nftCategory,
-        nftName,
-        nftThumbnail,
-        nftPrice,
-        nftDesc,
-      })
-    );
+    // dispatch(
+    //   addNFTStart({
+    //     nftCategory,
+    //     nftName,
+    //     nftThumbnail,
+    //     nftPrice,
+    //     nftDesc,
+    //   })
+    // );
     resetForm();
 
   };
 
   const handleLoadMore = () => {
-    dispatch(
-      fetchNFTsStart({
-        startAfterDoc: queryDoc,
-        persistNFTs: data
-      })
-    );
-  };
-
-  const configLoadMore = {
-    onLoadMoreEvt: handleLoadMore,
+    // dispatch(
+    //   fetchNFTsStart({
+    //     startAfterDoc: queryDoc,
+    //     persistNFTs: data
+    //   })
+    // );
   };
 
   return (
@@ -162,33 +151,33 @@ const Admin = props => {
               <td>
                 <table className="results" border="0" cellPadding="10" cellSpacing="0">
                   <tbody>
-                    {(Array.isArray(data) && data.length > 0) && data.map((nft, index) => {
-                      const {
-                        nftName,
-                        nftThumbnail,
-                        nftPrice,
-                        documentID
-                      } = nft;
-
-                      return (
-                        <tr key={index}>
-                          <td>
-                            <img className="thumb" src={nftThumbnail} />
-                          </td>
-                          <td>
-                            {nftName}
-                          </td>
-                          <td>
-                            {nftPrice}Ξ
-                          </td>
-                          <td>
-                            <Button onClick={() => dispatch(deleteNFTStart(documentID))}>
-                              Delete
-                            </Button>
-                          </td>
-                        </tr>
-                      )
-                    })}
+                    {/*{(Array.isArray(data) && data.length > 0) && data.map((nft, index) => {*/}
+                    {/*  const {*/}
+                    {/*    nftName,*/}
+                    {/*    nftThumbnail,*/}
+                    {/*    nftPrice,*/}
+                    {/*    documentID*/}
+                    {/*  } = nft;*/}
+										
+                    {/*  return (*/}
+                    {/*    <tr key={index}>*/}
+                    {/*      <td>*/}
+                    {/*        <img className="thumb" src={nftThumbnail} />*/}
+                    {/*      </td>*/}
+                    {/*      <td>*/}
+                    {/*        {nftName}*/}
+                    {/*      </td>*/}
+                    {/*      <td>*/}
+                    {/*        {nftPrice}Ξ*/}
+                    {/*      </td>*/}
+                    {/*      <td>*/}
+                    {/*        <Button onClick={() => dispatch(deleteNFTStart(documentID))}>*/}
+                    {/*          Delete*/}
+                    {/*        </Button>*/}
+                    {/*      </td>*/}
+                    {/*    </tr>*/}
+                    {/*  )*/}
+                    {/*})}*/}
                   </tbody>
                 </table>
               </td>
@@ -204,9 +193,13 @@ const Admin = props => {
                   <tbody>
                     <tr>
                       <td>
-                        {!isLastPage && (
-                          <LoadMore {...configLoadMore} />
-                        )}
+                        {/*{!isLastPage && (*/}
+	                      {/*  <Button*/}
+		                    {/*    onClick={handleLoadMore}*/}
+	                      {/*  >*/}
+		                    {/*    Load More*/}
+	                      {/*  </Button>*/}
+                        {/*)}*/}
                       </td>
                     </tr>
                   </tbody>

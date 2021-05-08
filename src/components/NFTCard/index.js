@@ -1,41 +1,24 @@
-import React, { useEffect } from 'react'
+import React  from 'react'
 import { useParams } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { fetchNFTStart, setNFT } from './../../redux/NFTs/nft.actions'
 import Button from './../Forms/Button'
+import useNFT from "../../customHooks/useNFT.js"
+import Loader from "../Loader"
+import ErrorPlaceholder from "../ErrorPlaceholder"
 import './styles.scss'
 
-const mapState = state => ({
-	nft: state.nftData.nft
-})
-
-const NFTCard = ({}) => {
-	const dispatch = useDispatch()
-	const { nftID } = useParams()
-	const { nft } = useSelector(mapState)
+const NFTCard = () => {
+	const { id } = useParams()
+	const {NFT, loading, error} = useNFT(id)
+	
+	if (error) return <ErrorPlaceholder/>
+	if (loading || !NFT) return <Loader/>
 
 	const {
 		nftName,
 		nftThumbnail,
 		nftPrice,
 		nftDesc
-	} = nft
-
-	useEffect(() => {
-		dispatch(
-			fetchNFTStart(nftID)
-		)
-
-		return () => {
-			dispatch(
-				setNFT({})
-			)
-		}
-	}, [])
-
-	const configPurchaseBtn = {
-		type: 'button'
-	}
+	} = NFT
 
 	return (
 		<div className="nftcard">
@@ -56,7 +39,7 @@ const NFTCard = ({}) => {
 					</li>
 					<li>
 						<div className="purchasenft">
-							<Button {...configPurchaseBtn}>
+							<Button>
 								Purchase
 							</Button>
 						</div>
