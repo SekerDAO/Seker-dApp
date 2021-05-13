@@ -1,13 +1,10 @@
 import React, {FunctionComponent} from "react"
 import {Link} from "react-router-dom"
 import "./styles.scss"
+import {useAuth} from "../../customHooks/useAuth"
 
 const Header: FunctionComponent = () => {
-	const currentUser = null // TODO
-
-	const signOut = () => {
-		// dispatch(signOutUserStart())
-	}
+	const {account, isLoggedIn, signIn, signOut} = useAuth()
 
 	return (
 		<header className="header">
@@ -21,47 +18,35 @@ const Header: FunctionComponent = () => {
 					<h3>TokenWalk</h3>
 				</div>
 				<div className="navigation">
-					{currentUser ? (
-						<>
-							<ul>
-								<li>
-									<Link to="/learn">Learn</Link>
-								</li>
-								<li>
-									<Link to="/dashboard">My Account</Link>
-								</li>
-								<li>
-									<Link to="/galleries">Galleries</Link>
-								</li>
-								<li>
-									<Link to="/galleries">Exhibits</Link>
-								</li>
-								<li>
-									<span onClick={() => signOut()}>LogOut</span>
-								</li>
-							</ul>
-						</>
-					) : (
-						<>
-							<ul>
-								<li>
-									<Link to="/learn">Learn</Link>
-								</li>
-								<li>
-									<Link to="/registration">Register</Link>
-								</li>
-								<li>
-									<Link to="/galleries">Galleries</Link>
-								</li>
-								<li>
-									<Link to="/galleries">Exhibits</Link>
-								</li>
-								<li>
-									<Link to="/login">Connect Wallet</Link>
-								</li>
-							</ul>
-						</>
-					)}
+					<ul>
+						<li>
+							<Link to="/learn">Learn</Link>
+						</li>
+						<li>
+							<Link to="/dashboard">My Account</Link>
+						</li>
+						<li>
+							<Link to="/galleries">Galleries</Link>
+						</li>
+						<li>
+							<Link to="/galleries">Exhibits</Link>
+						</li>
+						<li>
+							{account ? (
+								isLoggedIn ? (
+									<span>
+										{account} <span onClick={signOut}>LogOut</span>
+									</span>
+								) : (
+									<span onClick={signIn}>Log In</span>
+								)
+							) : (
+								<a href="https://metamask.io/" target="_blank" rel="noopener noreferrer">
+									Install Metamask
+								</a>
+							)}
+						</li>
+					</ul>
 				</div>
 			</div>
 		</header>
