@@ -4,7 +4,7 @@ import "./styles.scss"
 import {useAuth} from "../../customHooks/useAuth"
 
 const Header: FunctionComponent = () => {
-	const {account, connectWallet, isLoggedIn, signIn, signOut, chainId} = useAuth()
+	const {account, connected, connecting, connectWallet, disconnect} = useAuth()
 
 	return (
 		<header className="header">
@@ -31,23 +31,13 @@ const Header: FunctionComponent = () => {
 						<li>
 							<Link to="/galleries">Exhibits</Link>
 						</li>
-						{account && (
-							<li>
-								<span>{account}</span>
-							</li>
-						)}
-						{chainId && (
-							<li>
-								<span>Chain ID: {chainId}</span>
-							</li>
-						)}
 						<li>
-							{account ? (
-								isLoggedIn ? (
-									<span onClick={signOut}>Logout</span>
-								) : (
-									<span onClick={signIn}>Sign In</span>
-								)
+							{account && connected ? (
+								<span>
+									{account} <span onClick={disconnect}>Disconnect</span>
+								</span>
+							) : connecting ? (
+								<span>Connecting...</span>
 							) : (
 								<span onClick={connectWallet}>Connect Wallet</span>
 							)}
