@@ -5,6 +5,8 @@ const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
 type AuthContext = {
 	account: string | null
+	chainId: number | null
+	connectWallet: () => void
 	signIn: () => void
 	isLoggedIn: boolean
 	signOut: () => void
@@ -12,20 +14,40 @@ type AuthContext = {
 
 export const useAuth = (): AuthContext => {
 	const [account, setAccount] = useState<string | null>(null)
+	const [chainId, setChainId] = useState<number | null>(null)
 	const [isLoggedIn, setIsLoggedIn] = useState(false)
 
-	const getAccount = async () => {
+	const initWeb3 = async () => {
 		window.web3 = new Web3(window.ethereum)
-		const accounts = await window.ethereum.request({method: "eth_requestAccounts"})
+		const accounts = await window.web3.eth.getAccounts()
 		if (accounts[0]) {
 			setAccount(accounts[0])
+			const currentChainId = await window.ethereum.request({method: "eth_chainId"})
+			if (currentChainId) {
+				setChainId(currentChainId)
+			}
 		}
 	}
 	useEffect(() => {
 		if (window.ethereum) {
-			getAccount()
+			initWeb3()
 		}
 	}, [window.ethereum])
+
+	const connectWallet = async () => {
+		if (!window.ethereum) {
+			window.open("https://metamask.io/", "blank")
+			return
+		}
+		const accounts = await window.ethereum.request({method: "eth_requestAccounts"})
+		if (accounts[0]) {
+			setAccount(accounts[0])
+		}
+		const currentChainId = await window.ethereum.request({method: "eth_chainId"})
+		if (currentChainId) {
+			setChainId(currentChainId)
+		}
+	}
 
 	const checkToken = () => {
 		const token = localStorage.getItem("tokenwalk_at")
@@ -72,6 +94,8 @@ export const useAuth = (): AuthContext => {
 
 	return {
 		account,
+		chainId,
+		connectWallet,
 		signIn,
 		isLoggedIn,
 		signOut

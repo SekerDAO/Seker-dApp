@@ -4,7 +4,7 @@ import "./styles.scss"
 import {useAuth} from "../../customHooks/useAuth"
 
 const Header: FunctionComponent = () => {
-	const {account, isLoggedIn, signIn, signOut} = useAuth()
+	const {account, connectWallet, isLoggedIn, signIn, signOut, chainId} = useAuth()
 
 	return (
 		<header className="header">
@@ -31,19 +31,25 @@ const Header: FunctionComponent = () => {
 						<li>
 							<Link to="/galleries">Exhibits</Link>
 						</li>
+						{account && (
+							<li>
+								<span>{account}</span>
+							</li>
+						)}
+						{chainId && (
+							<li>
+								<span>Chain ID: {chainId}</span>
+							</li>
+						)}
 						<li>
 							{account ? (
 								isLoggedIn ? (
-									<span>
-										{account} <span onClick={signOut}>LogOut</span>
-									</span>
+									<span onClick={signOut}>Logout</span>
 								) : (
-									<span onClick={signIn}>Log In</span>
+									<span onClick={signIn}>Sign In</span>
 								)
 							) : (
-								<a href="https://metamask.io/" target="_blank" rel="noopener noreferrer">
-									Install Metamask
-								</a>
+								<span onClick={connectWallet}>Connect Wallet</span>
 							)}
 						</li>
 					</ul>
