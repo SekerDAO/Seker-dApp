@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react"
-import {firestore} from "../firebase/utils"
 import {NFTSnapshot} from "../types/NFT"
+import firebase from "firebase/app"
 
 const useNFTs = ({
 	filters,
@@ -23,7 +23,7 @@ const useNFTs = ({
 	const [error, setError] = useState(false)
 
 	const fetchNFTs = async (_filters: string, _limit: number, _after: NFTSnapshot | null) => {
-		let ref = firestore.collection("nfts").orderBy("createdDate")
+		let ref = firebase.firestore().collection("nfts").orderBy("createdDate")
 		if (_filters) {
 			ref = ref.where("nftCategory", "==", _filters)
 		}

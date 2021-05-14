@@ -1,6 +1,8 @@
 import React from "react"
 import ReactDOM from "react-dom"
 import App from "./App"
+import firebase from "firebase"
+import {firebaseConfig} from "./firebase/config"
 // import reportWebVitals from './reportWebVitals';
 
 // TODO
@@ -10,6 +12,8 @@ declare global {
 		web3: any
 	}
 }
+
+firebase.initializeApp(firebaseConfig)
 
 ReactDOM.render(
 	<React.StrictMode>
