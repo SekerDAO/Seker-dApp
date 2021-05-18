@@ -8,6 +8,7 @@ import Homepage from "./pages/Homepage"
 import Learn from "./pages/Learn"
 import Galleries from "./pages/Galleries"
 import NFTDetails from "./pages/NFTDetails"
+import Profile from "./pages/Profile"
 import "./default.scss"
 
 const App: FunctionComponent = () => {
@@ -29,6 +30,7 @@ const App: FunctionComponent = () => {
 							)}
 						/>
 						<Route
+							exact
 							path="/learn"
 							render={() => (
 								<MainLayout>
@@ -46,7 +48,8 @@ const App: FunctionComponent = () => {
 							)}
 						/>
 						<Route
-							path="/galleries/:filters"
+							exact
+							path="/galleries/:category"
 							render={() => (
 								<MainLayout>
 									<Galleries />
@@ -54,6 +57,7 @@ const App: FunctionComponent = () => {
 							)}
 						/>
 						<Route
+							exact
 							path="/nft/:id"
 							render={() => (
 								<MainLayout>
@@ -61,21 +65,15 @@ const App: FunctionComponent = () => {
 								</MainLayout>
 							)}
 						/>
-						{/* TODO */}
-						{/*<Route path="/dashboard" render={() => (*/}
-						{/*  <WithAuth>*/}
-						{/*    <DashboardLayout>*/}
-						{/*      <Dashboard />*/}
-						{/*    </DashboardLayout>*/}
-						{/*  </WithAuth>*/}
-						{/*)} />*/}
-						{/*<Route path="/admin" render={() => (*/}
-						{/*  <WithAdminAuth>*/}
-						{/*    <AdminLayout>*/}
-						{/*      <Admin />*/}
-						{/*    </AdminLayout>*/}
-						{/*  </WithAdminAuth>*/}
-						{/*)} />*/}
+						<Route
+							exact
+							path="/profile/:account"
+							render={() => (
+								<MainLayout>
+									<Profile />
+								</MainLayout>
+							)}
+						/>
 					</Switch>
 				</div>
 			</AuthContext.Provider>

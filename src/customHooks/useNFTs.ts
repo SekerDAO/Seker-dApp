@@ -2,15 +2,21 @@ import {useEffect, useState} from "react"
 import {NFTSnapshot} from "../types/NFT"
 import firebase from "firebase/app"
 
-const useNFTs = ({
-	filters,
-	limit = 8,
-	after
-}: {
-	filters: string
+const defaultLimit = 8
+
+type NFTQueryParams = {
+	category?: string
+	user?: string
 	limit?: number
 	after: NFTSnapshot | null
-}): {
+}
+
+const useNFTs = ({
+	category,
+	user,
+	limit,
+	after
+}: NFTQueryParams): {
 	NFTs: {
 		totalCount: number
 		data: NFTSnapshot[]
@@ -22,16 +28,19 @@ const useNFTs = ({
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
 
-	const fetchNFTs = async (_filters: string, _limit: number, _after: NFTSnapshot | null) => {
+	const fetchNFTs = async (params: NFTQueryParams) => {
 		let ref = firebase.firestore().collection("nfts").orderBy("createdDate")
-		if (_filters) {
-			ref = ref.where("nftCategory", "==", _filters)
+		if (params.category) {
+			ref = ref.where("nftCategory", "==", params.category)
+		}
+		if (params.user) {
+			ref = ref.where("nftAdminUserUID", "==", params.user)
 		}
 		const totalSnapshot = await ref.get()
-		if (_after) {
-			ref = ref.startAfter(_after)
+		if (params.after) {
+			ref = ref.startAfter(params.after)
 		}
-		const snapshot = await ref.limit(_limit).get()
+		const snapshot = await ref.limit(params.limit ?? defaultLimit).get()
 		return {
 			totalCount: totalSnapshot.size,
 			data: snapshot.docs as NFTSnapshot[]
@@ -41,7 +50,7 @@ const useNFTs = ({
 	useEffect(() => {
 		setLoading(true)
 		setError(false)
-		fetchNFTs(filters, limit, after)
+		fetchNFTs({category, user, limit, after})
 			.then(res => {
 				setNFTs(prevState => ({
 					totalCount: res.totalCount,
@@ -54,7 +63,7 @@ const useNFTs = ({
 				setError(true)
 				setLoading(false)
 			})
-	}, [filters, limit, after])
+	}, [category, user, limit, after])
 
 	return {
 		NFTs,

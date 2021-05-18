@@ -1,7 +1,7 @@
 import React, {FunctionComponent, SelectHTMLAttributes} from "react"
 import "./styles.scss"
 
-const FormSelect: FunctionComponent<
+const Select: FunctionComponent<
 	{
 		options: {name: string; value: string | number}[]
 		label?: string
@@ -10,10 +10,10 @@ const FormSelect: FunctionComponent<
 	if (!Array.isArray(options) || options.length < 1) return null
 
 	return (
-		<div className="formRow">
+		<div className="select">
 			{label && <label>{label}</label>}
 
-			<select className="formSelect" {...selectProps}>
+			<select className="select__field" {...selectProps}>
 				{options.map((option, index) => {
 					const {value, name} = option
 
@@ -28,4 +28,4 @@ const FormSelect: FunctionComponent<
 	)
 }
 
-export default FormSelect
+export default Select

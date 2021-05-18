@@ -1,0 +1,29 @@
+@import "src/variables";
+
+.btn {
+  font-size: 16px;
+  line-height: 1;
+  padding: 10px;
+  outline: none;
+
+  &--primary {
+    color: white;
+    background-color: $purple1;
+    border: none;
+
+    &:hover {
+      background-color: $purple2;
+    }
+  }
+
+  &--secondary {
+    color: $purple1;
+    background-color: white;
+    border: 1px solid $purple1;
+
+    &:hover {
+      color: white;
+      background-color: $purple1;
+    }
+  }
+}

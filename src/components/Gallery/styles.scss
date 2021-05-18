@@ -1,72 +1,47 @@
+@import "src/variables";
+
 .gallery {
-  width: 25%;/* 33.333333333333333%; */
-  margin: 0 auto 8rem;
-  padding: 10px 10px;
-  cursor: pointer;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
 
-  .thumb {
-    display: block;
-    width: 100%;
+  &__item {
+    max-width: calc(33% - 20px);
+    margin: 10px;
+    cursor: pointer;
+    border: 1px solid $light-grey;
 
-    img {
+    &:hover {
+      border-color: $purple2;
+    }
+
+    &-thumb {
       display: block;
       width: 100%;
-      margin: 0;
-    }
 
-    video {
-      display: block;
-      width: 100%;
-      margin: 0;
-    }
-  }
-
-  .details {
-    display: block;
-    width: 100%;
-    margin: 0 auto;
-    padding: 1rem 0;
-
-    ul,
-    ul li {
-      padding: 0;
-      margin: 0;
-    }
-
-    ul {
-      li {
+      img {
         display: block;
         width: 100%;
-        list-style-type: none;
-        text-align: left;
-        margin: 0 0 0.5rem;
+        margin: 0;
+      }
 
-        a {
-          color: black;
-        }
-
-        .name {
-          font-size: 2.2rem;
-          line-height: 1.2;
-          font-weight: 400;
-        }
-
-        .price {
-          font-size: 1.6rem;
-          line-height: 1;
-          font-weight: 400;
-        }
+      video {
+        display: block;
+        width: 100%;
+        margin: 0;
       }
     }
   }
-}
 
-.gallery:hover {
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
-}
+  &__details {
+    padding: 5px;
 
-@media only screen and (max-width: 980px) {
-  .gallery {
-    width: 100%;
+    div {
+      margin: 5px;
+    }
+
+    a {
+      color: black;
+    }
   }
 }

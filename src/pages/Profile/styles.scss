@@ -1,0 +1,44 @@
+@import "src/variables";
+
+.profile {
+  display: flex;
+  padding: 135px 0;
+  position: relative;
+
+  &__photo {
+    position: absolute;
+    left: 0;
+    top: -75px;
+    z-index: 2;
+    border-radius: 50%;
+    background-color: $light-grey;
+    border: 1px solid white;
+    width: 150px;
+    height: 150px;
+  }
+
+  &__info {
+    flex: 1;
+    max-width: 250px;
+    display: flex;
+    flex-direction: column;
+
+    p,
+    h2 {
+      margin: 10px 0;
+    }
+  }
+
+  &__main {
+    flex: 1;
+  }
+
+  &__controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    align-self: stretch;
+    padding: 0 20px 0 10px;
+    margin-bottom: 10px;
+  }
+}
