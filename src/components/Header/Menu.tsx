@@ -1,10 +1,10 @@
-import React, {FunctionComponent, useRef, useState} from "react"
+import React, {FunctionComponent, useContext, useRef, useState} from "react"
 import {Link} from "react-router-dom"
-import {useAuth} from "../../customHooks/useAuth"
+import {AuthContext} from "../../customHooks/useAuth"
 import useClickOutside from "../../customHooks/useClickOutside"
 
 const HeaderMenu: FunctionComponent = () => {
-	const {account, connected, connecting, connectWallet, disconnect} = useAuth()
+	const {account, connected, connecting, connectWallet, disconnect} = useContext(AuthContext)
 	const [isOpened, setIsOpened] = useState(false)
 	const ref = useRef<HTMLDivElement | null>(null)
 

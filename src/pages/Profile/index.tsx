@@ -1,26 +1,23 @@
-import React, {FunctionComponent, useState} from "react"
-import {useParams} from "react-router-dom"
-import useNFTs from "../../customHooks/useNFTs"
-import {NFTSnapshot} from "../../types/NFT"
-import ErrorPlaceholder from "../../components/ErrorPlaceholder"
-import Loader from "../../components/Loader"
-import Gallery from "../../components/Gallery"
-import Button from "../../components/Controls/Button"
-import Select from "../../components/Controls/Select"
+import React, {FunctionComponent, useContext} from "react"
+import {useHistory, useLocation, useParams} from "react-router-dom"
 import "./styles.scss"
-import Input from "../../components/Controls/Input"
+import {AuthContext} from "../../customHooks/useAuth"
+import {parse} from "query-string"
+import ProfileGallery from "../../components/UserProfile/ProfileGallery"
+import Button from "../../components/Controls/Button"
+import ProfileEdit from "../../components/UserProfile/ProfileEdit"
+import ProfileDAOs from "../../components/UserProfile/ProfileDAOs"
+import ProfileView from "../../components/UserProfile/ProfileView"
+
+type ProfilePage = "nfts" | "edit" | "daos" | "profile"
 
 const Profile: FunctionComponent = () => {
+	const {connected, account: userAccount} = useContext(AuthContext)
+	const {push} = useHistory()
+	const {pathname, search} = useLocation()
 	const {account} = useParams<{account: string}>()
-	const [cursor, setCursor] = useState<NFTSnapshot | null>(null)
-	const {NFTs, loading, error} = useNFTs({user: account.toUpperCase(), after: cursor})
-
-	if (error) return <ErrorPlaceholder />
-	if (loading) return <Loader />
-
-	const handleLoadMore = () => {
-		setCursor(NFTs.data[NFTs.data.length - 1])
-	}
+	const isOwner = connected && account.toUpperCase() === userAccount?.toUpperCase()
+	const page: ProfilePage = (isOwner && (parse(search).page as ProfilePage)) || "nfts"
 
 	return (
 		<div className="profile">
@@ -29,25 +26,59 @@ const Profile: FunctionComponent = () => {
 				<h2>TODO: name</h2>
 				<p>{`${account.slice(0, 3)}...${account.slice(-4)}`}</p>
 				<p>TODO: description</p>
+				{isOwner && (
+					<div className="profile__edit-menu">
+						<a
+							className={page === "nfts" ? "active" : undefined}
+							onClick={() => {
+								push(pathname)
+							}}
+						>
+							Create / Edit NFTs
+						</a>
+						<a
+							className={page === "edit" ? "active" : undefined}
+							onClick={() => {
+								push(`${pathname}?page=edit`)
+							}}
+						>
+							Edit Profile
+						</a>
+						<a
+							className={page === "daos" ? "active" : undefined}
+							onClick={() => {
+								push(`${pathname}?page=daos`)
+							}}
+						>
+							View Youe DAOs
+						</a>
+						<a
+							className={page === "profile" ? "active" : undefined}
+							onClick={() => {
+								push(`${pathname}?page=profile`)
+							}}
+						>
+							View Profile
+						</a>
+					</div>
+				)}
 			</div>
 			<div className="profile__main">
-				<div className="profile__controls">
-					<Input placeholder="Search" />
-					<Select options={[{name: "Sort By", value: ""}]} />
-				</div>
-				<Gallery
-					items={NFTs.data.map(doc => {
-						const {nftThumbnail, nftName, nftPrice} = doc.data()
-						return {
-							id: doc.id,
-							thumbnail: nftThumbnail,
-							name: nftName,
-							price: nftPrice
-						}
-					})}
-				/>
+				{page === "nfts" && (
+					<>
+						{isOwner && (
+							<div className="profile__edit-buttons">
+								<Button buttonType="primary">Create A Custom Domain</Button>
+								<Button buttonType="secondary">Create / Load NFT</Button>
+							</div>
+						)}
+						<ProfileGallery account={account} />
+					</>
+				)}
+				{page === "edit" && <ProfileEdit />}
+				{page === "daos" && <ProfileDAOs />}
+				{page === "profile" && <ProfileView />}
 			</div>
-			{NFTs.data.length < NFTs.totalCount && <Button onClick={handleLoadMore}>Load More</Button>}
 		</div>
 	)
 }

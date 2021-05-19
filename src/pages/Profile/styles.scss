@@ -22,10 +22,14 @@
     max-width: 250px;
     display: flex;
     flex-direction: column;
+    margin: 0 30px 0 40px;
 
-    p,
+    p {
+      margin: 5px 0;
+    }
+
     h2 {
-      margin: 10px 0;
+      margin: 0 0 20px 0;
     }
   }
 
@@ -40,5 +44,34 @@
     align-self: stretch;
     padding: 0 20px 0 10px;
     margin-bottom: 10px;
+  }
+
+  &__edit-menu {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid black;
+    padding-top: 35px;
+    margin-top: 35px;
+
+    a {
+      color: $purple1;
+      margin: 5px 0;
+
+      &:hover {
+        color: $purple2;
+      }
+
+      &.active {
+        font-weight: bold;
+      }
+    }
+  }
+
+  &__edit-buttons {
+    margin: 0 0 30px 10px;
+
+    button {
+      margin-right: 10px;
+    }
   }
 }
