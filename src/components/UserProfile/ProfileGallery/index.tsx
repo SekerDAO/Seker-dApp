@@ -1,12 +1,12 @@
 import React, {FunctionComponent, useState} from "react"
-import Input from "../Controls/Input"
-import Select from "../Controls/Select"
-import Gallery from "../Gallery"
-import Button from "../Controls/Button"
-import {NFTSnapshot} from "../../types/NFT"
-import useNFTs from "../../customHooks/useNFTs"
-import ErrorPlaceholder from "../ErrorPlaceholder"
-import Loader from "../Loader"
+import Input from "../../Controls/Input"
+import Select from "../../Controls/Select"
+import Gallery from "../../Gallery"
+import Button from "../../Controls/Button"
+import {NFTSnapshot} from "../../../types/NFT"
+import useNFTs from "../../../customHooks/useNFTs"
+import ErrorPlaceholder from "../../ErrorPlaceholder"
+import Loader from "../../Loader"
 
 const ProfileGallery: FunctionComponent<{account: string}> = ({account}) => {
 	const [cursor, setCursor] = useState<NFTSnapshot | null>(null)
@@ -22,7 +22,7 @@ const ProfileGallery: FunctionComponent<{account: string}> = ({account}) => {
 	return (
 		<>
 			<div className="profile__controls">
-				<Input placeholder="Search" />
+				<Input placeholder="Search" borders="bottom" />
 				<Select options={[{name: "Sort By", value: ""}]} />
 			</div>
 			<Gallery
