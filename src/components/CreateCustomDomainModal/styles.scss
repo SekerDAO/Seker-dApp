@@ -1,0 +1,24 @@
+.create-custom-domain {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+
+  button {
+    align-self: flex-start;
+  }
+
+  h2 {
+    margin-top: 50px;
+  }
+
+  label,
+  button {
+    margin-top: 20px;
+  }
+
+  input {
+    margin-top: 10px;
+  }
+}

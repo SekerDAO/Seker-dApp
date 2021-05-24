@@ -15,6 +15,11 @@
     &:hover {
       background-color: $purple2;
     }
+
+    &:disabled {
+      background-color: $dark-grey;
+      cursor: not-allowed;
+    }
   }
 
   &--secondary {
@@ -25,6 +30,11 @@
     &:hover {
       color: white;
       background-color: $purple1;
+    }
+
+    &:disabled {
+      background-color: $light-grey;
+      cursor: not-allowed;
     }
   }
 }

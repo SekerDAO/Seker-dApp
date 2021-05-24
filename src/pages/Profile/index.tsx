@@ -8,6 +8,7 @@ import Button from "../../components/Controls/Button"
 import ProfileEdit from "../../components/UserProfile/ProfileEdit"
 import ProfileDAOs from "../../components/UserProfile/ProfileDAOs"
 import ProfileView from "../../components/UserProfile/ProfileView"
+import CreateCustomDomainModal from "../../components/CreateCustomDomainModal"
 
 type ProfilePage = "nfts" | "edit" | "daos" | "profile"
 
@@ -68,7 +69,7 @@ const Profile: FunctionComponent = () => {
 					<>
 						{isOwner && (
 							<div className="profile__edit-buttons">
-								<Button buttonType="primary">Create A Custom Domain</Button>
+								<CreateCustomDomainModal />
 								<Button buttonType="secondary">Create / Load NFT</Button>
 							</div>
 						)}
