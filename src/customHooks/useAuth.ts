@@ -1,5 +1,6 @@
 import {createContext, useEffect, useState} from "react"
-import Web3 from "web3"
+//import Web3 from "web3"
+import {ethers} from "ethers"
 import decode from "jwt-decode"
 const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
@@ -15,23 +16,46 @@ type AuthContext = {
 export const useAuth = (): AuthContext => {
 	const [account, setAccount] = useState<string | null>(null)
 	const [chainId, setChainId] = useState<number | null>(null)
+	// todo: return provider
+	// todo: return signer
 	const [connected, setConnected] = useState(false)
 	const [connecting, setConnecting] = useState(false)
 
-	const initWeb3 = async () => {
-		window.web3 = new Web3(window.ethereum)
-		const accounts = await window.web3.eth.getAccounts()
+	// const initWeb3 = async () => {
+	// 	window.web3 = new Web3(window.ethereum)
+	// 	const accounts = await window.web3.eth.getAccounts()
+	// 	if (accounts[0]) {
+	// 		setAccount(accounts[0])
+	// 		const currentChainId = await window.ethereum.request({method: "eth_chainId"})
+	// 		if (currentChainId) {
+	// 			setChainId(currentChainId)
+	// 		}
+	// 	}
+	// }
+
+	const initEthers = async () => {
+		const provider = new ethers.providers.Web3Provider(window.web3.currentProvider)
+		const signer = provider.getSigner()
+		const accounts = await provider.listAccounts()
+		const balance = await signer.getBalance()
+		console.log(balance.toString())
 		if (accounts[0]) {
 			setAccount(accounts[0])
 			const currentChainId = await window.ethereum.request({method: "eth_chainId"})
 			if (currentChainId) {
+				if (currentChainId !== "0x4") {
+					console.log("wrong network")
+					// TODO: modal asking them to switch to rinkeby in metamask
+				} // rinkeby
 				setChainId(currentChainId)
 			}
 		}
 	}
+
 	useEffect(() => {
 		if (window.ethereum) {
-			initWeb3()
+			//initWeb3()
+			initEthers()
 		}
 	}, [window.ethereum])
 
