@@ -1,12 +1,10 @@
-import {createContext, useEffect, useState} from "react"
-//import Web3 from "web3"
-import {ethers} from "ethers"
+import {createContext, useContext, useEffect, useState} from "react"
 import decode from "jwt-decode"
+import EthersContext from "./useEthers"
 const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
 type AuthContext = {
 	account: string | null
-	chainId: number | null
 	connectWallet: () => void
 	connected: boolean
 	disconnect: () => void
@@ -15,72 +13,45 @@ type AuthContext = {
 
 export const useAuth = (): AuthContext => {
 	const [account, setAccount] = useState<string | null>(null)
-	const [chainId, setChainId] = useState<number | null>(null)
-	// todo: return provider
-	// todo: return signer
 	const [connected, setConnected] = useState(false)
 	const [connecting, setConnecting] = useState(false)
+	const {provider, signer} = useContext(EthersContext)
 
-	// const initWeb3 = async () => {
-	// 	window.web3 = new Web3(window.ethereum)
-	// 	const accounts = await window.web3.eth.getAccounts()
-	// 	if (accounts[0]) {
-	// 		setAccount(accounts[0])
-	// 		const currentChainId = await window.ethereum.request({method: "eth_chainId"})
-	// 		if (currentChainId) {
-	// 			setChainId(currentChainId)
-	// 		}
-	// 	}
-	// }
-
-	const initEthers = async () => {
-		const provider = new ethers.providers.Web3Provider(window.web3.currentProvider)
-		const signer = provider.getSigner()
-		const accounts = await provider.listAccounts()
-		const balance = await signer.getBalance()
-		console.log(balance.toString())
+	const init = async () => {
+		const accounts = await provider!.listAccounts()
 		if (accounts[0]) {
 			setAccount(accounts[0])
-			const currentChainId = await window.ethereum.request({method: "eth_chainId"})
-			if (currentChainId) {
-				if (currentChainId !== "0x4") {
-					console.log("wrong network")
-					// TODO: modal asking them to switch to rinkeby in metamask
-				} // rinkeby
-				setChainId(currentChainId)
-			}
 		}
 	}
-
 	useEffect(() => {
-		if (window.ethereum) {
-			//initWeb3()
-			initEthers()
+		if (provider && signer) {
+			init()
 		}
-	}, [window.ethereum])
+	}, [provider, signer])
 
 	const connectWallet = async () => {
-		if (!window.ethereum) {
+		if (!(provider && signer)) {
 			window.open("https://metamask.io/", "blank")
 			return
 		}
 		setConnecting(true)
-		const accounts = await window.ethereum.request({method: "eth_requestAccounts"})
-		setAccount(accounts[0])
-		const currentChainId = await window.ethereum.request({method: "eth_chainId"})
-		setChainId(currentChainId)
-		const signature = await window.web3.eth.personal.sign(
-			JSON.stringify({account: accounts[0], token: "tokenwalk"}),
-			accounts[0]
-		)
 		try {
+			let currentAccount: string
+			if (account) {
+				currentAccount = account
+			} else {
+				const metamaskAccounts = await window.ethereum.request({method: "eth_requestAccounts"})
+				setAccount(metamaskAccounts[0])
+				currentAccount = metamaskAccounts[0]
+			}
+			const signature = await signer.signMessage(JSON.stringify({account: currentAccount, token: "tokenwalk"}))
 			const res = await fetch(`${REACT_APP_CLOUD_FUNCTIONS_URL}/auth`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json"
 				},
 				body: JSON.stringify({
-					account: accounts[0],
+					account: currentAccount,
 					token: "tokenwalk",
 					signature
 				})
@@ -116,7 +87,6 @@ export const useAuth = (): AuthContext => {
 
 	return {
 		account,
-		chainId,
 		connected,
 		connectWallet,
 		disconnect,

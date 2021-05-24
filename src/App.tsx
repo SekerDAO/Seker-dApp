@@ -10,8 +10,10 @@ import Galleries from "./pages/Galleries"
 import NFTDetails from "./pages/NFTDetails"
 import Profile from "./pages/Profile"
 import "./default.scss"
+import EthersContext, {useEthers} from "./customHooks/useEthers"
+import NetworkChecker from "./components/NetworkChecker"
 
-const App: FunctionComponent = () => {
+const AppWithEthers: FunctionComponent = () => {
 	const auth = useAuth()
 
 	return (
@@ -78,6 +80,17 @@ const App: FunctionComponent = () => {
 				</div>
 			</AuthContext.Provider>
 		</BrowserRouter>
+	)
+}
+
+const App: FunctionComponent = () => {
+	const ethers = useEthers()
+
+	return (
+		<EthersContext.Provider value={ethers}>
+			<NetworkChecker />
+			<AppWithEthers />
+		</EthersContext.Provider>
 	)
 }
 
