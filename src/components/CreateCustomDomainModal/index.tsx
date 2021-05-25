@@ -11,6 +11,7 @@ const CreateCustomDomainModal: FunctionComponent = () => {
 	const [name, setName] = useState("")
 	const [symbol, setSymbol] = useState("")
 	const [loading, setLoading] = useState(false)
+	const [success, setSuccess] = useState(false)
 	const {signer} = useContext(EthersContext)
 
 	const handleSubmit = async () => {
@@ -20,8 +21,12 @@ const CreateCustomDomainModal: FunctionComponent = () => {
 		setName("")
 		setSymbol("")
 		setLoading(false)
+		setSuccess(true)
+	}
+
+	const handleClose = () => {
 		setIsOpened(false)
-		alert("Success!") // TODO
+		setSuccess(false)
 	}
 
 	return (
@@ -34,35 +39,47 @@ const CreateCustomDomainModal: FunctionComponent = () => {
 			>
 				Create A Custom Domain
 			</Button>
-			<Modal
-				show={isOpened}
-				onClose={() => {
-					setIsOpened(false)
-				}}
-			>
+			<Modal show={isOpened} onClose={handleClose}>
 				<div className="create-custom-domain">
-					<h2>Create A Custom Domain</h2>
-					<label htmlFor="create-custom-domain-name">Domain Name</label>
-					<Input
-						id="create-custom-domain-name"
-						borders="all"
-						value={name}
-						onChange={e => {
-							setName(e.target.value)
-						}}
-					/>
-					<label htmlFor="create-custom-domain-symbol">Symbol</label>
-					<Input
-						id="create-custom-domain-symbol"
-						borders="all"
-						value={symbol}
-						onChange={e => {
-							setSymbol(e.target.value)
-						}}
-					/>
-					<Button disabled={!(name && symbol) || loading} buttonType="primary" onClick={handleSubmit}>
-						{loading ? "Processing..." : "Submit"}
-					</Button>
+					{success ? (
+						<>
+							<h2>Success!</h2>
+							<p>
+								You now have an immutable, unique, and versatile
+								<br />
+								domain to host your newly created NFTs. To create your
+								<br />
+								first NFT, click on the &quot;Create / Load NFT&quot; button at the
+								<br />
+								top of your user dashboard.
+							</p>
+						</>
+					) : (
+						<>
+							<h2>Create A Custom Domain</h2>
+							<label htmlFor="create-custom-domain-name">Domain Name</label>
+							<Input
+								id="create-custom-domain-name"
+								borders="all"
+								value={name}
+								onChange={e => {
+									setName(e.target.value)
+								}}
+							/>
+							<label htmlFor="create-custom-domain-symbol">Symbol</label>
+							<Input
+								id="create-custom-domain-symbol"
+								borders="all"
+								value={symbol}
+								onChange={e => {
+									setSymbol(e.target.value)
+								}}
+							/>
+							<Button disabled={!(name && symbol) || loading} buttonType="primary" onClick={handleSubmit}>
+								{loading ? "Processing..." : "Submit"}
+							</Button>
+						</>
+					)}
 				</div>
 			</Modal>
 		</>
