@@ -1,0 +1,28 @@
+@import "src/variables";
+
+.image-upload {
+  align-self: flex-start;
+  cursor: pointer;
+
+  button {
+    pointer-events: none;
+  }
+
+  input {
+    display: none;
+  }
+
+  &__preview {
+    min-height: 100px;
+    min-width: 213px;
+    border: 1px dashed black;
+    margin-top: 10px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  &.drag-over .image-upload__preview {
+    border-color: $purple2;
+  }
+}

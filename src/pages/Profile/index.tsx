@@ -4,11 +4,11 @@ import "./styles.scss"
 import {AuthContext} from "../../customHooks/useAuth"
 import {parse} from "query-string"
 import ProfileGallery from "../../components/UserProfile/ProfileGallery"
-import Button from "../../components/Controls/Button"
 import ProfileEdit from "../../components/UserProfile/ProfileEdit"
 import ProfileDAOs from "../../components/UserProfile/ProfileDAOs"
 import ProfileView from "../../components/UserProfile/ProfileView"
 import CreateCustomDomainModal from "../../components/CreateCustomDomainModal"
+import CreateNFTModal from "../../components/CreateNFTModal"
 
 type ProfilePage = "nfts" | "edit" | "daos" | "profile"
 
@@ -51,7 +51,7 @@ const Profile: FunctionComponent = () => {
 								push(`${pathname}?page=daos`)
 							}}
 						>
-							View Youe DAOs
+							View Your DAOs
 						</a>
 						<a
 							className={page === "profile" ? "active" : undefined}
@@ -70,7 +70,7 @@ const Profile: FunctionComponent = () => {
 						{isOwner && (
 							<div className="profile__edit-buttons">
 								<CreateCustomDomainModal />
-								<Button buttonType="secondary">Create / Load NFT</Button>
+								<CreateNFTModal />
 							</div>
 						)}
 						<ProfileGallery account={account} />

@@ -1,7 +1,6 @@
 import React, {FunctionComponent} from "react"
 import {Switch, Route, BrowserRouter} from "react-router-dom"
 import {AuthContext, useAuth} from "./customHooks/useAuth"
-import AdminToolbar from "./components/AdminToolbar"
 import MainLayout from "./layouts/MainLayout"
 import HomepageLayout from "./layouts/HomepageLayout"
 import Homepage from "./pages/Homepage"
@@ -20,7 +19,6 @@ const AppWithEthers: FunctionComponent = () => {
 		<BrowserRouter>
 			<AuthContext.Provider value={auth}>
 				<div className="App">
-					<AdminToolbar />
 					<Switch>
 						<Route
 							exact
