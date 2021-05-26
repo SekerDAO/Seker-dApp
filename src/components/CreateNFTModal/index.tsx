@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useState} from "react"
+import React, {FunctionComponent, useState, useContext} from "react"
 import Button from "../Controls/Button"
 import Modal from "../Modal"
 import RadioButton from "../Controls/RadioButton"
@@ -7,6 +7,8 @@ import ImageUpload from "../Controls/ImageUpload"
 import Input from "../Controls/Input"
 import {uploadMediaIPFS, uploadMetadataIPFS} from "../../api/functions/ipfsAPI"
 import createNFT from "../../api/functions/createNFT"
+import {checkOwner} from "../../api/functions/loadNFT"
+import EthersContext from "../../customHooks/useEthers"
 import "./styles.scss"
 
 type CreateNFTModalStage = "chooseOption" | "chooseDomain" | "uploadFile" | "loadExisting" | "success"
@@ -22,6 +24,7 @@ const CreateNFTModal: FunctionComponent<{account: string}> = ({account}) => {
 	const [numberOfEditions, setNumberOfEditions] = useState("")
 	const [tokenAddress, setTokenAddress] = useState("")
 	const [tokenID, setTokenID] = useState("")
+	const {provider} = useContext(EthersContext)
 
 	const handleClose = () => {
 		setIsOpened(false)
@@ -54,6 +57,9 @@ const CreateNFTModal: FunctionComponent<{account: string}> = ({account}) => {
 			// we do need to know the domain address here
 			//createNFT()
 		} else if (stage === "loadExisting" && tokenID && tokenAddress) {
+			console.log("weeee")
+			const bool = await checkOwner(account, tokenAddress, tokenID, provider)
+			console.log(bool)
 			//console.log("load existing")
 		}
 	}
