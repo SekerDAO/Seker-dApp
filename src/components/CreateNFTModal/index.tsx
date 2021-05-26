@@ -44,9 +44,9 @@ const CreateNFTModal: FunctionComponent = () => {
 			if (customDomain && !customDomainName) return
 			setStage("uploadFile")
 		} else if (stage === "uploadFile" && file && title && numberOfEditions) {
-			console.log("create new")
+			//console.log("create new")
 		} else if (stage === "loadExisting" && tokenID && tokenAddress) {
-			console.log("load existing")
+			//console.log("load existing")
 		}
 	}
 
