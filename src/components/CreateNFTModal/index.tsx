@@ -24,7 +24,7 @@ const CreateNFTModal: FunctionComponent<{account: string}> = ({account}) => {
 	const [numberOfEditions, setNumberOfEditions] = useState("")
 	const [tokenAddress, setTokenAddress] = useState("")
 	const [tokenID, setTokenID] = useState("")
-	const {provider} = useContext(EthersContext)
+	const {provider, signer} = useContext(EthersContext)
 
 	const handleClose = () => {
 		setIsOpened(false)
@@ -55,9 +55,9 @@ const CreateNFTModal: FunctionComponent<{account: string}> = ({account}) => {
 			console.log(hash)
 			// now that we have the metadata and images hashed + stored in the db, we can print the nft
 			// we do need to know the domain address here
-			//createNFT()
+			const nftAddress = "0x70Fbd853bD5407043abA9885d8901554daa01c8d"
+			await createNFT(account, metadataHashes, numberOfEditions, nftAddress, false, signer, provider)
 		} else if (stage === "loadExisting" && tokenID && tokenAddress) {
-			console.log("weeee")
 			const bool = await checkOwner(account, tokenAddress, tokenID, provider)
 			console.log(bool)
 			//console.log("load existing")

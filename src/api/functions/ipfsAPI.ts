@@ -14,6 +14,8 @@ const uploadMediaIPFS = async (file: any, account: string): Promise<string> => {
 	}
 }
 
+// TODO: edit this to store the metadata on a folder and add the whole folder
+// not sure how to do this with netlify server
 // prettier-ignore
 const uploadMetadataIPFS = async (hash: string, title: string, numberOfEditions: string, account: string): Promise<string[]> => {
 	const hashes = []
