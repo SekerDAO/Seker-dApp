@@ -69,7 +69,7 @@ const Profile: FunctionComponent = () => {
 					<>
 						{isOwner && (
 							<div className="profile__edit-buttons">
-								<CreateCustomDomainModal />
+								<CreateCustomDomainModal account={account} />
 								<CreateNFTModal />
 							</div>
 						)}

@@ -40,7 +40,7 @@
         "allow": ["error"]
       }
     ],
-    "no-alert": "error",
+    //"no-alert": "error",
     "no-debugger": "error",
     "import/no-extraneous-dependencies": ["error", { "devDependencies": false }],
     "react/prop-types": 0,

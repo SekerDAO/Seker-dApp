@@ -6,7 +6,7 @@ import "./styles.scss"
 import EthersContext from "../../customHooks/useEthers"
 import deployCustomDomain from "../../api/functions/deployCustomDomain"
 
-const CreateCustomDomainModal: FunctionComponent = () => {
+const CreateCustomDomainModal: FunctionComponent<{account: string}> = ({account}) => {
 	const [isOpened, setIsOpened] = useState(false)
 	const [name, setName] = useState("")
 	const [symbol, setSymbol] = useState("")
@@ -17,7 +17,7 @@ const CreateCustomDomainModal: FunctionComponent = () => {
 	const handleSubmit = async () => {
 		if (!(name && symbol && signer) || loading) return
 		setLoading(true)
-		await deployCustomDomain(name, symbol, signer)
+		await deployCustomDomain(name, symbol, signer, account)
 		setName("")
 		setSymbol("")
 		setLoading(false)
