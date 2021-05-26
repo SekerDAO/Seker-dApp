@@ -8,6 +8,7 @@ import {firebaseConfig} from "./firebase/config"
 // TODO
 declare global {
 	interface Window {
+		// eslint-disable-next-line
 		ethereum: any
 	}
 }
