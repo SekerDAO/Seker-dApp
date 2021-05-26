@@ -1,11 +1,47 @@
-import { create } from 'ipfs-http-client'
-const client = create('https://ipfs.infura.io:5001')
+import {create, urlSource} from "ipfs-http-client"
+// @ts-expect-error: Let's ignore a compile error like this unreachable code
+const client = create("https://ipfs.infura.io:5001")
 //import firebase from "firebase"
 
 // prettier-ignore
-const uploadMediaIPFS = async (file: file, account: string): Promise<void> => {
-	console.log(account)
-	//const snapshot = await firebase.firestore().collection('users').doc(account).get();
+const uploadMediaIPFS = async (file: any, account: string): Promise<string> => {
+	try{
+		const res = await client.add(file)
+		// todo: save image and hash in the database
+		return res.path
+	} catch (err) {
+		return err
+	}
 }
 
-export default uploadMediaIPFS
+// prettier-ignore
+const uploadMetadataIPFS = async (hash: string, title: string, numberOfEditions: string, account: string): Promise<string[]> => {
+	const hashes = []
+	for(let i = 0; i < parseInt(numberOfEditions, 10); i++){
+		const metadata = {
+			"name": title,
+			"description": "A decription of the specific nft", //todo
+			"external_url": "https://tokenwalk.com/nftaddress/nftid", //todo
+			"image": "https://ipfs.io/ipfs/"+hash,
+			"media":{
+				"uri":"https://ipfs.io/ipfs/"+hash,
+				"dimensions":"2188x2500","size":"22142080","mimeType":"video/mp4" //todo
+			},
+			"attributes": {
+				"original" : "false",
+				"edition-number" : i,
+				"royalty" : "10%" //todo
+			} 
+		}
+		try{
+			const res = await client.add(JSON.stringify(metadata))
+			// todo: save image and hash in the database
+			hashes.push(res.path)
+		} catch (err) {
+			hashes.push(err)
+		}
+	}
+	return hashes
+}
+
+export {uploadMediaIPFS, uploadMetadataIPFS}

@@ -5,7 +5,8 @@ import RadioButton from "../Controls/RadioButton"
 import Select from "../Controls/Select"
 import ImageUpload from "../Controls/ImageUpload"
 import Input from "../Controls/Input"
-import uploadMediaIPFS from "../../api/functions/ipfsAPI"
+import {uploadMediaIPFS, uploadMetadataIPFS} from "../../api/functions/ipfsAPI"
+import createNFT from "../../api/functions/createNFT"
 import "./styles.scss"
 
 type CreateNFTModalStage = "chooseOption" | "chooseDomain" | "uploadFile" | "loadExisting" | "success"
@@ -45,8 +46,13 @@ const CreateNFTModal: FunctionComponent<{account: string}> = ({account}) => {
 			if (customDomain && !customDomainName) return
 			setStage("uploadFile")
 		} else if (stage === "uploadFile" && file && title && numberOfEditions) {
-			await uploadMediaIPFS(file, account)
-			//console.log("create new")
+			const hash = await uploadMediaIPFS(file, account)
+			const metadataHashes = await uploadMetadataIPFS(hash, title, numberOfEditions, account)
+			console.log(metadataHashes)
+			console.log(hash)
+			// now that we have the metadata and images hashed + stored in the db, we can print the nft
+			// we do need to know the domain address here
+			//createNFT()
 		} else if (stage === "loadExisting" && tokenID && tokenAddress) {
 			//console.log("load existing")
 		}
