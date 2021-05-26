@@ -5,11 +5,12 @@ import RadioButton from "../Controls/RadioButton"
 import Select from "../Controls/Select"
 import ImageUpload from "../Controls/ImageUpload"
 import Input from "../Controls/Input"
+import uploadMediaIPFS from "../../api/functions/ipfsAPI"
 import "./styles.scss"
 
 type CreateNFTModalStage = "chooseOption" | "chooseDomain" | "uploadFile" | "loadExisting" | "success"
 
-const CreateNFTModal: FunctionComponent = () => {
+const CreateNFTModal: FunctionComponent<{account: string}> = ({account}) => {
 	const [isOpened, setIsOpened] = useState(false)
 	const [stage, setStage] = useState<CreateNFTModalStage>("chooseOption")
 	const [loadExisting, setLoadExisting] = useState(false)
@@ -33,7 +34,7 @@ const CreateNFTModal: FunctionComponent = () => {
 		setTokenID("")
 	}
 
-	const handleSubmit = () => {
+	const handleSubmit = async () => {
 		if (stage === "chooseOption") {
 			if (loadExisting) {
 				setStage("loadExisting")
@@ -44,6 +45,7 @@ const CreateNFTModal: FunctionComponent = () => {
 			if (customDomain && !customDomainName) return
 			setStage("uploadFile")
 		} else if (stage === "uploadFile" && file && title && numberOfEditions) {
+			await uploadMediaIPFS(file, account)
 			//console.log("create new")
 		} else if (stage === "loadExisting" && tokenID && tokenAddress) {
 			//console.log("load existing")
