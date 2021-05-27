@@ -38,7 +38,7 @@ const uploadMetadataIPFS = async (hash: string, title: string, numberOfEditions:
 		try{
 			const res = await client.add(JSON.stringify(metadata))
 			// todo: save image and hash in the database
-			hashes.push(res.path)
+			hashes.push("https://gateway.ipfs.io/ipfs/"+res.path)
 		} catch (err) {
 			hashes.push(err)
 		}

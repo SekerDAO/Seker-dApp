@@ -7,8 +7,7 @@ import firebase from "firebase"
 const createNFT = async (account: string, hashes: string[], numberOfEditions: string, nftAddress: string, isCustomDomain: boolean, signer: JsonRpcSigner | null, provider: Web3Provider | null): Promise<void> => {
 	// @ts-expect-error: Let's ignore a compile error like this unreachable code
 	const nft = new Contract(nftAddress, TWDomainToken.abi, signer)
-	const ipfsAddress = "https://gateway.ipfs.io/ipfs/"+hashes[0]+"/metadata"
-	const _tx = await nft.mintEdition(ipfsAddress, parseInt(numberOfEditions))
+	const _tx = await nft.mintEdition(hashes, parseInt(numberOfEditions))
 	// @ts-expect-error: Let's ignore a compile error like this unreachable code
     provider.once(_tx.hash, (receipt) => {
         console.log('Transaction Minded: ' + receipt.transactionHash);

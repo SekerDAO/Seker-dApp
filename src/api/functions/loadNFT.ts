@@ -51,7 +51,7 @@ const getNFTImage = async (metadata: string): Promise<void> => {
         	console.log(result)
 			const outside = URL.createObjectURL(result)
 			console.log(outside)
-			//todo: return the image?
+			//todo: return the image and begin DB storage
         },
         (error) => {
         	console.log(error)
