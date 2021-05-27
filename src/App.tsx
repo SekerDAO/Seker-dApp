@@ -1,6 +1,6 @@
 import React, {FunctionComponent} from "react"
 import {Switch, Route, BrowserRouter} from "react-router-dom"
-import {AuthContext, useAuth} from "./customHooks/useAuth"
+import {AuthContext, useAuth} from "./context/AuthContext"
 import MainLayout from "./layouts/MainLayout"
 import HomepageLayout from "./layouts/HomepageLayout"
 import Homepage from "./pages/Homepage"
@@ -9,7 +9,7 @@ import Galleries from "./pages/Galleries"
 import NFTDetails from "./pages/NFTDetails"
 import Profile from "./pages/Profile"
 import "./default.scss"
-import EthersContext, {useEthers} from "./customHooks/useEthers"
+import EthersContext, {useEthers} from "./context/EthersContext"
 import NetworkChecker from "./components/NetworkChecker"
 
 const AppWithEthers: FunctionComponent = () => {

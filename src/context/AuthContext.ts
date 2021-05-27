@@ -1,6 +1,7 @@
 import {createContext, useContext, useEffect, useState} from "react"
 import decode from "jwt-decode"
-import EthersContext from "./useEthers"
+import EthersContext from "./EthersContext"
+import firebase from "firebase"
 const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
 type AuthContext = {
@@ -58,6 +59,7 @@ export const useAuth = (): AuthContext => {
 			})
 			const json = await res.json()
 			localStorage.setItem("tokenwalk_at", json.token)
+			await firebase.auth().signInWithCustomToken(json.token)
 			setConnected(true)
 		} catch (e) {
 			console.error(e)
@@ -65,12 +67,13 @@ export const useAuth = (): AuthContext => {
 		setConnecting(false)
 	}
 
-	const checkToken = () => {
+	const checkToken = async () => {
 		const token = localStorage.getItem("tokenwalk_at")
 		if (token) {
 			try {
 				const {exp} = decode<{exp: number}>(token)
 				if (exp * 1000 - new Date().getTime() > 10) {
+					await firebase.auth().signInWithCustomToken(token)
 					setConnected(true)
 				}
 			} catch (e) {
@@ -78,7 +81,9 @@ export const useAuth = (): AuthContext => {
 			}
 		}
 	}
-	useEffect(checkToken, [])
+	useEffect(() => {
+		checkToken()
+	}, [])
 
 	const disconnect = () => {
 		localStorage.removeItem("tokenwalk_at")

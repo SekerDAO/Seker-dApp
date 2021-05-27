@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react"
 import {NFT} from "../types/NFT"
-import firebase from "firebase"
+import getNFT from "../api/firebase/getNFT"
 
 const useNFT = (
 	id: string
@@ -13,21 +13,10 @@ const useNFT = (
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
 
-	const fetchNFT = async (_id: string) => {
-		const snapshot = await firebase.firestore().collection("nfts").doc(_id).get()
-		if (!snapshot.exists) {
-			throw new Error("NFT not found")
-		}
-		return {
-			...(snapshot.data() as Omit<NFT, "id">),
-			id: _id
-		}
-	}
-
 	useEffect(() => {
 		setLoading(true)
 		setError(false)
-		fetchNFT(id)
+		getNFT(id)
 			.then(_NFT => {
 				setLoading(false)
 				setNFT(_NFT)

@@ -3,8 +3,10 @@ import Button from "../Controls/Button"
 import Modal from "../Modal"
 import Input from "../Controls/Input"
 import "./styles.scss"
-import EthersContext from "../../customHooks/useEthers"
-import deployCustomDomain from "../../api/functions/deployCustomDomain"
+import EthersContext from "../../context/EthersContext"
+import deployCustomDomain from "../../api/ethers/functions/deployCustomDomain"
+import addDomain from "../../api/firebase/addDomain"
+import {AuthContext} from "../../context/AuthContext"
 
 const CreateCustomDomainModal: FunctionComponent = () => {
 	const [isOpened, setIsOpened] = useState(false)
@@ -13,15 +15,21 @@ const CreateCustomDomainModal: FunctionComponent = () => {
 	const [loading, setLoading] = useState(false)
 	const [success, setSuccess] = useState(false)
 	const {signer} = useContext(EthersContext)
+	const {account} = useContext(AuthContext)
 
 	const handleSubmit = async () => {
-		if (!(name && symbol && signer) || loading) return
+		if (!(name && symbol && signer && account) || loading) return
 		setLoading(true)
-		await deployCustomDomain(name, symbol, signer)
-		setName("")
-		setSymbol("")
+		try {
+			await deployCustomDomain(name, symbol, signer)
+			await addDomain(name, symbol, account)
+			setName("")
+			setSymbol("")
+			setSuccess(true)
+		} catch (e) {
+			console.error(e) // TODO: notification
+		}
 		setLoading(false)
-		setSuccess(true)
 	}
 
 	const handleClose = () => {

@@ -1,16 +1,22 @@
-import React, {FunctionComponent, useState} from "react"
+import React, {FunctionComponent, useState, useContext} from "react"
 import Button from "../Controls/Button"
 import Modal from "../Modal"
 import RadioButton from "../Controls/RadioButton"
 import Select from "../Controls/Select"
 import ImageUpload from "../Controls/ImageUpload"
 import Input from "../Controls/Input"
+import EthersContext from "../../context/EthersContext"
 import "./styles.scss"
+import checkNFTOwner from "../../api/ethers/functions/checkNFTOwner"
+import {AuthContext} from "../../context/AuthContext"
+import getNFTMetadata from "../../api/ethers/functions/getNFTMetadata"
+import addNFT from "../../api/firebase/addNFT"
 
 type CreateNFTModalStage = "chooseOption" | "chooseDomain" | "uploadFile" | "loadExisting" | "success"
 
 const CreateNFTModal: FunctionComponent = () => {
 	const [isOpened, setIsOpened] = useState(false)
+	const [loading, setLoading] = useState(false)
 	const [stage, setStage] = useState<CreateNFTModalStage>("chooseOption")
 	const [loadExisting, setLoadExisting] = useState(false)
 	const [customDomain, setCustomDomain] = useState(false)
@@ -20,6 +26,8 @@ const CreateNFTModal: FunctionComponent = () => {
 	const [numberOfEditions, setNumberOfEditions] = useState("")
 	const [tokenAddress, setTokenAddress] = useState("")
 	const [tokenID, setTokenID] = useState("")
+	const {provider, signer} = useContext(EthersContext)
+	const {account} = useContext(AuthContext)
 
 	const handleClose = () => {
 		setIsOpened(false)
@@ -33,7 +41,7 @@ const CreateNFTModal: FunctionComponent = () => {
 		setTokenID("")
 	}
 
-	const handleSubmit = () => {
+	const handleSubmit = async () => {
 		if (stage === "chooseOption") {
 			if (loadExisting) {
 				setStage("loadExisting")
@@ -44,9 +52,42 @@ const CreateNFTModal: FunctionComponent = () => {
 			if (customDomain && !customDomainName) return
 			setStage("uploadFile")
 		} else if (stage === "uploadFile" && file && title && numberOfEditions) {
-			//console.log("create new")
-		} else if (stage === "loadExisting" && tokenID && tokenAddress) {
-			//console.log("load existing")
+			// const hash = await uploadMediaIPFS(file, account)
+			// const metadataHashes = await uploadMetadataIPFS(hash, title, numberOfEditions, account)
+			// console.log(metadataHashes)
+			// console.log(hash)
+			// // now that we have the metadata and images hashed + stored in the db, we can print the nft
+			// // we do need to know the domain address here
+			// const nftAddress = "0xa5676205dBd9ffa11038eB4661f785942E7701D5"
+			// await createNFT(account, metadataHashes, numberOfEditions, nftAddress, false, signer, provider)
+		} else if (stage === "loadExisting" && tokenID && tokenAddress && account && provider) {
+			setLoading(true)
+			try {
+				const isOwner = await checkNFTOwner(account, tokenAddress, tokenID, provider)
+				if (!isOwner) {
+					alert("You are not the owner!") // TODO
+					setLoading(false)
+					return
+				}
+				const metadata = await getNFTMetadata(tokenAddress, tokenID, provider)
+				await addNFT(
+					{
+						createdDate: new Date().toISOString(),
+						nftName: metadata.name,
+						nftDesc: metadata.description,
+						nftThumbnail: metadata.image,
+						externalUrl: metadata.external_url,
+						media: metadata.media,
+						attributes: metadata.attributes,
+						nftCategory: "art"
+					},
+					account
+				)
+				setStage("success")
+			} catch (e) {
+				console.error(e)
+			}
+			setLoading(false)
 		}
 	}
 
@@ -187,8 +228,8 @@ const CreateNFTModal: FunctionComponent = () => {
 						</>
 					)}
 					{stage !== "success" && (
-						<Button buttonType="primary" onClick={handleSubmit} disabled={submitButtonDisabled}>
-							{stage === "uploadFile" || stage === "loadExisting" ? "Submit" : "Continue"}
+						<Button buttonType="primary" onClick={handleSubmit} disabled={submitButtonDisabled || loading}>
+							{stage === "uploadFile" || stage === "loadExisting" ? (loading ? "Processing..." : "Submit") : "Continue"}
 						</Button>
 					)}
 				</div>
