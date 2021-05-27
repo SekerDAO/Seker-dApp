@@ -5,9 +5,9 @@ import RadioButton from "../Controls/RadioButton"
 import Select from "../Controls/Select"
 import ImageUpload from "../Controls/ImageUpload"
 import Input from "../Controls/Input"
-import {uploadMediaIPFS, uploadMetadataIPFS} from "../../api/functions/ipfsAPI"
+import {uploadMediaIPFS, uploadMetadataIPFS, getMetadataIPFS} from "../../api/functions/ipfsAPI"
 import createNFT from "../../api/functions/createNFT"
-import {checkOwner} from "../../api/functions/loadNFT"
+import {checkOwner, getNFTMetadata} from "../../api/functions/loadNFT"
 import EthersContext from "../../customHooks/useEthers"
 import "./styles.scss"
 
@@ -59,7 +59,10 @@ const CreateNFTModal: FunctionComponent<{account: string}> = ({account}) => {
 			await createNFT(account, metadataHashes, numberOfEditions, nftAddress, false, signer, provider)
 		} else if (stage === "loadExisting" && tokenID && tokenAddress) {
 			const bool = await checkOwner(account, tokenAddress, tokenID, provider)
-			console.log(bool)
+			if (bool === false) {
+				return
+			}
+			await getNFTMetadata(tokenAddress, tokenID, provider)
 			//console.log("load existing")
 		}
 	}

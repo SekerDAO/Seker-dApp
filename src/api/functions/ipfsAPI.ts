@@ -46,4 +46,20 @@ const uploadMetadataIPFS = async (hash: string, title: string, numberOfEditions:
 	return hashes
 }
 
-export {uploadMediaIPFS, uploadMetadataIPFS}
+const getMetadataIPFS = async (cid: string): Promise<string | undefined> => {
+	try {
+		const res = await client.get(cid)
+		for await (const value of res) {
+			// @ts-expect-error: Let's ignore a compile error like this unreachable code
+			for await (const content of value.content) {
+				console.log(content.toString("utf8"))
+				return content.toString("utf8")
+			}
+		}
+	} catch (err) {
+		console.log(err)
+		return err
+	}
+}
+
+export {uploadMediaIPFS, uploadMetadataIPFS, getMetadataIPFS}

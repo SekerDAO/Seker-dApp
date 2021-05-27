@@ -16,8 +16,20 @@ const checkOwner = async (account: string, address: string, id: string, provider
 	}
 }
 
+// prettier-ignore
+const getNFTMetadata = async (nftAddress: string, nftId: string, provider: Web3Provider | null): Promise<void> => {
+	try{
+		// @ts-expect-error: Let's ignore a compile error like this unreachable code
+		const nftContract = new Contract(nftAddress, MultiArtToken.abi, provider)
+		const uri = await nftContract.tokenURI(nftId)
+		console.log(uri)
+	} catch (err) {
+
+	}
+}
+
 const loadNFT = async (account: string, address: string, id: string): Promise<void> => {
 	//todo: enter into DB here
 }
 
-export {loadNFT, checkOwner}
+export {loadNFT, checkOwner, getNFTMetadata}
