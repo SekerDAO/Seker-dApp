@@ -1,7 +1,7 @@
 import React, {FunctionComponent, useContext} from "react"
 import {useHistory, useLocation, useParams} from "react-router-dom"
 import "./styles.scss"
-import {AuthContext} from "../../customHooks/useAuth"
+import {AuthContext} from "../../context/AuthContext"
 import {parse} from "query-string"
 import ProfileGallery from "../../components/UserProfile/ProfileGallery"
 import ProfileEdit from "../../components/UserProfile/ProfileEdit"
@@ -69,8 +69,8 @@ const Profile: FunctionComponent = () => {
 					<>
 						{isOwner && (
 							<div className="profile__edit-buttons">
-								<CreateCustomDomainModal account={account} />
-								<CreateNFTModal account={account} />
+								<CreateCustomDomainModal />
+								<CreateNFTModal />
 							</div>
 						)}
 						<ProfileGallery account={account} />
