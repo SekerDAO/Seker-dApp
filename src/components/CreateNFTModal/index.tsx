@@ -7,7 +7,7 @@ import ImageUpload from "../Controls/ImageUpload"
 import Input from "../Controls/Input"
 import {uploadMediaIPFS, uploadMetadataIPFS, getMetadataIPFS} from "../../api/functions/ipfsAPI"
 import createNFT from "../../api/functions/createNFT"
-import {checkOwner, getNFTMetadata} from "../../api/functions/loadNFT"
+import {checkOwner, getNFTMetadata, getNFTImage} from "../../api/functions/loadNFT"
 import EthersContext from "../../customHooks/useEthers"
 import "./styles.scss"
 
@@ -62,7 +62,9 @@ const CreateNFTModal: FunctionComponent<{account: string}> = ({account}) => {
 			if (bool === false) {
 				return
 			}
-			await getNFTMetadata(tokenAddress, tokenID, provider)
+			const metadata = await getNFTMetadata(tokenAddress, tokenID, provider)
+			console.log(metadata)
+			await getNFTImage(metadata)
 			//console.log("load existing")
 		}
 	}
