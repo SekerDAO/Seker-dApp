@@ -6,11 +6,15 @@ import Select from "../Controls/Select"
 import ImageUpload from "../Controls/ImageUpload"
 import Input from "../Controls/Input"
 import EthersContext from "../../context/EthersContext"
-import "./styles.scss"
 import checkNFTOwner from "../../api/ethers/functions/checkNFTOwner"
 import {AuthContext} from "../../context/AuthContext"
 import getNFTMetadata from "../../api/ethers/functions/getNFTMetadata"
 import addNFT from "../../api/firebase/addNFT"
+import uploadMedia from "../../api/ipfs/uploadMedia"
+import createNFT from "../../api/ethers/functions/createNFT"
+import Textarea from "../Controls/Textarea"
+import useMyDomains from "../../api/firebase/useMyDomains"
+import "./styles.scss"
 
 type CreateNFTModalStage = "chooseOption" | "chooseDomain" | "uploadFile" | "loadExisting" | "success"
 
@@ -20,14 +24,16 @@ const CreateNFTModal: FunctionComponent = () => {
 	const [stage, setStage] = useState<CreateNFTModalStage>("chooseOption")
 	const [loadExisting, setLoadExisting] = useState(false)
 	const [customDomain, setCustomDomain] = useState(false)
-	const [customDomainName, setCustomDomainName] = useState("")
+	const [customDomainAddress, setCustomDomainAddress] = useState("")
 	const [file, setFile] = useState<File | null>(null)
 	const [title, setTitle] = useState("")
+	const [description, setDescription] = useState("")
 	const [numberOfEditions, setNumberOfEditions] = useState("")
 	const [tokenAddress, setTokenAddress] = useState("")
 	const [tokenID, setTokenID] = useState("")
 	const {provider, signer} = useContext(EthersContext)
 	const {account} = useContext(AuthContext)
+	const {domains, loading: domainsLoading, error: domainsError} = useMyDomains()
 
 	const handleClose = () => {
 		setIsOpened(false)
@@ -49,17 +55,31 @@ const CreateNFTModal: FunctionComponent = () => {
 				setStage("chooseDomain")
 			}
 		} else if (stage === "chooseDomain") {
-			if (customDomain && !customDomainName) return
+			if (customDomain && !customDomainAddress) return
 			setStage("uploadFile")
-		} else if (stage === "uploadFile" && file && title && numberOfEditions) {
-			// const hash = await uploadMediaIPFS(file, account)
-			// const metadataHashes = await uploadMetadataIPFS(hash, title, numberOfEditions, account)
-			// console.log(metadataHashes)
-			// console.log(hash)
-			// // now that we have the metadata and images hashed + stored in the db, we can print the nft
-			// // we do need to know the domain address here
-			// const nftAddress = "0xa5676205dBd9ffa11038eB4661f785942E7701D5"
-			// await createNFT(account, metadataHashes, numberOfEditions, nftAddress, false, signer, provider)
+		} else if (stage === "uploadFile" && file && title && numberOfEditions && signer && provider && account) {
+			setLoading(true)
+			try {
+				const [metadata, hashes] = await uploadMedia(file, title, description, Number(numberOfEditions))
+				await createNFT(hashes, Number(numberOfEditions), signer, provider, customDomainAddress || undefined)
+				await addNFT(
+					{
+						createdDate: new Date().toISOString(),
+						nftName: metadata.name,
+						nftDesc: metadata.description,
+						nftThumbnail: metadata.image,
+						externalUrl: metadata.external_url,
+						media: metadata.media,
+						attributes: metadata.attributes,
+						nftCategory: "art"
+					},
+					account
+				)
+				setStage("success")
+			} catch (e) {
+				console.error(e) // TODO: notification
+			}
+			setLoading(false)
 		} else if (stage === "loadExisting" && tokenID && tokenAddress && account && provider) {
 			setLoading(true)
 			try {
@@ -92,7 +112,7 @@ const CreateNFTModal: FunctionComponent = () => {
 	}
 
 	const submitButtonDisabled =
-		(stage === "chooseDomain" && customDomain && !customDomainName) ||
+		(stage === "chooseDomain" && customDomain && !customDomainAddress) ||
 		(stage === "uploadFile" && !(file && title && numberOfEditions)) ||
 		(stage === "loadExisting" && !(tokenID && tokenID))
 
@@ -148,15 +168,16 @@ const CreateNFTModal: FunctionComponent = () => {
 									}}
 								/>
 								<Select
+									value={customDomainAddress}
 									options={[
 										{
 											name: "Select Domain",
 											value: ""
 										}
-									]} // TODO
-									disabled={!customDomain}
+									].concat(domains.map(domain => ({name: domain.name, value: domain.address})))}
+									disabled={!customDomain && domainsLoading && domainsError}
 									onChange={e => {
-										setCustomDomainName(e.target.value)
+										setCustomDomainAddress(e.target.value)
 									}}
 								/>
 							</div>
@@ -196,6 +217,7 @@ const CreateNFTModal: FunctionComponent = () => {
 									<label># of Editions</label>
 									<Input
 										number
+										max={50}
 										borders="all"
 										value={numberOfEditions}
 										onChange={e => {
@@ -204,6 +226,14 @@ const CreateNFTModal: FunctionComponent = () => {
 									/>
 								</div>
 							</div>
+							<label>Description</label>
+							<Textarea
+								borders="all"
+								value={description}
+								onChange={e => {
+									setDescription(e.target.value)
+								}}
+							/>
 						</>
 					)}
 					{stage === "loadExisting" && (
@@ -227,7 +257,17 @@ const CreateNFTModal: FunctionComponent = () => {
 							/>
 						</>
 					)}
-					{stage !== "success" && (
+					{stage === "success" ? (
+						<>
+							<h2>Success!</h2>
+							<p>
+								You now have the ability to delete, sign, or change the
+								<br />
+								visibility setting of your created NFT on the &quot;Create /<br />
+								Edit NFTs&quot; page of your user dashboard.
+							</p>
+						</>
+					) : (
 						<Button buttonType="primary" onClick={handleSubmit} disabled={submitButtonDisabled || loading}>
 							{stage === "uploadFile" || stage === "loadExisting" ? (loading ? "Processing..." : "Submit") : "Continue"}
 						</Button>

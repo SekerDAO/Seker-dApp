@@ -21,8 +21,8 @@ const CreateCustomDomainModal: FunctionComponent = () => {
 		if (!(name && symbol && signer && account) || loading) return
 		setLoading(true)
 		try {
-			await deployCustomDomain(name, symbol, signer)
-			await addDomain(name, symbol, account)
+			const domainAddress = await deployCustomDomain(name, symbol, signer)
+			await addDomain(name, symbol, domainAddress, account)
 			setName("")
 			setSymbol("")
 			setSuccess(true)

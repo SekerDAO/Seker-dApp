@@ -1,22 +1,22 @@
 import {JsonRpcSigner, Web3Provider} from "@ethersproject/providers"
 import TWDomainToken from "../abis/TWDomainToken.json"
+import MultiArtToken from "../abis/MultiArtToken.json"
 import {Contract} from "@ethersproject/contracts"
+const {REACT_APP_DOMAIN_ADDRESS} = process.env
 
 const createNFT = async (
-	account: string,
 	hashes: string[],
-	numberOfEditions: string,
-	nftAddress: string,
-	isCustomDomain: boolean,
+	numberOfEditions: number,
 	signer: JsonRpcSigner,
-	provider: Web3Provider
+	provider: Web3Provider,
+	customDomain?: string
 ): Promise<void> => {
-	const nft = new Contract(nftAddress, TWDomainToken.abi, signer)
-	const _tx = await nft.mintEdition(hashes, parseInt(numberOfEditions))
-	provider.once(_tx.hash, receipt => {
-		console.log("Transaction Minded: " + receipt.transactionHash)
-		console.log(receipt)
-	})
+	const nft = new Contract(
+		customDomain ?? REACT_APP_DOMAIN_ADDRESS!,
+		customDomain ? MultiArtToken.abi : TWDomainToken.abi,
+		signer
+	)
+	await nft.mintEdition(hashes, numberOfEditions)
 }
 
 export default createNFT

@@ -3,7 +3,7 @@ import firebase from "firebase"
 type NFTMediaInfo = {
 	dimensions: string
 	mimeType: string
-	size: string
+	size: number
 	uri: string
 }
 
@@ -16,7 +16,7 @@ export type NFT = {
 	nftDesc: string
 	externalUrl?: string
 	media: NFTMediaInfo
-	attributes?: Record<string, string | number>
+	attributes?: Record<string, string | number | boolean>
 	nftCategory: "art" | "exhibit"
 }
 
@@ -26,7 +26,7 @@ export type NFTMetadata = {
 	image: string
 	external_url: string
 	media: NFTMediaInfo
-	attributes: Record<string, string | number>
+	attributes: Record<string, string | number | boolean>
 }
 
 export type NFTSnapshot = firebase.firestore.QueryDocumentSnapshot<Omit<NFT, "id">>
