@@ -35,12 +35,12 @@
     // Can break code with auto-fix option, we are checking it separately (see package.json lint-hooks script)
     "react-hooks/exhaustive-deps": 0,
     "no-console": [
-      "warn",
+      "error",
       {
         "allow": ["error"]
       }
     ],
-    "no-alert": "off",
+    "no-alert": "error",
     "no-debugger": "error",
     "import/no-extraneous-dependencies": ["error", { "devDependencies": false }],
     "react/prop-types": 0,
