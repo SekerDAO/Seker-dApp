@@ -3,7 +3,7 @@ import Button from "../Controls/Button"
 import Modal from "../Modal"
 import RadioButton from "../Controls/RadioButton"
 import Select from "../Controls/Select"
-import ImageUpload from "../Controls/ImageUpload"
+import MediaUpload from "../Controls/MediaUpload"
 import Input from "../Controls/Input"
 import EthersContext from "../../context/EthersContext"
 import checkNFTOwner from "../../api/ethers/functions/checkNFTOwner"
@@ -85,7 +85,7 @@ const CreateNFTModal: FunctionComponent = () => {
 			try {
 				const isOwner = await checkNFTOwner(account, tokenAddress, tokenID, provider)
 				if (!isOwner) {
-					console.log("You are not the owner!") // TODO
+					alert("You are not the owner!") // TODO
 					setLoading(false)
 					return
 				}
@@ -197,7 +197,7 @@ const CreateNFTModal: FunctionComponent = () => {
 						<>
 							<h2>Create NFT</h2>
 							<p>Step 3. Input NFT Information</p>
-							<ImageUpload
+							<MediaUpload
 								onUpload={image => {
 									setFile(image)
 								}}

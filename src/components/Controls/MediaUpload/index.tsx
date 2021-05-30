@@ -1,24 +1,32 @@
 import React, {FunctionComponent, useRef, useState} from "react"
 import Button from "../Button"
 import useFileDrop from "../../../customHooks/useFileDrop"
-import acceptedImageTypes from "../../../constants/acceptedImageTypes"
+import {imageTypes, videoTypes} from "../../../constants/mimeTypes"
 import "./styles.scss"
 
-const ImageUpload: FunctionComponent<{
+const MediaUpload: FunctionComponent<{
 	onUpload: (file: File) => void
 }> = ({onUpload}) => {
 	const [imageUrl, setImageUrl] = useState<string | null>(null)
+	const [isVideo, setIsVideo] = useState(false)
 
 	const _onUpload = (file: File) => {
-		setImageUrl(URL.createObjectURL(file))
-		onUpload(file)
+		if (file.type.startsWith("image")) {
+			setImageUrl(URL.createObjectURL(file))
+			onUpload(file)
+		} else if (file.type.startsWith("video")) {
+			setIsVideo(true)
+			onUpload(file)
+		} else {
+			alert("Wrong file type!")
+		}
 	}
 
 	const uploadRef = useRef<HTMLLabelElement | null>(null)
 	const {handleFileUpload, handleDragOver, handleDrop, handleDragLeave, handleDragEnter} = useFileDrop({
 		uploadRef,
 		onUpload: _onUpload,
-		acceptedMimeTypes: acceptedImageTypes
+		acceptedMimeTypes: imageTypes
 	})
 
 	return (
@@ -30,13 +38,15 @@ const ImageUpload: FunctionComponent<{
 			onDragLeave={handleDragLeave}
 			onDrop={handleDrop}
 		>
-			<input type="file" accept={acceptedImageTypes.join(",")} onChange={handleFileUpload} />
+			<input type="file" accept={imageTypes.concat(videoTypes).join(",")} onChange={handleFileUpload} />
 			<Button buttonType="secondary">
 				<label>Upload File</label>
 			</Button>
-			<div className="image-upload__preview" style={imageUrl ? {backgroundImage: `url("${imageUrl}")`} : undefined} />
+			<div className="image-upload__preview" style={imageUrl ? {backgroundImage: `url("${imageUrl}")`} : undefined}>
+				{isVideo && "TODO: video icon"}
+			</div>
 		</label>
 	)
 }
 
-export default ImageUpload
+export default MediaUpload

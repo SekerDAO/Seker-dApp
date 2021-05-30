@@ -17,7 +17,11 @@ const uploadMedia = async (
 		throw new Error("Number of editions should be an integer between 1 and 50")
 	}
 	const {path} = await client.add(file)
-	const image = await createImage(file)
+	let dimensions = ""
+	if (file.type.startsWith("image")) {
+		const image = await createImage(file)
+		dimensions = `${image.width}x${image.height}`
+	}
 	const hashes = []
 	const metadata = {
 		name: title,
@@ -26,7 +30,7 @@ const uploadMedia = async (
 		image: `https://ipfs.io/ipfs/${path}`,
 		media: {
 			uri: `https://ipfs.io/ipfs/${path}`,
-			dimensions: `${image.width}x${image.height}`,
+			dimensions,
 			size: file.size,
 			mimeType: file.type
 		},
