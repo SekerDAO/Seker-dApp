@@ -7,7 +7,7 @@ const addNFT = async (nft: Omit<NFT, "id">, account: string): Promise<void> => {
 		.collection("nfts")
 		.add({
 			...nft,
-			nftAdminUserUID: account.toUpperCase()
+			nftAdminUserUID: account
 		})
 }
 

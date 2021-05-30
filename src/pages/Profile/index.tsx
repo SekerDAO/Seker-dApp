@@ -17,7 +17,7 @@ const Profile: FunctionComponent = () => {
 	const {push} = useHistory()
 	const {pathname, search} = useLocation()
 	const {account} = useParams<{account: string}>()
-	const isOwner = connected && account.toUpperCase() === userAccount?.toUpperCase()
+	const isOwner = connected && account === userAccount
 	const page: ProfilePage = (isOwner && (parse(search).page as ProfilePage)) || "nfts"
 
 	return (

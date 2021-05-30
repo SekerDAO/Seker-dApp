@@ -10,7 +10,7 @@ import Loader from "../../Loader"
 
 const ProfileGallery: FunctionComponent<{account: string}> = ({account}) => {
 	const [cursor, setCursor] = useState<NFTSnapshot | null>(null)
-	const {NFTs, loading, error} = useNFTs({user: account.toUpperCase(), after: cursor})
+	const {NFTs, loading, error} = useNFTs({user: account, after: cursor})
 
 	if (error) return <ErrorPlaceholder />
 	if (loading) return <Loader />

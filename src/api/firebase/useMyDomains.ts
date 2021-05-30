@@ -17,7 +17,7 @@ const useMyDomains = (): {
 		if (account) {
 			setLoading(true)
 			setError(false)
-			getMyDomains(account.toUpperCase())
+			getMyDomains(account)
 				.then(res => {
 					setDomains(res.docs.map(doc => doc.data()))
 					setLoading(false)
