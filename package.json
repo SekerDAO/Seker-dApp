@@ -18,7 +18,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
     "eject": "react-scripts eject",
     "lint": "eslint --ext .ts --ext .tsx --fix src/ ; stylelint src/**/*.scss --fix",
     "lint-hooks": "eslint --no-eslintrc --parser \"@typescript-eslint/parser\" --parser-options \"{\"ecmaVersion\": 2018, \"sourceType\": \"module\"}\" --plugin \"react-hooks\" --rule \"{\"react-hooks/exhaustive-deps\": 2}\" --ext .ts --ext .tsx src/"

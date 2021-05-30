@@ -85,7 +85,7 @@ const CreateNFTModal: FunctionComponent = () => {
 			try {
 				const isOwner = await checkNFTOwner(account, tokenAddress, tokenID, provider)
 				if (!isOwner) {
-					// TODO: alert
+					console.log("You are not the owner!") // TODO
 					setLoading(false)
 					return
 				}
