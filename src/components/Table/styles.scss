@@ -1,0 +1,25 @@
+@import "src/variables";
+
+.table {
+  border-collapse: collapse;
+  border: none;
+
+  tr {
+    border-bottom: 1px solid black;
+  }
+
+  th {
+    font-weight: normal;
+    color: $purple1;
+    text-align: left;
+    padding: 5px 0;
+  }
+
+  td {
+    padding: 5px 0;
+  }
+
+  thead > tr {
+    border-top: 1px solid black;
+  }
+}

@@ -1,0 +1,23 @@
+@import "src/variables";
+
+.profile-daos {
+  &__table {
+    margin: 10px;
+
+    .purple {
+      color: $purple1;
+    }
+
+    table {
+      width: 100%;
+    }
+  }
+
+  &__edit {
+    background-color: $purple1;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+  }
+}
