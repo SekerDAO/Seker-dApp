@@ -1,0 +1,18 @@
+.create-erc20-token {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+
+  input {
+    margin-top: 10px;
+  }
+
+  label {
+    margin-top: 20px;
+  }
+
+  button {
+    align-self: flex-start;
+    margin-top: 20px;
+  }
+}

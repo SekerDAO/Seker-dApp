@@ -2,6 +2,7 @@ import React, {FunctionComponent} from "react"
 import Input from "../../Controls/Input"
 import Button from "../../Controls/Button"
 import Table from "../../Table"
+import CreateGalleryDAOModal from "../CreateGalleryDAOModal"
 import "./styles.scss"
 
 const columns = [
@@ -62,7 +63,7 @@ const ProfileDAOs: FunctionComponent = () => {
 	return (
 		<>
 			<div className="profile__edit-buttons">
-				<Button buttonType="primary">Create A Gallery DAO</Button>
+				<CreateGalleryDAOModal />
 				<Button buttonType="secondary">Create A House DAO</Button>
 			</div>
 			<div className="profile__controls">

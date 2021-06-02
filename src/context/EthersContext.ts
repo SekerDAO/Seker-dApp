@@ -13,11 +13,11 @@ export const useEthers = (): EthersContext => {
 	const [signer, setSigner] = useState<JsonRpcSigner | null>(null)
 
 	const initEthers = async () => {
-		const provider = new Web3Provider(window.ethereum)
-		setProvider(provider)
-		const signer = provider.getSigner()
-		setSigner(signer)
-		const accounts = await provider.listAccounts()
+		const newProvider = new Web3Provider(window.ethereum)
+		setProvider(newProvider)
+		const newSigner = newProvider.getSigner()
+		setSigner(newSigner)
+		const accounts = await newProvider.listAccounts()
 		if (accounts[0]) {
 			const currentChainId = await window.ethereum.request({method: "eth_chainId"})
 			setChainId(currentChainId)

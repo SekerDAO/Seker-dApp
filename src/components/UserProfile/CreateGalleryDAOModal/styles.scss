@@ -1,0 +1,70 @@
+.create-gallery-dao {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+
+  &--wide {
+    min-width: 800px;
+  }
+
+  &__row {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+
+    .select {
+      margin-left: 5px;
+      flex: 1;
+      display: flex;
+
+      select {
+        flex: 1;
+      }
+    }
+  }
+
+  &__col {
+    display: flex;
+    flex: 1;
+    align-items: stretch;
+    flex-direction: column;
+
+    &:first-child {
+      margin-right: 20px;
+    }
+
+    &-wrap {
+      display: flex;
+      align-items: center;
+      flex: 1;
+
+      &.sp-between > div {
+        width: 33%;
+      }
+
+      label {
+        white-space: nowrap;
+        margin-right: 10px;
+      }
+
+      button {
+        margin-left: auto;
+      }
+    }
+  }
+
+  h2 {
+    margin: 50px 0 20px 0;
+  }
+
+  p {
+    margin: 0 0 10px 0;
+  }
+
+  > button {
+    align-self: flex-start;
+    margin-top: 20px;
+  }
+}

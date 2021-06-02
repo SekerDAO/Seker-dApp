@@ -9,6 +9,7 @@ const useNFT = (
 	loading: boolean
 	error: boolean
 } => {
+	// eslint-disable-next-line no-shadow
 	const [NFT, setNFT] = useState<NFT | null>(null)
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)

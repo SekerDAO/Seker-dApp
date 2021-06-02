@@ -1,17 +1,22 @@
-//TODO: this is mostly mock type
+export type DAOMemberRole = "member" | "admin" | "contributor"
+
+export type DAODecisionMakingSpeed = "slow" | "medium" | "fast"
+
+export type DAOVotingThreshold = "low" | "medium" | "high"
+
 export type DAO = {
 	type: "gallery" | "house"
-	houseType?: "token" | "admission" | "private"
+	houseType?: "token" | "admission"
 	name: string
 	symbol: string
 	totalSupply: number
 	members: {
 		address: string
-		role: "member" | "head"
+		role: DAOMemberRole
 		memberSince: string
 	}[]
-	decisionMakingSpeed: "slow" | "medium" | "fast"
-	votingThreshold: "low" | "medium" | "high"
+	decisionMakingSpeed: DAODecisionMakingSpeed
+	votingThreshold: DAOVotingThreshold
 	roles: {
 		member: boolean
 		admin: boolean

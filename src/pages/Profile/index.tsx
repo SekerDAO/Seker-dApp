@@ -7,8 +7,8 @@ import ProfileGallery from "../../components/UserProfile/ProfileGallery"
 import ProfileEdit from "../../components/UserProfile/ProfileEdit"
 import ProfileDAOs from "../../components/UserProfile/ProfileDAOs"
 import ProfileView from "../../components/UserProfile/ProfileView"
-import CreateCustomDomainModal from "../../components/CreateCustomDomainModal"
-import CreateNFTModal from "../../components/CreateNFTModal"
+import CreateCustomDomainModal from "../../components/UserProfile/CreateCustomDomainModal"
+import CreateNFTModal from "../../components/UserProfile/CreateNFTModal"
 
 type ProfilePage = "nfts" | "edit" | "daos" | "profile"
 

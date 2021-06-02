@@ -1,12 +1,12 @@
 import React, {FunctionComponent, useContext, useState} from "react"
-import Button from "../Controls/Button"
-import Modal from "../Modal"
-import Input from "../Controls/Input"
+import Button from "../../Controls/Button"
+import Modal from "../../Modal"
+import Input from "../../Controls/Input"
 import "./styles.scss"
-import EthersContext from "../../context/EthersContext"
-import deployCustomDomain from "../../api/ethers/functions/deployCustomDomain"
-import addDomain from "../../api/firebase/addDomain"
-import {AuthContext} from "../../context/AuthContext"
+import EthersContext from "../../../context/EthersContext"
+import deployCustomDomain from "../../../api/ethers/functions/deployCustomDomain"
+import addDomain from "../../../api/firebase/addDomain"
+import {AuthContext} from "../../../context/AuthContext"
 
 const CreateCustomDomainModal: FunctionComponent = () => {
 	const [isOpened, setIsOpened] = useState(false)
@@ -34,6 +34,9 @@ const CreateCustomDomainModal: FunctionComponent = () => {
 
 	const handleClose = () => {
 		setIsOpened(false)
+		setName("")
+		setSymbol("")
+		setLoading(false)
 		setSuccess(false)
 	}
 
