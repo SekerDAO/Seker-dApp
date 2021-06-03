@@ -5,20 +5,7 @@ import RadioButton from "../../Controls/RadioButton"
 import Select from "../../Controls/Select"
 import CreateERC20Token from "../CreateERC20Token"
 import CreateDAO from "../CreateDAO"
-
-// TODO
-const mockTokens = [
-	{
-		name: "Mock Token 1",
-		address: "0xFF",
-		totalSupply: 1000
-	},
-	{
-		name: "Mock Token 2",
-		address: "0xAA",
-		totalSupply: 10000
-	}
-]
+import useMyERC20Tokens from "../../../api/firebase/useMyERC20Tokens"
 
 type CreateGalleryDAOStage = "chooseToken" | "createToken" | "enterInfo" | "success"
 
@@ -29,6 +16,7 @@ const CreateGalleryDAOModal: FunctionComponent = () => {
 	const [token, setToken] = useState("")
 	const [name, setName] = useState("")
 	const [totalSupply, setTotalSupply] = useState("")
+	const {tokens, loading: tokensLoading, error: tokensError} = useMyERC20Tokens()
 
 	const handleClose = () => {
 		setIsOpened(false)
@@ -40,7 +28,7 @@ const CreateGalleryDAOModal: FunctionComponent = () => {
 	}
 
 	const handleTokenChange = (e: ChangeEvent<HTMLSelectElement>) => {
-		const tkn = mockTokens.find(tok => tok.address === e.target.value)
+		const tkn = tokens.find(tok => tok.address === e.target.value)
 		if (!tkn) {
 			setToken("")
 			setName("")
@@ -104,8 +92,8 @@ const CreateGalleryDAOModal: FunctionComponent = () => {
 											name: "Select Token",
 											value: ""
 										}
-									].concat(mockTokens.map(tkn => ({name: tkn.name, value: tkn.address})))}
-									disabled={tokenSource !== "existing"}
+									].concat(tokens.map(tkn => ({name: tkn.name, value: tkn.address})))}
+									disabled={tokenSource !== "existing" || tokensLoading || tokensError}
 									onChange={handleTokenChange}
 								/>
 							</div>

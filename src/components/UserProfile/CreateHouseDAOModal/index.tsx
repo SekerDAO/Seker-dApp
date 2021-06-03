@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FunctionComponent, useState} from "react"
+import React, {ChangeEvent, FunctionComponent, useContext, useState} from "react"
 import Button from "../../Controls/Button"
 import Modal from "../../Modal"
 import {HouseDAOTokenType} from "../../../types/DAO"
@@ -6,20 +6,11 @@ import RadioButton from "../../Controls/RadioButton"
 import Select from "../../Controls/Select"
 import CreateERC20Token from "../CreateERC20Token"
 import CreateDAO from "../CreateDAO"
-
-// TODO
-const mockTokens = [
-	{
-		name: "Mock Token 1",
-		address: "0xFF",
-		totalSupply: 1000
-	},
-	{
-		name: "Mock Token 2",
-		address: "0xAA",
-		totalSupply: 10000
-	}
-]
+import useNFTs from "../../../customHooks/useNFTs"
+import {AuthContext} from "../../../context/AuthContext"
+import useMyERC20Tokens from "../../../api/firebase/useMyERC20Tokens"
+import {ERC20Token} from "../../../types/ERC20Token"
+import {NFT} from "../../../types/NFT"
 
 type CreateHouseDAOStage = "chooseType" | "chooseToken" | "createToken" | "enterInfo" | "success"
 
@@ -31,6 +22,9 @@ const CreateHouseDAOModal: FunctionComponent = () => {
 	const [token, setToken] = useState("")
 	const [name, setName] = useState("")
 	const [totalSupply, setTotalSupply] = useState("")
+	const {account} = useContext(AuthContext)
+	const {NFTs, loading: NFTsLoading, error: NFTsError} = useNFTs({user: account!, limit: 0, after: null})
+	const {tokens, loading: tokensLoading, error: tokensError} = useMyERC20Tokens()
 
 	const handleClose = () => {
 		setIsOpened(false)
@@ -42,7 +36,10 @@ const CreateHouseDAOModal: FunctionComponent = () => {
 	}
 
 	const handleTokenChange = (e: ChangeEvent<HTMLSelectElement>) => {
-		const tkn = mockTokens.find(tok => tok.address === e.target.value)
+		const tkn =
+			tokenType === "NFT"
+				? NFTs.data.map(nft => nft.data()).find(tok => tok.address === e.target.value)
+				: tokens.find(tok => tok.address === e.target.value)
 		if (!tkn) {
 			setToken("")
 			setName("")
@@ -51,7 +48,9 @@ const CreateHouseDAOModal: FunctionComponent = () => {
 		}
 		setToken(tkn.address)
 		setName(tkn.name)
-		setTotalSupply(String(tkn.totalSupply))
+		if (tokenType === "ERC20") {
+			setTotalSupply(String((tkn as ERC20Token).totalSupply))
+		}
 	}
 
 	const handleSubmit = () => {
@@ -134,8 +133,17 @@ const CreateHouseDAOModal: FunctionComponent = () => {
 											name: "Select Token",
 											value: ""
 										}
-									].concat(mockTokens.map(tkn => ({name: tkn.name, value: tkn.address})))}
-									disabled={tokenSource !== "existing"}
+									].concat(
+										(tokenType === "NFT"
+											? NFTs.data.map(nft => nft.data())
+											: tokens
+										).map((tkn: ERC20Token | Omit<NFT, "id">) => ({name: tkn.name, value: tkn.address}))
+									)}
+									disabled={
+										tokenSource !== "existing" ||
+										(tokenType === "ERC20" && (tokensLoading || tokensError)) ||
+										(tokenType === "NFT" && (NFTsLoading || NFTsError))
+									}
 									onChange={handleTokenChange}
 								/>
 							</div>

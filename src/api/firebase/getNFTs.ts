@@ -27,7 +27,10 @@ const getNFTs = async (
 	if (params.after) {
 		ref = ref.startAfter(params.after)
 	}
-	const snapshot = await ref.limit(params.limit ?? defaultLimit).get()
+	if (params.limit !== 0) {
+		ref = ref.limit(params.limit ?? defaultLimit)
+	}
+	const snapshot = await ref.get()
 	return {
 		totalCount: totalSnapshot.size,
 		data: snapshot.docs as NFTSnapshot[]

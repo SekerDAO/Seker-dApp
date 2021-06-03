@@ -8,16 +8,17 @@ type NFTMediaInfo = {
 }
 
 export type NFT = {
+	address: string
 	createdDate: string
 	id: string
-	nftName: string
-	nftThumbnail: string
-	nftPrice?: number
-	nftDesc: string
+	name: string
+	thumbnail: string
+	price?: number
+	desc: string
 	externalUrl?: string
 	media: NFTMediaInfo
 	attributes?: Record<string, string | number | boolean>
-	nftCategory: "art" | "exhibit"
+	category: "art" | "exhibit"
 }
 
 export type NFTMetadata = {

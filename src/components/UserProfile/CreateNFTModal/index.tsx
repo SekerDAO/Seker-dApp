@@ -61,17 +61,24 @@ const CreateNFTModal: FunctionComponent = () => {
 			setLoading(true)
 			try {
 				const [metadata, hashes] = await uploadMedia(file, title, description, Number(numberOfEditions))
-				await createNFT(hashes, Number(numberOfEditions), signer, provider, customDomainAddress || undefined)
+				const address = await createNFT(
+					hashes,
+					Number(numberOfEditions),
+					signer,
+					provider,
+					customDomainAddress || undefined
+				)
 				await addNFT(
 					{
+						address,
 						createdDate: new Date().toISOString(),
-						nftName: metadata.name,
-						nftDesc: metadata.description,
-						nftThumbnail: metadata.image,
+						name: metadata.name,
+						desc: metadata.description,
+						thumbnail: metadata.image,
 						externalUrl: metadata.external_url,
 						media: metadata.media,
 						attributes: metadata.attributes,
-						nftCategory: "art"
+						category: "art" // TODO
 					},
 					account
 				)
@@ -92,14 +99,15 @@ const CreateNFTModal: FunctionComponent = () => {
 				const metadata = await getNFTMetadata(tokenAddress, tokenID, provider)
 				await addNFT(
 					{
+						address: tokenAddress,
 						createdDate: new Date().toISOString(),
-						nftName: metadata.name,
-						nftDesc: metadata.description,
-						nftThumbnail: metadata.image,
+						name: metadata.name,
+						desc: metadata.description,
+						thumbnail: metadata.image,
 						externalUrl: metadata.external_url,
 						media: metadata.media,
 						attributes: metadata.attributes,
-						nftCategory: "art"
+						category: "art"
 					},
 					account
 				)
@@ -175,7 +183,7 @@ const CreateNFTModal: FunctionComponent = () => {
 											value: ""
 										}
 									].concat(domains.map(domain => ({name: domain.name, value: domain.address})))}
-									disabled={!customDomain && domainsLoading && domainsError}
+									disabled={!customDomain || domainsLoading || domainsError}
 									onChange={e => {
 										setCustomDomainAddress(e.target.value)
 									}}

@@ -13,24 +13,20 @@ const NFTCard: FunctionComponent = () => {
 	if (error) return <ErrorPlaceholder />
 	if (loading || !NFT) return <Loader />
 
-	const {nftName, nftThumbnail, nftPrice, nftDesc} = NFT
+	const {name, thumbnail, price, desc} = NFT
 
 	return (
 		<div className="nftcard">
 			<div className="hero">
-				{NFT.media.mimeType.startsWith("video") ? (
-					<video src={nftThumbnail} autoPlay muted />
-				) : (
-					<img src={nftThumbnail} />
-				)}
+				{NFT.media.mimeType.startsWith("video") ? <video src={thumbnail} autoPlay muted /> : <img src={thumbnail} />}
 			</div>
 			<div className="nftdetails">
 				<ul>
 					<li>
-						<h1>{nftName}</h1>
+						<h1>{name}</h1>
 					</li>
 					<li>
-						<span>{nftPrice}</span>
+						<span>{price}</span>
 					</li>
 					<li>
 						<div className="purchasenft">
@@ -38,7 +34,7 @@ const NFTCard: FunctionComponent = () => {
 						</div>
 					</li>
 					<li>
-						<span>{nftDesc}</span>
+						<span>{desc}</span>
 					</li>
 				</ul>
 			</div>

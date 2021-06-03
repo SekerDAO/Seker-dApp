@@ -10,13 +10,14 @@ const createNFT = async (
 	signer: JsonRpcSigner,
 	provider: Web3Provider,
 	customDomain?: string
-): Promise<void> => {
+): Promise<string> => {
 	const nft = new Contract(
 		customDomain ?? REACT_APP_DOMAIN_ADDRESS!,
 		customDomain ? MultiArtToken.abi : TWDomainToken.abi,
 		signer
 	)
 	await nft.mintEdition(hashes, numberOfEditions)
+	return nft.address
 }
 
 export default createNFT

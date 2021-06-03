@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ethersproject/bignumber": "^5.3.0",
     "@ethersproject/contracts": "^5.2.0",
     "@ethersproject/providers": "^5.2.0",
     "firebase": "^8.4.2",

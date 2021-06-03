@@ -1,7 +1,11 @@
-import React, {ChangeEvent, FunctionComponent, useState} from "react"
+import React, {ChangeEvent, FunctionComponent, useContext, useState} from "react"
 import Input from "../../Controls/Input"
 import Button from "../../Controls/Button"
 import "./styles.scss"
+import deployERC20Token from "../../../api/ethers/functions/deployERC20Token"
+import EthersContext from "../../../context/EthersContext"
+import addERC20Token from "../../../api/firebase/addERC20Token"
+import {AuthContext} from "../../../context/AuthContext"
 
 const CreateERC20Token: FunctionComponent<{
 	afterCreate?: (name: string, symbol: string, address: string, totalSupply: number) => void
@@ -9,23 +13,31 @@ const CreateERC20Token: FunctionComponent<{
 	const [name, setName] = useState("")
 	const [symbol, setSymbol] = useState("")
 	const [totalSupply, setTotalSupply] = useState("")
+	const [loading, setLoading] = useState(false)
+	const {signer} = useContext(EthersContext)
+	const {account} = useContext(AuthContext)
 
 	const handleTotalSupplyChange = (e: ChangeEvent<HTMLInputElement>) => {
-		if (Number(e.target.value) > 100) {
-			setTotalSupply("100")
-		} else if (Number(e.target.value) < 0) {
+		if (Number(e.target.value) < 0) {
 			setTotalSupply("0")
 		} else {
 			setTotalSupply(String(e.target.value))
 		}
 	}
 
-	const handleSubmit = () => {
-		if (!(name && symbol && totalSupply)) return
-		console.log(`Mock create ERC20 token: ${name}, ${symbol}, ${totalSupply}`)
-		const address = "0xAA"
-		if (afterCreate) {
-			afterCreate(name, symbol, address, Number(totalSupply))
+	const handleSubmit = async () => {
+		if (!(name && symbol && totalSupply && signer && account)) return
+		setLoading(true)
+		try {
+			const address = await deployERC20Token(name, symbol, Number(totalSupply), signer)
+			await addERC20Token(name, symbol, address, Number(totalSupply), account)
+			if (afterCreate) {
+				afterCreate(name, symbol, address, Number(totalSupply))
+			}
+			setLoading(false)
+		} catch (e) {
+			console.error(e) //TODO: notification
+			setLoading(false)
 		}
 	}
 
@@ -60,8 +72,8 @@ const CreateERC20Token: FunctionComponent<{
 				value={totalSupply}
 				onChange={handleTotalSupplyChange}
 			/>
-			<Button disabled={!(name && symbol && totalSupply)} onClick={handleSubmit}>
-				Submit
+			<Button disabled={!(name && symbol && totalSupply) || loading} onClick={handleSubmit}>
+				{loading ? "Processing..." : "Submit"}
 			</Button>
 		</div>
 	)
