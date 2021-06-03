@@ -4,6 +4,7 @@ import RadioButton from "../../Controls/RadioButton"
 import Button from "../../Controls/Button"
 import {AuthContext} from "../../../context/AuthContext"
 import {DAODecisionMakingSpeed, DAOMemberRole, DAOVotingThreshold, HouseDAOTokenType, Member} from "../../../types/DAO"
+import deployHouseERC20DAO from "../../../api/ethers/functions/deployHouseERC20DAO"
 import "./styles.scss"
 
 const CreateDAO: FunctionComponent<{
