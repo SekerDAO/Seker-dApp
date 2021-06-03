@@ -1,9 +1,9 @@
 import React, {FunctionComponent} from "react"
 import Input from "../../Controls/Input"
-import Button from "../../Controls/Button"
 import Table from "../../Table"
 import CreateGalleryDAOModal from "../CreateGalleryDAOModal"
 import "./styles.scss"
+import CreateHouseDAOModal from "../CreateHouseDAOModal"
 
 const columns = [
 	{
@@ -64,7 +64,7 @@ const ProfileDAOs: FunctionComponent = () => {
 		<>
 			<div className="profile__edit-buttons">
 				<CreateGalleryDAOModal />
-				<Button buttonType="secondary">Create A House DAO</Button>
+				<CreateHouseDAOModal />
 			</div>
 			<div className="profile__controls">
 				<Input placeholder="Search" borders="bottom" />

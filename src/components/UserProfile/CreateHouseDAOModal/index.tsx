@@ -1,6 +1,7 @@
 import React, {ChangeEvent, FunctionComponent, useState} from "react"
 import Button from "../../Controls/Button"
 import Modal from "../../Modal"
+import {HouseDAOTokenType} from "../../../types/DAO"
 import RadioButton from "../../Controls/RadioButton"
 import Select from "../../Controls/Select"
 import CreateERC20Token from "../CreateERC20Token"
@@ -20,11 +21,12 @@ const mockTokens = [
 	}
 ]
 
-type CreateGalleryDAOStage = "chooseToken" | "createToken" | "enterInfo" | "success"
+type CreateHouseDAOStage = "chooseType" | "chooseToken" | "createToken" | "enterInfo" | "success"
 
-const CreateGalleryDAOModal: FunctionComponent = () => {
+const CreateHouseDAOModal: FunctionComponent = () => {
 	const [isOpened, setIsOpened] = useState(false)
-	const [stage, setStage] = useState<CreateGalleryDAOStage>("chooseToken")
+	const [stage, setStage] = useState<CreateHouseDAOStage>("chooseType")
+	const [tokenType, setTokenType] = useState<HouseDAOTokenType>("ERC20")
 	const [tokenSource, setTokenSource] = useState<"new" | "existing" | "import">("existing")
 	const [token, setToken] = useState("")
 	const [name, setName] = useState("")
@@ -32,7 +34,7 @@ const CreateGalleryDAOModal: FunctionComponent = () => {
 
 	const handleClose = () => {
 		setIsOpened(false)
-		setStage("chooseToken")
+		setStage("chooseType")
 		setTokenSource("existing")
 		setToken("")
 		setName("")
@@ -53,8 +55,10 @@ const CreateGalleryDAOModal: FunctionComponent = () => {
 	}
 
 	const handleSubmit = () => {
-		if (stage === "chooseToken") {
-			if (tokenSource === "new") {
+		if (stage === "chooseType") {
+			setStage("chooseToken")
+		} else if (stage === "chooseToken") {
+			if (tokenSource === "new" && tokenType === "ERC20") {
 				setStage("createToken")
 			} else if (tokenSource === "existing" && token) {
 				setStage("enterInfo")
@@ -71,28 +75,54 @@ const CreateGalleryDAOModal: FunctionComponent = () => {
 		setStage("enterInfo")
 	}
 
-	const submitButtonDisabled = tokenSource === "existing" && !token
+	const submitButtonDisabled = stage === "chooseToken" && tokenSource === "existing" && !token
 
 	return (
 		<>
 			<Button
-				buttonType="primary"
+				buttonType="secondary"
 				onClick={() => {
 					setIsOpened(true)
 				}}
 			>
-				Create A Gallery DAO
+				Create A House DAO
 			</Button>
 			<Modal show={isOpened} onClose={handleClose}>
 				<div className={`create-dao${stage === "enterInfo" ? " create-dao--wide" : ""}`}>
+					{stage === "chooseType" && (
+						<>
+							<h2>Create a House DAO</h2>
+							<p>Step 1. Choose DAO Type.</p>
+							<div className="create-dao__row">
+								<RadioButton
+									label="Token DAO"
+									id="create-house-dao-erc20"
+									checked={tokenType === "ERC20"}
+									onChange={() => {
+										setTokenType("ERC20")
+									}}
+								/>
+							</div>
+							<div className="create-dao__row">
+								<RadioButton
+									label="Admission by NFT"
+									id="create-house-dao-nft"
+									checked={tokenType === "NFT"}
+									onChange={() => {
+										setTokenType("NFT")
+									}}
+								/>
+							</div>
+						</>
+					)}
 					{stage === "chooseToken" && (
 						<>
-							<h2>Create Gallery DAO</h2>
-							<p>Step 1. Choose one.</p>
+							<h2>Create House DAO</h2>
+							<p>Step 2. Choose one.</p>
 							<div className="create-dao__row">
 								<RadioButton
 									label="Select Existing Token"
-									id="create-gallery-dao-existing-token"
+									id="create-house-dao-existing-token"
 									checked={tokenSource === "existing"}
 									onChange={() => {
 										setTokenSource("existing")
@@ -109,16 +139,18 @@ const CreateGalleryDAOModal: FunctionComponent = () => {
 									onChange={handleTokenChange}
 								/>
 							</div>
-							<div className="create-dao__row">
-								<RadioButton
-									label="Create New Token"
-									id="create-gallery-dao-new-token"
-									checked={tokenSource === "new"}
-									onChange={() => {
-										setTokenSource("new")
-									}}
-								/>
-							</div>
+							{tokenType === "ERC20" && (
+								<div className="create-dao__row">
+									<RadioButton
+										label="Create New Token"
+										id="create-house-dao-new-token"
+										checked={tokenSource === "new"}
+										onChange={() => {
+											setTokenSource("new")
+										}}
+									/>
+								</div>
+							)}
 							<div className="create-dao__row">
 								<RadioButton
 									label="TODO: Import Token"
@@ -130,9 +162,6 @@ const CreateGalleryDAOModal: FunctionComponent = () => {
 									disabled
 								/>
 							</div>
-							<Button buttonType="primary" onClick={handleSubmit} disabled={submitButtonDisabled}>
-								Continue
-							</Button>
 						</>
 					)}
 					{stage === "createToken" && <CreateERC20Token afterCreate={handleERC20Create} />}
@@ -142,15 +171,15 @@ const CreateGalleryDAOModal: FunctionComponent = () => {
 							tokenAddress={token}
 							initialName={name}
 							totalSupply={Number(totalSupply)}
-							DAOType="gallery"
-							tokenType="ERC20"
+							DAOType="house"
+							tokenType={tokenType}
 						/>
 					)}
 					{stage === "success" && (
 						<>
 							<h2>Success!</h2>
 							<p>
-								You can now see the gallery DAO you have created
+								You can now see the house DAO you have created
 								<br />
 								(along with other DAOs you currently belong to) and access the DAO
 								<br />
@@ -158,10 +187,15 @@ const CreateGalleryDAOModal: FunctionComponent = () => {
 							</p>
 						</>
 					)}
+					{["chooseType", "chooseToken"].includes(stage) && (
+						<Button buttonType="primary" onClick={handleSubmit} disabled={submitButtonDisabled}>
+							Continue
+						</Button>
+					)}
 				</div>
 			</Modal>
 		</>
 	)
 }
 
-export default CreateGalleryDAOModal
+export default CreateHouseDAOModal
