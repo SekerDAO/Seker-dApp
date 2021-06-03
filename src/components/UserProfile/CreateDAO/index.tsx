@@ -35,6 +35,10 @@ const CreateDAO: FunctionComponent<{
 			members.reduce((acc, cur) => acc && !!cur.address, true)
 		) {
 			console.log(`mock create DAO ${tokenAddress} ${totalSupply}`)
+			// TODO... call the following api in this order
+			// deployHouseERC20DAO()
+			// approveERC20()
+			// initHouseGovDAO()
 			afterCreate()
 		}
 	}
