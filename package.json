@@ -6,6 +6,7 @@
     "@ethersproject/bignumber": "^5.3.0",
     "@ethersproject/contracts": "^5.2.0",
     "@ethersproject/providers": "^5.2.0",
+    "@ethersproject/units": "^5.3.0",
     "firebase": "^8.4.2",
     "ipfs-http-client": "^50.0.0",
     "jwt-decode": "^3.1.2",

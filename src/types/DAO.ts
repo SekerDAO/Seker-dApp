@@ -2,8 +2,6 @@ export type DAOMemberRole = "member" | "admin" | "contributor" | "head"
 
 export type DAODecisionMakingSpeed = "slow" | "medium" | "fast"
 
-export type DAOVotingThreshold = "low" | "medium" | "high"
-
 export type HouseDAOTokenType = "ERC20" | "NFT"
 
 export type Member = {
@@ -20,11 +18,8 @@ export type DAO = {
 	totalSupply: number
 	members: Member[]
 	decisionMakingSpeed: DAODecisionMakingSpeed
-	votingThreshold: DAOVotingThreshold
-	roles: {
-		member: boolean
-		admin: boolean
-		contributor: boolean
-	}
+	votingThreshold: number
 	tax: number
+	minProposalAmount: number
+	govTokensAwarded: number
 }

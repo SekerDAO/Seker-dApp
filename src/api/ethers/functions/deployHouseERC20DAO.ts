@@ -1,12 +1,14 @@
 import HouseTokenDAO from "../abis/HouseTokenDAO.json"
-import {BigNumber} from "@ethersproject/bignumber"
-import {JsonRpcSigner} from "@ethersproject/providers"
+import {JsonRpcSigner, Web3Provider} from "@ethersproject/providers"
 import {ContractFactory} from "@ethersproject/contracts"
+import {parseEther} from "@ethersproject/units"
+import approveERC20 from "./approveERC20"
+import initHouseGovDAO from "./initHouseGovDAO"
+const {REACT_APP_WETH_ADDRESS} = process.env
 
 const deployHouseERC20DAO = async (
 	name: string,
-	signer: JsonRpcSigner,
-	headsOfHouse: [string],
+	headsOfHouse: string[],
 	governanceToken: string,
 	minEntryContribution: number,
 	proposalSpeed: number,
@@ -14,38 +16,26 @@ const deployHouseERC20DAO = async (
 	votingThreshold: number,
 	minProposalAmount: number,
 	govTokensAwarded: number,
-	weth: number
+	provider: Web3Provider,
+	signer: JsonRpcSigner
 ): Promise<string> => {
-	const one = BigNumber.from("1000000000000000000")
-	// 18 decimal converstions, assume all inputs are natural numbers
-	const govtotalSupplyBN = BigNumber.from(governanceTokenSupply)
-	const govtotalSupply18Decimals = govtotalSupplyBN.mul(one)
-
-	const minEntryContributionBN = BigNumber.from(minEntryContribution)
-	const minEntryContribution18Decimals = minEntryContributionBN.mul(one)
-
-	const votingThresholdBN = BigNumber.from(votingThreshold)
-	const votingThreshold18Decimals = votingThresholdBN.mul(one)
-
-	const minProposalAmountBN = BigNumber.from(minProposalAmount)
-	const minProposalAmount18Decimals = minProposalAmountBN.mul(one)
-
-	const govTokensAwardedBN = BigNumber.from(govTokensAwarded)
-	const govTokensAwarded18Decimals = govTokensAwardedBN.mul(one)
-
 	const dao = new ContractFactory(HouseTokenDAO.abi, HouseTokenDAO.bytecode, signer)
 	const contract = await dao.deploy(
 		headsOfHouse,
 		governanceToken,
-		minEntryContribution,
+		parseEther(String(minEntryContribution)),
 		proposalSpeed,
-		governanceTokenSupply,
-		votingThreshold,
-		minProposalAmount,
-		govTokensAwarded,
-		weth
+		parseEther(String(governanceTokenSupply)),
+		parseEther(String(votingThreshold)),
+		parseEther(String(minProposalAmount)),
+		parseEther(String(govTokensAwarded)),
+		REACT_APP_WETH_ADDRESS
 	)
+
 	await contract.deployed()
+	await approveERC20(governanceToken, contract.address, governanceTokenSupply, provider, signer)
+	await initHouseGovDAO(contract.address, provider, signer)
+
 	return contract.address
 }
 

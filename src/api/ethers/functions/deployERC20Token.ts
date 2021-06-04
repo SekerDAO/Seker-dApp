@@ -1,7 +1,7 @@
 import GovToken from "../abis/GovToken.json"
-import {BigNumber} from "@ethersproject/bignumber"
 import {JsonRpcSigner} from "@ethersproject/providers"
 import {ContractFactory} from "@ethersproject/contracts"
+import {parseEther} from "@ethersproject/units"
 
 const deployERC20Token = async (
 	name: string,
@@ -9,12 +9,8 @@ const deployERC20Token = async (
 	totalSupply: number,
 	signer: JsonRpcSigner
 ): Promise<string> => {
-	const one = BigNumber.from("1000000000000000000")
-	const totalSupplyBN = BigNumber.from(totalSupply)
-	const totalSupply18Decimals = totalSupplyBN.mul(one)
-
 	const token = new ContractFactory(GovToken.abi, GovToken.bytecode, signer)
-	const contract = await token.deploy(name, symbol, totalSupply18Decimals)
+	const contract = await token.deploy(name, symbol, parseEther(String(totalSupply)))
 	await contract.deployed()
 	return contract.address
 }

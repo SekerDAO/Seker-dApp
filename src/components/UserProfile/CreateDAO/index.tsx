@@ -3,9 +3,10 @@ import Input from "../../Controls/Input"
 import RadioButton from "../../Controls/RadioButton"
 import Button from "../../Controls/Button"
 import {AuthContext} from "../../../context/AuthContext"
-import {DAODecisionMakingSpeed, DAOMemberRole, DAOVotingThreshold, HouseDAOTokenType, Member} from "../../../types/DAO"
+import {DAODecisionMakingSpeed, DAOMemberRole, HouseDAOTokenType, Member} from "../../../types/DAO"
 import deployHouseERC20DAO from "../../../api/ethers/functions/deployHouseERC20DAO"
 import "./styles.scss"
+import EthersContext from "../../../context/EthersContext"
 
 const CreateDAO: FunctionComponent<{
 	afterCreate: () => void
@@ -16,30 +17,57 @@ const CreateDAO: FunctionComponent<{
 	DAOType: "gallery" | "house"
 }> = ({afterCreate, tokenAddress, initialName, totalSupply, tokenType, DAOType}) => {
 	const {account} = useContext(AuthContext)
+	const {provider, signer} = useContext(EthersContext)
+	const [loading, setLoading] = useState(false)
 	const [name, setName] = useState(initialName)
 	const [foundersPercentage, setFoundersPercentage] = useState("")
 	const [tax, setTax] = useState("")
 	const [minContribution, setMinContribution] = useState("")
 	const [decisionMakingSpeed, setDecisionMakingSpeed] = useState<DAODecisionMakingSpeed>("slow")
-	const [votingThreshold, setVotingThreshold] = useState<DAOVotingThreshold>("low")
+	const [votingThreshold, setVotingThreshold] = useState("")
+	const [minProposalAmount, setMinProposalAmount] = useState("")
+	const [govTokenAward, setGovTokenAward] = useState("")
 	const [members, setMembers] = useState<Member[]>([
 		{address: account!, role: DAOType === "gallery" ? "admin" : "head"}
 	])
 
-	const handleSubmit = () => {
+	const handleSubmit = async () => {
 		if (
 			name &&
 			(tokenType === "NFT" || foundersPercentage) &&
 			(DAOType === "house" || tax) &&
 			(DAOType === "gallery" || tokenType === "NFT" || minContribution) &&
-			members.reduce((acc, cur) => acc && !!cur.address, true)
+			members.reduce((acc, cur) => acc && !!cur.address, true) &&
+			votingThreshold &&
+			govTokenAward &&
+			minProposalAmount &&
+			provider &&
+			signer
 		) {
-			console.log(`mock create DAO ${tokenAddress} ${totalSupply}`)
-			// TODO... call the following api in this order
-			// deployHouseERC20DAO()
-			// approveERC20()
-			// initHouseGovDAO()
-			afterCreate()
+			setLoading(true)
+			try {
+				if (tokenType === "ERC20") {
+					await deployHouseERC20DAO(
+						name,
+						members.map(m => m.address),
+						tokenAddress,
+						Number(minContribution),
+						decisionMakingSpeed === "slow" ? 1 : decisionMakingSpeed === "medium" ? 2 : 3,
+						(totalSupply * Number(foundersPercentage)) / 100,
+						(totalSupply * Number(foundersPercentage) * Number(votingThreshold)) / 10000,
+						Number(minProposalAmount),
+						Number(govTokenAward),
+						provider,
+						signer
+					)
+				} else {
+					console.log(`mock create DAO ${tokenAddress} ${totalSupply}`)
+				}
+				afterCreate()
+			} catch (e) {
+				console.error(e) // TODO: notification
+			}
+			setLoading(false)
 		}
 	}
 
@@ -85,6 +113,30 @@ const CreateDAO: FunctionComponent<{
 			setMinContribution("0")
 		} else {
 			setMinContribution(e.target.value)
+		}
+	}
+
+	const handleVotingThresholdChange = (e: ChangeEvent<HTMLInputElement>) => {
+		if (Number(e.target.value) < 0) {
+			setVotingThreshold("0")
+		} else {
+			setVotingThreshold(e.target.value)
+		}
+	}
+
+	const handleMinProposalChange = (e: ChangeEvent<HTMLInputElement>) => {
+		if (Number(e.target.value) < 0) {
+			setMinProposalAmount("0")
+		} else {
+			setMinProposalAmount(e.target.value)
+		}
+	}
+
+	const handleAwardChange = (e: ChangeEvent<HTMLInputElement>) => {
+		if (Number(e.target.value) < 0) {
+			setGovTokenAward("0")
+		} else {
+			setGovTokenAward(e.target.value)
 		}
 	}
 
@@ -273,42 +325,27 @@ const CreateDAO: FunctionComponent<{
 					<label>Voting Threshold</label>
 				</div>
 				<div className="create-dao__col">
-					<div className="create-dao__col-wrap sp-between">
-						<div>
-							<RadioButton
-								label="Low"
-								id="create-dao-vt-low"
-								checked={votingThreshold === "low"}
-								onChange={() => {
-									setVotingThreshold("low")
-								}}
-							/>
-						</div>
-						<div>
-							<RadioButton
-								label="Medium"
-								id="create-dao-vt-medium"
-								checked={votingThreshold === "medium"}
-								onChange={() => {
-									setVotingThreshold("medium")
-								}}
-							/>
-						</div>
-						<div>
-							<RadioButton
-								label="High"
-								id="create-dao-vt-high"
-								checked={votingThreshold === "high"}
-								onChange={() => {
-									setVotingThreshold("high")
-								}}
-							/>
-						</div>
-					</div>
+					<Input borders="all" value={votingThreshold} onChange={handleVotingThresholdChange} number min={0} />
 				</div>
 			</div>
-			<Button buttonType="primary" onClick={handleSubmit} disabled={submitButtonDisabled}>
-				Submit
+			<div className="create-dao__row">
+				<div className="create-dao__col">
+					<label>Minimum Proposal Amount</label>
+				</div>
+				<div className="create-dao__col">
+					<Input borders="all" value={minProposalAmount} onChange={handleMinProposalChange} number min={0} />
+				</div>
+			</div>
+			<div className="create-dao__row">
+				<div className="create-dao__col">
+					<label>Governance Token Award</label>
+				</div>
+				<div className="create-dao__col">
+					<Input borders="all" value={govTokenAward} onChange={handleAwardChange} number min={0} />
+				</div>
+			</div>
+			<Button buttonType="primary" onClick={handleSubmit} disabled={submitButtonDisabled || loading}>
+				{loading ? "Processing..." : "Submit"}
 			</Button>
 		</>
 	)

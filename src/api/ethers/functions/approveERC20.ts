@@ -1,23 +1,26 @@
-import {Web3Provider} from "@ethersproject/providers"
+import {JsonRpcSigner, Web3Provider} from "@ethersproject/providers"
 import {Contract} from "@ethersproject/contracts"
 import GovToken from "../abis/GovToken.json"
+import {parseEther} from "@ethersproject/units"
 
-const approveERC20 = async (
-	account: string, // account of the token owner
-	address: string, // gov token address
-	to: string, // the address of the dao contract
-	amount: number, // percentage of total supply given to dao
-	provider: Web3Provider
-): Promise<boolean> => {
-	const ERC20Contract = new Contract(address, GovToken.abi, provider)
-	const _tx = await ERC20Contract.approve(to, amount)
+const approveERC20 = (
+	governanceToken: string,
+	address: string,
+	totalSupply: number,
+	provider: Web3Provider,
+	signer: JsonRpcSigner
+): Promise<void> =>
+	new Promise<void>(async (resolve, reject) => {
+		try {
+			const ERC20Contract = new Contract(governanceToken, GovToken.abi, signer)
+			const tx = await ERC20Contract.approve(address, parseEther(String(totalSupply)))
 
-	provider.once(_tx.hash, receipt => {
-		console.log("Transaction Minded: " + receipt.transactionHash)
-		console.log(receipt)
-		return true
+			provider.once(tx.hash, () => {
+				resolve()
+			})
+		} catch (e) {
+			reject(e)
+		}
 	})
-	return false
-}
 
 export default approveERC20
