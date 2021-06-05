@@ -33,8 +33,10 @@ const deployHouseERC20DAO = async (
 	)
 
 	await contract.deployed()
+	// TODO if(governanceTokenSupply > O) {
 	await approveERC20(governanceToken, contract.address, governanceTokenSupply, provider, signer)
 	await initHouseGovDAO(contract.address, provider, signer)
+	// }
 
 	return contract.address
 }
