@@ -9,23 +9,13 @@ import useMyERC20Tokens from "../../../api/firebase/ERC20Token/useMyERC20Tokens"
 
 type CreateGalleryDAOStage = "chooseToken" | "createToken" | "enterInfo" | "success"
 
-const CreateGalleryDAOModal: FunctionComponent = () => {
-	const [isOpened, setIsOpened] = useState(false)
+const CreateGalleryDAOModalContent: FunctionComponent = () => {
 	const [stage, setStage] = useState<CreateGalleryDAOStage>("chooseToken")
 	const [tokenSource, setTokenSource] = useState<"new" | "existing" | "import">("existing")
 	const [token, setToken] = useState("")
 	const [name, setName] = useState("")
 	const [totalSupply, setTotalSupply] = useState("")
 	const {tokens, loading: tokensLoading, error: tokensError} = useMyERC20Tokens()
-
-	const handleClose = () => {
-		setIsOpened(false)
-		setStage("chooseToken")
-		setTokenSource("existing")
-		setToken("")
-		setName("")
-		setTotalSupply("")
-	}
 
 	const handleTokenChange = (e: ChangeEvent<HTMLSelectElement>) => {
 		const tkn = tokens.find(tok => tok.address === e.target.value)
@@ -62,6 +52,88 @@ const CreateGalleryDAOModal: FunctionComponent = () => {
 	const submitButtonDisabled = tokenSource === "existing" && !token
 
 	return (
+		<div className={`create-dao${stage === "enterInfo" ? " create-dao--wide" : ""}`}>
+			{stage === "chooseToken" && (
+				<>
+					<h2>Create Gallery DAO</h2>
+					<p>Step 1. Choose one.</p>
+					<div className="create-dao__row">
+						<RadioButton
+							label="Select Existing Token"
+							id="create-gallery-dao-existing-token"
+							checked={tokenSource === "existing"}
+							onChange={() => {
+								setTokenSource("existing")
+							}}
+						/>
+						<Select
+							options={[
+								{
+									name: "Select Token",
+									value: ""
+								}
+							].concat(tokens.map(tkn => ({name: tkn.name, value: tkn.address})))}
+							disabled={tokenSource !== "existing" || tokensLoading || tokensError}
+							onChange={handleTokenChange}
+						/>
+					</div>
+					<div className="create-dao__row">
+						<RadioButton
+							label="Create New Token"
+							id="create-gallery-dao-new-token"
+							checked={tokenSource === "new"}
+							onChange={() => {
+								setTokenSource("new")
+							}}
+						/>
+					</div>
+					<div className="create-dao__row">
+						<RadioButton
+							label="TODO: Import Token"
+							id="create-house-dao-import-token"
+							checked={tokenSource === "import"}
+							onChange={() => {
+								setTokenSource("import")
+							}}
+							disabled
+						/>
+					</div>
+					<Button buttonType="primary" onClick={handleSubmit} disabled={submitButtonDisabled}>
+						Continue
+					</Button>
+				</>
+			)}
+			{stage === "createToken" && <CreateERC20Token afterCreate={handleERC20Create} />}
+			{stage === "enterInfo" && (
+				<CreateDAO
+					afterCreate={handleSubmit}
+					tokenAddress={token}
+					initialName={name}
+					totalSupply={Number(totalSupply)}
+					DAOType="gallery"
+					tokenType="ERC20"
+				/>
+			)}
+			{stage === "success" && (
+				<>
+					<h2>Success!</h2>
+					<p>
+						You can now see the gallery DAO you have created
+						<br />
+						(along with other DAOs you currently belong to) and access the DAO
+						<br />
+						dashboard on the &quot;View Your DAOs&quot; page of your user dashboard.
+					</p>
+				</>
+			)}
+		</div>
+	)
+}
+
+const CreateGalleryDAOModal: FunctionComponent = () => {
+	const [isOpened, setIsOpened] = useState(false)
+
+	return (
 		<>
 			<Button
 				buttonType="primary"
@@ -71,82 +143,13 @@ const CreateGalleryDAOModal: FunctionComponent = () => {
 			>
 				Create A Gallery DAO
 			</Button>
-			<Modal show={isOpened} onClose={handleClose}>
-				<div className={`create-dao${stage === "enterInfo" ? " create-dao--wide" : ""}`}>
-					{stage === "chooseToken" && (
-						<>
-							<h2>Create Gallery DAO</h2>
-							<p>Step 1. Choose one.</p>
-							<div className="create-dao__row">
-								<RadioButton
-									label="Select Existing Token"
-									id="create-gallery-dao-existing-token"
-									checked={tokenSource === "existing"}
-									onChange={() => {
-										setTokenSource("existing")
-									}}
-								/>
-								<Select
-									options={[
-										{
-											name: "Select Token",
-											value: ""
-										}
-									].concat(tokens.map(tkn => ({name: tkn.name, value: tkn.address})))}
-									disabled={tokenSource !== "existing" || tokensLoading || tokensError}
-									onChange={handleTokenChange}
-								/>
-							</div>
-							<div className="create-dao__row">
-								<RadioButton
-									label="Create New Token"
-									id="create-gallery-dao-new-token"
-									checked={tokenSource === "new"}
-									onChange={() => {
-										setTokenSource("new")
-									}}
-								/>
-							</div>
-							<div className="create-dao__row">
-								<RadioButton
-									label="TODO: Import Token"
-									id="create-house-dao-import-token"
-									checked={tokenSource === "import"}
-									onChange={() => {
-										setTokenSource("import")
-									}}
-									disabled
-								/>
-							</div>
-							<Button buttonType="primary" onClick={handleSubmit} disabled={submitButtonDisabled}>
-								Continue
-							</Button>
-						</>
-					)}
-					{stage === "createToken" && <CreateERC20Token afterCreate={handleERC20Create} />}
-					{stage === "enterInfo" && (
-						<CreateDAO
-							afterCreate={handleSubmit}
-							tokenAddress={token}
-							initialName={name}
-							totalSupply={Number(totalSupply)}
-							DAOType="gallery"
-							tokenType="ERC20"
-						/>
-					)}
-					{stage === "success" && (
-						<>
-							<h2>Success!</h2>
-							<p>
-								You can now see the gallery DAO you have created
-								<br />
-								(along with other DAOs you currently belong to) and access the DAO
-								<br />
-								dashboard on the &quot;View Your DAOs&quot; page of your user dashboard.
-							</p>
-						</>
-					)}
-				</div>
+			<Modal
+				show={isOpened}
+				onClose={() => {
+					setIsOpened(false)
+				}}
+			>
+				<CreateGalleryDAOModalContent />
 			</Modal>
 		</>
 	)
