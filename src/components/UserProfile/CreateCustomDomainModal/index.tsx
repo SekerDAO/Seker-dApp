@@ -7,6 +7,7 @@ import EthersContext from "../../../context/EthersContext"
 import deployCustomDomain from "../../../api/ethers/functions/deployCustomDomain"
 import addDomain from "../../../api/firebase/domain/addDomain"
 import {AuthContext} from "../../../context/AuthContext"
+import {toastError} from "../../Toast"
 
 const CreateCustomDomainModal: FunctionComponent = () => {
 	const [isOpened, setIsOpened] = useState(false)
@@ -27,7 +28,8 @@ const CreateCustomDomainModal: FunctionComponent = () => {
 			setSymbol("")
 			setSuccess(true)
 		} catch (e) {
-			console.error(e) // TODO: notification
+			console.error(e)
+			toastError("Failed to create domain")
 		}
 		setLoading(false)
 	}

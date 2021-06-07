@@ -8,6 +8,7 @@ import deployHouseERC20DAO from "../../../api/ethers/functions/deployHouseERC20D
 import "./styles.scss"
 import EthersContext from "../../../context/EthersContext"
 import addDAO from "../../../api/firebase/DAO/addDAO"
+import {toastError} from "../../Toast"
 
 const CreateDAO: FunctionComponent<{
 	afterCreate: () => void
@@ -82,7 +83,8 @@ const CreateDAO: FunctionComponent<{
 				}
 				afterCreate()
 			} catch (e) {
-				console.error(e) // TODO: notification
+				console.error(e)
+				toastError("Failed to create DAO")
 			}
 			setLoading(false)
 		}

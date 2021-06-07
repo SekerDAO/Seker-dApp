@@ -15,6 +15,7 @@ import createNFT from "../../../api/ethers/functions/createNFT"
 import Textarea from "../../Controls/Textarea"
 import useMyDomains from "../../../api/firebase/domain/useMyDomains"
 import "./styles.scss"
+import {toastError} from "../../Toast"
 
 type CreateNFTModalStage = "chooseOption" | "chooseDomain" | "uploadFile" | "loadExisting" | "success"
 
@@ -84,7 +85,8 @@ const CreateNFTModal: FunctionComponent = () => {
 				)
 				setStage("success")
 			} catch (e) {
-				console.error(e) // TODO: notification
+				console.error(e)
+				toastError("Failed to create NFT")
 			}
 			setLoading(false)
 		} else if (stage === "loadExisting" && tokenID && tokenAddress && account && provider) {
@@ -92,7 +94,7 @@ const CreateNFTModal: FunctionComponent = () => {
 			try {
 				const isOwner = await checkNFTOwner(account, tokenAddress, tokenID, provider)
 				if (!isOwner) {
-					alert("You are not the owner!") // TODO
+					toastError("You are not the owner!")
 					setLoading(false)
 					return
 				}

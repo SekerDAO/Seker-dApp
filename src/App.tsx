@@ -8,9 +8,12 @@ import Learn from "./pages/Learn"
 import Galleries from "./pages/Galleries"
 import NFTDetails from "./pages/NFTDetails"
 import Profile from "./pages/Profile"
-import "./default.scss"
 import EthersContext, {useEthers} from "./context/EthersContext"
 import NetworkChecker from "./components/NetworkChecker"
+import {ToastContainer} from "react-toastify"
+import "./default.scss"
+import "react-toastify/dist/ReactToastify.min.css"
+import "./components/Toast/styles.scss"
 
 const AppWithEthers: FunctionComponent = () => {
 	const auth = useAuth()
@@ -19,6 +22,7 @@ const AppWithEthers: FunctionComponent = () => {
 		<BrowserRouter>
 			<AuthContext.Provider value={auth}>
 				<div className="App">
+					<ToastContainer />
 					<Switch>
 						<Route
 							exact

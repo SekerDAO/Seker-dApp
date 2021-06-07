@@ -6,6 +6,7 @@ import deployERC20Token from "../../../api/ethers/functions/deployERC20Token"
 import EthersContext from "../../../context/EthersContext"
 import addERC20Token from "../../../api/firebase/ERC20Token/addERC20Token"
 import {AuthContext} from "../../../context/AuthContext"
+import {toastError} from "../../Toast"
 
 const CreateERC20Token: FunctionComponent<{
 	afterCreate?: (name: string, symbol: string, address: string, totalSupply: number) => void
@@ -36,7 +37,8 @@ const CreateERC20Token: FunctionComponent<{
 			}
 			setLoading(false)
 		} catch (e) {
-			console.error(e) //TODO: notification
+			console.error(e)
+			toastError("Failed to create token")
 			setLoading(false)
 		}
 	}

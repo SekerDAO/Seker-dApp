@@ -3,6 +3,7 @@ import Button from "../Button"
 import useFileDrop from "../../../customHooks/useFileDrop"
 import {imageTypes, videoTypes} from "../../../constants/mimeTypes"
 import "./styles.scss"
+import {toastError} from "../../Toast"
 
 const MediaUpload: FunctionComponent<{
 	onUpload: (file: File) => void
@@ -18,7 +19,7 @@ const MediaUpload: FunctionComponent<{
 			setIsVideo(true)
 			onUpload(file)
 		} else {
-			alert("Wrong file type!")
+			toastError("Wrong file type!")
 		}
 	}
 

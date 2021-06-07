@@ -1,0 +1,26 @@
+@import "src/variables";
+
+.toast {
+  display: flex;
+  align-items: center;
+
+  svg {
+    margin-right: 10px;
+  }
+}
+
+.Toastify__toast--info {
+  background-color: $info !important;
+}
+
+.Toastify__toast--success {
+  background-color: $success !important;
+}
+
+.Toastify__toast--warning {
+  background-color: $warning !important;
+}
+
+.Toastify__toast--error {
+  background-color: $error !important;
+}
