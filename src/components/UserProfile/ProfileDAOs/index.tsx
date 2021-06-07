@@ -1,9 +1,13 @@
-import React, {FunctionComponent} from "react"
+import React, {FunctionComponent, useContext} from "react"
 import Input from "../../Controls/Input"
 import Table from "../../Table"
 import CreateGalleryDAOModal from "../CreateGalleryDAOModal"
 import "./styles.scss"
 import CreateHouseDAOModal from "../CreateHouseDAOModal"
+import useMyDAOs from "../../../api/firebase/DAO/useMyDAOs"
+import Loader from "../../Loader"
+import ErrorPlaceholder from "../../ErrorPlaceholder"
+import {AuthContext} from "../../../context/AuthContext"
 
 const columns = [
 	{
@@ -20,8 +24,8 @@ const columns = [
 		name: "Member Since"
 	},
 	{
-		id: "roles",
-		name: "DAO Role(s)"
+		id: "role",
+		name: "DAO Role"
 	},
 	{
 		id: "edit",
@@ -31,35 +35,13 @@ const columns = [
 	}
 ] as const
 
-//TODO
-const mockData = [
-	{
-		id: 1,
-		name: "Gallery DAO 1",
-		type: "gallery",
-		memberSince: new Date().toISOString().split("T")[0],
-		roles: "admin",
-		edit: ""
-	},
-	{
-		id: 2,
-		name: "House DAO 1",
-		type: "house",
-		memberSince: new Date().toISOString().split("T")[0],
-		roles: "guest",
-		edit: ""
-	},
-	{
-		id: 3,
-		name: "Gallery DAO 2",
-		type: "gallery",
-		memberSince: new Date().toISOString().split("T")[0],
-		roles: "collaborator",
-		edit: ""
-	}
-]
-
 const ProfileDAOs: FunctionComponent = () => {
+	const {DAOs, loading, error} = useMyDAOs()
+	const {account} = useContext(AuthContext)
+
+	if (error) return <ErrorPlaceholder />
+	if (!DAOs || loading) return <Loader />
+
 	return (
 		<>
 			<div className="profile__edit-buttons">
@@ -70,7 +52,21 @@ const ProfileDAOs: FunctionComponent = () => {
 				<Input placeholder="Search" borders="bottom" />
 			</div>
 			<div className="profile-daos__table">
-				<Table data={mockData} columns={columns} idCol="id" />
+				<Table
+					data={DAOs.map(DAO => {
+						const member = DAO.members.find(m => m.address === account)
+						return {
+							name: DAO.name,
+							tokenAddress: DAO.tokenAddress,
+							type: DAO.type,
+							memberSince: member?.memberSince?.split("T")[0] ?? "",
+							role: member?.role ?? "",
+							edit: ""
+						}
+					})}
+					columns={columns}
+					idCol="tokenAddress"
+				/>
 			</div>
 		</>
 	)

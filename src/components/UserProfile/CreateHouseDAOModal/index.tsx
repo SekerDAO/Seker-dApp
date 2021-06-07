@@ -8,7 +8,7 @@ import CreateERC20Token from "../CreateERC20Token"
 import CreateDAO from "../CreateDAO"
 import useNFTs from "../../../customHooks/useNFTs"
 import {AuthContext} from "../../../context/AuthContext"
-import useMyERC20Tokens from "../../../api/firebase/useMyERC20Tokens"
+import useMyERC20Tokens from "../../../api/firebase/ERC20Token/useMyERC20Tokens"
 import {ERC20Token} from "../../../types/ERC20Token"
 import {NFT} from "../../../types/NFT"
 

@@ -7,6 +7,7 @@ import {DAODecisionMakingSpeed, DAOMemberRole, HouseDAOTokenType, Member} from "
 import deployHouseERC20DAO from "../../../api/ethers/functions/deployHouseERC20DAO"
 import "./styles.scss"
 import EthersContext from "../../../context/EthersContext"
+import addDAO from "../../../api/firebase/DAO/addDAO"
 
 const CreateDAO: FunctionComponent<{
 	afterCreate: () => void
@@ -42,11 +43,12 @@ const CreateDAO: FunctionComponent<{
 			govTokenAward &&
 			minProposalAmount &&
 			provider &&
-			signer
+			signer &&
+			account
 		) {
 			setLoading(true)
 			try {
-				if (tokenType === "ERC20") {
+				if (DAOType === "house" && tokenType === "ERC20") {
 					await deployHouseERC20DAO(
 						name,
 						members.map(m => m.address),
@@ -59,6 +61,21 @@ const CreateDAO: FunctionComponent<{
 						Number(govTokenAward),
 						provider,
 						signer
+					)
+					await addDAO(
+						{
+							type: "house",
+							houseTokenType: "ERC20",
+							tokenAddress,
+							name,
+							totalSupply,
+							members,
+							decisionMakingSpeed,
+							votingThreshold: Number(votingThreshold),
+							minProposalAmount: Number(minProposalAmount),
+							govTokensAwarded: Number(govTokenAward)
+						},
+						account
 					)
 				} else {
 					console.log(`mock create DAO ${tokenAddress} ${totalSupply}`)
@@ -145,6 +162,8 @@ const CreateDAO: FunctionComponent<{
 		(tokenType === "NFT" || foundersPercentage) &&
 		(DAOType === "house" || tax) &&
 		(DAOType === "gallery" || tokenType === "NFT" || minContribution) &&
+		minProposalAmount &&
+		govTokenAward &&
 		members.reduce((acc, cur) => acc && !!cur.address, true)
 	)
 

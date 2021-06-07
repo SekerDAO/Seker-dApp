@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react"
 import {NFTSnapshot} from "../types/NFT"
-import getNFTs, {NFTQueryParams} from "../api/firebase/getNFTs"
+import getNFTs, {NFTQueryParams} from "../api/firebase/NFT/getNFTs"
 
 const useNFTs = ({
 	category,

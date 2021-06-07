@@ -13,13 +13,13 @@ export type Member = {
 export type DAO = {
 	type: "gallery" | "house"
 	houseTokenType?: HouseDAOTokenType
+	tokenAddress: string
 	name: string
-	symbol: string
 	totalSupply: number
 	members: Member[]
 	decisionMakingSpeed: DAODecisionMakingSpeed
 	votingThreshold: number
-	tax: number
+	tax?: number
 	minProposalAmount: number
 	govTokensAwarded: number
 }

@@ -1,5 +1,5 @@
 import firebase from "firebase"
-import {NFTSnapshot} from "../../types/NFT"
+import {NFTSnapshot} from "../../../types/NFT"
 
 const defaultLimit = 8
 

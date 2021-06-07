@@ -4,7 +4,7 @@ import Button from "../../Controls/Button"
 import "./styles.scss"
 import deployERC20Token from "../../../api/ethers/functions/deployERC20Token"
 import EthersContext from "../../../context/EthersContext"
-import addERC20Token from "../../../api/firebase/addERC20Token"
+import addERC20Token from "../../../api/firebase/ERC20Token/addERC20Token"
 import {AuthContext} from "../../../context/AuthContext"
 
 const CreateERC20Token: FunctionComponent<{

@@ -5,7 +5,7 @@ import Input from "../../Controls/Input"
 import "./styles.scss"
 import EthersContext from "../../../context/EthersContext"
 import deployCustomDomain from "../../../api/ethers/functions/deployCustomDomain"
-import addDomain from "../../../api/firebase/addDomain"
+import addDomain from "../../../api/firebase/domain/addDomain"
 import {AuthContext} from "../../../context/AuthContext"
 
 const CreateCustomDomainModal: FunctionComponent = () => {

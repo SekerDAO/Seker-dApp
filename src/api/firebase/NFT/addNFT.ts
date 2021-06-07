@@ -1,4 +1,4 @@
-import {NFT} from "../../types/NFT"
+import {NFT} from "../../../types/NFT"
 import firebase from "firebase"
 
 const addNFT = async (nft: Omit<NFT, "id">, account: string): Promise<void> => {
