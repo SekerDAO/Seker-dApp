@@ -17,6 +17,11 @@
     flex-direction: column;
     align-items: center;
     padding-bottom: 10px;
+
+    .btn {
+      align-self: stretch;
+      margin: 5px 20px;
+    }
   }
 
   &__left-section {
@@ -41,5 +46,59 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+
+    > h2 {
+      margin: 20px 0;
+    }
+
+    > p {
+      margin: 10px 0;
+    }
+  }
+
+  &__summary {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    &-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      p {
+        margin: 20px 0;
+      }
+
+      h2 {
+        color: $purple1;
+        margin: 20px 0;
+      }
+    }
+  }
+
+  &__separator {
+    height: 1px;
+    background-color: black;
+    align-self: stretch;
+  }
+
+  &__params {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid black;
+    padding: 20px 40px;
+  }
+
+  &__param {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    h2 {
+      font-size: 18px;
+    }
   }
 }

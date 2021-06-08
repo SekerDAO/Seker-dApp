@@ -5,7 +5,7 @@ import RadioButton from "../../Controls/RadioButton"
 import Select from "../../Controls/Select"
 import CreateERC20Token from "../CreateERC20Token"
 import CreateDAO from "../CreateDAO"
-import useMyERC20Tokens from "../../../api/firebase/ERC20Token/useMyERC20Tokens"
+import useMyERC20Tokens from "../../../customHooks/useMyERC20Tokens"
 
 type CreateGalleryDAOStage = "chooseToken" | "createToken" | "enterInfo" | "success"
 

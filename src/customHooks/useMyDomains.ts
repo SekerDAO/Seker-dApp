@@ -1,7 +1,7 @@
 import {useContext, useEffect, useState} from "react"
-import getMyDomains from "./getMyDomains"
-import {AuthContext} from "../../../context/AuthContext"
-import {Domain} from "../../../types/domain"
+import getMyDomains from "../api/firebase/domain/getMyDomains"
+import {AuthContext} from "../context/AuthContext"
+import {Domain} from "../types/domain"
 
 const useMyDomains = (): {
 	domains: Domain[]

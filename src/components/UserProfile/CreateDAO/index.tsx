@@ -74,7 +74,8 @@ const CreateDAO: FunctionComponent<{
 							decisionMakingSpeed,
 							votingThreshold: Number(votingThreshold),
 							minProposalAmount: Number(minProposalAmount),
-							govTokensAwarded: Number(govTokenAward)
+							govTokensAwarded: Number(govTokenAward),
+							minContribution: Number(minContribution)
 						},
 						account
 					)

@@ -13,8 +13,9 @@ const addDAO = async (
 		votingThreshold,
 		tax,
 		minProposalAmount,
-		govTokensAwarded
-	}: DAO,
+		govTokensAwarded,
+		minContribution
+	}: Omit<DAO, "id">,
 	account: string
 ): Promise<void> => {
 	await firebase
@@ -32,6 +33,7 @@ const addDAO = async (
 			...(tax ? {tax} : {}),
 			minProposalAmount,
 			govTokensAwarded,
+			minContribution,
 			owner: account
 		})
 }

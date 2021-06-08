@@ -1,7 +1,7 @@
 import {useContext, useEffect, useState} from "react"
-import {AuthContext} from "../../../context/AuthContext"
-import {ERC20Token} from "../../../types/ERC20Token"
-import getMyERC20Tokens from "./getMyERC20Tokens"
+import {AuthContext} from "../context/AuthContext"
+import {ERC20Token} from "../types/ERC20Token"
+import getMyERC20Tokens from "../api/firebase/ERC20Token/getMyERC20Tokens"
 
 const useMyERC20Tokens = (): {
 	tokens: ERC20Token[]

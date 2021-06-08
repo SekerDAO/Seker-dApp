@@ -1,3 +1,4 @@
+import firebase from "firebase"
 export type DAOMemberRole = "member" | "admin" | "contributor" | "head"
 
 export type DAODecisionMakingSpeed = "slow" | "medium" | "fast"
@@ -11,6 +12,7 @@ export type Member = {
 }
 
 export type DAO = {
+	id: string
 	type: "gallery" | "house"
 	houseTokenType?: HouseDAOTokenType
 	tokenAddress: string
@@ -22,4 +24,7 @@ export type DAO = {
 	tax?: number
 	minProposalAmount: number
 	govTokensAwarded: number
+	minContribution: number
 }
+
+export type DAOSnapshot = firebase.firestore.QueryDocumentSnapshot<Omit<DAO, "id">>
