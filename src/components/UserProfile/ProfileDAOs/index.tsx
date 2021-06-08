@@ -8,12 +8,15 @@ import useMyDAOs from "../../../api/firebase/DAO/useMyDAOs"
 import Loader from "../../Loader"
 import ErrorPlaceholder from "../../ErrorPlaceholder"
 import {AuthContext} from "../../../context/AuthContext"
+import {Link} from "react-router-dom"
 
 const columns = [
 	{
 		id: "name",
 		name: "DAO Name",
-		rowClassName: "purple"
+		rowClassName: "purple",
+		// eslint-disable-next-line react/display-name
+		render: (dao: {name: string; tokenAddress: string}) => <Link to={`/dao/${dao.tokenAddress}`}>{dao.name}</Link>
 	},
 	{
 		id: "type",

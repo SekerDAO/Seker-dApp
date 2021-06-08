@@ -14,6 +14,7 @@ import {ToastContainer} from "react-toastify"
 import "./default.scss"
 import "react-toastify/dist/ReactToastify.min.css"
 import "./components/Toast/styles.scss"
+import DAOPage from "./pages/DAO"
 
 const AppWithEthers: FunctionComponent = () => {
 	const auth = useAuth()
@@ -75,6 +76,15 @@ const AppWithEthers: FunctionComponent = () => {
 							render={() => (
 								<MainLayout>
 									<Profile />
+								</MainLayout>
+							)}
+						/>
+						<Route
+							exact
+							path="/dao/:address"
+							render={() => (
+								<MainLayout>
+									<DAOPage />
 								</MainLayout>
 							)}
 						/>
