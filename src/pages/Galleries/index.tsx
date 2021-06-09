@@ -30,43 +30,46 @@ const Galleries: FunctionComponent = () => {
 	}
 
 	return (
-		<div className="galleries">
-			<div className="galleryResults">
-				<h1>Browse Galleries</h1>
+		// <div className="galleries">
+		// 	<div className="galleryResults">
+		// 		<h1>Browse Galleries</h1>
 
-				<Select
-					defaultValue={category}
-					options={[
-						{
-							name: "Show All",
-							value: ""
-						},
-						{
-							name: "Gallery",
-							value: "gallery"
-						},
-						{
-							name: "Exhibit",
-							value: "exhibit"
-						}
-					]}
-					onChange={handleFilter}
-				/>
-				<Gallery
-					items={NFTs.data.map(doc => {
-						const {thumbnail, name, price, media} = doc.data()
-						return {
-							id: doc.id,
-							thumbnail,
-							name,
-							price,
-							isVideo: media.mimeType.startsWith("video")
-						}
-					})}
-				/>
-			</div>
+		// 		<Select
+		// 			defaultValue={category}
+		// 			options={[
+		// 				{
+		// 					name: "Show All",
+		// 					value: ""
+		// 				},
+		// 				{
+		// 					name: "Gallery",
+		// 					value: "gallery"
+		// 				},
+		// 				{
+		// 					name: "Exhibit",
+		// 					value: "exhibit"
+		// 				}
+		// 			]}
+		// 			onChange={handleFilter}
+		// 		/>
+		// 		<Gallery
+		// 			items={NFTs.data.map(doc => {
+		// 				const {thumbnail, name, price, media} = doc.data()
+		// 				return {
+		// 					id: doc.id,
+		// 					thumbnail,
+		// 					name,
+		// 					price,
+		// 					isVideo: media.mimeType.startsWith("video")
+		// 				}
+		// 			})}
+		// 		/>
+		// 	</div>
 
-			{NFTs.data.length < NFTs.totalCount && <Button onClick={handleLoadMore}>Load More</Button>}
+		// 	{NFTs.data.length < NFTs.totalCount && <Button onClick={handleLoadMore}>Load More</Button>}
+		// </div>
+		<div>
+			<h1>Coming Soon!</h1>
 		</div>
 	)
 }
