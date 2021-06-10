@@ -114,10 +114,10 @@ const CreateHouseDAOModalContent: FunctionComponent = () => {
 									value: ""
 								}
 							].concat(
-								(tokenType === "NFT"
-									? NFTs.data.map(nft => nft.data())
-									: tokens
-								).map((tkn: ERC20Token | Omit<NFT, "id">) => ({name: tkn.name, value: tkn.address}))
+								(tokenType === "NFT" ? NFTs.data.map(nft => nft.data()) : tokens).map((tkn: ERC20Token | NFT) => ({
+									name: tkn.name,
+									value: tkn.address
+								}))
 							)}
 							disabled={
 								tokenSource !== "existing" ||

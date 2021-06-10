@@ -3,6 +3,7 @@ import firebase from "firebase"
 
 const addDAO = async (
 	{
+		address,
 		name,
 		type,
 		houseTokenType,
@@ -15,13 +16,14 @@ const addDAO = async (
 		minProposalAmount,
 		govTokensAwarded,
 		minContribution
-	}: Omit<DAO, "id">,
+	}: DAO,
 	account: string
 ): Promise<void> => {
 	await firebase
 		.firestore()
 		.collection("DAOs")
-		.add({
+		.doc(address)
+		.set({
 			name,
 			type,
 			houseTokenType,

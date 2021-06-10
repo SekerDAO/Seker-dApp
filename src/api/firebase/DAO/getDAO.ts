@@ -6,10 +6,7 @@ const getDAO = async (id: string): Promise<DAO> => {
 	if (!snapshot.exists) {
 		throw new Error("DAO not found")
 	}
-	return {
-		...(snapshot.data() as Omit<DAO, "id">),
-		id
-	}
+	return snapshot.data() as DAO
 }
 
 export default getDAO

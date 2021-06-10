@@ -12,7 +12,7 @@ export type Member = {
 }
 
 export type DAO = {
-	id: string
+	address: string
 	type: "gallery" | "house"
 	houseTokenType?: HouseDAOTokenType
 	tokenAddress: string
@@ -27,4 +27,4 @@ export type DAO = {
 	minContribution: number
 }
 
-export type DAOSnapshot = firebase.firestore.QueryDocumentSnapshot<Omit<DAO, "id">>
+export type DAOSnapshot = firebase.firestore.QueryDocumentSnapshot<DAO>

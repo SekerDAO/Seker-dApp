@@ -1,11 +1,12 @@
 import {NFT} from "../../../types/NFT"
 import firebase from "firebase"
 
-const addNFT = async (nft: Omit<NFT, "id">, account: string): Promise<void> => {
+const addNFT = async (nft: NFT, account: string): Promise<void> => {
 	await firebase
 		.firestore()
 		.collection("nfts")
-		.add({
+		.doc(nft.address)
+		.set({
 			...nft,
 			nftAdminUserUID: account
 		})

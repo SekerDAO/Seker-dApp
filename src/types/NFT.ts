@@ -10,7 +10,6 @@ type NFTMediaInfo = {
 export type NFT = {
 	address: string
 	createdDate: string
-	id: string
 	name: string
 	thumbnail: string
 	price?: number
@@ -30,4 +29,4 @@ export type NFTMetadata = {
 	attributes: Record<string, string | number | boolean>
 }
 
-export type NFTSnapshot = firebase.firestore.QueryDocumentSnapshot<Omit<NFT, "id">>
+export type NFTSnapshot = firebase.firestore.QueryDocumentSnapshot<NFT>

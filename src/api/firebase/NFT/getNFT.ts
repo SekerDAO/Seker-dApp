@@ -6,10 +6,7 @@ const getNFT = async (id: string): Promise<NFT> => {
 	if (!snapshot.exists) {
 		throw new Error("NFT not found")
 	}
-	return {
-		...(snapshot.data() as Omit<NFT, "id">),
-		id: id
-	}
+	return snapshot.data() as NFT
 }
 
 export default getNFT

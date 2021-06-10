@@ -50,7 +50,7 @@ const CreateDAO: FunctionComponent<{
 			setLoading(true)
 			try {
 				if (DAOType === "house" && tokenType === "ERC20") {
-					await deployHouseERC20DAO(
+					const address = await deployHouseERC20DAO(
 						name,
 						members.map(m => m.address),
 						tokenAddress,
@@ -65,6 +65,7 @@ const CreateDAO: FunctionComponent<{
 					)
 					await addDAO(
 						{
+							address,
 							type: "house",
 							houseTokenType: "ERC20",
 							tokenAddress,
