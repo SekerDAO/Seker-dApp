@@ -19,6 +19,8 @@ export const fundingProposal = (
 			provider.once(tx.hash, () => {
 				resolve()
 			})
+
+			daoContract.once('ProposalCreated', function(error, event){ console.log(event.args.number.toString()); });
 		} catch (e) {
 			reject(e)
 		}
@@ -42,6 +44,8 @@ export const enterHouseDAOProposal = (
 			provider.once(tx.hash, () => {
 				resolve()
 			})
+
+			daoContract.once('ProposalCreated', function(error, event){ console.log(event.args.number.toString()); });
 		} catch (e) {
 			reject(e)
 		}
@@ -64,6 +68,8 @@ export const changeRoleProposal = (
 			provider.once(tx.hash, () => {
 				resolve()
 			})
+			
+			daoContract.once('ProposalCreated', function(error, event){ console.log(event.args.number.toString()); });
 		} catch (e) {
 			reject(e)
 		}
