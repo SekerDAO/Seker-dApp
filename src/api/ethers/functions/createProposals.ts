@@ -1,27 +1,21 @@
-import {Web3Provider} from "@ethersproject/providers"
+import {JsonRpcSigner, Web3Provider} from "@ethersproject/providers"
 import {Contract} from "@ethersproject/contracts"
-import GovToken from "../abis/GovToken.json"
-import MultiArtToken from "../abis/MultiArtToken.json"
 import HouseTokenDAO from "../abis/HouseTokenDAO.json"
+import {DAOMemberRole} from "../../../types/DAO"
 
-
-let roles = {
-	'headOfHouse': false,
-	'member': false
-}
-const fundingPropsal = (
+export const fundingProposal = (
 	doaAddress: string,
-	roles: Role,
+	roles: DAOMemberRole,
 	fundTarget: string,
 	amount: number,
 	signer: JsonRpcSigner,
 	provider: Web3Provider
-): Promise<void> => 
+): Promise<void> =>
 	new Promise<void>(async (resolve, reject) => {
 		try {
 			// todo: preflight checks: 1 is a member 2 has enough gov tokens
 			const daoContract = new Contract(doaAddress, HouseTokenDAO.abi, provider)
-			const tx = await awaitdaoContract.submitProposal(roles, fundTarget, amount, 0)
+			const tx = await daoContract.submitProposal(roles, fundTarget, amount, 0)
 
 			provider.once(tx.hash, () => {
 				resolve()
@@ -31,17 +25,17 @@ const fundingPropsal = (
 		}
 	})
 
-const enterHouseDAOPropasl = (
+export const enterHouseDAOPropasl = (
 	doaAddress: string,
-	roles: Role,
+	roles: DAOMemberRole,
 	contribution: number,
 	signer: JsonRpcSigner,
 	provider: Web3Provider
-): Promise<void> => 
+): Promise<void> =>
 	new Promise<void>(async (resolve, reject) => {
 		try {
 			const daoContract = new Contract(doaAddress, HouseTokenDAO.abi, provider)
-			const tx = await awaitdaoContract.joinDAOProposal(contribution, roles)
+			const tx = await daoContract.joinDAOProposal(contribution, roles)
 
 			provider.once(tx.hash, () => {
 				resolve()
@@ -51,19 +45,19 @@ const enterHouseDAOPropasl = (
 		}
 	})
 
-const changeRolePropsal = (
+export const changeRolePropsal = (
 	doaAddress: string,
-	roles: Role,
+	roles: DAOMemberRole,
 	fundTarget: string,
 	amount: number,
 	signer: JsonRpcSigner,
 	provider: Web3Provider
-): Promise<void> => 
+): Promise<void> =>
 	new Promise<void>(async (resolve, reject) => {
 		try {
 			// todo: preflight checks: 1 is a member 2 has enough gov tokens
 			const daoContract = new Contract(doaAddress, HouseTokenDAO.abi, provider)
-			const tx = await awaitdaoContract.submitProposal(roles, signer, 0, 1)
+			const tx = await daoContract.submitProposal(roles, signer, 0, 1)
 
 			provider.once(tx.hash, () => {
 				resolve()
@@ -72,6 +66,5 @@ const changeRolePropsal = (
 			reject(e)
 		}
 	})
-
 
 // TODO: open exection proposal type
