@@ -24,8 +24,8 @@ export const fundingProposal = (
 		}
 	})
 
-export const enterHouseDAOPropasl = (
-	doaAddress: string,
+export const enterHouseDAOProposal = (
+	daoAddress: string,
 	contribution: number,
 	signer: JsonRpcSigner,
 	provider: Web3Provider
@@ -36,7 +36,7 @@ export const enterHouseDAOPropasl = (
 				headOfHouse: false,
 				member: true
 			}
-			const daoContract = new Contract(doaAddress, HouseTokenDAO.abi, provider)
+			const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
 			const tx = await daoContract.joinDAOProposal(contribution, roles)
 
 			provider.once(tx.hash, () => {
