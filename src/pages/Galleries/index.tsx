@@ -1,33 +1,34 @@
-import React, {ChangeEvent, FunctionComponent, useState} from "react"
-import {useHistory, useParams} from "react-router-dom"
-import Gallery from "../../components/Gallery"
-import Select from "../../components/Controls/Select"
-import useNFTs from "../../customHooks/useNFTs"
-import Loader from "../../components/Loader"
-import ErrorPlaceholder from "../../components/ErrorPlaceholder"
-import Button from "../../components/Controls/Button"
-import {NFTSnapshot} from "../../types/NFT"
+import React, {FunctionComponent} from "react"
+// import React, {ChangeEvent, FunctionComponent, useState} from "react"
+// import {useHistory, useParams} from "react-router-dom"
+// import Gallery from "../../components/Gallery"
+// import Select from "../../components/Controls/Select"
+// import useNFTs from "../../customHooks/useNFTs"
+// import Loader from "../../components/Loader"
+// import ErrorPlaceholder from "../../components/ErrorPlaceholder"
+// import Button from "../../components/Controls/Button"
+// import {NFTSnapshot} from "../../types/NFT"
 import "./styles.scss"
 
 const Galleries: FunctionComponent = () => {
-	const history = useHistory()
-	const {category} = useParams<{category: string}>()
-	const [cursor, setCursor] = useState<NFTSnapshot | null>(null)
-	const {NFTs, loading, error} = useNFTs({category, after: cursor})
-
-	if (error) return <ErrorPlaceholder />
-	if (loading) return <Loader />
-	if (NFTs.data.length === 0) {
-		return <p> No Search Results </p>
-	}
-
-	const handleFilter = (e: ChangeEvent<HTMLSelectElement>) => {
-		history.push(`/galleries/${e.target.value}`)
-	}
-
-	const handleLoadMore = () => {
-		setCursor(NFTs.data[NFTs.data.length - 1])
-	}
+	// const history = useHistory()
+	// const {category} = useParams<{category: string}>()
+	// const [cursor, setCursor] = useState<NFTSnapshot | null>(null)
+	// const {NFTs, loading, error} = useNFTs({category, after: cursor})
+	//
+	// if (error) return <ErrorPlaceholder />
+	// if (loading) return <Loader />
+	// if (NFTs.data.length === 0) {
+	// 	return <p> No Search Results </p>
+	// }
+	//
+	// const handleFilter = (e: ChangeEvent<HTMLSelectElement>) => {
+	// 	history.push(`/galleries/${e.target.value}`)
+	// }
+	//
+	// const handleLoadMore = () => {
+	// 	setCursor(NFTs.data[NFTs.data.length - 1])
+	// }
 
 	return (
 		// <div className="galleries">
