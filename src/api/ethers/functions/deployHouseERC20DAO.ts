@@ -20,7 +20,6 @@ const deployHouseERC20DAO = async (
 	signer: JsonRpcSigner
 ): Promise<string> => {
 	const dao = new ContractFactory(HouseTokenDAO.abi, HouseTokenDAO.bytecode, signer)
-	console.log(REACT_APP_WETH_ADDRESS)
 	const contract = await dao.deploy(
 		headsOfHouse,
 		governanceToken,
