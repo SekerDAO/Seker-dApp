@@ -5,7 +5,6 @@ import {DAOMemberRole} from "../../../types/DAO"
 
 export const fundingProposal = (
 	doaAddress: string,
-	roles: DAOMemberRole,
 	fundTarget: string,
 	amount: number,
 	signer: JsonRpcSigner,
@@ -15,7 +14,7 @@ export const fundingProposal = (
 		try {
 			// todo: preflight checks: 1 is a member 2 has enough gov tokens
 			const daoContract = new Contract(doaAddress, HouseTokenDAO.abi, provider)
-			const tx = await daoContract.submitProposal(roles, fundTarget, amount, 0)
+			const tx = await daoContract.submitProposal(0, fundTarget, amount, 0)
 
 			provider.once(tx.hash, () => {
 				resolve()
@@ -27,13 +26,16 @@ export const fundingProposal = (
 
 export const enterHouseDAOPropasl = (
 	doaAddress: string,
-	roles: DAOMemberRole,
 	contribution: number,
 	signer: JsonRpcSigner,
 	provider: Web3Provider
 ): Promise<void> =>
 	new Promise<void>(async (resolve, reject) => {
 		try {
+			const roles = {
+				headOfHouse: false,
+				member: true
+			}
 			const daoContract = new Contract(doaAddress, HouseTokenDAO.abi, provider)
 			const tx = await daoContract.joinDAOProposal(contribution, roles)
 

@@ -48,8 +48,8 @@ const ChangeRole: FunctionComponent = () => {
 						options={[
 							{name: "Choose One", value: ""},
 							{name: "Member", value: "member"},
-							{name: "Admin", value: "admin"},
-							{name: "Contributor", value: "contributor"},
+							//{name: "Admin", value: "admin"},
+							//{name: "Contributor", value: "contributor"},
 							{name: "Head", value: "head"},
 							{name: "Kick", value: "kick"}
 						]}
