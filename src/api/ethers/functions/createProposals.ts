@@ -1,7 +1,7 @@
 import {JsonRpcSigner, Web3Provider} from "@ethersproject/providers"
 import {Contract} from "@ethersproject/contracts"
 import HouseTokenDAO from "../abis/HouseTokenDAO.json"
-import {DAOMemberRole} from "../../../types/DAO"
+import {HouseDAORole} from "../../../types/DAO"
 
 export const fundingProposal = (
 	doaAddress: string,
@@ -47,9 +47,9 @@ export const enterHouseDAOPropasl = (
 		}
 	})
 
-export const changeRolePropsal = (
+export const changeRoleProposal = (
 	doaAddress: string,
-	roles: DAOMemberRole,
+	role: HouseDAORole | "kick",
 	fundTarget: string,
 	amount: number,
 	signer: JsonRpcSigner,
@@ -59,7 +59,7 @@ export const changeRolePropsal = (
 		try {
 			// todo: preflight checks: 1 is a member 2 has enough gov tokens
 			const daoContract = new Contract(doaAddress, HouseTokenDAO.abi, provider)
-			const tx = await daoContract.submitProposal(roles, signer, 0, 1)
+			const tx = await daoContract.submitProposal({member: role !== "kick", headOfHouse: role === "head"}, signer, 0, 1)
 
 			provider.once(tx.hash, () => {
 				resolve()

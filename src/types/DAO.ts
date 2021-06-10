@@ -1,5 +1,10 @@
 import firebase from "firebase"
-export type DAOMemberRole = "member" | "admin" | "contributor" | "head"
+
+export type HouseDAORole = "member" | "head"
+
+export type GalleryDAORole = "member" | "admin" | "contributor"
+
+export type DAOMemberRole = HouseDAORole | GalleryDAORole
 
 export type DAODecisionMakingSpeed = "slow" | "medium" | "fast"
 
