@@ -81,7 +81,7 @@ const AppWithEthers: FunctionComponent = () => {
 						/>
 						<Route
 							exact
-							path="/dao/:id"
+							path="/dao/:address"
 							render={() => (
 								<MainLayout>
 									<DAOPage />
