@@ -50,7 +50,7 @@ const DAOPage: FunctionComponent = () => {
 					}}
 				/>
 				{activeMenuIndex === 0 && <AboutDAO dao={DAO} />}
-				{activeMenuIndex === 3 && <CreateDAOProposal isOwner={isOwner} />}
+				{activeMenuIndex === 3 && <CreateDAOProposal isOwner={isOwner} daoAddress={DAO.address} />}
 			</div>
 		</div>
 	)

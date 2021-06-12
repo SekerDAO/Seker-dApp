@@ -1,10 +1,30 @@
-import React, {FunctionComponent, useState} from "react"
+import React, {FunctionComponent, useContext, useState} from "react"
 import Input from "../../Controls/Input"
 import Button from "../../Controls/Button"
+import EthersContext from "../../../context/EthersContext"
+import {enterHouseDAOProposal} from "../../../api/ethers/functions/createProposals"
+import {toastError} from "../../Toast"
 
-const JoinHouse: FunctionComponent = () => {
+const JoinHouse: FunctionComponent<{
+	daoAddress: string
+}> = ({daoAddress}) => {
+	const {provider, signer} = useContext(EthersContext)
+	const [loading, setLoading] = useState(false)
 	const [title, setTitle] = useState("")
 	const [description, setDescription] = useState("")
+
+	const handleSubmit = async () => {
+		if (!(provider && signer)) return
+		setLoading(true)
+		try {
+			const proposalId = await enterHouseDAOProposal(daoAddress, provider, signer)
+			console.log(proposalId)
+		} catch (e) {
+			console.error(e)
+			toastError("Failed to create proposal")
+		}
+		setLoading(false)
+	}
 
 	return (
 		<>
@@ -26,8 +46,9 @@ const JoinHouse: FunctionComponent = () => {
 				}}
 				value={description}
 			/>
-			<p className="create-dao-proposal__note">The minimum contribution amount is: TODO</p>
-			<Button>Create Proposal</Button>
+			<Button onClick={handleSubmit} disabled={loading || !title || !description}>
+				{loading ? "Processing..." : "Create Proposal"}
+			</Button>
 		</>
 	)
 }

@@ -3,7 +3,7 @@ import {DAO} from "../types/DAO"
 import getDAO from "../api/firebase/DAO/getDAO"
 
 const useDAO = (
-	id: string
+	address: string
 ): {
 	DAO: DAO | null
 	loading: boolean
@@ -17,7 +17,7 @@ const useDAO = (
 	useEffect(() => {
 		setLoading(true)
 		setError(false)
-		getDAO(id)
+		getDAO(address)
 			.then(_DAO => {
 				setLoading(false)
 				setDAO(_DAO)
@@ -27,7 +27,7 @@ const useDAO = (
 				setError(true)
 				setLoading(false)
 			})
-	}, [id])
+	}, [address])
 
 	return {
 		DAO,

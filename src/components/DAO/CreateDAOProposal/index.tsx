@@ -1,17 +1,22 @@
-import React, {FunctionComponent, useState} from "react"
+import React, {FunctionComponent, useContext, useState} from "react"
 import Select from "../../Controls/Select"
 import ApplyForCommission from "./ApplyForCommission"
 import "./styles.scss"
 import JoinHouse from "./JoinHouse"
 import RequestFunding from "./RequestFunding"
 import ChangeRole from "./ChangeRole"
+import {AuthContext} from "../../../context/AuthContext"
 
 type DAOProposalType = "applyForCommission" | "joinHouse" | "requestFunding" | "changeRole"
 
 const CreateDAOProposal: FunctionComponent<{
 	isOwner: boolean
-}> = ({isOwner}) => {
+	daoAddress: string
+}> = ({isOwner, daoAddress}) => {
+	const {connected} = useContext(AuthContext)
 	const [type, setType] = useState<DAOProposalType>(isOwner ? "requestFunding" : "applyForCommission")
+
+	if (!connected) return <div>TODO: Please connect wallet</div>
 
 	return (
 		<div className="create-dao-proposal">
@@ -29,7 +34,7 @@ const CreateDAOProposal: FunctionComponent<{
 				}}
 			/>
 			{type === "applyForCommission" && <ApplyForCommission />}
-			{type === "joinHouse" && <JoinHouse />}
+			{type === "joinHouse" && <JoinHouse daoAddress={daoAddress} />}
 			{type === "requestFunding" && <RequestFunding />}
 			{type === "changeRole" && <ChangeRole />}
 		</div>
