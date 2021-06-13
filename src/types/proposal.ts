@@ -13,3 +13,10 @@ export type Proposal = {
 	recipientAddress?: string
 	newRole?: DAOMemberRole | "kick"
 }
+
+export const DAOProposalsTypeNames = {
+	applyForCommission: "Apply For Commission",
+	joinHouse: "Join House",
+	requestFunding: "Request Funding",
+	changeRole: "Change Role / Kick"
+} as const

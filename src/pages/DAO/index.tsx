@@ -9,6 +9,7 @@ import {AuthContext} from "../../context/AuthContext"
 import Button from "../../components/Controls/Button"
 import AboutDAO from "../../components/DAO/AboutDAO"
 import CreateDAOProposal from "../../components/DAO/CreateDAOProposal"
+import DAOProposals from "../../components/DAO/DAOProposals"
 
 const menuEntries = ["About", "Members", "Proposals", "Create Proposal", "Collection"]
 
@@ -50,6 +51,7 @@ const DAOPage: FunctionComponent = () => {
 					}}
 				/>
 				{activeMenuIndex === 0 && <AboutDAO dao={DAO} />}
+				{activeMenuIndex === 2 && <DAOProposals daoAddress={DAO.address} />}
 				{activeMenuIndex === 3 && <CreateDAOProposal isOwner={isOwner} daoAddress={DAO.address} />}
 			</div>
 		</div>

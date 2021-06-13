@@ -6,7 +6,7 @@ import JoinHouse from "./JoinHouse"
 import RequestFunding from "./RequestFunding"
 import ChangeRole from "./ChangeRole"
 import {AuthContext} from "../../../context/AuthContext"
-import {DAOProposalType} from "../../../types/proposal"
+import {DAOProposalsTypeNames, DAOProposalType} from "../../../types/proposal"
 
 const CreateDAOProposal: FunctionComponent<{
 	isOwner: boolean
@@ -23,10 +23,10 @@ const CreateDAOProposal: FunctionComponent<{
 			<Select
 				value={type}
 				options={[
-					{name: "Apply For Commission", value: "applyForCommission"},
-					{name: "Join House", value: "joinHouse"},
-					{name: "Request Funding", value: "requestFunding"},
-					{name: "Change Role / Kick", value: "changeRole"}
+					{name: DAOProposalsTypeNames.applyForCommission, value: "applyForCommission"},
+					{name: DAOProposalsTypeNames.joinHouse, value: "joinHouse"},
+					{name: DAOProposalsTypeNames.requestFunding, value: "requestFunding"},
+					{name: DAOProposalsTypeNames.changeRole, value: "changeRole"}
 				].slice(...(isOwner ? [2] : [0, 2]))}
 				onChange={e => {
 					setType(e.target.value as DAOProposalType)
