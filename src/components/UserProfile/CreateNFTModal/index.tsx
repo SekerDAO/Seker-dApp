@@ -13,7 +13,7 @@ import addNFT from "../../../api/firebase/NFT/addNFT"
 import uploadMedia from "../../../api/ipfs/uploadMedia"
 import createNFT from "../../../api/ethers/functions/createNFT"
 import Textarea from "../../Controls/Textarea"
-import useMyDomains from "../../../customHooks/useMyDomains"
+import useMyDomains from "../../../customHooks/getters/useMyDomains"
 import "./styles.scss"
 import {toastError} from "../../Toast"
 

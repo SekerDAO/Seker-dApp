@@ -1,8 +1,18 @@
-import React, {ChangeEvent, FunctionComponent, useState} from "react"
+import React, {ChangeEvent, FunctionComponent, useContext, useState} from "react"
 import Input from "../../Controls/Input"
 import Button from "../../Controls/Button"
+import {AuthContext} from "../../../context/AuthContext"
+import EthersContext from "../../../context/EthersContext"
+import addProposal from "../../../api/firebase/proposal/addProposal"
+import {toastError, toastSuccess} from "../../Toast"
+import {fundingProposal} from "../../../api/ethers/functions/createProposals"
 
-const RequestFunding: FunctionComponent = () => {
+const RequestFunding: FunctionComponent<{
+	daoAddress: string
+}> = ({daoAddress}) => {
+	const {account} = useContext(AuthContext)
+	const {provider, signer} = useContext(EthersContext)
+	const [loading, setLoading] = useState(false)
 	const [title, setTitle] = useState("")
 	const [description, setDescription] = useState("")
 	const [amount, setAmount] = useState("")
@@ -14,6 +24,33 @@ const RequestFunding: FunctionComponent = () => {
 		} else {
 			setAmount(e.target.value)
 		}
+	}
+
+	const handleSubmit = async () => {
+		if (!(provider && signer && account && amount && recipient)) return
+		setLoading(true)
+		try {
+			const proposalId = await fundingProposal(daoAddress, recipient, Number(amount), provider, signer)
+			await addProposal({
+				id: proposalId,
+				type: "requestFunding",
+				daoAddress,
+				userAddress: account,
+				title,
+				...(description ? {description} : {}),
+				recipientAddress: recipient,
+				amount: Number(amount)
+			})
+			toastSuccess("Proposal successfully created")
+			setTitle("")
+			setDescription("")
+			setAmount("")
+			setRecipient("")
+		} catch (e) {
+			console.error(e)
+			toastError("Failed to create proposal")
+		}
+		setLoading(false)
 	}
 
 	return (
@@ -37,7 +74,7 @@ const RequestFunding: FunctionComponent = () => {
 				value={description}
 			/>
 			<label htmlFor="request-funding-amount">Requested Amount</label>
-			<Input borders="all" id="request-funding-amount" onChange={handleAmountChange} value={amount} />
+			<Input borders="all" id="request-funding-amount" onChange={handleAmountChange} value={amount} number />
 			<label htmlFor="request-funding-recipient">Recipient</label>
 			<Input
 				borders="all"
@@ -47,7 +84,9 @@ const RequestFunding: FunctionComponent = () => {
 				}}
 				value={recipient}
 			/>
-			<Button>Create Proposal</Button>
+			<Button onClick={handleSubmit} disabled={loading || !(title && amount && recipient)}>
+				{loading ? "Processing..." : "Create Proposal"}
+			</Button>
 		</>
 	)
 }

@@ -1,14 +1,14 @@
 import {useContext, useEffect, useState} from "react"
-import getMyDomains from "../api/firebase/domain/getMyDomains"
-import {AuthContext} from "../context/AuthContext"
-import {Domain} from "../types/domain"
+import {AuthContext} from "../../context/AuthContext"
+import {DAOSnapshot} from "../../types/DAO"
+import getMyDAOs from "../../api/firebase/DAO/getMyDAOs"
 
-const useMyDomains = (): {
-	domains: Domain[]
+const useMyDAOs = (): {
+	DAOs: DAOSnapshot[]
 	loading: boolean
 	error: boolean
 } => {
-	const [domains, setDomains] = useState<Domain[]>([])
+	const [DAOs, setDAOs] = useState<DAOSnapshot[]>([])
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
 	const {account} = useContext(AuthContext)
@@ -17,9 +17,9 @@ const useMyDomains = (): {
 		if (account) {
 			setLoading(true)
 			setError(false)
-			getMyDomains(account)
+			getMyDAOs(account)
 				.then(res => {
-					setDomains(res.docs.map(doc => doc.data()))
+					setDAOs(res)
 					setLoading(false)
 				})
 				.catch(e => {
@@ -31,10 +31,10 @@ const useMyDomains = (): {
 	}, [account])
 
 	return {
-		domains,
+		DAOs,
 		loading,
 		error
 	}
 }
 
-export default useMyDomains
+export default useMyDAOs

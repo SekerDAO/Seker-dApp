@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react"
-import {NFT} from "../types/NFT"
-import getNFT from "../api/firebase/NFT/getNFT"
+import {NFT} from "../../types/NFT"
+import getNFT from "../../api/firebase/NFT/getNFT"
 
 const useNFT = (
 	id: string

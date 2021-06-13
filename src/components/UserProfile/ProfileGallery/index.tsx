@@ -4,7 +4,7 @@ import Select from "../../Controls/Select"
 import Gallery from "../../Gallery"
 import Button from "../../Controls/Button"
 import {NFTSnapshot} from "../../../types/NFT"
-import useNFTs from "../../../customHooks/useNFTs"
+import useNFTs from "../../../customHooks/getters/useNFTs"
 import ErrorPlaceholder from "../../ErrorPlaceholder"
 import Loader from "../../Loader"
 

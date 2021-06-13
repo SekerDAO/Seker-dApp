@@ -1,14 +1,14 @@
 import {useContext, useEffect, useState} from "react"
-import {AuthContext} from "../context/AuthContext"
-import {ERC20Token} from "../types/ERC20Token"
-import getMyERC20Tokens from "../api/firebase/ERC20Token/getMyERC20Tokens"
+import getMyDomains from "../../api/firebase/domain/getMyDomains"
+import {AuthContext} from "../../context/AuthContext"
+import {Domain} from "../../types/domain"
 
-const useMyERC20Tokens = (): {
-	tokens: ERC20Token[]
+const useMyDomains = (): {
+	domains: Domain[]
 	loading: boolean
 	error: boolean
 } => {
-	const [tokens, setTokens] = useState<ERC20Token[]>([])
+	const [domains, setDomains] = useState<Domain[]>([])
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
 	const {account} = useContext(AuthContext)
@@ -17,9 +17,9 @@ const useMyERC20Tokens = (): {
 		if (account) {
 			setLoading(true)
 			setError(false)
-			getMyERC20Tokens(account)
+			getMyDomains(account)
 				.then(res => {
-					setTokens(res.docs.map(doc => doc.data()))
+					setDomains(res.docs.map(doc => doc.data()))
 					setLoading(false)
 				})
 				.catch(e => {
@@ -31,10 +31,10 @@ const useMyERC20Tokens = (): {
 	}, [account])
 
 	return {
-		tokens,
+		domains,
 		loading,
 		error
 	}
 }
 
-export default useMyERC20Tokens
+export default useMyDomains

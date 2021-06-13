@@ -1,14 +1,51 @@
-import React, {FunctionComponent, useState} from "react"
+import React, {FunctionComponent, useContext, useState} from "react"
 import Input from "../../Controls/Input"
 import Button from "../../Controls/Button"
-import {DAOMemberRole} from "../../../types/DAO"
+import {HouseDAORole} from "../../../types/DAO"
 import Select from "../../Controls/Select"
+import {AuthContext} from "../../../context/AuthContext"
+import EthersContext from "../../../context/EthersContext"
+import addProposal from "../../../api/firebase/proposal/addProposal"
+import {toastError, toastSuccess} from "../../Toast"
+import {changeRoleProposal} from "../../../api/ethers/functions/createProposals"
 
-const ChangeRole: FunctionComponent = () => {
+const ChangeRole: FunctionComponent<{
+	daoAddress: string
+}> = ({daoAddress}) => {
+	const {account} = useContext(AuthContext)
+	const {provider, signer} = useContext(EthersContext)
+	const [loading, setLoading] = useState(false)
 	const [title, setTitle] = useState("")
 	const [description, setDescription] = useState("")
 	const [address, setAddress] = useState("")
-	const [newRole, setNewRole] = useState<DAOMemberRole | "kick" | "">("")
+	const [newRole, setNewRole] = useState<HouseDAORole | "kick" | "">("")
+
+	const handleSubmit = async () => {
+		if (!(provider && signer && account && address && newRole)) return
+		setLoading(true)
+		try {
+			const proposalId = await changeRoleProposal(daoAddress, newRole, address, provider, signer)
+			await addProposal({
+				id: proposalId,
+				type: "changeRole",
+				daoAddress,
+				userAddress: account,
+				title,
+				...(description ? {description} : {}),
+				recipientAddress: address,
+				newRole
+			})
+			toastSuccess("Proposal successfully created")
+			setTitle("")
+			setDescription("")
+			setAddress("")
+			setNewRole("")
+		} catch (e) {
+			console.error(e)
+			toastError("Failed to create proposal")
+		}
+		setLoading(false)
+	}
 
 	return (
 		<>
@@ -48,8 +85,6 @@ const ChangeRole: FunctionComponent = () => {
 						options={[
 							{name: "Choose One", value: ""},
 							{name: "Member", value: "member"},
-							//{name: "Admin", value: "admin"},
-							//{name: "Contributor", value: "contributor"},
 							{name: "Head", value: "head"},
 							{name: "Kick", value: "kick"}
 						]}
@@ -60,7 +95,9 @@ const ChangeRole: FunctionComponent = () => {
 					/>
 				</div>
 			</div>
-			<Button>Create Proposal</Button>
+			<Button onClick={handleSubmit} disabled={loading || !(title && address && newRole)}>
+				{loading ? "Processing..." : "Create Proposal"}
+			</Button>
 		</>
 	)
 }

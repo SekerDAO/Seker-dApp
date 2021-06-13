@@ -3,22 +3,35 @@ import Input from "../../Controls/Input"
 import Button from "../../Controls/Button"
 import EthersContext from "../../../context/EthersContext"
 import {enterHouseDAOProposal} from "../../../api/ethers/functions/createProposals"
-import {toastError} from "../../Toast"
+import {toastError, toastSuccess} from "../../Toast"
+import addProposal from "../../../api/firebase/proposal/addProposal"
+import {AuthContext} from "../../../context/AuthContext"
 
 const JoinHouse: FunctionComponent<{
 	daoAddress: string
 }> = ({daoAddress}) => {
+	const {account} = useContext(AuthContext)
 	const {provider, signer} = useContext(EthersContext)
 	const [loading, setLoading] = useState(false)
 	const [title, setTitle] = useState("")
 	const [description, setDescription] = useState("")
 
 	const handleSubmit = async () => {
-		if (!(provider && signer)) return
+		if (!(provider && signer && account)) return
 		setLoading(true)
 		try {
 			const proposalId = await enterHouseDAOProposal(daoAddress, provider, signer)
-			console.log(proposalId)
+			await addProposal({
+				id: proposalId,
+				type: "joinHouse",
+				daoAddress,
+				userAddress: account,
+				title,
+				...(description ? {description} : {})
+			})
+			toastSuccess("Proposal successfully created")
+			setTitle("")
+			setDescription("")
 		} catch (e) {
 			console.error(e)
 			toastError("Failed to create proposal")
@@ -46,7 +59,7 @@ const JoinHouse: FunctionComponent<{
 				}}
 				value={description}
 			/>
-			<Button onClick={handleSubmit} disabled={loading || !title || !description}>
+			<Button onClick={handleSubmit} disabled={loading || !title}>
 				{loading ? "Processing..." : "Create Proposal"}
 			</Button>
 		</>

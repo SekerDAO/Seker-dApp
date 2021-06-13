@@ -1,14 +1,14 @@
 import {useContext, useEffect, useState} from "react"
-import {AuthContext} from "../context/AuthContext"
-import {DAOSnapshot} from "../types/DAO"
-import getMyDAOs from "../api/firebase/DAO/getMyDAOs"
+import {AuthContext} from "../../context/AuthContext"
+import {ERC20Token} from "../../types/ERC20Token"
+import getMyERC20Tokens from "../../api/firebase/ERC20Token/getMyERC20Tokens"
 
-const useMyDAOs = (): {
-	DAOs: DAOSnapshot[]
+const useMyERC20Tokens = (): {
+	tokens: ERC20Token[]
 	loading: boolean
 	error: boolean
 } => {
-	const [DAOs, setDAOs] = useState<DAOSnapshot[]>([])
+	const [tokens, setTokens] = useState<ERC20Token[]>([])
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
 	const {account} = useContext(AuthContext)
@@ -17,9 +17,9 @@ const useMyDAOs = (): {
 		if (account) {
 			setLoading(true)
 			setError(false)
-			getMyDAOs(account)
+			getMyERC20Tokens(account)
 				.then(res => {
-					setDAOs(res)
+					setTokens(res.docs.map(doc => doc.data()))
 					setLoading(false)
 				})
 				.catch(e => {
@@ -31,10 +31,10 @@ const useMyDAOs = (): {
 	}, [account])
 
 	return {
-		DAOs,
+		tokens,
 		loading,
 		error
 	}
 }
 
-export default useMyDAOs
+export default useMyERC20Tokens

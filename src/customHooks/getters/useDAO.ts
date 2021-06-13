@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react"
-import {DAO} from "../types/DAO"
-import getDAO from "../api/firebase/DAO/getDAO"
+import {DAO} from "../../types/DAO"
+import getDAO from "../../api/firebase/DAO/getDAO"
 
 const useDAO = (
 	address: string

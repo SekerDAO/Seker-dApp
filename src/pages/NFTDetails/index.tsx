@@ -1,7 +1,7 @@
 import React, {FunctionComponent} from "react"
 import {useParams} from "react-router-dom"
 import Button from "../../components/Controls/Button"
-import useNFT from "../../customHooks/useNFT"
+import useNFT from "../../customHooks/getters/useNFT"
 import Loader from "../../components/Loader"
 import ErrorPlaceholder from "../../components/ErrorPlaceholder"
 import "./styles.scss"

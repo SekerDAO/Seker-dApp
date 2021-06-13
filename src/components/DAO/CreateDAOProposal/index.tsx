@@ -6,8 +6,7 @@ import JoinHouse from "./JoinHouse"
 import RequestFunding from "./RequestFunding"
 import ChangeRole from "./ChangeRole"
 import {AuthContext} from "../../../context/AuthContext"
-
-type DAOProposalType = "applyForCommission" | "joinHouse" | "requestFunding" | "changeRole"
+import {DAOProposalType} from "../../../types/proposal"
 
 const CreateDAOProposal: FunctionComponent<{
 	isOwner: boolean
@@ -33,10 +32,10 @@ const CreateDAOProposal: FunctionComponent<{
 					setType(e.target.value as DAOProposalType)
 				}}
 			/>
-			{type === "applyForCommission" && <ApplyForCommission />}
+			{type === "applyForCommission" && <ApplyForCommission daoAddress={daoAddress} />}
 			{type === "joinHouse" && <JoinHouse daoAddress={daoAddress} />}
-			{type === "requestFunding" && <RequestFunding />}
-			{type === "changeRole" && <ChangeRole />}
+			{type === "requestFunding" && <RequestFunding daoAddress={daoAddress} />}
+			{type === "changeRole" && <ChangeRole daoAddress={daoAddress} />}
 		</div>
 	)
 }
