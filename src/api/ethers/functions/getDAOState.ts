@@ -57,87 +57,138 @@ export const getHouseERC20GovTokenSupply = async (daoAddress: string, provider: 
 }
 // todo: getHouseERC721GovTokenSupply + gallery
 
-
 // Proposal Data Getters
-export const getHouseERC20ProposalExecuted = async (daoAddress: string, proposalId: number, provider: Web3Provider): Promise<bool> => {
+export const getHouseERC20ProposalExecuted = async (
+	daoAddress: string,
+	proposalId: number,
+	provider: Web3Provider
+): Promise<boolean> => {
 	const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
 	const proposal = await daoContract.proposals(proposalId)
 	return proposal.executed
 }
-export const getHouseERC20ProposalCanceled = async (daoAddress: string, proposalId: number, provider: Web3Provider): Promise<bool> => {
+export const getHouseERC20ProposalCanceled = async (
+	daoAddress: string,
+	proposalId: number,
+	provider: Web3Provider
+): Promise<boolean> => {
 	const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
 	const proposal = await daoContract.proposals(proposalId)
 	return proposal.canceled
 }
-export const getHouseERC20ProposalDeadline = async (daoAddress: string, proposalId: number, provider: Web3Provider): Promise<bool> => {
+export const getHouseERC20ProposalDeadline = async (
+	daoAddress: string,
+	proposalId: number | undefined,
+	provider: Web3Provider
+): Promise<number> => {
 	const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
 	const proposal = await daoContract.proposals(proposalId)
 	return proposal.deadline
+	//return 0
 }
-export const getHouseERC20ProposalDeadline = async (daoAddress: string, proposalId: number, provider: Web3Provider): Promise<number> => {
-	const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
-	const proposal = await daoContract.proposals(proposalId)
-	return proposal.deadline
-}
-export const getHouseERC20ProposalFundsRequested = async (daoAddress: string, proposalId: number, provider: Web3Provider): Promise<number> => {
+export const getHouseERC20ProposalFundsRequested = async (
+	daoAddress: string,
+	proposalId: number,
+	provider: Web3Provider
+): Promise<number> => {
 	const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
 	const proposal = await daoContract.proposals(proposalId)
 	return proposal.fundsRequested
 }
-export const getHouseERC20ProposalProposalType = async (daoAddress: string, proposalId: number, provider: Web3Provider): Promise<number> => {
+export const getHouseERC20ProposalProposalType = async (
+	daoAddress: string,
+	proposalId: number,
+	provider: Web3Provider
+): Promise<number> => {
 	const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
 	const proposal = await daoContract.proposals(proposalId)
 	return proposal.proposalType
 }
-export const getHouseERC20ProposalTargetAddress = async (daoAddress: string, proposalId: number, provider: Web3Provider): Promise<string> => {
+export const getHouseERC20ProposalTargetAddress = async (
+	daoAddress: string,
+	proposalId: number,
+	provider: Web3Provider
+): Promise<string> => {
 	const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
 	const proposal = await daoContract.proposals(proposalId)
 	return proposal.targetAddress
 }
-export const getHouseERC20ProposalRole = async (daoAddress: string, proposalId: number, provider: Web3Provider): Promise<Role> => {
-	const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
-	const proposal = await daoContract.proposals(proposalId)
-	// todo return Role type
-	//return proposal.role
-}
-export const getHouseERC20ProposalYesVotes = async (daoAddress: string, proposalId: number, provider: Web3Provider): Promise<number> => {
+// export const getHouseERC20ProposalRole = async (daoAddress: string, proposalId: number, provider: Web3Provider): Promise<Role> => {
+// 	const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
+// 	const proposal = await daoContract.proposals(proposalId)
+// 	// todo return Role type
+// 	//return proposal.role
+// }
+export const getHouseERC20ProposalYesVotes = async (
+	daoAddress: string,
+	proposalId: number,
+	provider: Web3Provider
+): Promise<number> => {
 	const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
 	const proposal = await daoContract.proposals(proposalId)
 	return proposal.yesVotes
 }
-export const getHouseERC20ProposalNoVotes = async (daoAddress: string, proposalId: number, provider: Web3Provider): Promise<number> => {
+export const getHouseERC20ProposalNoVotes = async (
+	daoAddress: string,
+	proposalId: number,
+	provider: Web3Provider
+): Promise<number> => {
 	const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
 	const proposal = await daoContract.proposals(proposalId)
 	return proposal.noVotes
 }
-export const getHouseERC20ProposalProposer = async (daoAddress: string, proposalId: number, provider: Web3Provider): Promise<address> => {
+export const getHouseERC20ProposalProposer = async (
+	daoAddress: string,
+	proposalId: number,
+	provider: Web3Provider
+): Promise<string> => {
 	const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
 	const proposal = await daoContract.proposals(proposalId)
 	return proposal.proposer
 }
-export const getHouseERC20ProposalGracePeriod = async (daoAddress: string, proposalId: number, provider: Web3Provider): Promise<number> => {
+export const getHouseERC20ProposalGracePeriod = async (
+	daoAddress: string,
+	proposalId: number,
+	provider: Web3Provider
+): Promise<number> => {
 	const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
 	const proposal = await daoContract.proposals(proposalId)
 	return proposal.gracePeriod
 }
 
 // membership Data Getters
-export const getHouseERC20MemberHeadOfHouse = async (daoAddress: string, member: address provider: Web3Provider): Promise<bool> => {
+export const getHouseERC20MemberHeadOfHouse = async (
+	daoAddress: string,
+	member: string,
+	provider: Web3Provider
+): Promise<boolean> => {
 	const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
 	const _member = await daoContract.members(member)
 	return _member.roles.headOfHouse
 }
-export const getHouseERC20Member = async (daoAddress: string, member: address provider: Web3Provider): Promise<bool> => {
+export const getHouseERC20Member = async (
+	daoAddress: string,
+	member: string,
+	provider: Web3Provider
+): Promise<boolean> => {
 	const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
 	const _member = await daoContract.members(member)
 	return _member.roles.member
 }
-export const getHouseERC20MemberShares = async (daoAddress: string, member: address provider: Web3Provider): Promise<number> => {
+export const getHouseERC20MemberShares = async (
+	daoAddress: string,
+	member: string,
+	provider: Web3Provider
+): Promise<number> => {
 	const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
 	const _member = await daoContract.members(member)
 	return _member.shares
 }
-export const getHouseERC20MemberActiveProposal = async (daoAddress: string, member: address provider: Web3Provider): Promise<bool> => {
+export const getHouseERC20MemberActiveProposal = async (
+	daoAddress: string,
+	member: string,
+	provider: Web3Provider
+): Promise<boolean> => {
 	const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
 	const _member = await daoContract.members(member)
 	return _member.activeProposal
