@@ -7,7 +7,10 @@ import {DAOProposalsTypeNames, Proposal} from "../../../types/proposal"
 import {
 	getHouseERC20ProposalDeadline,
 	getHouseERC20ProposalCanceled,
-	getHouseERC20ProposalExecuted
+	getHouseERC20ProposalExecuted,
+	getHouseERC20ProposalYesVotes,
+	getHouseERC20ProposalNoVotes,
+	getHouseERC20VotingThreshold
 } from "../../../api/ethers/functions/getDAOState"
 import "./styles.scss"
 import Input from "../../Controls/Input"
@@ -18,16 +21,23 @@ const DAOProposalCard: FunctionComponent<{proposal: Proposal; daoAddress: string
 	const {provider, signer} = useContext(EthersContext)
 	const getState = async () => {
 		if (!provider) return
+		const threshold = await getHouseERC20VotingThreshold(daoAddress, provider)
 		const date = await getHouseERC20ProposalDeadline(daoAddress, proposal.id, provider)
 		const executed = await getHouseERC20ProposalExecuted(daoAddress, proposal.id, provider)
 		const canceled = await getHouseERC20ProposalCanceled(daoAddress, proposal.id, provider)
+		const yesVotes = await getHouseERC20ProposalYesVotes(daoAddress, proposal.id, provider)
+		const noVotes = await getHouseERC20ProposalNoVotes(daoAddress, proposal.id, provider)
 		const seconds = new Date().getTime() / 1000
 		if (canceled) {
 			setProposalState("Canceled")
 		} else if (executed) {
 			setProposalState("Executed")
 		} else if (date < seconds) {
-			setProposalState("Expired")
+			if (yesVotes > threshold && yesVotes > noVotes) {
+				setProposalState("Passed")
+			} else {
+				setProposalState("Failed")
+			}
 		} else {
 			setProposalState(date.toString())
 		} // TODO Check for in funding proposal grace period

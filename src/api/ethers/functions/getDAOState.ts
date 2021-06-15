@@ -121,7 +121,7 @@ export const getHouseERC20ProposalTargetAddress = async (
 // }
 export const getHouseERC20ProposalYesVotes = async (
 	daoAddress: string,
-	proposalId: number,
+	proposalId: number | undefined,
 	provider: Web3Provider
 ): Promise<number> => {
 	const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
@@ -130,7 +130,7 @@ export const getHouseERC20ProposalYesVotes = async (
 }
 export const getHouseERC20ProposalNoVotes = async (
 	daoAddress: string,
-	proposalId: number,
+	proposalId: number | undefined,
 	provider: Web3Provider
 ): Promise<number> => {
 	const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
