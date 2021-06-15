@@ -4,7 +4,11 @@ import Loader from "../../Loader"
 import ErrorPlaceholder from "../../ErrorPlaceholder"
 import EthersContext from "../../../context/EthersContext"
 import {DAOProposalsTypeNames, Proposal} from "../../../types/proposal"
-import {getHouseERC20ProposalDeadline} from "../../../api/ethers/functions/getDAOState"
+import {
+	getHouseERC20ProposalDeadline,
+	getHouseERC20ProposalCanceled,
+	getHouseERC20ProposalExecuted
+} from "../../../api/ethers/functions/getDAOState"
 import "./styles.scss"
 import Input from "../../Controls/Input"
 import Select from "../../Controls/Select"
@@ -15,12 +19,19 @@ const DAOProposalCard: FunctionComponent<{proposal: Proposal; daoAddress: string
 	const getState = async () => {
 		if (!provider) return
 		const date = await getHouseERC20ProposalDeadline(daoAddress, proposal.id, provider)
+		const executed = await getHouseERC20ProposalExecuted(daoAddress, proposal.id, provider)
+		const canceled = await getHouseERC20ProposalCanceled(daoAddress, proposal.id, provider)
 		const seconds = new Date().getTime() / 1000
-		if (date < seconds) {
+		if (canceled) {
+			setProposalState("Canceled")
+		} else if (executed) {
+			setProposalState("Executed")
+		} else if (date < seconds) {
 			setProposalState("Expired")
 		} else {
 			setProposalState(date.toString())
-		}
+		} // TODO Check for in funding proposal grace period
+		// TODO check if passed before executed
 	}
 	useEffect(() => {
 		getState()

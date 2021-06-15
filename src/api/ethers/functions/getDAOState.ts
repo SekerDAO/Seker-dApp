@@ -60,7 +60,7 @@ export const getHouseERC20GovTokenSupply = async (daoAddress: string, provider: 
 // Proposal Data Getters
 export const getHouseERC20ProposalExecuted = async (
 	daoAddress: string,
-	proposalId: number,
+	proposalId: number | undefined,
 	provider: Web3Provider
 ): Promise<boolean> => {
 	const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
@@ -69,7 +69,7 @@ export const getHouseERC20ProposalExecuted = async (
 }
 export const getHouseERC20ProposalCanceled = async (
 	daoAddress: string,
-	proposalId: number,
+	proposalId: number | undefined,
 	provider: Web3Provider
 ): Promise<boolean> => {
 	const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
