@@ -174,7 +174,7 @@ const CreateDAO: FunctionComponent<{
 	return (
 		<>
 			<h2>{`Create ${DAOType === "house" ? "House" : "Gallery"} DAO`}</h2>
-			<p>{`Step ${DAOType === "house" ? 3 : 2}. Add Members And General DAO Parameters.`}</p>
+			<p>{`Step ${DAOType === "house" ? 3 : 2}. Add members and general DAO parameters.`}</p>
 			<label htmlFor="create-dao-name">DAO Name</label>
 			<Input
 				id="create-dao-name"
@@ -191,7 +191,7 @@ const CreateDAO: FunctionComponent<{
 						<Input id="create-dao-ts" borders="all" value={totalSupply} disabled />
 					</div>
 					<div className="create-dao__col">
-						<label htmlFor="create-dao-fp">Founder(s)&apos; Portion Of Token</label>
+						<label htmlFor="create-dao-fp">Founder(s)&apos; Portion of Token Supply</label>
 						<Input
 							id="create-dao-fp"
 							borders="all"

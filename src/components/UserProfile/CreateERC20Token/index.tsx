@@ -45,7 +45,7 @@ const CreateERC20Token: FunctionComponent<{
 
 	return (
 		<div className="create-erc20-token">
-			<h2>Create ERC20 Token</h2>
+			<h2>Create ERC-20 Token</h2>
 			<label htmlFor="create-erc20-name">Token Name</label>
 			<Input
 				id="create-erc20-name"

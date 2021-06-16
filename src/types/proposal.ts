@@ -15,7 +15,7 @@ export type Proposal = {
 }
 
 export const DAOProposalsTypeNames = {
-	applyForCommission: "Apply For Commission",
+	applyForCommission: "Apply for Commission",
 	joinHouse: "Join House",
 	requestFunding: "Request Funding",
 	changeRole: "Change Role / Kick"

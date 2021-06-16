@@ -64,7 +64,7 @@ const CreateCustomDomainModal: FunctionComponent = () => {
 								<br />
 								first NFT, click on the &quot;Create / Load NFT&quot; button at the
 								<br />
-								top of your user dashboard.
+								top of your profile dashboard.
 							</p>
 						</>
 					) : (
