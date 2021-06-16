@@ -2,6 +2,18 @@ import {DAOMemberRole} from "./DAO"
 
 export type DAOProposalType = "applyForCommission" | "joinHouse" | "requestFunding" | "changeRole"
 
+type DAOState = "active" | "canceled" | "executed" | "passed" | "failed"
+
+export type ProposalFirebaseData = Pick<
+	Proposal,
+	"id" | "type" | "daoAddress" | "userAddress" | "title" | "description" | "amount" | "recipientAddress" | "newRole"
+>
+
+export type ProposalEtherData = Pick<
+	Proposal,
+	"id" | "type" | "userAddress" | "state" | "amount" | "yesVotes" | "noVotes" | "deadline" | "gracePeriod"
+>
+
 export type Proposal = {
 	id?: number
 	type: DAOProposalType
@@ -12,6 +24,11 @@ export type Proposal = {
 	amount?: number
 	recipientAddress?: string
 	newRole?: DAOMemberRole | "kick"
+	state: DAOState
+	deadline: string
+	gracePeriod: string | null
+	noVotes: number
+	yesVotes: number
 }
 
 export const DAOProposalsTypeNames = {

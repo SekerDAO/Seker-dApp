@@ -36,7 +36,6 @@ const CreateDAO: FunctionComponent<{
 			name &&
 			(tokenType === "NFT" || foundersPercentage) &&
 			(DAOType === "house" || tax) &&
-			(DAOType === "gallery" || tokenType === "NFT") &&
 			members.reduce((acc, cur) => acc && !!cur.address, true) &&
 			votingThreshold &&
 			minProposalAmount &&
@@ -142,8 +141,8 @@ const CreateDAO: FunctionComponent<{
 		name &&
 		(tokenType === "NFT" || foundersPercentage) &&
 		(DAOType === "house" || tax) &&
-		(DAOType === "gallery" || tokenType === "NFT") &&
 		minProposalAmount &&
+		votingThreshold &&
 		members.reduce((acc, cur) => acc && !!cur.address, true)
 	)
 

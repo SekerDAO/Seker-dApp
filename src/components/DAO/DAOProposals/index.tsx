@@ -1,80 +1,47 @@
-import React, {useContext, useState, useEffect, FunctionComponent} from "react"
+import React, {useContext, FunctionComponent} from "react"
 import useDAOProposals from "../../../customHooks/getters/useDAOProposals"
 import Loader from "../../Loader"
 import ErrorPlaceholder from "../../ErrorPlaceholder"
 import EthersContext from "../../../context/EthersContext"
 import {DAOProposalsTypeNames, Proposal} from "../../../types/proposal"
-import {
-	getHouseERC20ProposalDeadline,
-	getHouseERC20ProposalCanceled,
-	getHouseERC20ProposalExecuted,
-	getHouseERC20ProposalYesVotes,
-	getHouseERC20ProposalNoVotes,
-	getHouseERC20VotingThreshold
-} from "../../../api/ethers/functions/getDAOState"
 import "./styles.scss"
 import Input from "../../Controls/Input"
 import Select from "../../Controls/Select"
+import {capitalize} from "../../../utlls"
 
-const DAOProposalCard: FunctionComponent<{proposal: Proposal; daoAddress: string}> = ({proposal, daoAddress}) => {
-	const [proposalState, setProposalState] = useState("")
-	const {provider, signer} = useContext(EthersContext)
-	const getState = async () => {
-		if (!provider) return
-		const threshold = await getHouseERC20VotingThreshold(daoAddress, provider)
-		const date = await getHouseERC20ProposalDeadline(daoAddress, proposal.id, provider)
-		const executed = await getHouseERC20ProposalExecuted(daoAddress, proposal.id, provider)
-		const canceled = await getHouseERC20ProposalCanceled(daoAddress, proposal.id, provider)
-		const yesVotes = await getHouseERC20ProposalYesVotes(daoAddress, proposal.id, provider)
-		const noVotes = await getHouseERC20ProposalNoVotes(daoAddress, proposal.id, provider)
-		const seconds = new Date().getTime() / 1000
-		if (canceled) {
-			setProposalState("Canceled")
-		} else if (executed) {
-			setProposalState("Executed")
-		} else if (date < seconds) {
-			if (yesVotes > threshold && yesVotes > noVotes) {
-				setProposalState("Passed")
-			} else {
-				setProposalState("Failed")
-			}
-		} else {
-			setProposalState(date.toString())
-		} // TODO Check for in funding proposal grace period
-		// TODO check if passed before executed
-	}
-	useEffect(() => {
-		getState()
-	}, [])
-	return (
-		<div className="dao-proposals__card">
-			<div className="dao-proposals__card-header">
-				<p>{DAOProposalsTypeNames[proposal.type]}</p>
-				<p>{proposalState}</p>
-			</div>
-			<div className="dao-proposals__card-footer">
-				<h2>{proposal.title}</h2>
-				<div className="dao-proposals__voting">
-					<div className="dao-proposals__voting-legend">
-						<p>TODO: yes</p>
-						<p>TODO: no</p>
-					</div>
-					<div className="dao-proposals__voting-bar">
-						<div
-							className="dao-proposals__voting-bar-inner"
-							style={{width: "75%"}} // TODO
-						/>
-					</div>
+const DAOProposalCard: FunctionComponent<{proposal: Proposal}> = ({proposal}) => (
+	<div className="dao-proposals__card">
+		<div className="dao-proposals__card-header">
+			<p>{DAOProposalsTypeNames[proposal.type]}</p>
+			<p>{capitalize(proposal.state)}</p>
+		</div>
+		<div className="dao-proposals__card-footer">
+			<h2>{proposal.title}</h2>
+			<div className="dao-proposals__voting">
+				<div className="dao-proposals__voting-legend">
+					<p>Yes</p>
+					<p>No</p>
+				</div>
+				<div className="dao-proposals__voting-bar">
+					<div
+						className="dao-proposals__voting-bar-inner"
+						style={{
+							width: proposal.noVotes === 0 ? "100%" : `${Math.round((proposal.yesVotes * 100) / proposal.noVotes)}%`
+						}}
+					/>
 				</div>
 			</div>
 		</div>
-	)
-}
+	</div>
+)
 
 const DAOProposals: FunctionComponent<{
 	daoAddress: string
 }> = ({daoAddress}) => {
+	const {provider} = useContext(EthersContext)
 	const {proposals, loading, error} = useDAOProposals(daoAddress)
+
+	if (!provider) return <div>TODO: please connect wallet</div>
 	if (error) return <ErrorPlaceholder />
 	if (loading) return <Loader />
 
@@ -87,7 +54,7 @@ const DAOProposals: FunctionComponent<{
 				<Select options={[{name: "Sort By", value: ""}]} />
 			</div>
 			{proposals.map((proposal, index) => (
-				<DAOProposalCard daoAddress={daoAddress} proposal={proposal} key={index} />
+				<DAOProposalCard proposal={proposal} key={index} />
 			))}
 		</div>
 	)
