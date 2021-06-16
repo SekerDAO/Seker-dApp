@@ -24,11 +24,9 @@ const CreateDAO: FunctionComponent<{
 	const [name, setName] = useState(initialName)
 	const [foundersPercentage, setFoundersPercentage] = useState("")
 	const [tax, setTax] = useState("")
-	const [minContribution, setMinContribution] = useState("")
 	const [decisionMakingSpeed, setDecisionMakingSpeed] = useState<DAODecisionMakingSpeed>("slow")
 	const [votingThreshold, setVotingThreshold] = useState("")
 	const [minProposalAmount, setMinProposalAmount] = useState("")
-	const [govTokenAward, setGovTokenAward] = useState("")
 	const [members, setMembers] = useState<Member[]>([
 		{address: account!, role: DAOType === "gallery" ? "admin" : "head"}
 	])
@@ -38,10 +36,8 @@ const CreateDAO: FunctionComponent<{
 			name &&
 			(tokenType === "NFT" || foundersPercentage) &&
 			(DAOType === "house" || tax) &&
-			(DAOType === "gallery" || tokenType === "NFT" || minContribution) &&
 			members.reduce((acc, cur) => acc && !!cur.address, true) &&
 			votingThreshold &&
-			govTokenAward &&
 			minProposalAmount &&
 			provider &&
 			signer &&
@@ -54,12 +50,10 @@ const CreateDAO: FunctionComponent<{
 						name,
 						members.map(m => m.address),
 						tokenAddress,
-						Number(minContribution),
 						decisionMakingSpeed === "slow" ? 1 : decisionMakingSpeed === "medium" ? 2 : 3,
 						(totalSupply * Number(foundersPercentage)) / 100,
 						(totalSupply * Number(foundersPercentage) * Number(votingThreshold)) / 10000,
 						Number(minProposalAmount),
-						Number(govTokenAward),
 						provider,
 						signer
 					)
@@ -74,9 +68,7 @@ const CreateDAO: FunctionComponent<{
 							members,
 							decisionMakingSpeed,
 							votingThreshold: Number(votingThreshold),
-							minProposalAmount: Number(minProposalAmount),
-							govTokensAwarded: Number(govTokenAward),
-							minContribution: Number(minContribution)
+							minProposalAmount: Number(minProposalAmount)
 						},
 						account
 					)
@@ -129,14 +121,6 @@ const CreateDAO: FunctionComponent<{
 		}
 	}
 
-	const handleMinContributionChange = (e: ChangeEvent<HTMLInputElement>) => {
-		if (Number(e.target.value) < 0) {
-			setMinContribution("0")
-		} else {
-			setMinContribution(e.target.value)
-		}
-	}
-
 	const handleVotingThresholdChange = (e: ChangeEvent<HTMLInputElement>) => {
 		if (Number(e.target.value) < 0) {
 			setVotingThreshold("0")
@@ -153,28 +137,19 @@ const CreateDAO: FunctionComponent<{
 		}
 	}
 
-	const handleAwardChange = (e: ChangeEvent<HTMLInputElement>) => {
-		if (Number(e.target.value) < 0) {
-			setGovTokenAward("0")
-		} else {
-			setGovTokenAward(e.target.value)
-		}
-	}
-
 	const submitButtonDisabled = !(
 		name &&
 		(tokenType === "NFT" || foundersPercentage) &&
 		(DAOType === "house" || tax) &&
-		(DAOType === "gallery" || tokenType === "NFT" || minContribution) &&
 		minProposalAmount &&
-		govTokenAward &&
+		votingThreshold &&
 		members.reduce((acc, cur) => acc && !!cur.address, true)
 	)
 
 	return (
 		<>
 			<h2>{`Create ${DAOType === "house" ? "House" : "Gallery"} DAO`}</h2>
-			<p>{`Step ${DAOType === "house" ? 3 : 2}. Add Members And General DAO Parameters.`}</p>
+			<p>{`Step ${DAOType === "house" ? 3 : 2}. Add members and general DAO parameters.`}</p>
 			<label htmlFor="create-dao-name">DAO Name</label>
 			<Input
 				id="create-dao-name"
@@ -191,7 +166,7 @@ const CreateDAO: FunctionComponent<{
 						<Input id="create-dao-ts" borders="all" value={totalSupply} disabled />
 					</div>
 					<div className="create-dao__col">
-						<label htmlFor="create-dao-fp">Founder(s)&apos; Portion Of Token</label>
+						<label htmlFor="create-dao-fp">Founder(s)&apos; Portion of Token Supply</label>
 						<Input
 							id="create-dao-fp"
 							borders="all"
@@ -294,16 +269,22 @@ const CreateDAO: FunctionComponent<{
 					</div>
 				</div>
 			)}
-			{DAOType === "house" && tokenType === "ERC20" && (
-				<div className="create-dao__row">
-					<div className="create-dao__col">
-						<label>Minimum Member Contribution</label>
-					</div>
-					<div className="create-dao__col">
-						<Input borders="all" value={minContribution} onChange={handleMinContributionChange} />
-					</div>
+			<div className="create-dao__row">
+				<div className="create-dao__col">
+					<label>Minimum Proposal Amount</label>
 				</div>
-			)}
+				<div className="create-dao__col">
+					<Input borders="all" value={minProposalAmount} onChange={handleMinProposalChange} number min={0} />
+				</div>
+			</div>
+			<div className="create-dao__row">
+				<div className="create-dao__col">
+					<label>Voting Threshold</label>
+				</div>
+				<div className="create-dao__col">
+					<Input borders="all" value={votingThreshold} onChange={handleVotingThresholdChange} number min={0} />
+				</div>
+			</div>
 			<div className="create-dao__row">
 				<div className="create-dao__col">
 					<label>Decision Making Speed</label>
@@ -341,30 +322,6 @@ const CreateDAO: FunctionComponent<{
 							/>
 						</div>
 					</div>
-				</div>
-			</div>
-			<div className="create-dao__row">
-				<div className="create-dao__col">
-					<label>Voting Threshold</label>
-				</div>
-				<div className="create-dao__col">
-					<Input borders="all" value={votingThreshold} onChange={handleVotingThresholdChange} number min={0} />
-				</div>
-			</div>
-			<div className="create-dao__row">
-				<div className="create-dao__col">
-					<label>Minimum Proposal Amount</label>
-				</div>
-				<div className="create-dao__col">
-					<Input borders="all" value={minProposalAmount} onChange={handleMinProposalChange} number min={0} />
-				</div>
-			</div>
-			<div className="create-dao__row">
-				<div className="create-dao__col">
-					<label>Governance Token Award</label>
-				</div>
-				<div className="create-dao__col">
-					<Input borders="all" value={govTokenAward} onChange={handleAwardChange} number min={0} />
 				</div>
 			</div>
 			<Button buttonType="primary" onClick={handleSubmit} disabled={submitButtonDisabled || loading}>

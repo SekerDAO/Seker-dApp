@@ -37,7 +37,7 @@ const DAOPage: FunctionComponent = () => {
 					) : (
 						<>
 							<Button buttonType="primary">Join House</Button>
-							<Button buttonType="secondary">Apply For Commission</Button>
+							<Button buttonType="secondary">Apply for Commission</Button>
 						</>
 					)}
 				</div>

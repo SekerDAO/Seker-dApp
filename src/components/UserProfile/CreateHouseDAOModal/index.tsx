@@ -70,11 +70,11 @@ const CreateHouseDAOModalContent: FunctionComponent = () => {
 		<div className={`create-dao${stage === "enterInfo" ? " create-dao--wide" : ""}`}>
 			{stage === "chooseType" && (
 				<>
-					<h2>Create a House DAO</h2>
-					<p>Step 1. Choose DAO Type.</p>
+					<h2>Create A House DAO</h2>
+					<p>Step 1. Choose DAO type.</p>
 					<div className="create-dao__row">
 						<RadioButton
-							label="Token DAO"
+							label="ERC-20 Governance Token DAO"
 							id="create-house-dao-erc20"
 							checked={tokenType === "ERC20"}
 							onChange={() => {
@@ -84,7 +84,7 @@ const CreateHouseDAOModalContent: FunctionComponent = () => {
 					</div>
 					<div className="create-dao__row">
 						<RadioButton
-							label="Admission by NFT"
+							label="ERC-721 Governance NFT DAO"
 							id="create-house-dao-nft"
 							checked={tokenType === "NFT"}
 							onChange={() => {
@@ -96,11 +96,11 @@ const CreateHouseDAOModalContent: FunctionComponent = () => {
 			)}
 			{stage === "chooseToken" && (
 				<>
-					<h2>Create House DAO</h2>
+					<h2>Create A House DAO</h2>
 					<p>Step 2. Choose one.</p>
 					<div className="create-dao__row">
 						<RadioButton
-							label="Select Existing Token"
+							label="Select Your Existing Token(s)"
 							id="create-house-dao-existing-token"
 							checked={tokenSource === "existing"}
 							onChange={() => {
@@ -167,11 +167,11 @@ const CreateHouseDAOModalContent: FunctionComponent = () => {
 				<>
 					<h2>Success!</h2>
 					<p>
-						You can now see the house DAO you have created
+						You can now see the house DAO you have created (along with
 						<br />
-						(along with other DAOs you currently belong to) and access the DAO
+						other DAOs you currently belong to) and access the DAO dashboard
 						<br />
-						dashboard on the &quot;View Your DAOs&quot; page of your user dashboard.
+						on the &quot;View Your DAOs&quot; page of your profile dashboard.
 					</p>
 				</>
 			)}

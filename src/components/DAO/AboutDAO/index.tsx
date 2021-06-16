@@ -39,22 +39,6 @@ const AboutDAO: FunctionComponent<{
 				</p>
 			</div>
 			<div className="dao__param">
-				<h2>{dao.minContribution}</h2>
-				<p>
-					Minimum
-					<br />
-					Contribution
-				</p>
-			</div>
-			<div className="dao__param">
-				<h2>{dao.govTokensAwarded}</h2>
-				<p>
-					Governance
-					<br />
-					Token Awarded
-				</p>
-			</div>
-			<div className="dao__param">
 				<h2>{dao.minProposalAmount}</h2>
 				<p>
 					Minimum

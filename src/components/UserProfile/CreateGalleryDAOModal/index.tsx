@@ -55,11 +55,11 @@ const CreateGalleryDAOModalContent: FunctionComponent = () => {
 		<div className={`create-dao${stage === "enterInfo" ? " create-dao--wide" : ""}`}>
 			{stage === "chooseToken" && (
 				<>
-					<h2>Create Gallery DAO</h2>
+					<h2>Create A Gallery DAO</h2>
 					<p>Step 1. Choose one.</p>
 					<div className="create-dao__row">
 						<RadioButton
-							label="Select Existing Token"
+							label="Your Existing Token(s)"
 							id="create-gallery-dao-existing-token"
 							checked={tokenSource === "existing"}
 							onChange={() => {
@@ -118,11 +118,11 @@ const CreateGalleryDAOModalContent: FunctionComponent = () => {
 				<>
 					<h2>Success!</h2>
 					<p>
-						You can now see the gallery DAO you have created
+						You can now see the gallery DAO you have created (along with
 						<br />
-						(along with other DAOs you currently belong to) and access the DAO
+						other DAOs you currently belong to) and access the DAO dashboard
 						<br />
-						dashboard on the &quot;View Your DAOs&quot; page of your user dashboard.
+						on the &quot;View Your DAOs&quot; page of your profile dashboard.
 					</p>
 				</>
 			)}

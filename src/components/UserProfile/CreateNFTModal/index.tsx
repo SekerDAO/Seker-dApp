@@ -140,12 +140,12 @@ const CreateNFTModal: FunctionComponent = () => {
 				<div className="create-nft">
 					{stage === "chooseOption" && (
 						<>
-							<h2>Create / load NFT</h2>
+							<h2>Create / Load NFT</h2>
 							<p>Step 1: Choose one.</p>
 							<div className="create-nft__row">
 								<RadioButton
 									id="create-new-nft-radio"
-									label="Create a new NFT"
+									label="Create New NFT"
 									checked={!loadExisting}
 									onChange={() => {
 										setLoadExisting(false)
@@ -155,7 +155,7 @@ const CreateNFTModal: FunctionComponent = () => {
 							<div className="create-nft__row">
 								<RadioButton
 									id="load-existing-nft-radio"
-									label="Load an existing NFT"
+									label="Load Existing NFT"
 									checked={loadExisting}
 									onChange={() => {
 										setLoadExisting(true)
@@ -170,7 +170,7 @@ const CreateNFTModal: FunctionComponent = () => {
 							<p>Step 2. Choose domain option.</p>
 							<div className="create-nft__row">
 								<RadioButton
-									label="Your Personal Domain(s)"
+									label="Your Custom Domain(s)"
 									id="create-nft-radio-pers-domain"
 									checked={customDomain}
 									onChange={() => {
@@ -206,7 +206,7 @@ const CreateNFTModal: FunctionComponent = () => {
 					{stage === "uploadFile" && (
 						<>
 							<h2>Create NFT</h2>
-							<p>Step 3. Input NFT Information</p>
+							<p>Step 3. Input NFT information.</p>
 							<MediaUpload
 								onUpload={image => {
 									setFile(image)
@@ -214,7 +214,7 @@ const CreateNFTModal: FunctionComponent = () => {
 							/>
 							<div className="create-nft__row">
 								<div className="create-nft__col">
-									<label>Title Of Piece</label>
+									<label>Title of Piece(s)</label>
 									<Input
 										borders="all"
 										value={title}
@@ -249,7 +249,7 @@ const CreateNFTModal: FunctionComponent = () => {
 					{stage === "loadExisting" && (
 						<>
 							<h2>Load NFT</h2>
-							<label>NFT Token Address</label>
+							<label>NFT Address</label>
 							<Input
 								borders="all"
 								value={tokenAddress}
@@ -257,7 +257,7 @@ const CreateNFTModal: FunctionComponent = () => {
 									setTokenAddress(e.target.value)
 								}}
 							/>
-							<label>NFT Token ID</label>
+							<label>NFT ID</label>
 							<Input
 								borders="all"
 								value={tokenID}
@@ -274,7 +274,7 @@ const CreateNFTModal: FunctionComponent = () => {
 								You now have the ability to delete, sign, or change the
 								<br />
 								visibility setting of your created NFT on the &quot;Create /<br />
-								Edit NFTs&quot; page of your user dashboard.
+								Edit NFTs&quot; page of your profile dashboard.
 							</p>
 						</>
 					) : (
