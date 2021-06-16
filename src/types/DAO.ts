@@ -28,8 +28,6 @@ export type DAO = {
 	votingThreshold: number
 	tax?: number
 	minProposalAmount: number
-	govTokensAwarded: number
-	minContribution: number
 }
 
 export type DAOSnapshot = firebase.firestore.QueryDocumentSnapshot<DAO>

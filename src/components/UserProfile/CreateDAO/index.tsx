@@ -24,11 +24,9 @@ const CreateDAO: FunctionComponent<{
 	const [name, setName] = useState(initialName)
 	const [foundersPercentage, setFoundersPercentage] = useState("")
 	const [tax, setTax] = useState("")
-	const [minContribution, setMinContribution] = useState("")
 	const [decisionMakingSpeed, setDecisionMakingSpeed] = useState<DAODecisionMakingSpeed>("slow")
 	const [votingThreshold, setVotingThreshold] = useState("")
 	const [minProposalAmount, setMinProposalAmount] = useState("")
-	const [govTokenAward, setGovTokenAward] = useState("")
 	const [members, setMembers] = useState<Member[]>([
 		{address: account!, role: DAOType === "gallery" ? "admin" : "head"}
 	])
@@ -38,10 +36,9 @@ const CreateDAO: FunctionComponent<{
 			name &&
 			(tokenType === "NFT" || foundersPercentage) &&
 			(DAOType === "house" || tax) &&
-			(DAOType === "gallery" || tokenType === "NFT" || minContribution) &&
+			(DAOType === "gallery" || tokenType === "NFT") &&
 			members.reduce((acc, cur) => acc && !!cur.address, true) &&
 			votingThreshold &&
-			govTokenAward &&
 			minProposalAmount &&
 			provider &&
 			signer &&
@@ -54,12 +51,10 @@ const CreateDAO: FunctionComponent<{
 						name,
 						members.map(m => m.address),
 						tokenAddress,
-						Number(minContribution),
 						decisionMakingSpeed === "slow" ? 1 : decisionMakingSpeed === "medium" ? 2 : 3,
 						(totalSupply * Number(foundersPercentage)) / 100,
 						(totalSupply * Number(foundersPercentage) * Number(votingThreshold)) / 10000,
 						Number(minProposalAmount),
-						Number(govTokenAward),
 						provider,
 						signer
 					)
@@ -74,9 +69,7 @@ const CreateDAO: FunctionComponent<{
 							members,
 							decisionMakingSpeed,
 							votingThreshold: Number(votingThreshold),
-							minProposalAmount: Number(minProposalAmount),
-							govTokensAwarded: Number(govTokenAward),
-							minContribution: Number(minContribution)
+							minProposalAmount: Number(minProposalAmount)
 						},
 						account
 					)
@@ -129,14 +122,6 @@ const CreateDAO: FunctionComponent<{
 		}
 	}
 
-	const handleMinContributionChange = (e: ChangeEvent<HTMLInputElement>) => {
-		if (Number(e.target.value) < 0) {
-			setMinContribution("0")
-		} else {
-			setMinContribution(e.target.value)
-		}
-	}
-
 	const handleVotingThresholdChange = (e: ChangeEvent<HTMLInputElement>) => {
 		if (Number(e.target.value) < 0) {
 			setVotingThreshold("0")
@@ -153,21 +138,12 @@ const CreateDAO: FunctionComponent<{
 		}
 	}
 
-	const handleAwardChange = (e: ChangeEvent<HTMLInputElement>) => {
-		if (Number(e.target.value) < 0) {
-			setGovTokenAward("0")
-		} else {
-			setGovTokenAward(e.target.value)
-		}
-	}
-
 	const submitButtonDisabled = !(
 		name &&
 		(tokenType === "NFT" || foundersPercentage) &&
 		(DAOType === "house" || tax) &&
-		(DAOType === "gallery" || tokenType === "NFT" || minContribution) &&
+		(DAOType === "gallery" || tokenType === "NFT") &&
 		minProposalAmount &&
-		govTokenAward &&
 		members.reduce((acc, cur) => acc && !!cur.address, true)
 	)
 

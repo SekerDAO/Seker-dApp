@@ -13,9 +13,7 @@ const addDAO = async (
 		decisionMakingSpeed,
 		votingThreshold,
 		tax,
-		minProposalAmount,
-		govTokensAwarded,
-		minContribution
+		minProposalAmount
 	}: DAO,
 	account: string
 ): Promise<void> => {
@@ -34,8 +32,6 @@ const addDAO = async (
 			votingThreshold,
 			...(tax ? {tax} : {}),
 			minProposalAmount,
-			govTokensAwarded,
-			minContribution,
 			owner: account
 		})
 }

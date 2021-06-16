@@ -10,12 +10,10 @@ const deployHouseERC20DAO = async (
 	name: string,
 	headsOfHouse: string[],
 	governanceToken: string,
-	minEntryContribution: number,
 	proposalSpeed: number,
 	governanceTokenSupply: number,
 	votingThreshold: number,
 	minProposalAmount: number,
-	govTokensAwarded: number,
 	provider: Web3Provider,
 	signer: JsonRpcSigner
 ): Promise<string> => {
@@ -23,12 +21,10 @@ const deployHouseERC20DAO = async (
 	const contract = await dao.deploy(
 		headsOfHouse,
 		governanceToken,
-		parseEther(String(minEntryContribution)),
 		proposalSpeed,
 		parseEther(String(governanceTokenSupply)),
 		parseEther(String(votingThreshold)),
 		parseEther(String(minProposalAmount)),
-		parseEther(String(govTokensAwarded)),
 		REACT_APP_WETH_ADDRESS
 	)
 	await contract.deployed()
