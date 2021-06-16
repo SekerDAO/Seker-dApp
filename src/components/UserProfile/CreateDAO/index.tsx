@@ -294,16 +294,22 @@ const CreateDAO: FunctionComponent<{
 					</div>
 				</div>
 			)}
-			{DAOType === "house" && tokenType === "ERC20" && (
-				<div className="create-dao__row">
-					<div className="create-dao__col">
-						<label>Minimum Member Contribution</label>
-					</div>
-					<div className="create-dao__col">
-						<Input borders="all" value={minContribution} onChange={handleMinContributionChange} />
-					</div>
+			<div className="create-dao__row">
+				<div className="create-dao__col">
+					<label>Minimum Proposal Amount</label>
 				</div>
-			)}
+				<div className="create-dao__col">
+					<Input borders="all" value={minProposalAmount} onChange={handleMinProposalChange} number min={0} />
+				</div>
+			</div>
+			<div className="create-dao__row">
+				<div className="create-dao__col">
+					<label>Voting Threshold</label>
+				</div>
+				<div className="create-dao__col">
+					<Input borders="all" value={votingThreshold} onChange={handleVotingThresholdChange} number min={0} />
+				</div>
+			</div>
 			<div className="create-dao__row">
 				<div className="create-dao__col">
 					<label>Decision Making Speed</label>
@@ -341,30 +347,6 @@ const CreateDAO: FunctionComponent<{
 							/>
 						</div>
 					</div>
-				</div>
-			</div>
-			<div className="create-dao__row">
-				<div className="create-dao__col">
-					<label>Voting Threshold</label>
-				</div>
-				<div className="create-dao__col">
-					<Input borders="all" value={votingThreshold} onChange={handleVotingThresholdChange} number min={0} />
-				</div>
-			</div>
-			<div className="create-dao__row">
-				<div className="create-dao__col">
-					<label>Minimum Proposal Amount</label>
-				</div>
-				<div className="create-dao__col">
-					<Input borders="all" value={minProposalAmount} onChange={handleMinProposalChange} number min={0} />
-				</div>
-			</div>
-			<div className="create-dao__row">
-				<div className="create-dao__col">
-					<label>Governance Token Award</label>
-				</div>
-				<div className="create-dao__col">
-					<Input borders="all" value={govTokenAward} onChange={handleAwardChange} number min={0} />
 				</div>
 			</div>
 			<Button buttonType="primary" onClick={handleSubmit} disabled={submitButtonDisabled || loading}>
