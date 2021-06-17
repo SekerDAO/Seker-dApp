@@ -16,6 +16,7 @@ import Textarea from "../../Controls/Textarea"
 import useMyDomains from "../../../customHooks/getters/useMyDomains"
 import "./styles.scss"
 import {toastError} from "../../Toast"
+const {REACT_APP_DOMAIN_ADDRESS} = process.env
 
 type CreateNFTModalStage = "chooseOption" | "chooseDomain" | "uploadFile" | "loadExisting" | "success"
 
@@ -31,7 +32,7 @@ const CreateNFTModal: FunctionComponent = () => {
 	const [description, setDescription] = useState("")
 	const [numberOfEditions, setNumberOfEditions] = useState("")
 	const [tokenAddress, setTokenAddress] = useState("")
-	const [tokenID, setTokenID] = useState("")
+	const [existingNFTId, setExistingNFTId] = useState("")
 	const {provider, signer} = useContext(EthersContext)
 	const {account} = useContext(AuthContext)
 	const {domains, loading: domainsLoading, error: domainsError} = useMyDomains()
@@ -45,7 +46,7 @@ const CreateNFTModal: FunctionComponent = () => {
 		setTitle("")
 		setNumberOfEditions("")
 		setTokenAddress("")
-		setTokenID("")
+		setExistingNFTId("")
 	}
 
 	const handleSubmit = async () => {
@@ -62,16 +63,11 @@ const CreateNFTModal: FunctionComponent = () => {
 			setLoading(true)
 			try {
 				const [metadata, hashes] = await uploadMedia(file, title, description, Number(numberOfEditions))
-				const address = await createNFT(
-					hashes,
-					Number(numberOfEditions),
-					signer,
-					provider,
-					customDomainAddress || undefined
-				)
+				const id = await createNFT(hashes, Number(numberOfEditions), signer, provider, customDomainAddress || undefined)
 				await addNFT(
 					{
-						address,
+						id,
+						address: customDomain ? customDomainAddress : REACT_APP_DOMAIN_ADDRESS!,
 						createdDate: new Date().toISOString(),
 						name: metadata.name,
 						desc: metadata.description,
@@ -89,18 +85,19 @@ const CreateNFTModal: FunctionComponent = () => {
 				toastError("Failed to create NFT")
 			}
 			setLoading(false)
-		} else if (stage === "loadExisting" && tokenID && tokenAddress && account && provider) {
+		} else if (stage === "loadExisting" && !isNaN(Number(existingNFTId)) && tokenAddress && account && provider) {
 			setLoading(true)
 			try {
-				const isOwner = await checkNFTOwner(account, tokenAddress, tokenID, provider)
+				const isOwner = await checkNFTOwner(account, tokenAddress, existingNFTId, provider)
 				if (!isOwner) {
 					toastError("You are not the owner!")
 					setLoading(false)
 					return
 				}
-				const metadata = await getNFTMetadata(tokenAddress, tokenID, provider)
+				const metadata = await getNFTMetadata(tokenAddress, existingNFTId, provider)
 				await addNFT(
 					{
+						id: Number(existingNFTId),
 						address: tokenAddress,
 						createdDate: new Date().toISOString(),
 						name: metadata.name,
@@ -124,7 +121,7 @@ const CreateNFTModal: FunctionComponent = () => {
 	const submitButtonDisabled =
 		(stage === "chooseDomain" && customDomain && !customDomainAddress) ||
 		(stage === "uploadFile" && !(file && title && numberOfEditions)) ||
-		(stage === "loadExisting" && !(tokenID && tokenID))
+		(stage === "loadExisting" && !(existingNFTId && existingNFTId))
 
 	return (
 		<>
@@ -260,10 +257,11 @@ const CreateNFTModal: FunctionComponent = () => {
 							<label>NFT ID</label>
 							<Input
 								borders="all"
-								value={tokenID}
+								value={existingNFTId}
 								onChange={e => {
-									setTokenID(e.target.value)
+									setExistingNFTId(e.target.value)
 								}}
+								number
 							/>
 						</>
 					)}

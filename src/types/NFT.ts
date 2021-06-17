@@ -8,6 +8,7 @@ type NFTMediaInfo = {
 }
 
 export type NFT = {
+	id: number
 	address: string
 	createdDate: string
 	name: string

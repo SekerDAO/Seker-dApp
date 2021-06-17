@@ -5,8 +5,7 @@ const addNFT = async (nft: NFT, account: string): Promise<void> => {
 	await firebase
 		.firestore()
 		.collection("nfts")
-		.doc(nft.address)
-		.set({
+		.add({
 			...nft,
 			nftAdminUserUID: account
 		})
