@@ -11,10 +11,12 @@
     top: -75px;
     z-index: 2;
     border-radius: 50%;
-    background-color: $light-grey;
     border: 1px solid white;
     width: 150px;
     height: 150px;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
   }
 
   &__info {

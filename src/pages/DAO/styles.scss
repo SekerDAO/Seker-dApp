@@ -5,8 +5,10 @@
   padding: 95px 0;
 
   &__photo {
-    background-color: $dark-grey;
     height: 250px;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
   }
 
   &__info {

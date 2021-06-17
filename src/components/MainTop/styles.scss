@@ -9,8 +9,7 @@
     background-repeat: no-repeat;
     background-size: cover;
     margin-top: -70px;
-
-    /* z-index: -1; */
+    z-index: -1;
 
     &::after {
       content: '';

@@ -5,7 +5,7 @@ import HeaderMenu from "./Menu"
 
 const Header: FunctionComponent = () => {
 	return (
-		<header className="header">
+		<header className="header" style={{backgroundImage: `url("/assets/Dashboard_Header.png")`}}>
 			<HeaderLogo />
 			<HeaderMenu />
 		</header>

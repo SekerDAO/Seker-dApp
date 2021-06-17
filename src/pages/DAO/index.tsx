@@ -27,7 +27,7 @@ const DAOPage: FunctionComponent = () => {
 	return (
 		<div className="dao">
 			<div className="dao__left-section">
-				<div className="dao__photo" />
+				<div className="dao__photo" style={{backgroundImage: `url("/assets/DAODashboard_Photo.png")`}} />
 				<div className="dao__info">
 					<h2>{DAO.name}</h2>
 					<p>TODO: est.</p>

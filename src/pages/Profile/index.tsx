@@ -22,7 +22,7 @@ const Profile: FunctionComponent = () => {
 
 	return (
 		<div className="profile">
-			<div className="profile__photo" />
+			<div className="profile__photo" style={{backgroundImage: `url("/assets/PersonalDashboard_Photo.png")`}} />
 			<div className="profile__info">
 				<h2>TODO: name</h2>
 				<p>{`${account.slice(0, 3)}...${account.slice(-4)}`}</p>
