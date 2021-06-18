@@ -35,4 +35,10 @@ export type DAO = {
 	discord?: string
 }
 
+export type DAOEnhanced = DAO & {
+	tokenSymbol: string
+	balance: number
+	fundedProjects: number
+}
+
 export type DAOSnapshot = firebase.firestore.QueryDocumentSnapshot<DAO>

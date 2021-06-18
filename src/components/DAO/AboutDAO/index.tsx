@@ -2,12 +2,11 @@ import React, {FunctionComponent} from "react"
 import MembersIcon from "../../../icons/MembersIcon"
 import HouseIcon from "../../../icons/HouseIcon"
 import ShieldIcon from "../../../icons/ShieldIcon"
-import {DAO} from "../../../types/DAO"
+import {DAOEnhanced} from "../../../types/DAO"
 
 const AboutDAO: FunctionComponent<{
-	dao: DAO
-	tokenSymbol: string | null
-}> = ({dao, tokenSymbol}) => (
+	dao: DAOEnhanced
+}> = ({dao}) => (
 	<>
 		<div className="dao__summary">
 			<div className="dao__summary-item">
@@ -18,12 +17,12 @@ const AboutDAO: FunctionComponent<{
 			<div className="dao__summary-item">
 				<p>House Bank</p>
 				<HouseIcon />
-				<h2>TODO</h2>
+				<h2>{dao.balance}</h2>
 			</div>
 			<div className="dao__summary-item">
 				<p>Funded Projects</p>
 				<ShieldIcon />
-				<h2>TODO</h2>
+				<h2>{dao.fundedProjects}</h2>
 			</div>
 		</div>
 		<h2>About {dao.name}</h2>
@@ -32,7 +31,7 @@ const AboutDAO: FunctionComponent<{
 		<h2>DAO Parameters</h2>
 		<div className="dao__params">
 			<div className="dao__param">
-				<h2>{tokenSymbol}</h2>
+				<h2>{dao.tokenSymbol}</h2>
 				<p>
 					ERC-20
 					<br />

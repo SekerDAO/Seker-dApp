@@ -1,53 +1,57 @@
 import {useContext, useEffect, useState} from "react"
-import {DAO} from "../../types/DAO"
+import {DAOEnhanced} from "../../types/DAO"
 import getDAO from "../../api/firebase/DAO/getDAO"
 import getERC20Symbol from "../../api/ethers/functions/ERC20Token/getERC20Symbol"
 import EthersContext from "../../context/EthersContext"
+import {Web3Provider} from "@ethersproject/providers"
+import {
+	getERC20HouseDAOBalance,
+	getERC20HouseDAOFundedProjects
+} from "../../api/ethers/functions/ERC20HouseDAO/getERC20HouseDAO"
 
 const useDAO = (
 	address: string
 ): {
-	DAO: DAO | null
-	tokenSymbol: string | null
+	dao: DAOEnhanced | null
 	loading: boolean
 	error: boolean
 } => {
-	// eslint-disable-next-line no-shadow
-	const [DAO, setDAO] = useState<DAO | null>(null)
-	const [tokenSymbol, setTokenSymbol] = useState<string | null>(null)
+	const [dao, setDao] = useState<DAOEnhanced | null>(null)
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
 	const {provider} = useContext(EthersContext)
 
+	const getInfo = async (_address: string, _provider: Web3Provider) => {
+		setLoading(true)
+		setError(false)
+		try {
+			const _dao = await getDAO(address)
+			const [tokenSymbol, balance, fundedProjects] = await Promise.all([
+				getERC20Symbol(_dao.tokenAddress, _provider),
+				getERC20HouseDAOBalance(_address, _provider),
+				getERC20HouseDAOFundedProjects(_address, _provider)
+			])
+			setDao({
+				..._dao,
+				tokenSymbol,
+				balance,
+				fundedProjects
+			})
+		} catch (e) {
+			console.error(e)
+			setError(true)
+		}
+		setLoading(false)
+	}
+
 	useEffect(() => {
 		if (provider) {
-			setLoading(true)
-			setError(false)
-			getDAO(address)
-				.then(_DAO => {
-					getERC20Symbol(_DAO.tokenAddress, provider)
-						.then(symbol => {
-							setLoading(false)
-							setTokenSymbol(symbol)
-							setDAO(_DAO)
-						})
-						.catch(e => {
-							console.error(e)
-							setError(true)
-							setLoading(false)
-						})
-				})
-				.catch(e => {
-					console.error(e)
-					setError(true)
-					setLoading(false)
-				})
+			getInfo(address, provider)
 		}
 	}, [address, provider])
 
 	return {
-		DAO,
-		tokenSymbol,
+		dao,
 		loading,
 		error
 	}
