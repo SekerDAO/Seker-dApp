@@ -25,7 +25,7 @@ const useDAO = (
 		setLoading(true)
 		setError(false)
 		try {
-			const _dao = await getDAO(address)
+			const _dao = await getDAO(_address)
 			const [tokenSymbol, balance, fundedProjects] = await Promise.all([
 				getERC20Symbol(_dao.tokenAddress, _provider),
 				getERC20HouseDAOBalance(_address, _provider),

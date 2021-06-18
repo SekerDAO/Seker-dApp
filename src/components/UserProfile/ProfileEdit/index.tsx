@@ -1,17 +1,48 @@
-import React, {FunctionComponent, useState} from "react"
+import React, {FunctionComponent, useContext, useState} from "react"
 import "./styles.scss"
 import Input from "../../Controls/Input"
 import Button from "../../Controls/Button"
+import {AuthContext} from "../../../context/AuthContext"
+import editUser from "../../../api/firebase/user/editUser"
+import {toastError, toastSuccess} from "../../Toast"
+import {User} from "../../../types/user"
 
-const ProfileEdit: FunctionComponent = () => {
-	const [name, setName] = useState("")
-	const [url, setUrl] = useState("")
-	const [bio, setBio] = useState("")
-	const [location, setLocation] = useState("")
-	const [email, setEmail] = useState("")
-	const [website, setWebsite] = useState("")
-	const [twitter, setTwitter] = useState("")
-	const [instagram, setInstagram] = useState("")
+const ProfileEdit: FunctionComponent<{user: User}> = ({user}) => {
+	const [name, setName] = useState(user.name ?? "")
+	const [url, setUrl] = useState(user.url ?? "")
+	const [bio, setBio] = useState(user.bio ?? "")
+	const [location, setLocation] = useState(user.location ?? "")
+	const [email, setEmail] = useState(user.email ?? "")
+	const [website, setWebsite] = useState(user.website ?? "")
+	const [twitter, setTwitter] = useState(user.twitter ?? "")
+	const [instagram, setInstagram] = useState(user.instagram ?? "")
+	const [processing, setProcessing] = useState(false)
+	const {account} = useContext(AuthContext)
+
+	const handleSubmit = async () => {
+		if (!account) return
+		setProcessing(true)
+		try {
+			await editUser(
+				{
+					name,
+					url,
+					bio,
+					location,
+					email,
+					website,
+					twitter,
+					instagram
+				},
+				account
+			)
+			toastSuccess("Profile successfully edited!")
+		} catch (e) {
+			console.error(e)
+			toastError("Failed to edit profile")
+		}
+		setProcessing(false)
+	}
 
 	return (
 		<div className="profile-edit">
@@ -96,7 +127,9 @@ const ProfileEdit: FunctionComponent = () => {
 					/>
 				</div>
 			</div>
-			<Button buttonType="primary">Save</Button>
+			<Button buttonType="primary" onClick={handleSubmit} disabled={processing}>
+				{processing ? "Saving..." : "Save"}
+			</Button>
 		</div>
 	)
 }
