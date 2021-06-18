@@ -6,7 +6,7 @@ import "./styles.scss"
 const MainLayout: FunctionComponent = ({children}) => {
 	return (
 		<div className="main">
-			<Header />
+			<Header background />
 			<div className="main__container">{children}</div>
 			<Footer />
 		</div>

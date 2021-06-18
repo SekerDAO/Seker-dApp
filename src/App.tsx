@@ -2,7 +2,6 @@ import React, {FunctionComponent} from "react"
 import {Switch, Route, BrowserRouter} from "react-router-dom"
 import {AuthContext, useAuth} from "./context/AuthContext"
 import MainLayout from "./layouts/MainLayout"
-import HomepageLayout from "./layouts/HomepageLayout"
 import Homepage from "./pages/Homepage"
 import Learn from "./pages/Learn"
 import Galleries from "./pages/Galleries"
@@ -25,15 +24,7 @@ const AppWithEthers: FunctionComponent = () => {
 				<div className="App">
 					<ToastContainer />
 					<Switch>
-						<Route
-							exact
-							path="/"
-							render={() => (
-								<HomepageLayout>
-									<Homepage />
-								</HomepageLayout>
-							)}
-						/>
+						<Route exact path="/" render={() => <Homepage />} />
 						<Route
 							exact
 							path="/learn"

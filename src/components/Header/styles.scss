@@ -3,13 +3,14 @@
 .header {
   height: 240px;
   width: 100%;
-  background-color: $light-grey;
+  background-color: transparent;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+  z-index: 2;
 
   &__logo {
     margin: 20px 0 0 40px;
