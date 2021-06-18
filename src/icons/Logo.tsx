@@ -1,7 +1,10 @@
 import React, {FunctionComponent} from "react"
 
-const Logo: FunctionComponent = () => (
-	<svg viewBox="0 0 200 40" width={200} height={40}>
+const Logo: FunctionComponent<{
+	width: number
+	height: number
+}> = ({width, height}) => (
+	<svg viewBox="0 0 200 40" width={width} height={height}>
 		<path
 			fill="white"
 			d="M732.55,60a.57.57,0,0,1-.28-.08l-5.64-3.24a.55.55,0,0,1-.27-.48V49.69a.55.55,0,0,1,.27-.48.56.56,0,0,1,.56,0l5.64,3.24a.56.56,0,0,1,.28.48v6.48a.56.56,0,0,1-.28.48A.57.57,0,0,1,732.55,60Zm-5.08-4.12,4.52,2.6v-5.2l-4.52-2.6Z"

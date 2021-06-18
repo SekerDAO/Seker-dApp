@@ -1,5 +1,5 @@
 .home-page {
-  min-height: 100vh;
+  min-height: calc(100vh + 240px);
   display: flex;
   position: relative;
   flex-direction: column;
@@ -15,7 +15,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    height: 100%;
+    height: calc(100% - 240px);
     width: 177.77777778vh; /* 100 * 16 / 9 */
     min-width: 100%;
     min-height: 56.25vw; /* 100 * 9 / 16 */

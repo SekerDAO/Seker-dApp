@@ -1,7 +1,39 @@
+@import "src/variables";
+
 .footer {
-  .wrap {
-    max-width: 1450px;
-    padding: 20px 10px;
-    margin: 0 auto;
+  height: 240px;
+  background-color: $black;
+  align-self: stretch;
+  color: white;
+  width: 100%;
+
+  &__wrap {
+    max-width: 1250px;
+    padding: 20px 0;
+    display: flex;
+    margin: 40px auto 0 auto;
+  }
+
+  &__col {
+    display: flex;
+    flex-direction: column;
+    width: 150px;
+    margin: 0 40px;
+
+    &:first-child {
+      margin-right: auto;
+
+      svg {
+        margin-bottom: 20px;
+      }
+    }
+
+    h3 {
+      font-size: 16px;
+    }
+
+    a {
+      font-size: 14px;
+    }
   }
 }

@@ -1,7 +1,8 @@
 import React, {FunctionComponent} from "react"
 import "./styles.scss"
-import HeaderLogo from "./Logo"
 import HeaderMenu from "./Menu"
+import {Link} from "react-router-dom"
+import Logo from "../../icons/Logo"
 
 const Header: FunctionComponent<{background: boolean}> = ({background}) => {
 	return (
@@ -9,7 +10,11 @@ const Header: FunctionComponent<{background: boolean}> = ({background}) => {
 			className="header"
 			style={background ? {backgroundImage: `url("/assets/Dashboard_Header.png")`} : undefined}
 		>
-			<HeaderLogo />
+			<div className="header__logo">
+				<Link to="/">
+					<Logo width={200} height={40} />
+				</Link>
+			</div>
 			<HeaderMenu />
 		</header>
 	)
