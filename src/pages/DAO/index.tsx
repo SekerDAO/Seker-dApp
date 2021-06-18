@@ -22,7 +22,7 @@ const DAOPage: FunctionComponent = () => {
 	if (error) return <ErrorPlaceholder />
 	if (!DAO || loading) return <Loader />
 
-	const isOwner = connected && !!DAO.members.find(m => m.address === account)
+	const isMember = connected && !!DAO.members.find(m => m.address === account)
 
 	return (
 		<div className="dao">
@@ -32,7 +32,7 @@ const DAOPage: FunctionComponent = () => {
 					<h2>{DAO.name}</h2>
 					<p>TODO: est.</p>
 					<p>TODO: website</p>
-					{isOwner ? (
+					{isMember ? (
 						<Button buttonType="primary">Edit House Profile</Button>
 					) : (
 						<>
@@ -52,7 +52,7 @@ const DAOPage: FunctionComponent = () => {
 				/>
 				{activeMenuIndex === 0 && <AboutDAO dao={DAO} />}
 				{activeMenuIndex === 2 && <DAOProposals daoAddress={DAO.address} />}
-				{activeMenuIndex === 3 && <CreateDAOProposal isOwner={isOwner} daoAddress={DAO.address} />}
+				{activeMenuIndex === 3 && <CreateDAOProposal isMember={isMember} daoAddress={DAO.address} />}
 			</div>
 		</div>
 	)

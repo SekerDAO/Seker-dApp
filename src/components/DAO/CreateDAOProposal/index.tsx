@@ -9,11 +9,11 @@ import {AuthContext} from "../../../context/AuthContext"
 import {DAOProposalsTypeNames, DAOProposalType} from "../../../types/proposal"
 
 const CreateDAOProposal: FunctionComponent<{
-	isOwner: boolean
+	isMember: boolean
 	daoAddress: string
-}> = ({isOwner, daoAddress}) => {
+}> = ({isMember, daoAddress}) => {
 	const {connected} = useContext(AuthContext)
-	const [type, setType] = useState<DAOProposalType>(isOwner ? "requestFunding" : "applyForCommission")
+	const [type, setType] = useState<DAOProposalType>(isMember ? "requestFunding" : "applyForCommission")
 
 	if (!connected) return <div>TODO: Please connect wallet</div>
 
@@ -27,7 +27,7 @@ const CreateDAOProposal: FunctionComponent<{
 					{name: DAOProposalsTypeNames.joinHouse, value: "joinHouse"},
 					{name: DAOProposalsTypeNames.requestFunding, value: "requestFunding"},
 					{name: DAOProposalsTypeNames.changeRole, value: "changeRole"}
-				].slice(...(isOwner ? [2] : [0, 2]))}
+				].slice(...(isMember ? [2] : [0, 2]))}
 				onChange={e => {
 					setType(e.target.value as DAOProposalType)
 				}}
