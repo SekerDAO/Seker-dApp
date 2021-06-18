@@ -1,15 +1,10 @@
 import {Web3Provider} from "@ethersproject/providers"
 import {Contract} from "@ethersproject/contracts"
-import GovToken from "../../abis/GovToken.json"
 import MultiArtToken from "../../abis/MultiArtToken.json"
 import HouseTokenDAO from "../../abis/HouseTokenDAO.json"
 import {ProposalEtherData} from "../../../../types/proposal"
 import {formatEther} from "@ethersproject/units"
 
-export const getERC20Symbol = async (erc20Address: string, provider: Web3Provider): Promise<string> => {
-	const erc20Contract = new Contract(erc20Address, GovToken.abi, provider)
-	return erc20Contract.symbol()
-}
 export const getERC721Symbol = async (erc721Address: string, provider: Web3Provider): Promise<string> => {
 	const erc721Contract = new Contract(erc721Address, MultiArtToken.abi, provider)
 	return erc721Contract.symbol()

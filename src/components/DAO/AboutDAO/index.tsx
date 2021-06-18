@@ -6,7 +6,8 @@ import {DAO} from "../../../types/DAO"
 
 const AboutDAO: FunctionComponent<{
 	dao: DAO
-}> = ({dao}) => (
+	tokenSymbol: string | null
+}> = ({dao, tokenSymbol}) => (
 	<>
 		<div className="dao__summary">
 			<div className="dao__summary-item">
@@ -27,11 +28,11 @@ const AboutDAO: FunctionComponent<{
 		</div>
 		<h2>About {dao.name}</h2>
 		<div className="dao__separator" />
-		<p>TODO: description</p>
+		<p>{dao.description}</p>
 		<h2>DAO Parameters</h2>
 		<div className="dao__params">
 			<div className="dao__param">
-				<h2>TODO</h2>
+				<h2>{tokenSymbol}</h2>
 				<p>
 					ERC-20
 					<br />
