@@ -51,7 +51,7 @@ const DAOPage: FunctionComponent = () => {
 					}}
 				/>
 				{activeMenuIndex === 0 && <AboutDAO dao={DAO} />}
-				{activeMenuIndex === 2 && <DAOProposals daoAddress={DAO.address} />}
+				{activeMenuIndex === 2 && <DAOProposals daoAddress={DAO.address} isMember={isMember} />}
 				{activeMenuIndex === 3 && <CreateDAOProposal isMember={isMember} daoAddress={DAO.address} />}
 			</div>
 		</div>

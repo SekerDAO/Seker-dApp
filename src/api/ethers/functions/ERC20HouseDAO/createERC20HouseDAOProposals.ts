@@ -60,7 +60,7 @@ export const createEnterERC20HouseDAOProposal = (
 				}
 			})
 
-			const tx = await daoContract.joinDAOProposal(0, {
+			const tx = await daoContract.joinDAOProposal({
 				headOfHouse: false,
 				member: true
 			})

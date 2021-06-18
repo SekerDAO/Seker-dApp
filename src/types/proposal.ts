@@ -29,6 +29,7 @@ export type Proposal = {
 	gracePeriod: string | null
 	noVotes: number
 	yesVotes: number
+	balance?: number
 }
 
 export const DAOProposalsTypeNames = {

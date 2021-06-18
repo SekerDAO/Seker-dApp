@@ -4,8 +4,10 @@ import getDAOProposals from "../../api/firebase/proposal/getDAOProposals"
 import {getHouseERC20DAOProposal} from "../../api/ethers/functions/ERC20HouseDAO/getERC20HouseDAO"
 import {Web3Provider} from "@ethersproject/providers"
 import EthersContext from "../../context/EthersContext"
+import getERC20Balance from "../../api/ethers/functions/ERC20Token/getERC20Balance"
+import getDAO from "../../api/firebase/DAO/getDAO"
 
-const useDAOProposals = (
+const useERC20HouseDAOProposals = (
 	daoAddress: string
 ): {
 	proposals: Proposal[]
@@ -21,21 +23,31 @@ const useDAOProposals = (
 		setLoading(true)
 		setError(false)
 		try {
+			const dao = await getDAO(address)
 			const firebaseData = (await getDAOProposals(address)).docs.map(doc => doc.data())
 			const ethersData = await Promise.all(
-				firebaseData.map(p =>
-					p.type === "applyForCommission"
-						? {
-								yesVotes: 0,
-								noVotes: 0,
-								state: "active" as const,
-								deadline: new Date().toISOString(),
-								gracePeriod: null,
-								userAddress: address,
-								type: "applyForCommission" as const
-						  }
-						: getHouseERC20DAOProposal(address, Number(p.id), _provider)
-				)
+				firebaseData.map(async p => {
+					if (p.type === "applyForCommission") {
+						return {
+							yesVotes: 0,
+							noVotes: 0,
+							state: "active" as const,
+							deadline: new Date().toISOString(),
+							gracePeriod: null,
+							userAddress: address,
+							type: "applyForCommission" as const
+						}
+					}
+					if (p.type === "joinHouse") {
+						const balance = await getERC20Balance(dao.tokenAddress, p.userAddress, _provider)
+						const proposalData = await getHouseERC20DAOProposal(address, Number(p.id), _provider)
+						return {
+							...proposalData,
+							balance
+						}
+					}
+					return getHouseERC20DAOProposal(address, Number(p.id), _provider)
+				})
 			)
 			setProposals(
 				firebaseData.map((p, index) => ({
@@ -64,4 +76,4 @@ const useDAOProposals = (
 	}
 }
 
-export default useDAOProposals
+export default useERC20HouseDAOProposals
