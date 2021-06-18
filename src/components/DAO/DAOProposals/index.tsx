@@ -40,7 +40,6 @@ const DAOProposalCard: FunctionComponent<{
 				<p>{capitalize(proposal.state)}</p>
 			</div>
 			<h2>{proposal.title}</h2>
-			<p>{proposal.description}</p>
 			{proposal.type === "joinHouse" && (
 				<div className="dao-proposals__card-section">
 					<b>Amount of governance token currently owned:</b>
