@@ -1,6 +1,6 @@
 import {JsonRpcSigner, Web3Provider} from "@ethersproject/providers"
-import TWDomainToken from "../abis/TWDomainToken.json"
-import MultiArtToken from "../abis/MultiArtToken.json"
+import TWDomainToken from "../../abis/TWDomainToken.json"
+import MultiArtToken from "../../abis/MultiArtToken.json"
 import {Contract} from "@ethersproject/contracts"
 const {REACT_APP_DOMAIN_ADDRESS} = process.env
 

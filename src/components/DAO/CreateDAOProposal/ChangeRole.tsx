@@ -7,7 +7,7 @@ import {AuthContext} from "../../../context/AuthContext"
 import EthersContext from "../../../context/EthersContext"
 import addProposal from "../../../api/firebase/proposal/addProposal"
 import {toastError, toastSuccess} from "../../Toast"
-import {changeRoleProposal} from "../../../api/ethers/functions/createProposals"
+import {createERC20HouseDAOChangeRoleProposal} from "../../../api/ethers/functions/ERC20HouseDAO/createERC20HouseDAOProposals"
 
 const ChangeRole: FunctionComponent<{
 	daoAddress: string
@@ -24,7 +24,7 @@ const ChangeRole: FunctionComponent<{
 		if (!(provider && signer && account && address && newRole)) return
 		setLoading(true)
 		try {
-			const proposalId = await changeRoleProposal(daoAddress, newRole, address, provider, signer)
+			const proposalId = await createERC20HouseDAOChangeRoleProposal(daoAddress, newRole, address, provider, signer)
 			await addProposal({
 				id: proposalId,
 				type: "changeRole",

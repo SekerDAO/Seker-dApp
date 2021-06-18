@@ -1,9 +1,9 @@
 import {Web3Provider} from "@ethersproject/providers"
 import {Contract} from "@ethersproject/contracts"
-import GovToken from "../abis/GovToken.json"
-import MultiArtToken from "../abis/MultiArtToken.json"
-import HouseTokenDAO from "../abis/HouseTokenDAO.json"
-import {ProposalEtherData} from "../../../types/proposal"
+import GovToken from "../../abis/GovToken.json"
+import MultiArtToken from "../../abis/MultiArtToken.json"
+import HouseTokenDAO from "../../abis/HouseTokenDAO.json"
+import {ProposalEtherData} from "../../../../types/proposal"
 import {formatEther} from "@ethersproject/units"
 
 export const getERC20Symbol = async (erc20Address: string, provider: Web3Provider): Promise<string> => {

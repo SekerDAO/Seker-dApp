@@ -1,7 +1,7 @@
 import {Web3Provider} from "@ethersproject/providers"
 import {Contract} from "@ethersproject/contracts"
-import MultiArtToken from "../abis/MultiArtToken.json"
-import {NFTMetadata} from "../../../types/NFT"
+import MultiArtToken from "../../abis/MultiArtToken.json"
+import {NFTMetadata} from "../../../../types/NFT"
 
 const getNFTMetadata = async (nftAddress: string, nftId: string, provider: Web3Provider): Promise<NFTMetadata> => {
 	const nftContract = new Contract(nftAddress, MultiArtToken.abi, provider)

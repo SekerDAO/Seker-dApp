@@ -1,5 +1,5 @@
 import {JsonRpcSigner} from "@ethersproject/providers"
-import MultiArtToken from "../abis/MultiArtToken.json"
+import MultiArtToken from "../../abis/MultiArtToken.json"
 import {ContractFactory} from "@ethersproject/contracts"
 
 const deployCustomDomain = async (name: string, symbol: string, signer: JsonRpcSigner): Promise<string> => {

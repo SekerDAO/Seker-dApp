@@ -1,4 +1,4 @@
-import GovToken from "../abis/GovToken.json"
+import GovToken from "../../abis/GovToken.json"
 import {JsonRpcSigner} from "@ethersproject/providers"
 import {ContractFactory} from "@ethersproject/contracts"
 import {parseEther} from "@ethersproject/units"

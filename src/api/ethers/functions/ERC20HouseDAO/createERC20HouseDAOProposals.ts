@@ -1,11 +1,11 @@
 import {JsonRpcSigner, Web3Provider} from "@ethersproject/providers"
 import {Contract} from "@ethersproject/contracts"
-import HouseTokenDAO from "../abis/HouseTokenDAO.json"
-import {HouseDAORole} from "../../../types/DAO"
+import HouseTokenDAO from "../../abis/HouseTokenDAO.json"
+import {HouseDAORole} from "../../../../types/DAO"
 import {BigNumber} from "@ethersproject/bignumber"
 import {parseEther} from "@ethersproject/units"
 
-export const fundingProposal = (
+export const createERC20HouseDAOFundingProposal = (
 	daoAddress: string,
 	fundTarget: string,
 	amount: number,
@@ -41,7 +41,7 @@ export const fundingProposal = (
 		}
 	})
 
-export const enterHouseDAOProposal = (
+export const createEnterERC20HouseDAOProposal = (
 	daoAddress: string,
 	provider: Web3Provider,
 	signer: JsonRpcSigner
@@ -77,7 +77,7 @@ export const enterHouseDAOProposal = (
 		}
 	})
 
-export const changeRoleProposal = (
+export const createERC20HouseDAOChangeRoleProposal = (
 	daoAddress: string,
 	role: HouseDAORole | "kick",
 	fundTarget: string,

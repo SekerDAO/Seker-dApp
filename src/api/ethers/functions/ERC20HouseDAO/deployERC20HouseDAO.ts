@@ -1,12 +1,12 @@
-import HouseTokenDAO from "../abis/HouseTokenDAO.json"
+import HouseTokenDAO from "../../abis/HouseTokenDAO.json"
 import {JsonRpcSigner, Web3Provider} from "@ethersproject/providers"
 import {ContractFactory} from "@ethersproject/contracts"
 import {parseEther} from "@ethersproject/units"
-import approveERC20 from "./approveERC20"
-import initHouseGovDAO from "./initHouseGovDAO"
+import approveERC20 from "../ERC20Token/approveERC20"
+import initERC20HouseDAO from "./initERC20HouseDAO"
 const {REACT_APP_WETH_ADDRESS} = process.env
 
-const deployHouseERC20DAO = async (
+const deployERC20HouseDAO = async (
 	name: string,
 	headsOfHouse: string[],
 	governanceToken: string,
@@ -30,10 +30,10 @@ const deployHouseERC20DAO = async (
 	await contract.deployed()
 	// TODO if(governanceTokenSupply > O) {
 	await approveERC20(governanceToken, contract.address, governanceTokenSupply, provider, signer)
-	await initHouseGovDAO(contract.address, provider, signer)
+	await initERC20HouseDAO(contract.address, provider, signer)
 	// }
 
 	return contract.address
 }
 
-export default deployHouseERC20DAO
+export default deployERC20HouseDAO

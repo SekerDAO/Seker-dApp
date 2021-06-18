@@ -1,6 +1,6 @@
 import {JsonRpcSigner, Web3Provider} from "@ethersproject/providers"
 import {Contract} from "@ethersproject/contracts"
-import GovToken from "../abis/GovToken.json"
+import GovToken from "../../abis/GovToken.json"
 import {parseEther} from "@ethersproject/units"
 
 const approveERC20 = (

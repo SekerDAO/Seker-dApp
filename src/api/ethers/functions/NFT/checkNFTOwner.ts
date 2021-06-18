@@ -1,6 +1,6 @@
 import {Web3Provider} from "@ethersproject/providers"
 import {Contract} from "@ethersproject/contracts"
-import MultiArtToken from "../abis/MultiArtToken.json"
+import MultiArtToken from "../../abis/MultiArtToken.json"
 
 const checkNFTOwner = async (
 	account: string,

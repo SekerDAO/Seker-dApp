@@ -2,7 +2,7 @@ import React, {ChangeEvent, FunctionComponent, useContext, useState} from "react
 import Input from "../../Controls/Input"
 import Button from "../../Controls/Button"
 import "./styles.scss"
-import deployERC20Token from "../../../api/ethers/functions/deployERC20Token"
+import deployERC20Token from "../../../api/ethers/functions/ERC20Token/deployERC20Token"
 import EthersContext from "../../../context/EthersContext"
 import addERC20Token from "../../../api/firebase/ERC20Token/addERC20Token"
 import {AuthContext} from "../../../context/AuthContext"

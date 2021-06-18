@@ -5,7 +5,7 @@ import {AuthContext} from "../../../context/AuthContext"
 import EthersContext from "../../../context/EthersContext"
 import addProposal from "../../../api/firebase/proposal/addProposal"
 import {toastError, toastSuccess} from "../../Toast"
-import {fundingProposal} from "../../../api/ethers/functions/createProposals"
+import {createERC20HouseDAOFundingProposal} from "../../../api/ethers/functions/ERC20HouseDAO/createERC20HouseDAOProposals"
 
 const RequestFunding: FunctionComponent<{
 	daoAddress: string
@@ -30,7 +30,13 @@ const RequestFunding: FunctionComponent<{
 		if (!(provider && signer && account && amount && recipient)) return
 		setLoading(true)
 		try {
-			const proposalId = await fundingProposal(daoAddress, recipient, Number(amount), provider, signer)
+			const proposalId = await createERC20HouseDAOFundingProposal(
+				daoAddress,
+				recipient,
+				Number(amount),
+				provider,
+				signer
+			)
 			await addProposal({
 				id: proposalId,
 				type: "requestFunding",

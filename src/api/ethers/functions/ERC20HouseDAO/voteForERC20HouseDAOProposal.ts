@@ -1,8 +1,8 @@
 import {JsonRpcSigner, Web3Provider} from "@ethersproject/providers"
 import {Contract} from "@ethersproject/contracts"
-import HouseTokenDAO from "../abis/HouseTokenDAO.json"
+import HouseTokenDAO from "../../abis/HouseTokenDAO.json"
 
-const vote = (
+const voteForERC20HouseDAOProposal = (
 	daoAddress: string,
 	proposalId: number,
 	yes: boolean,
@@ -22,4 +22,4 @@ const vote = (
 		}
 	})
 
-export default vote
+export default voteForERC20HouseDAOProposal
