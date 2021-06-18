@@ -76,12 +76,13 @@ export const getHouseERC20DAOProposal = async (
 		id: proposalId,
 		type: data.proposalType === 0 ? "requestFunding" : data.proposalType === 1 ? "changeRole" : "joinHouse",
 		userAddress: data.proposer,
-		// TODO Check for in funding proposal grace period
 		// TODO check if passed before executed
 		state: data.executed
 			? "executed"
 			: data.canceled
 			? "canceled"
+			: data.gracePeriod > 0
+			? "queued"
 			: deadline < new Date()
 			? yesVotes > threshold && yesVotes > noVotes
 				? "passed"
