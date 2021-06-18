@@ -14,7 +14,7 @@ const addDAO = async (
 		votingThreshold,
 		tax,
 		minProposalAmount
-	}: DAO,
+	}: Omit<DAO, "estimated">,
 	account: string
 ): Promise<void> => {
 	await firebase
@@ -30,6 +30,7 @@ const addDAO = async (
 			members: members.map(m => ({...m, memberSince: new Date().toISOString()})),
 			decisionMakingSpeed,
 			votingThreshold,
+			estimated: new Date().toISOString(),
 			...(tax ? {tax} : {}),
 			minProposalAmount,
 			owner: account

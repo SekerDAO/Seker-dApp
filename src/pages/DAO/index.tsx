@@ -32,7 +32,7 @@ const DAOPage: FunctionComponent = () => {
 				<div className="dao__photo" style={{backgroundImage: `url("/assets/DAODashboard_Photo.png")`}} />
 				<div className="dao__info">
 					<h2>{dao.name}</h2>
-					<p>TODO: est.</p>
+					<p>est. {dao.estimated.split("T")[0]}</p>
 					<p>{dao.website}</p>
 					{isMember ? (
 						<Button

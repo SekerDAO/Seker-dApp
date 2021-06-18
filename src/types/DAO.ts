@@ -22,6 +22,7 @@ export type DAO = {
 	houseTokenType?: HouseDAOTokenType
 	tokenAddress: string
 	name: string
+	estimated: string
 	totalSupply: number
 	members: Member[]
 	decisionMakingSpeed: DAODecisionMakingSpeed
