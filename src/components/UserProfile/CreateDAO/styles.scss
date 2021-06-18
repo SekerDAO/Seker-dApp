@@ -5,6 +5,10 @@
   align-items: stretch;
   justify-content: space-between;
 
+  > label {
+    margin: 15px 0 5px 0;
+  }
+
   &--wide {
     min-width: 800px;
   }
@@ -12,7 +16,12 @@
   &__row {
     display: flex;
     align-items: center;
+    min-height: 32px;
     margin: 5px 0;
+
+    &.top-margin {
+      margin: 15px 0 0 0;
+    }
 
     .select {
       margin-left: 5px;
@@ -33,6 +42,10 @@
 
     &:first-child {
       margin-right: 20px;
+    }
+
+    > label:not(.no-margin) {
+      margin: 15px 0 5px 0;
     }
 
     &-wrap {
@@ -57,10 +70,6 @@
 
   h2 {
     margin: 50px 0 20px 0;
-  }
-
-  p {
-    margin: 0 0 10px 0;
   }
 
   > button {

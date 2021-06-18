@@ -9,6 +9,7 @@ import Loader from "../../Loader"
 import ErrorPlaceholder from "../../ErrorPlaceholder"
 import {AuthContext} from "../../../context/AuthContext"
 import {Link} from "react-router-dom"
+import SearchIcon from "../../../icons/SearchIcon"
 
 const columns = [
 	{
@@ -52,7 +53,10 @@ const ProfileDAOs: FunctionComponent = () => {
 				<CreateHouseDAOModal />
 			</div>
 			<div className="profile__controls">
-				<Input placeholder="Search" borders="bottom" />
+				<div className="profile__search">
+					<Input placeholder="Search" borders="bottom" />
+					<SearchIcon />
+				</div>
 			</div>
 			<div className="profile-daos__table">
 				<Table

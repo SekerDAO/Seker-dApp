@@ -7,7 +7,7 @@
 
   &__photo {
     position: absolute;
-    left: 0;
+    left: 40px;
     top: -75px;
     z-index: 2;
     border-radius: 50%;
@@ -49,6 +49,16 @@
     align-self: stretch;
     padding: 0 20px 0 10px;
     margin-bottom: 10px;
+  }
+
+  &__search {
+    position: relative;
+
+    svg {
+      position: absolute;
+      right: 5px;
+      top: 8px;
+    }
   }
 
   &__edit-menu {

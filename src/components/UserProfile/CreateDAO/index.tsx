@@ -179,12 +179,12 @@ const CreateDAO: FunctionComponent<{
 					</div>
 				</div>
 			)}
-			<div className="create-dao__row">
+			<div className="create-dao__row top-margin">
 				<div className="create-dao__col">
-					<label>Add Members</label>
+					<label className="no-margin">Add Members</label>
 				</div>
 				<div className="create-dao__col">
-					<label>DAO Role(s)</label>
+					<label className="no-margin">DAO Role(s)</label>
 				</div>
 			</div>
 			{members.map((member, index) => (
@@ -271,7 +271,7 @@ const CreateDAO: FunctionComponent<{
 			)}
 			<div className="create-dao__row">
 				<div className="create-dao__col">
-					<label>Minimum Proposal Amount</label>
+					<label className="no-margin">Minimum Proposal Amount</label>
 				</div>
 				<div className="create-dao__col">
 					<Input borders="all" value={minProposalAmount} onChange={handleMinProposalChange} number min={0} />
@@ -279,7 +279,7 @@ const CreateDAO: FunctionComponent<{
 			</div>
 			<div className="create-dao__row">
 				<div className="create-dao__col">
-					<label>Voting Threshold</label>
+					<label className="no-margin">Voting Threshold</label>
 				</div>
 				<div className="create-dao__col">
 					<Input borders="all" value={votingThreshold} onChange={handleVotingThresholdChange} number min={0} />
@@ -287,7 +287,7 @@ const CreateDAO: FunctionComponent<{
 			</div>
 			<div className="create-dao__row">
 				<div className="create-dao__col">
-					<label>Decision Making Speed</label>
+					<label className="no-margin">Decision Making Speed</label>
 				</div>
 				<div className="create-dao__col">
 					<div className="create-dao__col-wrap sp-between">

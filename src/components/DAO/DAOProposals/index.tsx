@@ -11,6 +11,7 @@ import {capitalize} from "../../../utlls"
 import Button from "../../Controls/Button"
 import {toastError, toastSuccess} from "../../Toast"
 import voteForERC20HouseDAOProposal from "../../../api/ethers/functions/ERC20HouseDAO/voteForERC20HouseDAOProposal"
+import SearchIcon from "../../../icons/SearchIcon"
 
 const DAOProposalCard: FunctionComponent<{
 	proposal: Proposal
@@ -136,7 +137,10 @@ const DAOProposals: FunctionComponent<{
 		<div className="dao-proposals">
 			<h2>Proposals</h2>
 			<div className="dao-proposals__controls">
-				<Input borders="bottom" placeholder="Search" />
+				<div className="dao-proposals__search">
+					<Input placeholder="Search" borders="bottom" />
+					<SearchIcon />
+				</div>
 				<Select options={[{name: "Filter By", value: ""}]} />
 				<Select options={[{name: "Sort By", value: ""}]} />
 			</div>

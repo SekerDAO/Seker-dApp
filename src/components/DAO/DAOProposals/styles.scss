@@ -14,12 +14,19 @@
     align-items: center;
     margin-bottom: 20px;
 
-    input {
-      margin-right: auto;
-    }
-
     .select {
       margin-left: 10px;
+    }
+  }
+
+  &__search {
+    position: relative;
+    margin-right: auto;
+
+    svg {
+      position: absolute;
+      right: 5px;
+      top: 8px;
     }
   }
 

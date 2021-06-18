@@ -10,16 +10,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: $light-grey;
-    border-top: 1px solid $dark-grey;
-    border-left: 1px solid $dark-grey;
-    border-bottom: 1px solid $dark-grey;
+    background-color: $white;
+    border-top: 1px solid $white2;
+    border-left: 1px solid $white2;
+    border-bottom: 1px solid $white2;
     padding: 10px;
     cursor: pointer;
     transition: color, background-color 0.3s ease-in-out;
 
     &:last-child {
-      border-right: 1px solid $dark-grey;
+      border-right: 1px solid $white2;
     }
 
     &--active {

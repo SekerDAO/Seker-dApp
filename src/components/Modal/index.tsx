@@ -1,5 +1,6 @@
 import React, {FunctionComponent} from "react"
 import "./styles.scss"
+import CloseIcon from "../../icons/CloseIcon"
 
 const Modal: FunctionComponent<{
 	show: boolean
@@ -9,9 +10,11 @@ const Modal: FunctionComponent<{
 
 	return (
 		<>
-			<div className="modal__overlay" onClick={onClose} />,
+			<div className="modal__overlay" onClick={onClose} />
 			<div className="modal__body">
-				<div className="modal__close" onClick={onClose} />
+				<div className="modal__close" onClick={onClose}>
+					<CloseIcon />
+				</div>
 				{children}
 			</div>
 		</>

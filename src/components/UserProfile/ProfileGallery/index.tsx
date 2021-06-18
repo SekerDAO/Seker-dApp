@@ -7,6 +7,7 @@ import {NFTSnapshot} from "../../../types/NFT"
 import useNFTs from "../../../customHooks/getters/useNFTs"
 import ErrorPlaceholder from "../../ErrorPlaceholder"
 import Loader from "../../Loader"
+import SearchIcon from "../../../icons/SearchIcon"
 
 const ProfileGallery: FunctionComponent<{account: string}> = ({account}) => {
 	const [cursor, setCursor] = useState<NFTSnapshot | null>(null)
@@ -22,7 +23,10 @@ const ProfileGallery: FunctionComponent<{account: string}> = ({account}) => {
 	return (
 		<>
 			<div className="profile__controls">
-				<Input placeholder="Search" borders="bottom" />
+				<div className="profile__search">
+					<Input placeholder="Search" borders="bottom" />
+					<SearchIcon />
+				</div>
 				<Select options={[{name: "Sort By", value: ""}]} />
 			</div>
 			<Gallery
