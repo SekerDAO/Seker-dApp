@@ -8,7 +8,6 @@ import React, {FunctionComponent} from "react"
 // import ErrorPlaceholder from "../../components/ErrorPlaceholder"
 // import Button from "../../components/Controls/Button"
 // import {NFTSnapshot} from "../../types/NFT"
-import "./styles.scss"
 
 const Galleries: FunctionComponent = () => {
 	// const history = useHistory()

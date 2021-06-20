@@ -27,7 +27,6 @@ const addDAO = async (
 			houseTokenType,
 			tokenAddress,
 			totalSupply,
-			members: members.map(m => ({...m, memberSince: new Date().toISOString()})),
 			decisionMakingSpeed,
 			votingThreshold,
 			estimated: new Date().toISOString(),
@@ -35,6 +34,14 @@ const addDAO = async (
 			minProposalAmount,
 			owner: account
 		})
+	for (const member of members) {
+		await firebase.firestore().collection("daoUsers").add({
+			dao: address,
+			address: member.address,
+			memberSince: new Date().toISOString(),
+			role: member.role
+		})
+	}
 }
 
 export default addDAO

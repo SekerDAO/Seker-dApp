@@ -17,7 +17,7 @@ const columns = [
 		name: "DAO Name",
 		rowClassName: "purple",
 		// eslint-disable-next-line react/display-name
-		render: (dao: {name: string; id: string}) => <Link to={`/dao/${dao.id}`}>{dao.name}</Link>
+		render: (dao: {name: string; address: string}) => <Link to={`/dao/${dao.address}`}>{dao.name}</Link>
 	},
 	{
 		id: "type",
@@ -60,8 +60,8 @@ const ProfileDAOs: FunctionComponent = () => {
 			</div>
 			<div className="profile-daos__table">
 				<Table
-					data={DAOs.map(DAO => {
-						const {name, tokenAddress, type, members} = DAO.data()
+					data={DAOs.map(dao => {
+						const {name, tokenAddress, type, members} = dao
 						const member = members.find(m => m.address === account)
 						return {
 							name,
@@ -70,11 +70,11 @@ const ProfileDAOs: FunctionComponent = () => {
 							memberSince: member?.memberSince?.split("T")[0] ?? "",
 							role: member?.role ?? "",
 							edit: "",
-							id: DAO.id
+							address: dao.address
 						}
 					})}
 					columns={columns}
-					idCol="id"
+					idCol="address"
 				/>
 			</div>
 		</>

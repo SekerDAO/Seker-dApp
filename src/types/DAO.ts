@@ -16,6 +16,11 @@ export type Member = {
 	memberSince?: string
 }
 
+export type FirebaseDAOUser = Member & {
+	id: string
+	dao: string
+}
+
 export type DAO = {
 	address: string
 	type: "gallery" | "house"

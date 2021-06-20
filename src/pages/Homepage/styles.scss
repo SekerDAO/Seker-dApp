@@ -15,10 +15,8 @@
     position: absolute;
     top: 0;
     left: 0;
-    height: calc(100% - 240px);
     width: 177.77777778vh; /* 100 * 16 / 9 */
     min-width: 100%;
-    min-height: 56.25vw; /* 100 * 9 / 16 */
     z-index: -1;
   }
 
