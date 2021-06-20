@@ -14,7 +14,7 @@ const HomePage: FunctionComponent = () => {
 			</h1>
 			<div className="home-page__buttons">
 				<Button>House DAOs</Button>
-				<Button buttonType="secondary">About Aplha</Button>
+				<Button buttonType="secondary">About Alpha</Button>
 			</div>
 			<Footer />
 		</div>
