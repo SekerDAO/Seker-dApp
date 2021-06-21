@@ -16,11 +16,15 @@ import Textarea from "../../Controls/Textarea"
 import useMyDomains from "../../../customHooks/getters/useMyDomains"
 import "./styles.scss"
 import {toastError} from "../../Toast"
+import {NFT} from "../../../types/NFT"
+import addDAONFT from "../../../api/firebase/NFT/addDAONFT"
 const {REACT_APP_DOMAIN_ADDRESS} = process.env
 
 type CreateNFTModalStage = "chooseOption" | "chooseDomain" | "uploadFile" | "loadExisting" | "success"
 
-const CreateNFTModal: FunctionComponent = () => {
+const CreateNFTModal: FunctionComponent<{
+	daoAddress?: string
+}> = ({daoAddress}) => {
 	const [isOpened, setIsOpened] = useState(false)
 	const [loading, setLoading] = useState(false)
 	const [stage, setStage] = useState<CreateNFTModalStage>("chooseOption")
@@ -64,21 +68,23 @@ const CreateNFTModal: FunctionComponent = () => {
 			try {
 				const [metadata, hashes] = await uploadMedia(file, title, description, Number(numberOfEditions))
 				const id = await createNFT(hashes, Number(numberOfEditions), signer, provider, customDomainAddress || undefined)
-				await addNFT(
-					{
-						id,
-						address: customDomain ? customDomainAddress : REACT_APP_DOMAIN_ADDRESS!,
-						createdDate: new Date().toISOString(),
-						name: metadata.name,
-						desc: metadata.description,
-						thumbnail: metadata.image,
-						externalUrl: metadata.external_url,
-						media: metadata.media,
-						attributes: metadata.attributes,
-						category: "art" // TODO
-					},
-					account
-				)
+				const nft: NFT = {
+					id,
+					address: customDomain ? customDomainAddress : REACT_APP_DOMAIN_ADDRESS!,
+					createdDate: new Date().toISOString(),
+					name: metadata.name,
+					desc: metadata.description,
+					thumbnail: metadata.image,
+					externalUrl: metadata.external_url,
+					media: metadata.media,
+					attributes: metadata.attributes,
+					category: "art" // TODO
+				}
+				if (daoAddress) {
+					await addDAONFT(nft, daoAddress)
+				} else {
+					await addNFT(nft, account)
+				}
 				setStage("success")
 			} catch (e) {
 				console.error(e)

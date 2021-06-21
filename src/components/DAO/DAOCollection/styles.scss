@@ -1,0 +1,10 @@
+@import "src/variables";
+
+.dao-collection {
+  display: flex;
+  flex-direction: column;
+
+  &__edit-buttons {
+    margin: 20px 0 30px 10px;
+  }
+}

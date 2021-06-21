@@ -1,15 +1,15 @@
 import React, {FunctionComponent, useState} from "react"
-import Input from "../../Controls/Input"
-import Select from "../../Controls/Select"
-import Gallery from "../../Gallery"
-import Button from "../../Controls/Button"
-import {NFTSnapshot} from "../../../types/NFT"
-import useNFTs from "../../../customHooks/getters/useNFTs"
-import ErrorPlaceholder from "../../ErrorPlaceholder"
-import Loader from "../../Loader"
-import SearchIcon from "../../../icons/SearchIcon"
+import Input from "../Controls/Input"
+import Select from "../Controls/Select"
+import Gallery from "../Gallery"
+import Button from "../Controls/Button"
+import {NFTSnapshot} from "../../types/NFT"
+import useNFTs from "../../customHooks/getters/useNFTs"
+import ErrorPlaceholder from "../ErrorPlaceholder"
+import Loader from "../Loader"
+import SearchIcon from "../../icons/SearchIcon"
 
-const ProfileGallery: FunctionComponent<{account: string}> = ({account}) => {
+const NFTGallery: FunctionComponent<{account: string}> = ({account}) => {
 	const [cursor, setCursor] = useState<NFTSnapshot | null>(null)
 	const {NFTs, loading, error} = useNFTs({user: account, after: cursor})
 
@@ -46,4 +46,4 @@ const ProfileGallery: FunctionComponent<{account: string}> = ({account}) => {
 	)
 }
 
-export default ProfileGallery
+export default NFTGallery

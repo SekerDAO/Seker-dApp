@@ -3,7 +3,7 @@ import {useHistory, useLocation, useParams} from "react-router-dom"
 import "./styles.scss"
 import {AuthContext} from "../../context/AuthContext"
 import {parse} from "query-string"
-import ProfileGallery from "../../components/UserProfile/ProfileGallery"
+import NFTGallery from "../../components/NFTGallery"
 import ProfileEdit from "../../components/UserProfile/ProfileEdit"
 import ProfileDAOs from "../../components/UserProfile/ProfileDAOs"
 import ProfileView from "../../components/UserProfile/ProfileView"
@@ -80,7 +80,7 @@ const Profile: FunctionComponent = () => {
 								<CreateNFTModal />
 							</div>
 						)}
-						<ProfileGallery account={account} />
+						<NFTGallery account={account} />
 					</>
 				)}
 				{page === "edit" && <ProfileEdit user={user} />}

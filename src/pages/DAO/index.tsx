@@ -11,6 +11,7 @@ import AboutDAO from "../../components/DAO/AboutDAO"
 import CreateDAOProposal from "../../components/DAO/CreateDAOProposal"
 import DAOProposals from "../../components/DAO/DAOProposals"
 import EditDAO from "../../components/DAO/EditDAO"
+import DAOCollection from "../../components/DAO/DAOCollection"
 
 const menuEntries = ["About", "Members", "Proposals", "Create Proposal", "Collection"]
 
@@ -71,6 +72,7 @@ const DAOPage: FunctionComponent = () => {
 						{activeMenuIndex === 0 && <AboutDAO dao={dao} />}
 						{activeMenuIndex === 2 && <DAOProposals daoAddress={dao.address} isMember={isMember} />}
 						{activeMenuIndex === 3 && <CreateDAOProposal isMember={isMember} daoAddress={dao.address} />}
+						{activeMenuIndex === 4 && <DAOCollection daoAddress={dao.address} />}
 					</>
 				)}
 			</div>
