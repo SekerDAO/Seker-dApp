@@ -12,6 +12,11 @@ import Button from "../../Controls/Button"
 import {toastError, toastSuccess} from "../../Toast"
 import voteForERC20HouseDAOProposal from "../../../api/ethers/functions/ERC20HouseDAO/voteForERC20HouseDAOProposal"
 import SearchIcon from "../../../icons/SearchIcon"
+import {
+	startERC20HouseDAOFundingGracePeriod,
+	startERC20HouseDAORoleChangeGracePeriod
+} from "../../../api/ethers/functions/ERC20HouseDAO/startERC20HouseDAOProposalsGracePeriod"
+import {executeERC20HouseDAORoleChange} from "../../../api/ethers/functions/ERC20HouseDAO/executeERC20HouseDAOProposals"
 
 const DAOProposalCard: FunctionComponent<{
 	proposal: Proposal
@@ -30,6 +35,44 @@ const DAOProposalCard: FunctionComponent<{
 		} catch (e) {
 			console.error(e)
 			toastError("Failed to vote")
+		}
+		setProcessing(false)
+	}
+
+	const startGracePeriod = async () => {
+		if (!(provider && signer)) return
+		setProcessing(true)
+		try {
+			if (proposal.type === "changeRole") {
+				await startERC20HouseDAORoleChangeGracePeriod(daoAddress, proposal.id!, provider, signer)
+			} else if (proposal.type === "requestFunding") {
+				await startERC20HouseDAOFundingGracePeriod(daoAddress, proposal.id!, provider, signer)
+			} else {
+				throw new Error("Not supported for this type of proposal yet")
+			}
+			toastSuccess("Grace period started")
+		} catch (e) {
+			console.error(e)
+			toastError("Failed to start grace period")
+		}
+		setProcessing(false)
+	}
+
+	const execute = async () => {
+		if (!(provider && signer)) return
+		setProcessing(true)
+		try {
+			if (proposal.type === "changeRole") {
+				await executeERC20HouseDAORoleChange(daoAddress, proposal.id!, provider, signer)
+			} else if (proposal.type === "requestFunding") {
+				await startERC20HouseDAOFundingGracePeriod(daoAddress, proposal.id!, provider, signer)
+			} else {
+				throw new Error("Not supported for this type of proposal yet")
+			}
+			toastSuccess("Grace period started")
+		} catch (e) {
+			console.error(e)
+			toastError("Failed to start grace period")
 		}
 		setProcessing(false)
 	}
