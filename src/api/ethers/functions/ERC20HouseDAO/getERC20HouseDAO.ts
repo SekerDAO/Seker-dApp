@@ -37,18 +37,20 @@ export const getHouseERC20DAOProposal = async (
 	const noVotes = Number(formatEther(data.noVotes))
 	const threshold = Number(formatEther(votingThreshold))
 	const deadline = new Date(Number(data.deadline.toString()) * 1000)
+	const gracePeriod = Number(data.gracePeriod.toString())
 
 	return {
 		id: proposalId,
 		type: data.proposalType === 0 ? "requestFunding" : data.proposalType === 1 ? "changeRole" : "joinHouse",
 		userAddress: data.proposer,
-		// TODO check if passed before executed
 		state: data.executed
 			? "executed"
 			: data.canceled
 			? "canceled"
-			: data.gracePeriod > 0
-			? "queued"
+			: gracePeriod > 0
+			? gracePeriod > new Date().getTime() / 1000
+				? "queued"
+				: "waiting"
 			: deadline < new Date()
 			? yesVotes > threshold && yesVotes > noVotes
 				? "passed"

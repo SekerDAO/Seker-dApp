@@ -2,7 +2,7 @@ import {DAOMemberRole} from "./DAO"
 
 export type DAOProposalType = "applyForCommission" | "joinHouse" | "requestFunding" | "changeRole"
 
-type DAOState = "active" | "canceled" | "executed" | "passed" | "failed" | "queued"
+type DAOState = "active" | "canceled" | "executed" | "passed" | "failed" | "queued" | "waiting"
 
 export type ProposalFirebaseData = Pick<
 	Proposal,

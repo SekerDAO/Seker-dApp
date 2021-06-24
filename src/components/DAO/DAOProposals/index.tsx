@@ -43,12 +43,10 @@ const DAOProposalCard: FunctionComponent<{
 		if (!(provider && signer)) return
 		setProcessing(true)
 		try {
-			if (proposal.type === "changeRole") {
+			if (["changeRole", "joinHouse"].includes(proposal.type)) {
 				await startERC20HouseDAORoleChangeGracePeriod(daoAddress, proposal.id!, provider, signer)
 			} else if (proposal.type === "requestFunding") {
 				await startERC20HouseDAOFundingGracePeriod(daoAddress, proposal.id!, provider, signer)
-			} else {
-				throw new Error("Not supported for this type of proposal yet")
 			}
 			toastSuccess("Grace period started")
 		} catch (e) {
@@ -62,12 +60,10 @@ const DAOProposalCard: FunctionComponent<{
 		if (!(provider && signer)) return
 		setProcessing(true)
 		try {
-			if (proposal.type === "changeRole") {
+			if (["changeRole", "joinHouse"].includes(proposal.type)) {
 				await executeERC20HouseDAORoleChange(daoAddress, proposal.id!, provider, signer)
 			} else if (proposal.type === "requestFunding") {
 				await startERC20HouseDAOFundingGracePeriod(daoAddress, proposal.id!, provider, signer)
-			} else {
-				throw new Error("Not supported for this type of proposal yet")
 			}
 			toastSuccess("Grace period started")
 		} catch (e) {
@@ -158,6 +154,8 @@ const DAOProposalCard: FunctionComponent<{
 									</Button>
 								</>
 							))}
+						{proposal.state === "passed" && <Button onClick={startGracePeriod}>Queue</Button>}
+						{proposal.state === "waiting" && <Button onClick={execute}>Execute</Button>}
 					</div>
 				</div>
 			)}
