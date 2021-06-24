@@ -29,7 +29,7 @@ const AppWithEthers: FunctionComponent = () => {
 							exact
 							path="/learn"
 							render={() => (
-								<MainLayout>
+								<MainLayout headerBackground={false} headerHeight={160}>
 									<Learn />
 								</MainLayout>
 							)}

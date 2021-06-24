@@ -1,0 +1,47 @@
+@import "src/variables";
+
+.learn-menu {
+  min-width: 250px;
+  margin-right: 20px;
+  display: flex;
+  flex-direction: column;
+
+  &__link-lv0 {
+    margin: 5px 0;
+    display: flex;
+    align-items: center;
+
+    a {
+      color: $purple2;
+      font-size: 18px;
+    }
+  }
+
+  &__link-lv1 {
+    color: black;
+    margin-left: 5px;
+    line-height: 20px;
+  }
+
+  &__link-lv2 {
+    color: black;
+    margin-left: 10px;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  &__expand {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 10px 5px 0 5px;
+    border-color: black transparent transparent transparent;
+    margin-left: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+
+    &--expanded {
+      transform: rotate(180deg);
+    }
+  }
+}
