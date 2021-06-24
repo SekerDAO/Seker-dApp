@@ -16,7 +16,10 @@ import {
 	startERC20HouseDAOFundingGracePeriod,
 	startERC20HouseDAORoleChangeGracePeriod
 } from "../../../api/ethers/functions/ERC20HouseDAO/startERC20HouseDAOProposalsGracePeriod"
-import {executeERC20HouseDAORoleChange} from "../../../api/ethers/functions/ERC20HouseDAO/executeERC20HouseDAOProposals"
+import {
+	executeERC20HouseDAOFundingProposal,
+	executeERC20HouseDAORoleChange
+} from "../../../api/ethers/functions/ERC20HouseDAO/executeERC20HouseDAOProposals"
 
 const DAOProposalCard: FunctionComponent<{
 	proposal: Proposal
@@ -63,7 +66,7 @@ const DAOProposalCard: FunctionComponent<{
 			if (["changeRole", "joinHouse"].includes(proposal.type)) {
 				await executeERC20HouseDAORoleChange(daoAddress, proposal.id!, provider, signer)
 			} else if (proposal.type === "requestFunding") {
-				await startERC20HouseDAOFundingGracePeriod(daoAddress, proposal.id!, provider, signer)
+				await executeERC20HouseDAOFundingProposal(daoAddress, proposal.id!, provider, signer)
 			}
 			toastSuccess("Grace period started")
 		} catch (e) {
