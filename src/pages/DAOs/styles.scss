@@ -1,0 +1,24 @@
+.daos {
+  h1 {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  &__controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 40px;
+  }
+
+  &__search {
+    position: relative;
+    margin-right: auto;
+
+    svg {
+      position: absolute;
+      right: 5px;
+      top: 8px;
+    }
+  }
+}

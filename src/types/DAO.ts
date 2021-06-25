@@ -21,9 +21,11 @@ export type FirebaseDAOUser = Member & {
 	dao: string
 }
 
+export type DAOType = "gallery" | "house"
+
 export type DAO = {
 	address: string
-	type: "gallery" | "house"
+	type: DAOType
 	houseTokenType?: HouseDAOTokenType
 	tokenAddress: string
 	name: string
@@ -47,4 +49,14 @@ export type DAOEnhanced = DAO & {
 	fundedProjects: number
 }
 
-export type DAOSnapshot = firebase.firestore.QueryDocumentSnapshot<DAO>
+export type DAOSnapshot = firebase.firestore.QueryDocumentSnapshot<Omit<DAO, "members"> & {membersCount: number}>
+
+export type DAOQueryParams = {
+	type?: DAOType
+	limit?: number
+	after: DAOSnapshot | null
+}
+
+export type DAOListItemProps = Pick<DAO, "address" | "name" | "type" | "houseTokenType" | "description"> & {
+	membersCount: number
+}

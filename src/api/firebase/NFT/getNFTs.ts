@@ -1,14 +1,7 @@
 import firebase from "firebase"
-import {NFTSnapshot} from "../../../types/NFT"
+import {NFTQueryParams, NFTSnapshot} from "../../../types/NFT"
 
 const defaultLimit = 8
-
-export type NFTQueryParams = {
-	category?: string
-	user?: string
-	limit?: number
-	after: NFTSnapshot | null
-}
 
 const getNFTs = async (
 	params: NFTQueryParams

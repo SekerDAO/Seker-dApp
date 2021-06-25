@@ -31,3 +31,12 @@ export type NFTMetadata = {
 }
 
 export type NFTSnapshot = firebase.firestore.QueryDocumentSnapshot<NFT>
+
+export type NFTQueryParams = {
+	category?: string
+	user?: string
+	limit?: number
+	after: NFTSnapshot | null
+}
+
+export type NFTGalleryItemProps = Pick<NFT, "id" | "thumbnail" | "name" | "price"> & {isVideo: boolean}

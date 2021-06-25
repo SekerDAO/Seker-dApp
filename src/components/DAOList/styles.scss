@@ -1,0 +1,42 @@
+@import "src/variables";
+
+.dao-list {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 26px;
+
+  &__item {
+    width: 375px;
+    display: flex;
+    flex-direction: column;
+    margin: 12px;
+    border: 1px solid $dark-grey;
+    color: black;
+    padding-bottom: 10px;
+
+    &:hover {
+      border-color: $purple2;
+    }
+
+    &-image {
+      align-self: stretch;
+      height: 412px;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+
+    h3 {
+      margin: 10px 10px 0 10px;
+    }
+
+    p {
+      margin: 0 10px;
+
+      b {
+        display: block;
+        margin-top: 5px;
+      }
+    }
+  }
+}

@@ -36,6 +36,9 @@ const HeaderMenu: FunctionComponent = () => {
 							<Link to="/learn">Learn</Link>
 						</li>
 						<li>
+							<Link to="/daos">DAOs</Link>
+						</li>
+						<li>
 							<Link to="/galleries">Galleries</Link>
 						</li>
 						<li>
