@@ -14,6 +14,10 @@ import EditDAO from "../../components/DAO/EditDAO"
 import DAOCollection from "../../components/DAO/DAOCollection"
 import UploadImageModal from "../../components/Modals/UploadImageModal"
 import updateDAOImage from "../../api/firebase/DAO/updateDAOImage"
+import TwitterIcon from "../../icons/TwitterIcon"
+import {PURPLE_2} from "../../constants/colors"
+import TelegramIcon from "../../icons/TelegramIcon"
+import DiscordIcon from "../../icons/DiscordIcon"
 
 const menuEntries = ["About", "Members", "Proposals", "Create Proposal", "Collection"]
 
@@ -67,6 +71,23 @@ const DAOPage: FunctionComponent = () => {
 							<Button buttonType="secondary">Apply for Commission</Button>
 						</>
 					)}
+					<div className="dao__socials">
+						{dao.twitter && (
+							<a target="_blank" rel="noopener noreferrer" href={`https://twiter.com/${dao.twitter}`}>
+								<TwitterIcon fill={PURPLE_2} />
+							</a>
+						)}
+						{dao.telegram && (
+							<a target="_blank" rel="noopener noreferrer" href={`https://t.me/${dao.telegram}`}>
+								<TelegramIcon fill={PURPLE_2} />
+							</a>
+						)}
+						{dao.discord && (
+							<a target="_blank" rel="noopener noreferrer" href={`https://discord.gg/${dao.discord}`}>
+								<DiscordIcon fill={PURPLE_2} />
+							</a>
+						)}
+					</div>
 				</div>
 			</div>
 			<div className="dao__main">

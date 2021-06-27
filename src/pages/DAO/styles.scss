@@ -47,6 +47,16 @@
     }
   }
 
+  &__socials {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+
+    svg {
+      margin-right: 5px;
+    }
+  }
+
   &__main {
     flex: 1;
     display: flex;

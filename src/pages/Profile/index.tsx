@@ -14,6 +14,9 @@ import ErrorPlaceholder from "../../components/ErrorPlaceholder"
 import Loader from "../../components/Loader"
 import updateUserImage from "../../api/firebase/user/updateUserImage"
 import UploadImageModal from "../../components/Modals/UploadImageModal"
+import TwitterIcon from "../../icons/TwitterIcon"
+import InstagramIcon from "../../icons/InstagramIcon"
+import {PURPLE_2} from "../../constants/colors"
 
 type ProfilePage = "nfts" | "edit" | "daos" | "profile"
 
@@ -91,6 +94,18 @@ const Profile: FunctionComponent = () => {
 						</a>
 					</div>
 				)}
+				<div className="profile__socials">
+					{user.twitter && (
+						<a target="_blank" rel="noopener noreferrer" href={`https://twiter.com/${user.twitter}`}>
+							<TwitterIcon fill={PURPLE_2} />
+						</a>
+					)}
+					{user.instagram && (
+						<a target="_blank" rel="noopener noreferrer" href={`https://instagram.com/${user.twitter}`}>
+							<InstagramIcon fill={PURPLE_2} />
+						</a>
+					)}
+				</div>
 			</div>
 			<div className="profile__main">
 				{page === "nfts" && (
