@@ -33,7 +33,7 @@ const NFTGallery: FunctionComponent<{account: string}> = ({account}) => {
 				items={NFTs.data.map(doc => {
 					const {thumbnail, name, price, media} = doc.data()
 					return {
-						id: Number(doc.id),
+						id: doc.id,
 						thumbnail,
 						name,
 						price,

@@ -39,4 +39,7 @@ export type NFTQueryParams = {
 	after: NFTSnapshot | null
 }
 
-export type NFTGalleryItemProps = Pick<NFT, "id" | "thumbnail" | "name" | "price"> & {isVideo: boolean}
+export type NFTGalleryItemProps = Pick<NFT, "thumbnail" | "name" | "price"> & {
+	id: string
+	isVideo: boolean
+}
