@@ -1,6 +1,6 @@
 import React, {FunctionComponent} from "react"
 import NFTGallery from "../../NFTGallery"
-import CreateNFTModal from "../../UserProfile/CreateNFTModal"
+import CreateNFTModal from "../../Modals/CreateNFTModal"
 import "./styles.scss"
 
 const DAOCollection: FunctionComponent<{daoAddress: string}> = ({daoAddress}) => {

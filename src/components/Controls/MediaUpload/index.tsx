@@ -6,9 +6,10 @@ import "./styles.scss"
 import {toastError} from "../../Toast"
 
 const MediaUpload: FunctionComponent<{
+	initialUrl?: string
 	onUpload: (file: File) => void
-}> = ({onUpload}) => {
-	const [imageUrl, setImageUrl] = useState<string | null>(null)
+}> = ({initialUrl, onUpload}) => {
+	const [imageUrl, setImageUrl] = useState<string | null>(initialUrl ?? null)
 	const [isVideo, setIsVideo] = useState(false)
 
 	const _onUpload = (file: File) => {

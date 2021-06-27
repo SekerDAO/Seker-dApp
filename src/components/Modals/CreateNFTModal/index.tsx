@@ -1,6 +1,6 @@
 import React, {FunctionComponent, useState, useContext} from "react"
 import Button from "../../Controls/Button"
-import Modal from "../../Modal"
+import Modal from "../Modal"
 import RadioButton from "../../Controls/RadioButton"
 import Select from "../../Controls/Select"
 import MediaUpload from "../../Controls/MediaUpload"

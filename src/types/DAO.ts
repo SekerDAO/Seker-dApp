@@ -41,9 +41,11 @@ export type DAO = {
 	twitter?: string
 	telegram?: string
 	discord?: string
+	image?: string
 }
 
 export type DAOEnhanced = DAO & {
+	owner: string
 	tokenSymbol: string
 	balance: number
 	fundedProjects: number

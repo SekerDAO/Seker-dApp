@@ -1,10 +1,10 @@
 import React, {ChangeEvent, FunctionComponent, useState} from "react"
 import Button from "../../Controls/Button"
-import Modal from "../../Modal"
+import Modal from "../Modal"
 import RadioButton from "../../Controls/RadioButton"
 import Select from "../../Controls/Select"
-import CreateERC20Token from "../CreateERC20Token"
-import CreateDAO from "../CreateDAO"
+import CreateERC20Token from "../../DAO/CreateERC20Token"
+import CreateDAO from "../../DAO/CreateDAO"
 import useMyERC20Tokens from "../../../customHooks/getters/useMyERC20Tokens"
 
 type CreateGalleryDAOStage = "chooseToken" | "createToken" | "enterInfo" | "success"

@@ -1,6 +1,6 @@
 import React, {FunctionComponent, useContext, useState} from "react"
 import Button from "../../Controls/Button"
-import Modal from "../../Modal"
+import Modal from "../Modal"
 import Input from "../../Controls/Input"
 import "./styles.scss"
 import EthersContext from "../../../context/EthersContext"

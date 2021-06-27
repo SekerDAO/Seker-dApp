@@ -12,6 +12,8 @@ import CreateDAOProposal from "../../components/DAO/CreateDAOProposal"
 import DAOProposals from "../../components/DAO/DAOProposals"
 import EditDAO from "../../components/DAO/EditDAO"
 import DAOCollection from "../../components/DAO/DAOCollection"
+import UploadImageModal from "../../components/Modals/UploadImageModal"
+import updateDAOImage from "../../api/firebase/DAO/updateDAOImage"
 
 const menuEntries = ["About", "Members", "Proposals", "Create Proposal", "Collection"]
 
@@ -26,16 +28,31 @@ const DAOPage: FunctionComponent = () => {
 	if (!dao || loading) return <Loader />
 
 	const isMember = connected && !!dao.members.find(m => m.address === account)
+	// TODO: change DAO owner permissions check
+	const isOwner = dao.owner === account
 
 	return (
 		<div className="dao">
 			<div className="dao__left-section">
-				<div className="dao__photo" style={{backgroundImage: `url("/assets/DAODashboard_Photo.png")`}} />
+				<div className="dao__photo" style={{backgroundImage: `url(${dao.image ?? "/assets/DAODashboard_Photo.png"})`}}>
+					{isOwner && (
+						<UploadImageModal
+							initialUrl={dao.image}
+							buttonName="Edit Image"
+							titleText="Edit DAO Image"
+							onUpload={async file => {
+								await updateDAOImage(file, dao!.address)
+							}}
+							successToastText="DAO image successfully updated"
+							errorToastText="Failed to update DAO image"
+						/>
+					)}
+				</div>
 				<div className="dao__info">
 					<h2>{dao.name}</h2>
 					<p>est. {dao.estimated.split("T")[0]}</p>
 					<p>{dao.website}</p>
-					{isMember ? (
+					{isOwner ? (
 						<Button
 							buttonType="primary"
 							onClick={() => {

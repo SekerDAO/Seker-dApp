@@ -4,14 +4,16 @@ import "./styles.scss"
 import {AuthContext} from "../../context/AuthContext"
 import {parse} from "query-string"
 import NFTGallery from "../../components/NFTGallery"
-import ProfileEdit from "../../components/UserProfile/ProfileEdit"
-import ProfileDAOs from "../../components/UserProfile/ProfileDAOs"
-import ProfileView from "../../components/UserProfile/ProfileView"
-import CreateCustomDomainModal from "../../components/UserProfile/CreateCustomDomainModal"
-import CreateNFTModal from "../../components/UserProfile/CreateNFTModal"
+import ProfileEdit from "../../components/User/ProfileEdit"
+import ProfileDAOs from "../../components/User/ProfileDAOs"
+import ProfileView from "../../components/User/ProfileView"
+import CreateCustomDomainModal from "../../components/Modals/CreateCustomDomainModal"
+import CreateNFTModal from "../../components/Modals/CreateNFTModal"
 import useUser from "../../customHooks/getters/useUser"
 import ErrorPlaceholder from "../../components/ErrorPlaceholder"
 import Loader from "../../components/Loader"
+import updateUserImage from "../../api/firebase/user/updateUserImage"
+import UploadImageModal from "../../components/Modals/UploadImageModal"
 
 type ProfilePage = "nfts" | "edit" | "daos" | "profile"
 
@@ -27,9 +29,28 @@ const Profile: FunctionComponent = () => {
 	if (error) return <ErrorPlaceholder />
 	if (loading || !user) return <Loader />
 
+	const handleUploadImage = async (file: File) => {
+		if (!account) return
+		await updateUserImage(file, account)
+	}
+
 	return (
 		<div className="profile">
-			<div className="profile__photo" style={{backgroundImage: `url("/assets/PersonalDashboard_Photo.png")`}} />
+			<div
+				className="profile__photo"
+				style={{backgroundImage: `url("${user.image ?? "/assets/PersonalDashboard_Photo.png"}")`}}
+			>
+				{isOwner && (
+					<UploadImageModal
+						titleText="Edit Profile Image"
+						buttonName="Edit Image"
+						onUpload={handleUploadImage}
+						initialUrl={user.image}
+						successToastText="Image successfully updated!"
+						errorToastText="Failed to update image"
+					/>
+				)}
+			</div>
 			<div className="profile__info">
 				<h2>{user.name}</h2>
 				<p>{`${account.slice(0, 3)}...${account.slice(-4)}`}</p>

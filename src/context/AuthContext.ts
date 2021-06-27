@@ -99,4 +99,4 @@ export const useAuth = (): AuthContext => {
 	}
 }
 
-export const AuthContext = createContext<AuthContext>(({} as unknown) as AuthContext)
+export const AuthContext = createContext<AuthContext>({} as unknown as AuthContext)
