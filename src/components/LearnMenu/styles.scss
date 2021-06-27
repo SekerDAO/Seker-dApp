@@ -2,7 +2,7 @@
 
 .learn-menu {
   min-width: 250px;
-  margin-right: 20px;
+  margin: 15px 20px 0 0;
   display: flex;
   flex-direction: column;
 
@@ -39,9 +39,10 @@
     margin-left: 5px;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
+    transform: rotate(-90deg);
 
     &--expanded {
-      transform: rotate(180deg);
+      transform: rotate(0deg);
     }
   }
 }

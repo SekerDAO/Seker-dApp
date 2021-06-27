@@ -16,7 +16,7 @@ const LearnMenu: FunctionComponent<{
 			{entries.map((lv0Entry, lv0Index) => (
 				<Fragment key={lv0Index}>
 					<div className="learn-menu__link-lv0">
-						<a href={`#learn_0_${lv0Index}`}>{lv0Entry.title}</a>
+						<a href={`#learn_${lv0Index}`}>{lv0Entry.title}</a>
 						<span
 							onClick={() => {
 								toggleEntryExpand(lv0Index)
@@ -27,11 +27,15 @@ const LearnMenu: FunctionComponent<{
 					{expandedEntries[lv0Index] &&
 						lv0Entry.childArticles.map((lv1Entry, lv1Index) => (
 							<Fragment key={lv1Index}>
-								<a className="learn-menu__link-lv1" href={`#learn_1_${lv1Index}`}>
+								<a className="learn-menu__link-lv1" href={`#learn_${lv0Index}_${lv1Index}`}>
 									{lv1Entry.title}
 								</a>
 								{lv1Entry.childArticles.map((lv2Entry, lv2Index) => (
-									<a key={lv2Index} className="learn-menu__link-lv2" href={`#learn_2_${lv2Index}`}>
+									<a
+										key={lv2Index}
+										className="learn-menu__link-lv2"
+										href={`#learn_${lv0Index}_${lv1Index}_${lv2Index}`}
+									>
 										{lv2Entry.title}
 									</a>
 								))}
