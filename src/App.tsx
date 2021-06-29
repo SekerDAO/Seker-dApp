@@ -4,7 +4,6 @@ import {AuthContext, useAuth} from "./context/AuthContext"
 import MainLayout from "./layouts/MainLayout"
 import Homepage from "./pages/Homepage"
 import Learn from "./pages/Learn"
-import Galleries from "./pages/Galleries"
 import NFTDetails from "./pages/NFTDetails"
 import Profile from "./pages/Profile"
 import EthersContext, {useEthers} from "./context/EthersContext"
@@ -37,24 +36,6 @@ const AppWithEthers: FunctionComponent = () => {
 						/>
 						<Route
 							exact
-							path="/galleries"
-							render={() => (
-								<MainLayout>
-									<Galleries />
-								</MainLayout>
-							)}
-						/>
-						<Route
-							exact
-							path="/galleries/:category"
-							render={() => (
-								<MainLayout>
-									<Galleries />
-								</MainLayout>
-							)}
-						/>
-						<Route
-							exact
 							path="/nft/:id"
 							render={() => (
 								<MainLayout>
@@ -82,7 +63,16 @@ const AppWithEthers: FunctionComponent = () => {
 						/>
 						<Route
 							exact
-							path="/daos"
+							path="/houses"
+							render={() => (
+								<MainLayout headerBackground={false} headerHeight={160}>
+									<DAOsPage />
+								</MainLayout>
+							)}
+						/>
+						<Route
+							exact
+							path="/galleries"
 							render={() => (
 								<MainLayout headerBackground={false} headerHeight={160}>
 									<DAOsPage />

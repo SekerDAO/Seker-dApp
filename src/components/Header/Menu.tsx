@@ -36,13 +36,10 @@ const HeaderMenu: FunctionComponent = () => {
 							<Link to="/learn">Learn</Link>
 						</li>
 						<li>
-							<Link to="/daos">DAOs</Link>
+							<Link to="/houses">Houses</Link>
 						</li>
 						<li>
 							<Link to="/galleries">Galleries</Link>
-						</li>
-						<li>
-							<Link to="/galleries">Exhibits</Link>
 						</li>
 						<li>
 							{account && connected ? (

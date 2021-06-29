@@ -6,6 +6,13 @@
   justify-content: center;
   overflow: hidden;
 
+  &__link {
+    color: white;
+    font-size: 20px;
+    margin: 20px 50px;
+    text-decoration: underline;
+  }
+
   .header {
     position: absolute;
     top: 0;
@@ -21,10 +28,11 @@
   }
 
   &__title {
-    font-size: 45px;
-    line-height: 1.2;
     color: white;
     margin-left: 50px;
+    font-size: 60px;
+    line-height: 75px;
+    margin-bottom: 20px;
   }
 
   &__buttons {

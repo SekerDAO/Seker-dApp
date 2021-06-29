@@ -3,6 +3,7 @@ import Header from "../../components/Header"
 import Footer from "../../components/Footer"
 import Button from "../../components/Controls/Button"
 import "./styles.scss"
+import {Link} from "react-router-dom"
 
 const HomePage: FunctionComponent = () => {
 	return (
@@ -13,9 +14,16 @@ const HomePage: FunctionComponent = () => {
 				Welcome To <br /> TokenWalk
 			</h1>
 			<div className="home-page__buttons">
-				<Button>House DAOs</Button>
-				<Button buttonType="secondary">About Alpha</Button>
+				<Link to="/houses">
+					<Button>Houses</Button>
+				</Link>
+				<Link to="/galleries">
+					<Button buttonType="secondary">Galleries</Button>
+				</Link>
 			</div>
+			<Link className="home-page__link" to="/learn">
+				About Alpha
+			</Link>
 			<Footer />
 		</div>
 	)

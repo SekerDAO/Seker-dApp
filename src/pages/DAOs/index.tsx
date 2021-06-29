@@ -1,20 +1,20 @@
-import React, {ChangeEvent, FunctionComponent, useState} from "react"
+import React, {FunctionComponent, useState} from "react"
 import useDAOs from "../../customHooks/getters/useDAOs"
-import {DAOSnapshot, DAOType} from "../../types/DAO"
+import {DAOSnapshot} from "../../types/DAO"
 import Loader from "../../components/Loader"
 import ErrorPlaceholder from "../../components/ErrorPlaceholder"
 import Input from "../../components/Controls/Input"
 import SearchIcon from "../../icons/SearchIcon"
-import Select from "../../components/Controls/Select"
 import DAOList from "../../components/DAOList"
 import Button from "../../components/Controls/Button"
 import "./styles.scss"
+import {useLocation} from "react-router-dom"
 
 const DAOsPage: FunctionComponent = () => {
-	const [daoType, setDaoType] = useState<DAOType | "">("")
+	const {pathname} = useLocation()
 	const [cursor, setCursor] = useState<DAOSnapshot | null>(null)
 	const {DAOs, loading, error} = useDAOs({
-		...(daoType ? {type: daoType} : {}),
+		type: pathname.match("houses") ? "house" : "gallery",
 		after: cursor
 	})
 
@@ -25,28 +25,14 @@ const DAOsPage: FunctionComponent = () => {
 		setCursor(DAOs.data[DAOs.data.length - 1].snapshot)
 	}
 
-	const handleFilterChange = (e: ChangeEvent<HTMLSelectElement>) => {
-		setDaoType(e.target.value as "")
-		setCursor(null)
-	}
-
 	return (
 		<div className="daos">
-			<h1>DAOs</h1>
+			<h1>{pathname.match("houses") ? "Houses" : "Galleries"}</h1>
 			<div className="daos__controls">
 				<div className="daos__search">
 					<Input placeholder="Search" borders="bottom" />
 					<SearchIcon />
 				</div>
-				<Select
-					options={[
-						{name: "Type", value: ""},
-						{name: "Gallery", value: "gallery"},
-						{name: "House", value: "house"}
-					]}
-					value={daoType}
-					onChange={handleFilterChange}
-				/>
 			</div>
 			<DAOList
 				DAOs={DAOs.data.map(({snapshot, membersCount}) => {

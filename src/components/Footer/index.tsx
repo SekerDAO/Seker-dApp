@@ -1,13 +1,17 @@
 import React, {FunctionComponent} from "react"
 import "./styles.scss"
 import Logo from "../../icons/Logo"
+import {Link} from "react-router-dom"
 
 const Footer: FunctionComponent = () => {
 	return (
 		<footer className="footer">
 			<div className="footer__wrap">
 				<div className="footer__col">
-					<Logo width={150} height={30} />© TokenWalk 2021
+					<Link to="/">
+						<Logo width={150} height={30} />
+					</Link>
+					© TokenWalk 2021
 				</div>
 				<div className="footer__col">
 					<h3>Resources</h3>
