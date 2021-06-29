@@ -6,7 +6,7 @@
     margin-bottom: 10px;
   }
 
-  input {
+  > input {
     margin-bottom: 20px;
   }
 
@@ -17,5 +17,21 @@
     .btn:first-child {
       margin-right: 10px;
     }
+  }
+
+  &__url-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+
+    input {
+      flex: 1;
+    }
+  }
+
+  &__url-placeholder {
+    padding: 6px;
+    color: white;
+    background-color: black;
   }
 }

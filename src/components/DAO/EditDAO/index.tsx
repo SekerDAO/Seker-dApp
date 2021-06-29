@@ -71,32 +71,41 @@ const EditDAO: FunctionComponent<{
 				id="edit-dao-website"
 			/>
 			<label htmlFor="edit-dao-tw">Twitter URL</label>
-			<Input
-				borders="all"
-				value={twitter}
-				onChange={e => {
-					setTwitter(e.target.value)
-				}}
-				id="edit-dao-tw"
-			/>
+			<div className="edit-dao__url-container">
+				<div className="edit-dao__url-placeholder">twitter.com</div>
+				<Input
+					borders="all"
+					value={twitter}
+					onChange={e => {
+						setTwitter(e.target.value)
+					}}
+					id="edit-dao-tw"
+				/>
+			</div>
 			<label htmlFor="edit-dao-tg">Telegram URL</label>
-			<Input
-				borders="all"
-				value={telegram}
-				onChange={e => {
-					setTelegram(e.target.value)
-				}}
-				id="edit-dao-tg"
-			/>
+			<div className="edit-dao__url-container">
+				<div className="edit-dao__url-placeholder">t.me</div>
+				<Input
+					borders="all"
+					value={telegram}
+					onChange={e => {
+						setTelegram(e.target.value)
+					}}
+					id="edit-dao-tg"
+				/>
+			</div>
 			<label htmlFor="edit-dao-discord">Discord URL</label>
-			<Input
-				borders="all"
-				value={discord}
-				onChange={e => {
-					setDiscord(e.target.value)
-				}}
-				id="edit-dao-discord"
-			/>
+			<div className="edit-dao__url-container">
+				<div className="edit-dao__url-placeholder">discord.gg</div>
+				<Input
+					borders="all"
+					value={discord}
+					onChange={e => {
+						setDiscord(e.target.value)
+					}}
+					id="edit-dao-discord"
+				/>
+			</div>
 			<div className="edit-dao__buttons">
 				<Button disabled={!name || processing} onClick={handleSave}>
 					{processing ? "Saving..." : "Save"}

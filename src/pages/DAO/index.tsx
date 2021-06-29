@@ -73,7 +73,7 @@ const DAOPage: FunctionComponent = () => {
 					)}
 					<div className="dao__socials">
 						{dao.twitter && (
-							<a target="_blank" rel="noopener noreferrer" href={`https://twiter.com/${dao.twitter}`}>
+							<a target="_blank" rel="noopener noreferrer" href={`https://twitter.com/${dao.twitter}`}>
 								<TwitterIcon fill={PURPLE_2} />
 							</a>
 						)}

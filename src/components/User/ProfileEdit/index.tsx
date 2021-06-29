@@ -106,25 +106,31 @@ const ProfileEdit: FunctionComponent<{user: User}> = ({user}) => {
 			<div className="profile-edit__socials">
 				<div className="profile-edit__social">
 					<label htmlFor="profile-edit-tw">Twitter URL</label>
-					<Input
-						id="profile-edit-tw"
-						borders="all"
-						value={twitter}
-						onChange={e => {
-							setTwitter(e.target.value)
-						}}
-					/>
+					<div className="profile-edit__url-container">
+						<div className="profile-edit__url-placeholder">twitter.com</div>
+						<Input
+							id="profile-edit-tw"
+							borders="all"
+							value={twitter}
+							onChange={e => {
+								setTwitter(e.target.value)
+							}}
+						/>
+					</div>
 				</div>
 				<div className="profile-edit__social">
 					<label htmlFor="profile-edit-inst">Instagram URL</label>
-					<Input
-						id="profile-edit-inst"
-						borders="all"
-						value={instagram}
-						onChange={e => {
-							setInstagram(e.target.value)
-						}}
-					/>
+					<div className="profile-edit__url-container">
+						<div className="profile-edit__url-placeholder">instagram.com</div>
+						<Input
+							id="profile-edit-inst"
+							borders="all"
+							value={instagram}
+							onChange={e => {
+								setInstagram(e.target.value)
+							}}
+						/>
+					</div>
 				</div>
 			</div>
 			<Button buttonType="primary" onClick={handleSubmit} disabled={processing}>
