@@ -24,7 +24,7 @@ const addDAO = async (
 		.set({
 			name,
 			type,
-			houseTokenType,
+			...(houseTokenType ? {houseTokenType} : {}),
 			tokenAddress,
 			totalSupply,
 			decisionMakingSpeed,

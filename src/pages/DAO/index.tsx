@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useContext, useState} from "react"
+import React, {FunctionComponent, useContext, useEffect, useState} from "react"
 import {useParams} from "react-router-dom"
 import HorizontalMenu from "../../components/HorizontalMenu"
 import "./styles.scss"
@@ -25,9 +25,14 @@ const menuEntries = ["About", "Members", "Proposals", "Create Proposal", "Collec
 const DAOPage: FunctionComponent = () => {
 	const {account, connected} = useContext(AuthContext)
 	const {address} = useParams<{address: string}>()
-	const [activeMenuIndex, setActiveMenuIndex] = useState(0)
 	const {dao, loading, error} = useDAO(address)
 	const [editOpened, setEditOpened] = useState(false)
+	const [activeMenuIndex, setActiveMenuIndex] = useState(0)
+	useEffect(() => {
+		if (dao?.type === "gallery") {
+			setActiveMenuIndex(4)
+		}
+	}, [dao])
 
 	if (error) return <ErrorPlaceholder />
 	if (!dao || loading) return <Loader />

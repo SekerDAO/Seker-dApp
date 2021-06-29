@@ -4,10 +4,7 @@ import getDAO from "../../api/firebase/DAO/getDAO"
 import getERC20Symbol from "../../api/ethers/functions/ERC20Token/getERC20Symbol"
 import EthersContext from "../../context/EthersContext"
 import {Web3Provider} from "@ethersproject/providers"
-import {
-	getERC20HouseDAOBalance,
-	getERC20HouseDAOFundedProjects
-} from "../../api/ethers/functions/ERC20HouseDAO/getERC20HouseDAO"
+import {getERC20HouseDAOBalance, getERC20HouseDAOFundedProjects} from "../../api/ethers/functions/ERC20DAO/getERC20DAO"
 
 const useDAO = (
 	address: string

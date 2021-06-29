@@ -4,7 +4,7 @@ import RadioButton from "../../Controls/RadioButton"
 import Button from "../../Controls/Button"
 import {AuthContext} from "../../../context/AuthContext"
 import {DAODecisionMakingSpeed, DAOMemberRole, HouseDAOTokenType, Member} from "../../../types/DAO"
-import deployERC20HouseDAO from "../../../api/ethers/functions/ERC20HouseDAO/deployERC20HouseDAO"
+import deployERC20DAO from "../../../api/ethers/functions/ERC20DAO/deployERC20DAO"
 import "./styles.scss"
 import EthersContext from "../../../context/EthersContext"
 import addDAO from "../../../api/firebase/DAO/addDAO"
@@ -45,8 +45,8 @@ const CreateDAO: FunctionComponent<{
 		) {
 			setLoading(true)
 			try {
-				if (DAOType === "house" && tokenType === "ERC20") {
-					const address = await deployERC20HouseDAO(
+				if ((DAOType === "house" && tokenType === "ERC20") || DAOType === "gallery") {
+					const address = await deployERC20DAO(
 						name,
 						members.map(m => m.address),
 						tokenAddress,
@@ -60,8 +60,8 @@ const CreateDAO: FunctionComponent<{
 					await addDAO(
 						{
 							address,
-							type: "house",
-							houseTokenType: "ERC20",
+							type: DAOType,
+							...(DAOType === "house" ? {houseTokenType: "ERC20"} : {}),
 							tokenAddress,
 							name,
 							totalSupply,

@@ -1,7 +1,7 @@
 import {useContext, useEffect, useState} from "react"
 import {Proposal} from "../../types/proposal"
 import getDAOProposals from "../../api/firebase/proposal/getDAOProposals"
-import {getHouseERC20DAOProposal} from "../../api/ethers/functions/ERC20HouseDAO/getERC20HouseDAO"
+import {getHouseERC20DAOProposal} from "../../api/ethers/functions/ERC20DAO/getERC20DAO"
 import {Web3Provider} from "@ethersproject/providers"
 import EthersContext from "../../context/EthersContext"
 import getERC20Balance from "../../api/ethers/functions/ERC20Token/getERC20Balance"

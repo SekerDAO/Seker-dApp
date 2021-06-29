@@ -5,7 +5,7 @@ import {HouseDAORole} from "../../../../types/DAO"
 import {BigNumber} from "@ethersproject/bignumber"
 import {parseEther} from "@ethersproject/units"
 
-export const createERC20HouseDAOFundingProposal = (
+export const createERC20DAOFundingProposal = (
 	daoAddress: string,
 	fundTarget: string,
 	amount: number,
@@ -41,7 +41,7 @@ export const createERC20HouseDAOFundingProposal = (
 		}
 	})
 
-export const createEnterERC20HouseDAOProposal = (
+export const createEnterERC20DAOProposal = (
 	daoAddress: string,
 	provider: Web3Provider,
 	signer: JsonRpcSigner
@@ -77,7 +77,7 @@ export const createEnterERC20HouseDAOProposal = (
 		}
 	})
 
-export const createERC20HouseDAOChangeRoleProposal = (
+export const createERC20DAOChangeRoleProposal = (
 	daoAddress: string,
 	role: HouseDAORole | "kick",
 	fundTarget: string,

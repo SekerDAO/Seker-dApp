@@ -10,16 +10,16 @@ import Select from "../../Controls/Select"
 import {capitalize} from "../../../utlls"
 import Button from "../../Controls/Button"
 import {toastError, toastSuccess} from "../../Toast"
-import voteForERC20HouseDAOProposal from "../../../api/ethers/functions/ERC20HouseDAO/voteForERC20HouseDAOProposal"
+import voteForERC20DAOProposal from "../../../api/ethers/functions/ERC20DAO/voteForERC20DAOProposal"
 import SearchIcon from "../../../icons/SearchIcon"
 import {
 	startERC20HouseDAOFundingGracePeriod,
 	startERC20HouseDAORoleChangeGracePeriod
-} from "../../../api/ethers/functions/ERC20HouseDAO/startERC20HouseDAOProposalsGracePeriod"
+} from "../../../api/ethers/functions/ERC20DAO/startERC20DAOProposalsGracePeriod"
 import {
 	executeERC20HouseDAOFundingProposal,
 	executeERC20HouseDAORoleChange
-} from "../../../api/ethers/functions/ERC20HouseDAO/executeERC20HouseDAOProposals"
+} from "../../../api/ethers/functions/ERC20DAO/executeERC20DAOProposals"
 
 const DAOProposalCard: FunctionComponent<{
 	proposal: Proposal
@@ -33,7 +33,7 @@ const DAOProposalCard: FunctionComponent<{
 		if (!(provider && signer)) return
 		setProcessing(true)
 		try {
-			await voteForERC20HouseDAOProposal(daoAddress, proposal.id!, yes, provider, signer)
+			await voteForERC20DAOProposal(daoAddress, proposal.id!, yes, provider, signer)
 			toastSuccess("Vote successful!")
 		} catch (e) {
 			console.error(e)
