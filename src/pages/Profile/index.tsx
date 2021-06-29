@@ -58,6 +58,23 @@ const Profile: FunctionComponent = () => {
 				<h2>{user.name}</h2>
 				<p>{`${account.slice(0, 3)}...${account.slice(-4)}`}</p>
 				<p>{user.bio}</p>
+				<p>{user.email}</p>
+				{user.website && (
+					<a href={user.website.startsWith("http") ? user.website : `https://${user.website}`}>{user.website}</a>
+				)}
+				<p>{user.location}</p>
+				<div className="profile__socials">
+					{user.twitter && (
+						<a target="_blank" rel="noopener noreferrer" href={`https://twiter.com/${user.twitter}`}>
+							<TwitterIcon fill={PURPLE_2} />
+						</a>
+					)}
+					{user.instagram && (
+						<a target="_blank" rel="noopener noreferrer" href={`https://instagram.com/${user.twitter}`}>
+							<InstagramIcon fill={PURPLE_2} />
+						</a>
+					)}
+				</div>
 				{isOwner && (
 					<div className="profile__edit-menu">
 						<a
@@ -94,18 +111,6 @@ const Profile: FunctionComponent = () => {
 						</a>
 					</div>
 				)}
-				<div className="profile__socials">
-					{user.twitter && (
-						<a target="_blank" rel="noopener noreferrer" href={`https://twiter.com/${user.twitter}`}>
-							<TwitterIcon fill={PURPLE_2} />
-						</a>
-					)}
-					{user.instagram && (
-						<a target="_blank" rel="noopener noreferrer" href={`https://instagram.com/${user.twitter}`}>
-							<InstagramIcon fill={PURPLE_2} />
-						</a>
-					)}
-				</div>
 			</div>
 			<div className="profile__main">
 				{page === "nfts" && (
