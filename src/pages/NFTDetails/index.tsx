@@ -16,27 +16,29 @@ const NFTCard: FunctionComponent = () => {
 	const {name, thumbnail, price, desc} = NFT
 
 	return (
-		<div className="nftcard">
-			<div className="hero">
-				{NFT.media.mimeType.startsWith("video") ? <video src={thumbnail} autoPlay muted /> : <img src={thumbnail} />}
-			</div>
-			<div className="nftdetails">
-				<ul>
-					<li>
-						<h1>{name}</h1>
-					</li>
-					<li>
-						<span>{price}</span>
-					</li>
-					<li>
-						<div className="purchasenft">
-							<Button>Purchase</Button>
-						</div>
-					</li>
-					<li>
-						<span>{desc}</span>
-					</li>
-				</ul>
+		<div className="main__container">
+			<div className="nftcard">
+				<div className="hero">
+					{NFT.media.mimeType.startsWith("video") ? <video src={thumbnail} autoPlay muted /> : <img src={thumbnail} />}
+				</div>
+				<div className="nftdetails">
+					<ul>
+						<li>
+							<h1>{name}</h1>
+						</li>
+						<li>
+							<span>{price}</span>
+						</li>
+						<li>
+							<div className="purchasenft">
+								<Button>Purchase</Button>
+							</div>
+						</li>
+						<li>
+							<span>{desc}</span>
+						</li>
+					</ul>
+				</div>
 			</div>
 		</div>
 	)

@@ -1,7 +1,6 @@
 import React, {FunctionComponent} from "react"
 import {Switch, Route, BrowserRouter} from "react-router-dom"
 import {AuthContext, useAuth} from "./context/AuthContext"
-import MainLayout from "./layouts/MainLayout"
 import Homepage from "./pages/Homepage"
 import Learn from "./pages/Learn"
 import NFTDetails from "./pages/NFTDetails"
@@ -14,6 +13,8 @@ import "react-toastify/dist/ReactToastify.min.css"
 import "./components/Toast/styles.scss"
 import DAOPage from "./pages/DAO"
 import DAOsPage from "./pages/DAOs"
+import Header from "./components/Header"
+import Footer from "./components/Footer"
 
 const AppWithEthers: FunctionComponent = () => {
 	const auth = useAuth()
@@ -21,65 +22,19 @@ const AppWithEthers: FunctionComponent = () => {
 	return (
 		<BrowserRouter>
 			<AuthContext.Provider value={auth}>
-				<div className="App">
+				<div className="main">
+					<Header />
 					<ToastContainer />
 					<Switch>
-						<Route exact path="/" render={() => <Homepage />} />
-						<Route
-							exact
-							path="/learn"
-							render={() => (
-								<MainLayout headerBackground={false} headerHeight={160}>
-									<Learn />
-								</MainLayout>
-							)}
-						/>
-						<Route
-							exact
-							path="/nft/:id"
-							render={() => (
-								<MainLayout>
-									<NFTDetails />
-								</MainLayout>
-							)}
-						/>
-						<Route
-							exact
-							path="/profile/:account"
-							render={() => (
-								<MainLayout>
-									<Profile />
-								</MainLayout>
-							)}
-						/>
-						<Route
-							exact
-							path="/dao/:address"
-							render={() => (
-								<MainLayout>
-									<DAOPage />
-								</MainLayout>
-							)}
-						/>
-						<Route
-							exact
-							path="/houses"
-							render={() => (
-								<MainLayout headerBackground={false} headerHeight={160}>
-									<DAOsPage />
-								</MainLayout>
-							)}
-						/>
-						<Route
-							exact
-							path="/galleries"
-							render={() => (
-								<MainLayout headerBackground={false} headerHeight={160}>
-									<DAOsPage />
-								</MainLayout>
-							)}
-						/>
+						<Route exact path="/" component={Homepage} />
+						<Route exact path="/learn" component={Learn} />
+						<Route exact path="/nft/:id" component={NFTDetails} />
+						<Route exact path="/profile/:account" component={Profile} />
+						<Route exact path="/dao/:address" component={DAOPage} />
+						<Route exact path="/houses" component={DAOsPage} />
+						<Route exact path="/galleries" component={DAOsPage} />
 					</Switch>
+					<Footer />
 				</div>
 			</AuthContext.Provider>
 		</BrowserRouter>

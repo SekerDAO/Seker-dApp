@@ -3,22 +3,14 @@ import "./styles.scss"
 import HeaderMenu from "./Menu"
 import {Link} from "react-router-dom"
 import Logo from "../../icons/Logo"
+import {BLACK} from "../../constants/colors"
 
-const Header: FunctionComponent<{
-	background: boolean
-	height?: number
-}> = ({background, height}) => {
+const Header: FunctionComponent = () => {
 	return (
-		<header
-			className="header"
-			style={{
-				...(background ? {backgroundImage: `url("/assets/Dashboard_Header.png")`} : {}),
-				...(height ? {height: `${height}px`} : {})
-			}}
-		>
+		<header className="header">
 			<div className="header__logo">
 				<Link to="/">
-					<Logo width={200} height={40} />
+					<Logo width={150} height={30} fill={BLACK} />
 				</Link>
 			</div>
 			<HeaderMenu />

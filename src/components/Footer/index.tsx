@@ -9,7 +9,7 @@ const Footer: FunctionComponent = () => {
 			<div className="footer__wrap">
 				<div className="footer__col">
 					<Link to="/">
-						<Logo width={150} height={30} />
+						<Logo width={150} height={30} fill="white" />
 					</Link>
 					© TokenWalk 2021
 				</div>

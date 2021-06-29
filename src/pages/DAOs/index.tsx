@@ -26,28 +26,30 @@ const DAOsPage: FunctionComponent = () => {
 	}
 
 	return (
-		<div className="daos">
-			<h1>{pathname.match("houses") ? "Houses" : "Galleries"}</h1>
-			<div className="daos__controls">
-				<div className="daos__search">
-					<Input placeholder="Search" borders="bottom" />
-					<SearchIcon />
+		<div className="main__container">
+			<div className="daos">
+				<h1>{pathname.match("houses") ? "Houses" : "Galleries"}</h1>
+				<div className="daos__controls">
+					<div className="daos__search">
+						<Input placeholder="Search" borders="bottom" />
+						<SearchIcon />
+					</div>
 				</div>
+				<DAOList
+					DAOs={DAOs.data.map(({snapshot, membersCount}) => {
+						const {name, description, type, houseTokenType} = snapshot.data()
+						return {
+							address: snapshot.id,
+							name,
+							description,
+							type,
+							houseTokenType,
+							membersCount
+						}
+					})}
+				/>
+				{DAOs.data.length < DAOs.totalCount && <Button onClick={handleLoadMore}>Load More</Button>}
 			</div>
-			<DAOList
-				DAOs={DAOs.data.map(({snapshot, membersCount}) => {
-					const {name, description, type, houseTokenType} = snapshot.data()
-					return {
-						address: snapshot.id,
-						name,
-						description,
-						type,
-						houseTokenType,
-						membersCount
-					}
-				})}
-			/>
-			{DAOs.data.length < DAOs.totalCount && <Button onClick={handleLoadMore}>Load More</Button>}
 		</div>
 	)
 }

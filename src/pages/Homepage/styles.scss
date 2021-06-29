@@ -1,10 +1,11 @@
 .home-page {
-  min-height: calc(100vh + 240px);
+  min-height: 100vh;
   display: flex;
   position: relative;
   flex-direction: column;
   justify-content: center;
   overflow: hidden;
+  align-self: stretch;
 
   &__link {
     color: white;
@@ -22,7 +23,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 177.77777778vh; /* 100 * 16 / 9 */
+    width: 180vh; /* 100 * 16 / 9 */
     min-width: 100%;
     z-index: -1;
   }

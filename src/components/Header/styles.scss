@@ -1,9 +1,9 @@
 @import "src/variables";
 
 .header {
-  height: 240px;
+  height: 70px;
   width: 100%;
-  background-color: transparent;
+  background-color: white;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -16,16 +16,6 @@
     margin: 20px 0 0 40px;
     display: flex;
     align-items: center;
-    color: white;
-
-    img {
-      width: 40px;
-      height: 40px;
-    }
-
-    h3 {
-      margin: 0 0 0 5px;
-    }
   }
 
   &__menu {
@@ -37,7 +27,7 @@
       height: 40px;
       border-radius: 50%;
       background-color: $purple2;
-      border: 1px solid white;
+      border: 1px solid black;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -45,7 +35,7 @@
       cursor: pointer;
 
       div {
-        background-color: white;
+        background-color: black;
         width: 20px;
         height: 2px;
         margin: 2px 0;
@@ -57,18 +47,8 @@
       background-color: white;
       top: 45px;
       right: 0;
-
-      &::before {
-        content: "";
-        position: absolute;
-        top: -5px;
-        right: 15px;
-        width: 0;
-        height: 0;
-        border-left: 5px solid transparent;
-        border-right: 5px solid transparent;
-        border-bottom: 5px solid white;
-      }
+      border: 1px solid black;
+      z-index: 2;
     }
 
     ul {
