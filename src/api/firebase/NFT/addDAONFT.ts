@@ -5,7 +5,7 @@ const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 const addDAONFT = async (nft: NFT, address: string): Promise<void> => {
 	const token = await firebase.auth().currentUser?.getIdToken(true)
 	if (!token) {
-		throw new Error("Not authorized in firabase")
+		throw new Error("Not authorized in firebase")
 	}
 	const res = await fetch(`${REACT_APP_CLOUD_FUNCTIONS_URL}/addDaoNft`, {
 		method: "POST",

@@ -38,8 +38,7 @@ const DAOPage: FunctionComponent = () => {
 	if (!dao || loading) return <Loader />
 
 	const isMember = connected && !!dao.members.find(m => m.address === account)
-	// TODO: change DAO owner permissions check
-	const isOwner = dao.owner === account
+	const isOwner = !!dao.members.find(m => ["head", "admin"].includes(m.role) && m.address === account)
 
 	return (
 		<>

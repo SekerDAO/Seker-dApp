@@ -46,7 +46,6 @@ export type DAO = {
 }
 
 export type DAOEnhanced = DAO & {
-	owner: string
 	tokenSymbol: string
 	balance: number
 	fundedProjects: number
