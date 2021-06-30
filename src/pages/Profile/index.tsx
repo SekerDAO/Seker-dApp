@@ -25,22 +25,22 @@ const Profile: FunctionComponent = () => {
 	const {connected, account: userAccount} = useContext(AuthContext)
 	const {push} = useHistory()
 	const {pathname, search} = useLocation()
-	const {account} = useParams<{account: string}>()
-	const {user, loading, error} = useUser(account)
-	const isOwner = connected && account === userAccount
+	const {userId} = useParams<{userId: string}>()
+	const {user, loading, error} = useUser(userId)
+	const isOwner = connected && user?.account === userAccount
 	const page: ProfilePage = (isOwner && (parse(search).page as ProfilePage)) || "nfts"
 
 	if (error) return <ErrorPlaceholder />
 	if (loading || !user) return <Loader />
 
 	const handleUploadProfileImage = async (file: File) => {
-		if (!account) return
-		await updateUserImage(file, account, "profile")
+		if (!user.account) return
+		await updateUserImage(file, user.account, "profile")
 	}
 
 	const handleUploadHeaderImage = async (file: File) => {
-		if (!account) return
-		await updateUserImage(file, account, "header")
+		if (!user.account) return
+		await updateUserImage(file, user.account, "header")
 	}
 
 	return (
@@ -76,7 +76,7 @@ const Profile: FunctionComponent = () => {
 					</div>
 					<div className="profile__info">
 						<h2>{user.name}</h2>
-						<p>{`${account.slice(0, 3)}...${account.slice(-4)}`}</p>
+						<p>{`${user.account.slice(0, 3)}...${user.account.slice(-4)}`}</p>
 						<p>{user.bio}</p>
 						<p>{user.email}</p>
 						{user.website && (
@@ -141,7 +141,7 @@ const Profile: FunctionComponent = () => {
 										<CreateNFTModal />
 									</div>
 								)}
-								<NFTGallery account={account} />
+								<NFTGallery account={user.account} />
 							</>
 						)}
 						{page === "edit" && <ProfileEdit user={user} />}

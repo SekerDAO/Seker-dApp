@@ -10,3 +10,5 @@ export type User = {
 	profileImage?: string
 	headerImage?: string
 }
+
+export type UserWithAccount = User & {account: string}

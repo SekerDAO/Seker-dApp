@@ -4,7 +4,7 @@ import {AuthContext} from "../../context/AuthContext"
 import useClickOutside from "../../customHooks/useClickOutside"
 
 const HeaderMenu: FunctionComponent = () => {
-	const {account, connected, connecting, connectWallet, disconnect} = useContext(AuthContext)
+	const {account, url, connected, connecting, connectWallet, disconnect} = useContext(AuthContext)
 	const [isOpened, setIsOpened] = useState(false)
 	const ref = useRef<HTMLDivElement | null>(null)
 
@@ -29,7 +29,7 @@ const HeaderMenu: FunctionComponent = () => {
 					<ul>
 						{account && connected && (
 							<li>
-								<Link to={`/profile/${account}`}>Profile</Link>
+								<Link to={`/profile/${url ?? account}`}>Profile</Link>
 							</li>
 						)}
 						<li>

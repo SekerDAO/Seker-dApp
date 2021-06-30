@@ -29,7 +29,7 @@ const AppWithEthers: FunctionComponent = () => {
 						<Route exact path="/" component={Homepage} />
 						<Route exact path="/learn" component={Learn} />
 						<Route exact path="/nft/:id" component={NFTDetails} />
-						<Route exact path="/profile/:account" component={Profile} />
+						<Route exact path="/profile/:userId" component={Profile} />
 						<Route exact path="/dao/:address" component={DAOPage} />
 						<Route exact path="/houses" component={DAOsPage} />
 						<Route exact path="/galleries" component={DAOsPage} />

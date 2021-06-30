@@ -1,3 +1,5 @@
+@import "src/variables";
+
 .input {
   &__field {
     font-size: 16px;
@@ -10,5 +12,17 @@
     &--bordered {
       border: 1px solid black;
     }
+
+    &--bad {
+      border-color: $error;
+    }
+  }
+
+  &__validation {
+    position: absolute;
+    bottom: -20px;
+    right: 0;
+    color: $error;
+    font-size: 14px;
   }
 }

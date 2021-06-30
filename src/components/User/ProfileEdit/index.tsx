@@ -6,6 +6,8 @@ import {AuthContext} from "../../../context/AuthContext"
 import editUser from "../../../api/firebase/user/editUser"
 import {toastError, toastSuccess} from "../../Toast"
 import {User} from "../../../types/user"
+import useValidation from "../../../customHooks/useValidation"
+import checkUserUrl from "../../../api/firebase/user/checkUserUrl"
 
 const ProfileEdit: FunctionComponent<{user: User}> = ({user}) => {
 	const [name, setName] = useState(user.name ?? "")
@@ -19,8 +21,17 @@ const ProfileEdit: FunctionComponent<{user: User}> = ({user}) => {
 	const [processing, setProcessing] = useState(false)
 	const {account} = useContext(AuthContext)
 
+	const validateUrl = async (val: string) => {
+		if (!account) {
+			throw new Error("Account not connected")
+		}
+		const res = await checkUserUrl(val, account)
+		return res ? null : "This URL is occupied"
+	}
+	const {validation: urlValidation} = useValidation(url, [validateUrl])
+
 	const handleSubmit = async () => {
-		if (!account) return
+		if (!account || urlValidation) return
 		setProcessing(true)
 		try {
 			await editUser(
@@ -59,6 +70,7 @@ const ProfileEdit: FunctionComponent<{user: User}> = ({user}) => {
 			<div className="profile-edit__url-container">
 				<div className="profile-edit__url-placeholder">tokenwalk.com</div>
 				<Input
+					validation={urlValidation}
 					id="profile-edit-url"
 					borders="all"
 					value={url}
@@ -133,7 +145,7 @@ const ProfileEdit: FunctionComponent<{user: User}> = ({user}) => {
 					</div>
 				</div>
 			</div>
-			<Button buttonType="primary" onClick={handleSubmit} disabled={processing}>
+			<Button buttonType="primary" onClick={handleSubmit} disabled={processing || !!urlValidation}>
 				{processing ? "Saving..." : "Save"}
 			</Button>
 		</div>

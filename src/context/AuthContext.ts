@@ -2,10 +2,12 @@ import {createContext, useContext, useEffect, useState} from "react"
 import decode from "jwt-decode"
 import EthersContext from "./EthersContext"
 import firebase from "firebase"
+import getUser from "../api/firebase/user/getUser"
 const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
 type AuthContext = {
 	account: string | null
+	url: string | null
 	connectWallet: () => void
 	connected: boolean
 	disconnect: () => void
@@ -17,6 +19,14 @@ export const useAuth = (): AuthContext => {
 	const [connected, setConnected] = useState(false)
 	const [connecting, setConnecting] = useState(false)
 	const {provider, signer} = useContext(EthersContext)
+	const [url, setUrl] = useState<string | null>(null)
+	useEffect(() => {
+		if (account) {
+			getUser(account).then(user => {
+				setUrl(user.url ?? null)
+			})
+		}
+	}, [account])
 
 	const init = async () => {
 		const accounts = await provider!.listAccounts()
@@ -92,6 +102,7 @@ export const useAuth = (): AuthContext => {
 
 	return {
 		account,
+		url,
 		connected,
 		connectWallet,
 		disconnect,

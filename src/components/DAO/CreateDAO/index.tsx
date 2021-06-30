@@ -245,6 +245,7 @@ const CreateDAO: FunctionComponent<{
 							{index !== 0 && (
 								<Button
 									buttonType="secondary"
+									extraClassName="mg-left"
 									onClick={() => {
 										handleMemberRoleRemove(index)
 									}}
@@ -252,7 +253,11 @@ const CreateDAO: FunctionComponent<{
 									-
 								</Button>
 							)}
-							<Button buttonType="primary" onClick={handleMemberRoleAdd}>
+							<Button
+								buttonType="primary"
+								extraClassName={index === 0 ? "mg-left" : undefined}
+								onClick={handleMemberRoleAdd}
+							>
 								+
 							</Button>
 						</div>
