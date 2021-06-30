@@ -41,7 +41,8 @@ export type DAO = {
 	twitter?: string
 	telegram?: string
 	discord?: string
-	image?: string
+	profileImage?: string
+	headerImage?: string
 }
 
 export type DAOEnhanced = DAO & {
@@ -59,6 +60,9 @@ export type DAOQueryParams = {
 	after: DAOSnapshot | null
 }
 
-export type DAOListItemProps = Pick<DAO, "address" | "name" | "type" | "houseTokenType" | "description"> & {
+export type DAOListItemProps = Pick<
+	DAO,
+	"address" | "name" | "type" | "houseTokenType" | "description" | "profileImage"
+> & {
 	membersCount: number
 }

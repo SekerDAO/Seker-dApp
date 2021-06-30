@@ -9,11 +9,15 @@ const DAOListItem: FunctionComponent<DAOListItemProps> = ({
 	description,
 	type,
 	houseTokenType,
-	membersCount
+	membersCount,
+	profileImage
 }) => (
 	<Link to={`/dao/${address}`}>
 		<div className="dao-list__item">
-			<div className="dao-list__item-image" style={{backgroundImage: `url("/assets/DAODashboard_Photo.png")`}} />
+			<div
+				className="dao-list__item-image"
+				style={{backgroundImage: `url("${profileImage ?? "/assets/DAODashboard_Photo.png"}")`}}
+			/>
 			<h3>{name}</h3>
 			<p>
 				<b>Type:</b>
@@ -44,6 +48,7 @@ const DAOList: FunctionComponent<{
 				description={dao.description}
 				membersCount={dao.membersCount}
 				houseTokenType={dao.houseTokenType}
+				profileImage={dao.profileImage}
 			/>
 		))}
 	</div>

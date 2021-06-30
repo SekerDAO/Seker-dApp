@@ -33,26 +33,42 @@ const Profile: FunctionComponent = () => {
 	if (error) return <ErrorPlaceholder />
 	if (loading || !user) return <Loader />
 
-	const handleUploadImage = async (file: File) => {
+	const handleUploadProfileImage = async (file: File) => {
 		if (!account) return
-		await updateUserImage(file, account)
+		await updateUserImage(file, account, "profile")
+	}
+
+	const handleUploadHeaderImage = async (file: File) => {
+		if (!account) return
+		await updateUserImage(file, account, "header")
 	}
 
 	return (
 		<>
-			<DashboardHeader />
+			<DashboardHeader background={user.headerImage}>
+				{isOwner && (
+					<UploadImageModal
+						titleText="Edit Header Image"
+						buttonName="Edit Header"
+						onUpload={handleUploadHeaderImage}
+						initialUrl={user.headerImage}
+						successToastText="Header image successfully updated!"
+						errorToastText="Failed to update header image"
+					/>
+				)}
+			</DashboardHeader>
 			<div className="main__container">
 				<div className="profile">
 					<div
 						className="profile__photo"
-						style={{backgroundImage: `url("${user.image ?? "/assets/PersonalDashboard_Photo.png"}")`}}
+						style={{backgroundImage: `url("${user.profileImage ?? "/assets/PersonalDashboard_Photo.png"}")`}}
 					>
 						{isOwner && (
 							<UploadImageModal
 								titleText="Edit Profile Image"
 								buttonName="Edit Image"
-								onUpload={handleUploadImage}
-								initialUrl={user.image}
+								onUpload={handleUploadProfileImage}
+								initialUrl={user.profileImage}
 								successToastText="Image successfully updated!"
 								errorToastText="Failed to update image"
 							/>

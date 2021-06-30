@@ -43,21 +43,34 @@ const DAOPage: FunctionComponent = () => {
 
 	return (
 		<>
-			<DashboardHeader />
+			<DashboardHeader background={dao.headerImage}>
+				{isOwner && (
+					<UploadImageModal
+						initialUrl={dao.headerImage}
+						buttonName="Edit Header"
+						titleText="Edit DAO Header"
+						onUpload={async file => {
+							await updateDAOImage(file, dao!.address, "header")
+						}}
+						successToastText="DAO header successfully updated"
+						errorToastText="Failed to update DAO header"
+					/>
+				)}
+			</DashboardHeader>
 			<div className="main__container">
 				<div className="dao">
 					<div className="dao__left-section">
 						<div
 							className="dao__photo"
-							style={{backgroundImage: `url(${dao.image ?? "/assets/DAODashboard_Photo.png"})`}}
+							style={{backgroundImage: `url(${dao.profileImage ?? "/assets/DAODashboard_Photo.png"})`}}
 						>
 							{isOwner && (
 								<UploadImageModal
-									initialUrl={dao.image}
+									initialUrl={dao.profileImage}
 									buttonName="Edit Image"
 									titleText="Edit DAO Image"
 									onUpload={async file => {
-										await updateDAOImage(file, dao!.address)
+										await updateDAOImage(file, dao!.address, "profile")
 									}}
 									successToastText="DAO image successfully updated"
 									errorToastText="Failed to update DAO image"

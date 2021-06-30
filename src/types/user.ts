@@ -7,5 +7,6 @@ export type User = {
 	website?: string
 	twitter?: string
 	instagram?: string
-	image?: string
+	profileImage?: string
+	headerImage?: string
 }
