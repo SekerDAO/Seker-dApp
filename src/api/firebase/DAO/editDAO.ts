@@ -37,7 +37,7 @@ const editDAO = async ({
 		})
 	})
 	if (res.status !== 200) {
-		throw new Error("Failed to add NFT")
+		throw new Error("Failed to edit DAO")
 	}
 }
 
