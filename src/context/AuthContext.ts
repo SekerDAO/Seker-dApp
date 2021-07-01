@@ -55,7 +55,9 @@ export const useAuth = (): AuthContext => {
 				setAccount(metamaskAccounts[0])
 				currentAccount = metamaskAccounts[0]
 			}
-			const signature = await signer.signMessage(JSON.stringify({account: currentAccount, token: "tokenwalk"}))
+			const signature = await signer.signMessage(
+				JSON.stringify({account: currentAccount, token: "tokenwalk"})
+			)
 			const res = await fetch(`${REACT_APP_CLOUD_FUNCTIONS_URL}/auth`, {
 				method: "POST",
 				headers: {

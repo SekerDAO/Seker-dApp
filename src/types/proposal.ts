@@ -6,12 +6,28 @@ type DAOState = "active" | "canceled" | "executed" | "passed" | "failed" | "queu
 
 export type ProposalFirebaseData = Pick<
 	Proposal,
-	"id" | "type" | "daoAddress" | "userAddress" | "title" | "description" | "amount" | "recipientAddress" | "newRole"
+	| "id"
+	| "type"
+	| "daoAddress"
+	| "userAddress"
+	| "title"
+	| "description"
+	| "amount"
+	| "recipientAddress"
+	| "newRole"
 >
 
 export type ProposalEtherData = Pick<
 	Proposal,
-	"id" | "type" | "userAddress" | "state" | "amount" | "yesVotes" | "noVotes" | "deadline" | "gracePeriod"
+	| "id"
+	| "type"
+	| "userAddress"
+	| "state"
+	| "amount"
+	| "yesVotes"
+	| "noVotes"
+	| "deadline"
+	| "gracePeriod"
 >
 
 export type Proposal = {

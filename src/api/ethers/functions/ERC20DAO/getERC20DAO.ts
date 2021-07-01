@@ -5,21 +5,30 @@ import HouseTokenDAO from "../../abis/HouseTokenDAO.json"
 import {ProposalEtherData} from "../../../../types/proposal"
 import {formatEther} from "@ethersproject/units"
 
-export const getERC20HouseDAOBalance = async (daoAddress: string, provider: Web3Provider): Promise<number> => {
+export const getERC20HouseDAOBalance = async (
+	daoAddress: string,
+	provider: Web3Provider
+): Promise<number> => {
 	const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
 	const balance = await daoContract.balance()
 	return Number(formatEther(balance))
 }
 
 // todo: getHouseERC721Balance + getGalleryBalance
-export const getERC20HouseDAOFundedProjects = async (daoAddress: string, provider: Web3Provider): Promise<number> => {
+export const getERC20HouseDAOFundedProjects = async (
+	daoAddress: string,
+	provider: Web3Provider
+): Promise<number> => {
 	const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
 	const projects = await daoContract.fundedProjects()
 	return Number(formatEther(projects))
 }
 
 // todo: getHouseERC721FundedProjects
-export const getERC20HouseDAOMemberCount = async (daoAddress: string, provider: Web3Provider): Promise<number> => {
+export const getERC20HouseDAOMemberCount = async (
+	daoAddress: string,
+	provider: Web3Provider
+): Promise<number> => {
 	const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
 	return daoContract.memberCount()
 }
@@ -41,7 +50,12 @@ export const getHouseERC20DAOProposal = async (
 
 	return {
 		id: proposalId,
-		type: data.proposalType === 0 ? "requestFunding" : data.proposalType === 1 ? "changeRole" : "joinHouse",
+		type:
+			data.proposalType === 0
+				? "requestFunding"
+				: data.proposalType === 1
+				? "changeRole"
+				: "joinHouse",
 		userAddress: data.proposer,
 		state: data.executed
 			? "executed"

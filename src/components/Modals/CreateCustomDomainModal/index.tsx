@@ -88,7 +88,11 @@ const CreateCustomDomainModal: FunctionComponent = () => {
 									setSymbol(e.target.value)
 								}}
 							/>
-							<Button disabled={!(name && symbol) || loading} buttonType="primary" onClick={handleSubmit}>
+							<Button
+								disabled={!(name && symbol) || loading}
+								buttonType="primary"
+								onClick={handleSubmit}
+							>
 								{loading ? "Processing..." : "Submit"}
 							</Button>
 						</>

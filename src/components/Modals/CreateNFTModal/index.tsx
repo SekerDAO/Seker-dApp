@@ -20,7 +20,12 @@ import {NFT} from "../../../types/NFT"
 import addDAONFT from "../../../api/firebase/NFT/addDAONFT"
 const {REACT_APP_DOMAIN_ADDRESS} = process.env
 
-type CreateNFTModalStage = "chooseOption" | "chooseDomain" | "uploadFile" | "loadExisting" | "success"
+type CreateNFTModalStage =
+	| "chooseOption"
+	| "chooseDomain"
+	| "uploadFile"
+	| "loadExisting"
+	| "success"
 
 const CreateNFTModal: FunctionComponent<{
 	daoAddress?: string
@@ -63,11 +68,30 @@ const CreateNFTModal: FunctionComponent<{
 		} else if (stage === "chooseDomain") {
 			if (customDomain && !customDomainAddress) return
 			setStage("uploadFile")
-		} else if (stage === "uploadFile" && file && title && numberOfEditions && signer && provider && account) {
+		} else if (
+			stage === "uploadFile" &&
+			file &&
+			title &&
+			numberOfEditions &&
+			signer &&
+			provider &&
+			account
+		) {
 			setLoading(true)
 			try {
-				const [metadata, hashes] = await uploadMedia(file, title, description, Number(numberOfEditions))
-				const id = await createNFT(hashes, Number(numberOfEditions), signer, provider, customDomainAddress || undefined)
+				const [metadata, hashes] = await uploadMedia(
+					file,
+					title,
+					description,
+					Number(numberOfEditions)
+				)
+				const id = await createNFT(
+					hashes,
+					Number(numberOfEditions),
+					signer,
+					provider,
+					customDomainAddress || undefined
+				)
 				const nft: NFT = {
 					id,
 					address: customDomain ? customDomainAddress : REACT_APP_DOMAIN_ADDRESS!,
@@ -91,7 +115,13 @@ const CreateNFTModal: FunctionComponent<{
 				toastError("Failed to create NFT")
 			}
 			setLoading(false)
-		} else if (stage === "loadExisting" && !isNaN(Number(existingNFTId)) && tokenAddress && account && provider) {
+		} else if (
+			stage === "loadExisting" &&
+			!isNaN(Number(existingNFTId)) &&
+			tokenAddress &&
+			account &&
+			provider
+		) {
 			setLoading(true)
 			try {
 				const isOwner = await checkNFTOwner(account, tokenAddress, existingNFTId, provider)
@@ -282,8 +312,16 @@ const CreateNFTModal: FunctionComponent<{
 							</p>
 						</>
 					) : (
-						<Button buttonType="primary" onClick={handleSubmit} disabled={submitButtonDisabled || loading}>
-							{stage === "uploadFile" || stage === "loadExisting" ? (loading ? "Processing..." : "Submit") : "Continue"}
+						<Button
+							buttonType="primary"
+							onClick={handleSubmit}
+							disabled={submitButtonDisabled || loading}
+						>
+							{stage === "uploadFile" || stage === "loadExisting"
+								? loading
+									? "Processing..."
+									: "Submit"
+								: "Continue"}
 						</Button>
 					)}
 				</div>

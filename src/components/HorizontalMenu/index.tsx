@@ -13,7 +13,9 @@ const HorizontalMenu: FunctionComponent<{
 				onClick={() => {
 					onChange(index)
 				}}
-				className={`horizontal-menu__item${index === activeIndex ? " horizontal-menu__item--active" : ""}`}
+				className={`horizontal-menu__item${
+					index === activeIndex ? " horizontal-menu__item--active" : ""
+				}`}
 			>
 				{entry}
 			</div>

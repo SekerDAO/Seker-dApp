@@ -10,7 +10,10 @@ const editDAO = async ({
 	twitter,
 	telegram,
 	discord
-}: Pick<DAO, "address" | "name" | "description" | "website" | "twitter" | "telegram" | "discord">): Promise<void> => {
+}: Pick<
+	DAO,
+	"address" | "name" | "description" | "website" | "twitter" | "telegram" | "discord"
+>): Promise<void> => {
 	const token = await firebase.auth().currentUser?.getIdToken(true)
 	if (!token) {
 		throw new Error("Not authorized in firebase")

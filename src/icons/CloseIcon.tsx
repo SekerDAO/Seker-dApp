@@ -11,7 +11,14 @@ const CloseIcon: FunctionComponent = () => (
 			height="16.97"
 			transform="translate(-108.26 32.19) rotate(-45)"
 		/>
-		<rect fill="white" x="90.83" y="73.8" width="16.97" height="2.4" transform="translate(-108.26 32.19) rotate(-45)" />
+		<rect
+			fill="white"
+			x="90.83"
+			y="73.8"
+			width="16.97"
+			height="2.4"
+			transform="translate(-108.26 32.19) rotate(-45)"
+		/>
 	</svg>
 )
 

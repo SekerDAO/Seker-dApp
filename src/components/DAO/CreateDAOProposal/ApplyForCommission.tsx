@@ -69,7 +69,13 @@ const ApplyForCommission: FunctionComponent<{
 				value={description}
 			/>
 			<label htmlFor="apply-commission-amount">Requested Amount</label>
-			<Input borders="all" id="apply-commission-amount" onChange={handleAmountChange} value={amount} number />
+			<Input
+				borders="all"
+				id="apply-commission-amount"
+				onChange={handleAmountChange}
+				value={amount}
+				number
+			/>
 			<label htmlFor="apply-commission-recipient">Recipient</label>
 			<Input
 				borders="all"
@@ -81,8 +87,9 @@ const ApplyForCommission: FunctionComponent<{
 			/>
 			<div className="create-dao-proposal__separator" />
 			<p className="create-dao-proposal__note">
-				<b>Note:</b> This proposal will not be directly voted on by members but instead act as an informative post to
-				the community. If it gains interest, a member of the house can choose to initiate a funding proposal.
+				<b>Note:</b> This proposal will not be directly voted on by members but instead act as an
+				informative post to the community. If it gains interest, a member of the house can choose to
+				initiate a funding proposal.
 			</p>
 			<Button onClick={handleSubmit} disabled={loading || !(title && amount && recipient)}>
 				{loading ? "Processing..." : "Create Proposal"}

@@ -13,7 +13,9 @@ const CreateDAOProposal: FunctionComponent<{
 	daoAddress: string
 }> = ({isMember, daoAddress}) => {
 	const {connected} = useContext(AuthContext)
-	const [type, setType] = useState<DAOProposalType>(isMember ? "requestFunding" : "applyForCommission")
+	const [type, setType] = useState<DAOProposalType>(
+		isMember ? "requestFunding" : "applyForCommission"
+	)
 
 	if (!connected) return <div>TODO: Please connect wallet</div>
 

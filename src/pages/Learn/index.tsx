@@ -26,7 +26,9 @@ const Learn: FunctionComponent = () => {
 							))}
 							{lv1Article.childArticles.map((lv2Article, lv2Index) => (
 								<Fragment key={lv2Index}>
-									<h3 id={`learn_${activeArticleIndex}_${lv1Index}_${lv2Index}`}>{lv2Article.title}</h3>
+									<h3 id={`learn_${activeArticleIndex}_${lv1Index}_${lv2Index}`}>
+										{lv2Article.title}
+									</h3>
 									{lv2Article.articles.map((article, idx) => (
 										<p key={idx}>{article}</p>
 									))}

@@ -17,7 +17,9 @@ const columns = [
 		name: "DAO Name",
 		rowClassName: "purple",
 		// eslint-disable-next-line react/display-name
-		render: (dao: {name: string; address: string}) => <Link to={`/dao/${dao.address}`}>{dao.name}</Link>
+		render: (dao: {name: string; address: string}) => (
+			<Link to={`/dao/${dao.address}`}>{dao.name}</Link>
+		)
 	},
 	{
 		id: "type",

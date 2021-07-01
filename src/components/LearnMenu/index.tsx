@@ -5,7 +5,9 @@ import "./styles.scss"
 const LearnMenu: FunctionComponent<{
 	entries: Learn
 }> = ({entries}) => {
-	const [expandedEntries, setExpandedEntries] = useState<boolean[]>(new Array(entries.length).fill(false))
+	const [expandedEntries, setExpandedEntries] = useState<boolean[]>(
+		new Array(entries.length).fill(false)
+	)
 
 	const toggleEntryExpand = (index: number) => {
 		setExpandedEntries(prevState => prevState.map((entry, idx) => (idx === index ? !entry : entry)))
@@ -21,7 +23,9 @@ const LearnMenu: FunctionComponent<{
 							onClick={() => {
 								toggleEntryExpand(lv0Index)
 							}}
-							className={`learn-menu__expand${expandedEntries[lv0Index] ? " learn-menu__expand--expanded" : ""}`}
+							className={`learn-menu__expand${
+								expandedEntries[lv0Index] ? " learn-menu__expand--expanded" : ""
+							}`}
 						/>
 					</div>
 					{expandedEntries[lv0Index] &&

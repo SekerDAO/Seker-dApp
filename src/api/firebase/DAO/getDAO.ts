@@ -6,7 +6,11 @@ const getDAO = async (address: string): Promise<DAO> => {
 	if (!snapshot.exists) {
 		throw new Error("DAO not found")
 	}
-	const daoMembers = await firebase.firestore().collection("daoUsers").where("dao", "==", address).get()
+	const daoMembers = await firebase
+		.firestore()
+		.collection("daoUsers")
+		.where("dao", "==", address)
+		.get()
 	return {
 		...snapshot.data(),
 		address,

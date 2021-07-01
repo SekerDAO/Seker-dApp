@@ -1,7 +1,11 @@
 import firebase from "firebase"
 const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
-const updateDAOImage = async (file: File, address: string, imageType: "profile" | "header"): Promise<void> => {
+const updateDAOImage = async (
+	file: File,
+	address: string,
+	imageType: "profile" | "header"
+): Promise<void> => {
 	const token = await firebase.auth().currentUser?.getIdToken(true)
 	if (!token) {
 		throw new Error("Not authorized in firebase")

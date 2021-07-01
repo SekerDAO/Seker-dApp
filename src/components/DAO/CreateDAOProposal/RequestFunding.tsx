@@ -30,7 +30,13 @@ const RequestFunding: FunctionComponent<{
 		if (!(provider && signer && account && amount && recipient)) return
 		setLoading(true)
 		try {
-			const proposalId = await createERC20DAOFundingProposal(daoAddress, recipient, Number(amount), provider, signer)
+			const proposalId = await createERC20DAOFundingProposal(
+				daoAddress,
+				recipient,
+				Number(amount),
+				provider,
+				signer
+			)
 			await addProposal({
 				id: proposalId,
 				type: "requestFunding",
@@ -74,7 +80,13 @@ const RequestFunding: FunctionComponent<{
 				value={description}
 			/>
 			<label htmlFor="request-funding-amount">Requested Amount</label>
-			<Input borders="all" id="request-funding-amount" onChange={handleAmountChange} value={amount} number />
+			<Input
+				borders="all"
+				id="request-funding-amount"
+				onChange={handleAmountChange}
+				value={amount}
+				number
+			/>
 			<label htmlFor="request-funding-recipient">Recipient</label>
 			<Input
 				borders="all"

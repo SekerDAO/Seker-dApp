@@ -24,7 +24,13 @@ const ChangeRole: FunctionComponent<{
 		if (!(provider && signer && account && address && newRole)) return
 		setLoading(true)
 		try {
-			const proposalId = await createERC20DAOChangeRoleProposal(daoAddress, newRole, address, provider, signer)
+			const proposalId = await createERC20DAOChangeRoleProposal(
+				daoAddress,
+				newRole,
+				address,
+				provider,
+				signer
+			)
 			await addProposal({
 				id: proposalId,
 				type: "changeRole",

@@ -19,7 +19,11 @@ const NFTCard: FunctionComponent = () => {
 		<div className="main__container">
 			<div className="nftcard">
 				<div className="hero">
-					{NFT.media.mimeType.startsWith("video") ? <video src={thumbnail} autoPlay muted /> : <img src={thumbnail} />}
+					{NFT.media.mimeType.startsWith("video") ? (
+						<video src={thumbnail} autoPlay muted />
+					) : (
+						<img src={thumbnail} />
+					)}
 				</div>
 				<div className="nftdetails">
 					<ul>

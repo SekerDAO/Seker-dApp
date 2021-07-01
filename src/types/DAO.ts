@@ -51,7 +51,9 @@ export type DAOEnhanced = DAO & {
 	fundedProjects: number
 }
 
-export type DAOSnapshot = firebase.firestore.QueryDocumentSnapshot<Omit<DAO, "members"> & {membersCount: number}>
+export type DAOSnapshot = firebase.firestore.QueryDocumentSnapshot<
+	Omit<DAO, "members"> & {membersCount: number}
+>
 
 export type DAOQueryParams = {
 	type?: DAOType

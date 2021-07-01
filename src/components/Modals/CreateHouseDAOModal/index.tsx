@@ -22,7 +22,11 @@ const CreateHouseDAOModalContent: FunctionComponent = () => {
 	const [name, setName] = useState("")
 	const [totalSupply, setTotalSupply] = useState("")
 	const {account} = useContext(AuthContext)
-	const {NFTs, loading: NFTsLoading, error: NFTsError} = useNFTs({user: account!, limit: 0, after: null})
+	const {
+		NFTs,
+		loading: NFTsLoading,
+		error: NFTsError
+	} = useNFTs({user: account!, limit: 0, after: null})
 	const {tokens, loading: tokensLoading, error: tokensError} = useMyERC20Tokens()
 
 	const handleTokenChange = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -57,7 +61,12 @@ const CreateHouseDAOModalContent: FunctionComponent = () => {
 		}
 	}
 
-	const handleERC20Create = (newName: string, symbol: string, address: string, newTotalSupply: number) => {
+	const handleERC20Create = (
+		newName: string,
+		symbol: string,
+		address: string,
+		newTotalSupply: number
+	) => {
 		setName(newName)
 		setToken(address)
 		setTotalSupply(String(newTotalSupply))
@@ -114,10 +123,12 @@ const CreateHouseDAOModalContent: FunctionComponent = () => {
 									value: ""
 								}
 							].concat(
-								(tokenType === "NFT" ? NFTs.data.map(nft => nft.data()) : tokens).map((tkn: ERC20Token | NFT) => ({
-									name: tkn.name,
-									value: tkn.address
-								}))
+								(tokenType === "NFT" ? NFTs.data.map(nft => nft.data()) : tokens).map(
+									(tkn: ERC20Token | NFT) => ({
+										name: tkn.name,
+										value: tkn.address
+									})
+								)
 							)}
 							disabled={
 								tokenSource !== "existing" ||

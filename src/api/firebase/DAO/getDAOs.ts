@@ -26,7 +26,11 @@ const getDAOs = async (
 	const snapshot = await ref.get()
 	const data = await Promise.all(
 		snapshot.docs.map(async s => {
-			const usersSnapshot = await firebase.firestore().collection("daoUsers").where("dao", "==", s.id).get()
+			const usersSnapshot = await firebase
+				.firestore()
+				.collection("daoUsers")
+				.where("dao", "==", s.id)
+				.get()
 			return {
 				snapshot: s as DAOSnapshot,
 				membersCount: usersSnapshot.size

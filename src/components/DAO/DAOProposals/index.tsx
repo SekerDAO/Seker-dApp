@@ -125,7 +125,9 @@ const DAOProposalCard: FunctionComponent<{
 								className="dao-proposals__voting-bar-inner"
 								style={{
 									width:
-										proposal.noVotes === 0 ? "100%" : `${Math.round((proposal.yesVotes * 100) / proposal.noVotes)}%`
+										proposal.noVotes === 0
+											? "100%"
+											: `${Math.round((proposal.yesVotes * 100) / proposal.noVotes)}%`
 								}}
 							/>
 						</div>
@@ -189,7 +191,12 @@ const DAOProposals: FunctionComponent<{
 				<Select options={[{name: "Sort By", value: ""}]} />
 			</div>
 			{proposals.map((proposal, index) => (
-				<DAOProposalCard daoAddress={daoAddress} proposal={proposal} key={index} isMember={isMember} />
+				<DAOProposalCard
+					daoAddress={daoAddress}
+					proposal={proposal}
+					key={index}
+					isMember={isMember}
+				/>
 			))}
 		</div>
 	)

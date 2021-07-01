@@ -61,7 +61,11 @@ const Profile: FunctionComponent = () => {
 				<div className="profile">
 					<div
 						className="profile__photo"
-						style={{backgroundImage: `url("${user.profileImage ?? "/assets/PersonalDashboard_Photo.png"}")`}}
+						style={{
+							backgroundImage: `url("${
+								user.profileImage ?? "/assets/PersonalDashboard_Photo.png"
+							}")`
+						}}
 					>
 						{isOwner && (
 							<UploadImageModal
@@ -80,17 +84,27 @@ const Profile: FunctionComponent = () => {
 						<p>{user.bio}</p>
 						<p>{user.email}</p>
 						{user.website && (
-							<a href={user.website.startsWith("http") ? user.website : `https://${user.website}`}>{user.website}</a>
+							<a href={user.website.startsWith("http") ? user.website : `https://${user.website}`}>
+								{user.website}
+							</a>
 						)}
 						<p>{user.location}</p>
 						<div className="profile__socials">
 							{user.twitter && (
-								<a target="_blank" rel="noopener noreferrer" href={`https://twiter.com/${user.twitter}`}>
+								<a
+									target="_blank"
+									rel="noopener noreferrer"
+									href={`https://twiter.com/${user.twitter}`}
+								>
 									<TwitterIcon fill={PURPLE_2} />
 								</a>
 							)}
 							{user.instagram && (
-								<a target="_blank" rel="noopener noreferrer" href={`https://instagram.com/${user.twitter}`}>
+								<a
+									target="_blank"
+									rel="noopener noreferrer"
+									href={`https://instagram.com/${user.twitter}`}
+								>
 									<InstagramIcon fill={PURPLE_2} />
 								</a>
 							)}

@@ -25,11 +25,12 @@ const MediaUpload: FunctionComponent<{
 	}
 
 	const uploadRef = useRef<HTMLLabelElement | null>(null)
-	const {handleFileUpload, handleDragOver, handleDrop, handleDragLeave, handleDragEnter} = useFileDrop({
-		uploadRef,
-		onUpload: _onUpload,
-		acceptedMimeTypes: imageTypes
-	})
+	const {handleFileUpload, handleDragOver, handleDrop, handleDragLeave, handleDragEnter} =
+		useFileDrop({
+			uploadRef,
+			onUpload: _onUpload,
+			acceptedMimeTypes: imageTypes
+		})
 
 	return (
 		<label
@@ -40,11 +41,18 @@ const MediaUpload: FunctionComponent<{
 			onDragLeave={handleDragLeave}
 			onDrop={handleDrop}
 		>
-			<input type="file" accept={imageTypes.concat(videoTypes).join(",")} onChange={handleFileUpload} />
+			<input
+				type="file"
+				accept={imageTypes.concat(videoTypes).join(",")}
+				onChange={handleFileUpload}
+			/>
 			<Button buttonType="secondary">
 				<label>Upload File</label>
 			</Button>
-			<div className="image-upload__preview" style={imageUrl ? {backgroundImage: `url("${imageUrl}")`} : undefined}>
+			<div
+				className="image-upload__preview"
+				style={imageUrl ? {backgroundImage: `url("${imageUrl}")`} : undefined}
+			>
 				{isVideo && "TODO: video icon"}
 			</div>
 		</label>

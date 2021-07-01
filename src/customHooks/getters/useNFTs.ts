@@ -15,7 +15,10 @@ const useNFTs = ({
 	loading: boolean
 	error: boolean
 } => {
-	const [NFTs, setNFTs] = useState<{totalCount: number; data: NFTSnapshot[]}>({totalCount: 0, data: []})
+	const [NFTs, setNFTs] = useState<{totalCount: number; data: NFTSnapshot[]}>({
+		totalCount: 0,
+		data: []
+	})
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
 

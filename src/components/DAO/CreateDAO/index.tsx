@@ -95,7 +95,9 @@ const CreateDAO: FunctionComponent<{
 	}
 
 	const handleMemberAddressChange = (address: string, index: number) => {
-		setMembers(prevState => prevState.map((item, idx) => (idx === index ? {...item, address} : item)))
+		setMembers(prevState =>
+			prevState.map((item, idx) => (idx === index ? {...item, address} : item))
+		)
 	}
 
 	const handleMemberRoleChange = (role: DAOMemberRole, index: number) => {
@@ -279,7 +281,13 @@ const CreateDAO: FunctionComponent<{
 					<label className="no-margin">Minimum Proposal Amount</label>
 				</div>
 				<div className="create-dao__col">
-					<Input borders="all" value={minProposalAmount} onChange={handleMinProposalChange} number min={0} />
+					<Input
+						borders="all"
+						value={minProposalAmount}
+						onChange={handleMinProposalChange}
+						number
+						min={0}
+					/>
 				</div>
 			</div>
 			<div className="create-dao__row">
@@ -287,7 +295,13 @@ const CreateDAO: FunctionComponent<{
 					<label className="no-margin">Voting Threshold</label>
 				</div>
 				<div className="create-dao__col">
-					<Input borders="all" value={votingThreshold} onChange={handleVotingThresholdChange} number min={0} />
+					<Input
+						borders="all"
+						value={votingThreshold}
+						onChange={handleVotingThresholdChange}
+						number
+						min={0}
+					/>
 				</div>
 			</div>
 			<div className="create-dao__row">
@@ -329,7 +343,11 @@ const CreateDAO: FunctionComponent<{
 					</div>
 				</div>
 			</div>
-			<Button buttonType="primary" onClick={handleSubmit} disabled={submitButtonDisabled || loading}>
+			<Button
+				buttonType="primary"
+				onClick={handleSubmit}
+				disabled={submitButtonDisabled || loading}
+			>
 				{loading ? "Processing..." : "Submit"}
 			</Button>
 		</>

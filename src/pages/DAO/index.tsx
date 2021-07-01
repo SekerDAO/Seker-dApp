@@ -38,7 +38,9 @@ const DAOPage: FunctionComponent = () => {
 	if (!dao || loading) return <Loader />
 
 	const isMember = connected && !!dao.members.find(m => m.address === account)
-	const isOwner = !!dao.members.find(m => ["head", "admin"].includes(m.role) && m.address === account)
+	const isOwner = !!dao.members.find(
+		m => ["head", "admin"].includes(m.role) && m.address === account
+	)
 
 	return (
 		<>
@@ -61,7 +63,9 @@ const DAOPage: FunctionComponent = () => {
 					<div className="dao__left-section">
 						<div
 							className="dao__photo"
-							style={{backgroundImage: `url(${dao.profileImage ?? "/assets/DAODashboard_Photo.png"})`}}
+							style={{
+								backgroundImage: `url(${dao.profileImage ?? "/assets/DAODashboard_Photo.png"})`
+							}}
 						>
 							{isOwner && (
 								<UploadImageModal
@@ -97,17 +101,29 @@ const DAOPage: FunctionComponent = () => {
 							)}
 							<div className="dao__socials">
 								{dao.twitter && (
-									<a target="_blank" rel="noopener noreferrer" href={`https://twitter.com/${dao.twitter}`}>
+									<a
+										target="_blank"
+										rel="noopener noreferrer"
+										href={`https://twitter.com/${dao.twitter}`}
+									>
 										<TwitterIcon fill={PURPLE_2} />
 									</a>
 								)}
 								{dao.telegram && (
-									<a target="_blank" rel="noopener noreferrer" href={`https://t.me/${dao.telegram}`}>
+									<a
+										target="_blank"
+										rel="noopener noreferrer"
+										href={`https://t.me/${dao.telegram}`}
+									>
 										<TelegramIcon fill={PURPLE_2} />
 									</a>
 								)}
 								{dao.discord && (
-									<a target="_blank" rel="noopener noreferrer" href={`https://discord.gg/${dao.discord}`}>
+									<a
+										target="_blank"
+										rel="noopener noreferrer"
+										href={`https://discord.gg/${dao.discord}`}
+									>
 										<DiscordIcon fill={PURPLE_2} />
 									</a>
 								)}
@@ -132,8 +148,12 @@ const DAOPage: FunctionComponent = () => {
 									}}
 								/>
 								{activeMenuIndex === 0 && <AboutDAO dao={dao} />}
-								{activeMenuIndex === 2 && <DAOProposals daoAddress={dao.address} isMember={isMember} />}
-								{activeMenuIndex === 3 && <CreateDAOProposal isMember={isMember} daoAddress={dao.address} />}
+								{activeMenuIndex === 2 && (
+									<DAOProposals daoAddress={dao.address} isMember={isMember} />
+								)}
+								{activeMenuIndex === 3 && (
+									<CreateDAOProposal isMember={isMember} daoAddress={dao.address} />
+								)}
 								{activeMenuIndex === 4 && <DAOCollection daoAddress={dao.address} />}
 							</>
 						)}

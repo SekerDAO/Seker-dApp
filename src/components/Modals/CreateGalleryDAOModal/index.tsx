@@ -42,7 +42,12 @@ const CreateGalleryDAOModalContent: FunctionComponent = () => {
 		}
 	}
 
-	const handleERC20Create = (newName: string, symbol: string, address: string, newTotalSupply: number) => {
+	const handleERC20Create = (
+		newName: string,
+		symbol: string,
+		address: string,
+		newTotalSupply: number
+	) => {
 		setName(newName)
 		setToken(address)
 		setTotalSupply(String(newTotalSupply))

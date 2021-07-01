@@ -2,7 +2,11 @@ import {User, UserWithAccount} from "../../../types/user"
 import firebase from "firebase"
 
 const getUser = async (account: string): Promise<UserWithAccount> => {
-	const userByURLSnapshot = await firebase.firestore().collection("users").where("url", "==", account).get()
+	const userByURLSnapshot = await firebase
+		.firestore()
+		.collection("users")
+		.where("url", "==", account)
+		.get()
 	if (!userByURLSnapshot.empty) {
 		return {
 			...(userByURLSnapshot.docs[0].data() as User),

@@ -9,7 +9,9 @@ const Button: FunctionComponent<
 > = ({buttonType = "primary", extraClassName, children, ...buttonProps}) => {
 	return (
 		<button
-			className={`btn ${buttonType === "primary" ? "btn--primary" : "btn--secondary"} ${extraClassName ?? ""}`}
+			className={`btn ${buttonType === "primary" ? "btn--primary" : "btn--secondary"} ${
+				extraClassName ?? ""
+			}`}
 			{...buttonProps}
 		>
 			{children}

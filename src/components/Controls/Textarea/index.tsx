@@ -7,7 +7,10 @@ const Textarea: FunctionComponent<
 	} & TextareaHTMLAttributes<HTMLTextAreaElement>
 > = ({borders, ...inputProps}) => {
 	return (
-		<textarea className={`textarea__field${borders === "all" ? " textarea__field--bordered" : ""}`} {...inputProps} />
+		<textarea
+			className={`textarea__field${borders === "all" ? " textarea__field--bordered" : ""}`}
+			{...inputProps}
+		/>
 	)
 }
 
