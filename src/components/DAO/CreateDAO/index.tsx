@@ -49,8 +49,8 @@ const CreateDAO: FunctionComponent<{
 						members.map(m => m.address),
 						tokenAddress,
 						decisionMakingSpeed === "slow" ? 1 : decisionMakingSpeed === "medium" ? 2 : 3,
-						(totalSupply * Number(foundersPercentage)) / 100,
-						(totalSupply * Number(foundersPercentage) * Number(votingThreshold)) / 10000,
+						totalSupply * (1 - Number(foundersPercentage) / 100),
+						Number(votingThreshold),
 						Number(minProposalAmount),
 						provider,
 						signer
