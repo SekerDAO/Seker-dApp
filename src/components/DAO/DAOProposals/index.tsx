@@ -21,6 +21,7 @@ import {
 	executeERC20DAOJoin,
 	executeERC20DAORoleChange
 } from "../../../api/ethers/functions/ERC20DAO/executeERC20DAOProposals"
+const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
 const DAOProposalCard: FunctionComponent<{
 	proposal: Proposal
@@ -66,8 +67,36 @@ const DAOProposalCard: FunctionComponent<{
 		try {
 			if (proposal.type === "changeRole") {
 				await executeERC20DAORoleChange(daoAddress, proposal.id!, provider, signer)
+
+				const res = await fetch(`${REACT_APP_CLOUD_FUNCTIONS_URL}/updateDaoUser`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({
+						daoAddress,
+						memberAddress: proposal.recipientAddress
+					})
+				})
+				if (res.status !== 200) {
+					throw new Error("Failed to add member")
+				}
 			} else if (proposal.type === "joinHouse") {
 				await executeERC20DAOJoin(daoAddress, proposal.id!, provider, signer)
+
+				const res = await fetch(`${REACT_APP_CLOUD_FUNCTIONS_URL}/updateDaoUser`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({
+						daoAddress,
+						memberAddress: proposal.userAddress
+					})
+				})
+				if (res.status !== 200) {
+					throw new Error("Failed to add member")
+				}
 			} else if (proposal.type === "requestFunding") {
 				await executeERC20DAOFundingProposal(daoAddress, proposal.id!, provider, signer)
 			}
@@ -162,8 +191,16 @@ const DAOProposalCard: FunctionComponent<{
 									</Button>
 								</>
 							))}
-						{proposal.state === "passed" && <Button onClick={startGracePeriod}>Queue</Button>}
-						{proposal.state === "waiting" && <Button onClick={execute}>Execute</Button>}
+						{proposal.state === "passed" && (
+							<Button onClick={startGracePeriod} disabled={processing}>
+								{processing ? "Processing..." : "Queue"}
+							</Button>
+						)}
+						{proposal.state === "waiting" && (
+							<Button onClick={execute} disabled={processing}>
+								{processing ? "Processing..." : "Execute"}
+							</Button>
+						)}
 					</div>
 				</div>
 			)}
