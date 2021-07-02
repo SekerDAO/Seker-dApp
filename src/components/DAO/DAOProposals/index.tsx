@@ -18,6 +18,7 @@ import {
 } from "../../../api/ethers/functions/ERC20DAO/startERC20DAOProposalsGracePeriod"
 import {
 	executeERC20DAOFundingProposal,
+	executeERC20DAOJoin,
 	executeERC20DAORoleChange
 } from "../../../api/ethers/functions/ERC20DAO/executeERC20DAOProposals"
 
@@ -63,8 +64,10 @@ const DAOProposalCard: FunctionComponent<{
 		if (!(provider && signer)) return
 		setProcessing(true)
 		try {
-			if (["changeRole", "joinHouse"].includes(proposal.type)) {
+			if (proposal.type === "changeRole") {
 				await executeERC20DAORoleChange(daoAddress, proposal.id!, provider, signer)
+			} else if (proposal.type === "joinHouse") {
+				await executeERC20DAOJoin(daoAddress, proposal.id!, provider, signer)
 			} else if (proposal.type === "requestFunding") {
 				await executeERC20DAOFundingProposal(daoAddress, proposal.id!, provider, signer)
 			}
