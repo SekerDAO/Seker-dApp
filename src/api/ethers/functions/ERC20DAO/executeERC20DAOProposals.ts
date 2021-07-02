@@ -2,7 +2,7 @@ import {JsonRpcSigner, Web3Provider} from "@ethersproject/providers"
 import {Contract} from "@ethersproject/contracts"
 import HouseTokenDAO from "../../abis/HouseTokenDAO.json"
 
-export const executeERC20HouseDAORoleChange = (
+export const executeERC20DAORoleChange = (
 	daoAddress: string,
 	proposalId: number,
 	provider: Web3Provider,
@@ -21,7 +21,7 @@ export const executeERC20HouseDAORoleChange = (
 		}
 	})
 
-export const executeERC20HouseDAOFundingProposal = (
+export const executeERC20DAOFundingProposal = (
 	daoAddress: string,
 	proposalId: number,
 	provider: Web3Provider,

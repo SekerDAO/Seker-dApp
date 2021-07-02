@@ -13,12 +13,12 @@ import {toastError, toastSuccess} from "../../Toast"
 import voteForERC20DAOProposal from "../../../api/ethers/functions/ERC20DAO/voteForERC20DAOProposal"
 import SearchIcon from "../../../icons/SearchIcon"
 import {
-	startERC20HouseDAOFundingGracePeriod,
-	startERC20HouseDAORoleChangeGracePeriod
+	startERC20DAOFundingGracePeriod,
+	startERC20DAORoleChangeGracePeriod
 } from "../../../api/ethers/functions/ERC20DAO/startERC20DAOProposalsGracePeriod"
 import {
-	executeERC20HouseDAOFundingProposal,
-	executeERC20HouseDAORoleChange
+	executeERC20DAOFundingProposal,
+	executeERC20DAORoleChange
 } from "../../../api/ethers/functions/ERC20DAO/executeERC20DAOProposals"
 
 const DAOProposalCard: FunctionComponent<{
@@ -47,9 +47,9 @@ const DAOProposalCard: FunctionComponent<{
 		setProcessing(true)
 		try {
 			if (["changeRole", "joinHouse"].includes(proposal.type)) {
-				await startERC20HouseDAORoleChangeGracePeriod(daoAddress, proposal.id!, provider, signer)
+				await startERC20DAORoleChangeGracePeriod(daoAddress, proposal.id!, provider, signer)
 			} else if (proposal.type === "requestFunding") {
-				await startERC20HouseDAOFundingGracePeriod(daoAddress, proposal.id!, provider, signer)
+				await startERC20DAOFundingGracePeriod(daoAddress, proposal.id!, provider, signer)
 			}
 			toastSuccess("Grace period started")
 		} catch (e) {
@@ -64,14 +64,14 @@ const DAOProposalCard: FunctionComponent<{
 		setProcessing(true)
 		try {
 			if (["changeRole", "joinHouse"].includes(proposal.type)) {
-				await executeERC20HouseDAORoleChange(daoAddress, proposal.id!, provider, signer)
+				await executeERC20DAORoleChange(daoAddress, proposal.id!, provider, signer)
 			} else if (proposal.type === "requestFunding") {
-				await executeERC20HouseDAOFundingProposal(daoAddress, proposal.id!, provider, signer)
+				await executeERC20DAOFundingProposal(daoAddress, proposal.id!, provider, signer)
 			}
-			toastSuccess("Grace period started")
+			toastSuccess("Proposal successfully executed")
 		} catch (e) {
 			console.error(e)
-			toastError("Failed to start grace period")
+			toastError("Failed to execute proposal")
 		}
 		setProcessing(false)
 	}

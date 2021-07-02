@@ -3,7 +3,7 @@ import {Contract} from "@ethersproject/contracts"
 import HouseTokenDAO from "../../abis/HouseTokenDAO.json"
 import {BigNumber} from "@ethersproject/bignumber"
 
-export const startERC20HouseDAOFundingGracePeriod = (
+export const startERC20DAOFundingGracePeriod = (
 	daoAddress: string,
 	proposalId: number,
 	provider: Web3Provider,
@@ -38,7 +38,7 @@ export const startERC20HouseDAOFundingGracePeriod = (
 		}
 	})
 
-export const startERC20HouseDAORoleChangeGracePeriod = (
+export const startERC20DAORoleChangeGracePeriod = (
 	daoAddress: string,
 	proposalId: number,
 	provider: Web3Provider,
