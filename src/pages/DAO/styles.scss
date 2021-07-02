@@ -5,10 +5,11 @@
   padding: 95px 0;
 
   &__photo {
-    height: 250px;
+    height: 275px;
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
+    background-color: $light-grey;
     z-index: 2;
     display: flex;
     align-items: center;
@@ -44,6 +45,7 @@
 
     h2 {
       margin: 20px 0;
+      line-height: 28px;
     }
   }
 

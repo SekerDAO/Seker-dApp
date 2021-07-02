@@ -34,7 +34,7 @@
       cursor: pointer;
 
       div {
-        background-color: black;
+        background-color: white;
         width: 20px;
         height: 2px;
         margin: 2px 0;
@@ -46,7 +46,7 @@
       background-color: white;
       top: 45px;
       right: 0;
-      border: 1px solid black;
+      border: 1px solid $purple1;
       z-index: 2;
     }
 

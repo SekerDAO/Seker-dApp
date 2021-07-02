@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useContext, useEffect, useState} from "react"
+import React, {FunctionComponent, useContext, useState} from "react"
 import {useParams} from "react-router-dom"
 import HorizontalMenu from "../../components/HorizontalMenu"
 import "./styles.scss"
@@ -20,7 +20,8 @@ import TelegramIcon from "../../icons/TelegramIcon"
 import DiscordIcon from "../../icons/DiscordIcon"
 import DashboardHeader from "../../components/DashboardHeader"
 
-const menuEntries = ["About", "Members", "Proposals", "Create Proposal", "Collection"]
+const houseMenuEntries = ["About", "Members", "Proposals", "Create Proposal", "Collection"]
+const galleryMenuEntries = ["Collection", "About", "Members", "Proposals", "Create Proposal"]
 
 const DAOPage: FunctionComponent = () => {
 	const {account, connected} = useContext(AuthContext)
@@ -28,11 +29,6 @@ const DAOPage: FunctionComponent = () => {
 	const {dao, loading, error} = useDAO(address)
 	const [editOpened, setEditOpened] = useState(false)
 	const [activeMenuIndex, setActiveMenuIndex] = useState(0)
-	useEffect(() => {
-		if (dao?.type === "gallery") {
-			setActiveMenuIndex(4)
-		}
-	}, [dao])
 
 	if (error) return <ErrorPlaceholder />
 	if (!dao || loading) return <Loader />
@@ -41,6 +37,8 @@ const DAOPage: FunctionComponent = () => {
 	const isOwner = !!dao.members.find(
 		m => ["head", "admin"].includes(m.role) && m.address === account
 	)
+
+	const menuEntries = dao.type === "house" ? houseMenuEntries : galleryMenuEntries
 
 	return (
 		<>
@@ -84,21 +82,6 @@ const DAOPage: FunctionComponent = () => {
 							<h2>{dao.name}</h2>
 							<p>est. {dao.estimated.split("T")[0]}</p>
 							<p>{dao.website}</p>
-							{isOwner ? (
-								<Button
-									buttonType="primary"
-									onClick={() => {
-										setEditOpened(true)
-									}}
-								>
-									Edit House Profile
-								</Button>
-							) : (
-								<>
-									<Button buttonType="primary">Join House</Button>
-									<Button buttonType="secondary">Apply for Commission</Button>
-								</>
-							)}
 							<div className="dao__socials">
 								{dao.twitter && (
 									<a
@@ -128,6 +111,21 @@ const DAOPage: FunctionComponent = () => {
 									</a>
 								)}
 							</div>
+							{isOwner ? (
+								<Button
+									buttonType="primary"
+									onClick={() => {
+										setEditOpened(true)
+									}}
+								>
+									Edit House Profile
+								</Button>
+							) : (
+								<>
+									<Button buttonType="primary">Join House</Button>
+									<Button buttonType="secondary">Apply for Commission</Button>
+								</>
+							)}
 						</div>
 					</div>
 					<div className="dao__main">
@@ -147,14 +145,16 @@ const DAOPage: FunctionComponent = () => {
 										setActiveMenuIndex(index)
 									}}
 								/>
-								{activeMenuIndex === 0 && <AboutDAO dao={dao} />}
-								{activeMenuIndex === 2 && (
+								{menuEntries[activeMenuIndex] === "About" && <AboutDAO dao={dao} />}
+								{menuEntries[activeMenuIndex] === "Proposals" && (
 									<DAOProposals daoAddress={dao.address} isMember={isMember} />
 								)}
-								{activeMenuIndex === 3 && (
+								{menuEntries[activeMenuIndex] === "Create Proposal" && (
 									<CreateDAOProposal isMember={isMember} daoAddress={dao.address} />
 								)}
-								{activeMenuIndex === 4 && <DAOCollection daoAddress={dao.address} />}
+								{menuEntries[activeMenuIndex] === "Collection" && (
+									<DAOCollection daoAddress={dao.address} />
+								)}
 							</>
 						)}
 					</div>

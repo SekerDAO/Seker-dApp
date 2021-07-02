@@ -83,6 +83,7 @@ const ProfileEdit: FunctionComponent<{user: User}> = ({user}) => {
 			<Input
 				id="profile-edit-bio"
 				borders="all"
+				maxLength={280}
 				value={bio}
 				onChange={e => {
 					setBio(e.target.value)

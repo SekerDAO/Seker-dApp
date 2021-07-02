@@ -6,7 +6,6 @@ import {parse} from "query-string"
 import NFTGallery from "../../components/NFTGallery"
 import ProfileEdit from "../../components/User/ProfileEdit"
 import ProfileDAOs from "../../components/User/ProfileDAOs"
-import ProfileView from "../../components/User/ProfileView"
 import CreateCustomDomainModal from "../../components/Modals/CreateCustomDomainModal"
 import CreateNFTModal from "../../components/Modals/CreateNFTModal"
 import useUser from "../../customHooks/getters/useUser"
@@ -81,14 +80,14 @@ const Profile: FunctionComponent = () => {
 					<div className="profile__info">
 						<h2>{user.name}</h2>
 						<p>{`${user.account.slice(0, 3)}...${user.account.slice(-4)}`}</p>
-						<p>{user.bio}</p>
+						<p>{user.location}</p>
 						<p>{user.email}</p>
 						{user.website && (
 							<a href={user.website.startsWith("http") ? user.website : `https://${user.website}`}>
 								{user.website}
 							</a>
 						)}
-						<p>{user.location}</p>
+						<p>{user.bio}</p>
 						<div className="profile__socials">
 							{user.twitter && (
 								<a
@@ -147,20 +146,15 @@ const Profile: FunctionComponent = () => {
 						)}
 					</div>
 					<div className="profile__main">
-						{page === "nfts" && (
-							<>
-								{isOwner && (
-									<div className="profile__edit-buttons">
-										<CreateCustomDomainModal />
-										<CreateNFTModal />
-									</div>
-								)}
-								<NFTGallery account={user.account} />
-							</>
+						{page === "nfts" && isOwner && (
+							<div className="profile__edit-buttons">
+								<CreateCustomDomainModal />
+								<CreateNFTModal />
+							</div>
 						)}
+						{["nfts", "profile"].includes(page) && <NFTGallery account={user.account} />}
 						{page === "edit" && <ProfileEdit user={user} />}
 						{page === "daos" && <ProfileDAOs />}
-						{page === "profile" && <ProfileView />}
 					</div>
 				</div>
 			</div>

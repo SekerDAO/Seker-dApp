@@ -5,6 +5,10 @@
   flex-wrap: wrap;
   margin: 0 26px;
 
+  > a {
+    display: flex;
+  }
+
   &__item {
     width: 375px;
     display: flex;

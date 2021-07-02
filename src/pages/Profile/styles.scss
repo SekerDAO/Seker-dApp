@@ -17,6 +17,7 @@
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
+    background-color: $light-grey;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -36,10 +37,12 @@
 
     h2 {
       margin: 0 0 20px 0;
+      line-height: 28px;
     }
 
-    a {
+    > a {
       color: $purple2;
+      padding-bottom: 20px;
     }
   }
 

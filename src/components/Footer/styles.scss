@@ -14,6 +14,16 @@
     margin: 0 auto;
   }
 
+  &__socials {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+
+    svg {
+      margin-right: 10px;
+    }
+  }
+
   &__col {
     display: flex;
     flex-direction: column;

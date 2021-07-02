@@ -23,7 +23,6 @@ const CreateDAO: FunctionComponent<{
 	const [loading, setLoading] = useState(false)
 	const [name, setName] = useState(initialName)
 	const [foundersPercentage, setFoundersPercentage] = useState("")
-	const [tax, setTax] = useState("")
 	const [decisionMakingSpeed, setDecisionMakingSpeed] = useState<DAODecisionMakingSpeed>("slow")
 	const [votingThreshold, setVotingThreshold] = useState("")
 	const [minProposalAmount, setMinProposalAmount] = useState("")
@@ -35,7 +34,6 @@ const CreateDAO: FunctionComponent<{
 		if (
 			name &&
 			(tokenType === "NFT" || foundersPercentage) &&
-			(DAOType === "house" || tax) &&
 			members.reduce((acc, cur) => acc && !!cur.address, true) &&
 			votingThreshold &&
 			minProposalAmount &&
@@ -113,16 +111,6 @@ const CreateDAO: FunctionComponent<{
 		setMembers(prevState => prevState.filter((_, idx) => idx !== index))
 	}
 
-	const handleTaxChange = (e: ChangeEvent<HTMLInputElement>) => {
-		if (Number(e.target.value) < 0) {
-			setTax("0")
-		} else if (Number(e.target.value) > 100) {
-			setTax("100")
-		} else {
-			setTax(e.target.value)
-		}
-	}
-
 	const handleVotingThresholdChange = (e: ChangeEvent<HTMLInputElement>) => {
 		if (Number(e.target.value) < 0) {
 			setVotingThreshold("0")
@@ -142,7 +130,6 @@ const CreateDAO: FunctionComponent<{
 	const submitButtonDisabled = !(
 		name &&
 		(tokenType === "NFT" || foundersPercentage) &&
-		(DAOType === "house" || tax) &&
 		minProposalAmount &&
 		votingThreshold &&
 		members.reduce((acc, cur) => acc && !!cur.address, true)
@@ -266,16 +253,6 @@ const CreateDAO: FunctionComponent<{
 					</div>
 				</div>
 			))}
-			{DAOType === "gallery" && (
-				<div className="create-dao__row">
-					<div className="create-dao__col">
-						<label>Gallery DAO Tax</label>
-					</div>
-					<div className="create-dao__col">
-						<Input borders="all" value={tax} onChange={handleTaxChange} />
-					</div>
-				</div>
-			)}
 			<div className="create-dao__row">
 				<div className="create-dao__col">
 					<label className="no-margin">Minimum Proposal Amount</label>
