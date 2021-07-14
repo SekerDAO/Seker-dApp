@@ -49,7 +49,7 @@ const DAOPage: FunctionComponent = () => {
 						buttonName="Edit Header"
 						titleText="Edit DAO Header"
 						onUpload={async file => {
-							await updateDAOImage(file, dao!.address, "header")
+							await updateDAOImage(file, dao!.gnosisAddress, "header")
 						}}
 						successToastText="DAO header successfully updated"
 						errorToastText="Failed to update DAO header"
@@ -71,7 +71,7 @@ const DAOPage: FunctionComponent = () => {
 									buttonName="Edit Image"
 									titleText="Edit DAO Image"
 									onUpload={async file => {
-										await updateDAOImage(file, dao!.address, "profile")
+										await updateDAOImage(file, dao!.gnosisAddress, "profile")
 									}}
 									successToastText="DAO image successfully updated"
 									errorToastText="Failed to update DAO image"
@@ -146,14 +146,20 @@ const DAOPage: FunctionComponent = () => {
 									}}
 								/>
 								{menuEntries[activeMenuIndex] === "About" && <AboutDAO dao={dao} />}
-								{menuEntries[activeMenuIndex] === "Proposals" && (
-									<DAOProposals daoAddress={dao.address} isMember={isMember} />
-								)}
-								{menuEntries[activeMenuIndex] === "Create Proposal" && (
-									<CreateDAOProposal isMember={isMember} daoAddress={dao.address} />
-								)}
+								{menuEntries[activeMenuIndex] === "Proposals" &&
+									(dao.daoAddress ? (
+										<DAOProposals daoAddress={dao.daoAddress} isMember={isMember} />
+									) : (
+										<p>TODO: DAO not decentralized</p>
+									))}
+								{menuEntries[activeMenuIndex] === "Create Proposal" &&
+									(dao.daoAddress ? (
+										<CreateDAOProposal isMember={isMember} daoAddress={dao.daoAddress} />
+									) : (
+										<p>TODO: DAO not decentralized</p>
+									))}
 								{menuEntries[activeMenuIndex] === "Collection" && (
-									<DAOCollection daoAddress={dao.address} />
+									<DAOCollection daoAddress={dao.gnosisAddress} />
 								)}
 							</>
 						)}

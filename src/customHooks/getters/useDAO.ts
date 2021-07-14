@@ -10,7 +10,7 @@ import {
 } from "../../api/ethers/functions/ERC20DAO/getERC20DAO"
 
 const useDAO = (
-	address: string
+	gnosisAddress: string
 ): {
 	dao: DAOEnhanced | null
 	loading: boolean
@@ -21,16 +21,21 @@ const useDAO = (
 	const [error, setError] = useState(false)
 	const {provider} = useContext(EthersContext)
 
-	const getInfo = async (_address: string, _provider: Web3Provider) => {
+	const getInfo = async (_gnosisAddress: string, _provider: Web3Provider) => {
 		setLoading(true)
 		setError(false)
 		try {
-			const _dao = await getDAO(_address)
-			const [tokenSymbol, balance, fundedProjects] = await Promise.all([
-				getERC20Symbol(_dao.tokenAddress, _provider),
-				getERC20HouseDAOBalance(_address, _provider),
-				getERC20HouseDAOFundedProjects(_address, _provider)
-			])
+			const _dao = await getDAO(_gnosisAddress)
+			let tokenSymbol = ""
+			let balance = 0
+			let fundedProjects = 0
+			if (_dao.tokenAddress && _dao.daoAddress) {
+				;[tokenSymbol, balance, fundedProjects] = await Promise.all([
+					getERC20Symbol(_dao.tokenAddress, _provider),
+					getERC20HouseDAOBalance(_dao.daoAddress, _provider),
+					getERC20HouseDAOFundedProjects(_dao.daoAddress, _provider)
+				])
+			}
 			setDao({
 				..._dao,
 				tokenSymbol,
@@ -46,9 +51,9 @@ const useDAO = (
 
 	useEffect(() => {
 		if (provider) {
-			getInfo(address, provider)
+			getInfo(gnosisAddress, provider)
 		}
-	}, [address, provider])
+	}, [gnosisAddress, provider])
 
 	return {
 		dao,

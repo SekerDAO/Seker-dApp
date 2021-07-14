@@ -24,7 +24,7 @@ const EditDAO: FunctionComponent<{
 		setProcessing(true)
 		try {
 			await editDAO({
-				address: dao.address,
+				gnosisAddress: dao.gnosisAddress,
 				name,
 				description,
 				website,

@@ -3,44 +3,31 @@ import firebase from "firebase"
 
 const addDAO = async (
 	{
-		address,
+		gnosisAddress,
 		name,
 		type,
-		houseTokenType,
-		tokenAddress,
-		totalSupply,
 		members,
-		decisionMakingSpeed,
-		votingThreshold,
-		tax,
-		minProposalAmount
-	}: Omit<DAO, "estimated">,
+		gnosisVotingThreshold
+	}: Omit<DAO, "estimated" | "members"> & {members: string[]},
 	account: string
 ): Promise<void> => {
-	await firebase
-		.firestore()
-		.collection("DAOs")
-		.doc(address)
-		.set({
-			name,
-			type,
-			...(houseTokenType ? {houseTokenType} : {}),
-			tokenAddress,
-			totalSupply,
-			decisionMakingSpeed,
-			votingThreshold,
-			estimated: new Date().toISOString(),
-			...(tax ? {tax} : {}),
-			minProposalAmount,
-			owner: account
-		})
+	await firebase.firestore().collection("DAOs").doc(gnosisAddress).set({
+		name,
+		type,
+		gnosisVotingThreshold,
+		estimated: new Date().toISOString(),
+		owner: account
+	})
 	for (const member of members) {
-		await firebase.firestore().collection("daoUsers").add({
-			dao: address,
-			address: member.address,
-			memberSince: new Date().toISOString(),
-			role: member.role
-		})
+		await firebase
+			.firestore()
+			.collection("daoUsers")
+			.add({
+				dao: gnosisAddress,
+				address: member,
+				memberSince: new Date().toISOString(),
+				role: type === "gallery" ? "admin" : "head"
+			})
 	}
 }
 

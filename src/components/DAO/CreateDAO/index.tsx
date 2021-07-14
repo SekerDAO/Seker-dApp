@@ -3,21 +3,21 @@ import Input from "../../Controls/Input"
 import RadioButton from "../../Controls/RadioButton"
 import Button from "../../Controls/Button"
 import {AuthContext} from "../../../context/AuthContext"
-import {DAODecisionMakingSpeed, DAOMemberRole, HouseDAOTokenType, Member} from "../../../types/DAO"
+import {DAODecisionMakingSpeed, DAOMemberRole, Member} from "../../../types/DAO"
 import deployERC20DAO from "../../../api/ethers/functions/ERC20DAO/deployERC20DAO"
 import "./styles.scss"
 import EthersContext from "../../../context/EthersContext"
-import addDAO from "../../../api/firebase/DAO/addDAO"
 import {toastError} from "../../Toast"
+import editDAO from "../../../api/firebase/DAO/editDAO"
 
 const CreateDAO: FunctionComponent<{
+	gnosisAddress: string
 	afterCreate: () => void
 	tokenAddress: string
 	initialName: string
 	totalSupply: number
-	tokenType: HouseDAOTokenType
 	DAOType: "gallery" | "house"
-}> = ({afterCreate, tokenAddress, initialName, totalSupply, tokenType, DAOType}) => {
+}> = ({gnosisAddress, afterCreate, tokenAddress, initialName, totalSupply, DAOType}) => {
 	const {account} = useContext(AuthContext)
 	const {provider, signer} = useContext(EthersContext)
 	const [loading, setLoading] = useState(false)
@@ -33,7 +33,7 @@ const CreateDAO: FunctionComponent<{
 	const handleSubmit = async () => {
 		if (
 			name &&
-			(tokenType === "NFT" || foundersPercentage) &&
+			foundersPercentage &&
 			members.reduce((acc, cur) => acc && !!cur.address, true) &&
 			votingThreshold &&
 			minProposalAmount &&
@@ -43,36 +43,28 @@ const CreateDAO: FunctionComponent<{
 		) {
 			setLoading(true)
 			try {
-				if ((DAOType === "house" && tokenType === "ERC20") || DAOType === "gallery") {
-					const address = await deployERC20DAO(
-						name,
-						members.map(m => m.address),
-						tokenAddress,
-						decisionMakingSpeed === "slow" ? 1 : decisionMakingSpeed === "medium" ? 2 : 3,
-						totalSupply * (1 - Number(foundersPercentage) / 100),
-						Number(votingThreshold),
-						Number(minProposalAmount),
-						provider,
-						signer
-					)
-					await addDAO(
-						{
-							address,
-							type: DAOType,
-							...(DAOType === "house" ? {houseTokenType: "ERC20"} : {}),
-							tokenAddress,
-							name,
-							totalSupply,
-							members,
-							decisionMakingSpeed,
-							votingThreshold: Number(votingThreshold),
-							minProposalAmount: Number(minProposalAmount)
-						},
-						account
-					)
-				} else {
-					console.log(`mock create DAO ${tokenAddress} ${totalSupply}`)
-				}
+				const daoAddress = await deployERC20DAO(
+					name,
+					members.map(m => m.address),
+					tokenAddress,
+					decisionMakingSpeed === "slow" ? 1 : decisionMakingSpeed === "medium" ? 2 : 3,
+					totalSupply * (1 - Number(foundersPercentage) / 100),
+					Number(votingThreshold),
+					Number(minProposalAmount),
+					provider,
+					signer
+				)
+				await editDAO({
+					gnosisAddress,
+					daoAddress,
+					tokenAddress,
+					name,
+					totalSupply,
+					decisionMakingSpeed,
+					daoVotingThreshold: Number(votingThreshold),
+					minProposalAmount: Number(minProposalAmount)
+				})
+				console.log("TODO: handle members?")
 				afterCreate()
 			} catch (e) {
 				console.error(e)
@@ -129,7 +121,7 @@ const CreateDAO: FunctionComponent<{
 
 	const submitButtonDisabled = !(
 		name &&
-		(tokenType === "NFT" || foundersPercentage) &&
+		foundersPercentage &&
 		minProposalAmount &&
 		votingThreshold &&
 		members.reduce((acc, cur) => acc && !!cur.address, true)
@@ -148,26 +140,24 @@ const CreateDAO: FunctionComponent<{
 					setName(e.target.value)
 				}}
 			/>
-			{tokenType === "ERC20" && (
-				<div className="create-dao__row">
-					<div className="create-dao__col">
-						<label htmlFor="create-dao-ts">Total Supply</label>
-						<Input id="create-dao-ts" borders="all" value={totalSupply} disabled />
-					</div>
-					<div className="create-dao__col">
-						<label htmlFor="create-dao-fp">Founder(s)&apos; Portion of Token Supply</label>
-						<Input
-							id="create-dao-fp"
-							borders="all"
-							value={foundersPercentage}
-							number
-							onChange={handleFoundersPercentageChange}
-							min={0}
-							max={100}
-						/>
-					</div>
+			<div className="create-dao__row">
+				<div className="create-dao__col">
+					<label htmlFor="create-dao-ts">Total Supply</label>
+					<Input id="create-dao-ts" borders="all" value={totalSupply} disabled />
 				</div>
-			)}
+				<div className="create-dao__col">
+					<label htmlFor="create-dao-fp">Founder(s)&apos; Portion of Token Supply</label>
+					<Input
+						id="create-dao-fp"
+						borders="all"
+						value={foundersPercentage}
+						number
+						onChange={handleFoundersPercentageChange}
+						min={0}
+						max={100}
+					/>
+				</div>
+			</div>
 			<div className="create-dao__row top-margin">
 				<div className="create-dao__col">
 					<label className="no-margin">Add Members</label>

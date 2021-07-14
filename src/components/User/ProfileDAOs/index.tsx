@@ -1,9 +1,7 @@
 import React, {FunctionComponent, useContext} from "react"
 import Input from "../../Controls/Input"
 import Table from "../../Table"
-import CreateGalleryDAOModal from "../../Modals/CreateGalleryDAOModal"
 import "./styles.scss"
-import CreateHouseDAOModal from "../../Modals/CreateHouseDAOModal"
 import useMyDAOs from "../../../customHooks/getters/useMyDAOs"
 import Loader from "../../Loader"
 import ErrorPlaceholder from "../../ErrorPlaceholder"
@@ -17,8 +15,8 @@ const columns = [
 		name: "DAO Name",
 		rowClassName: "purple",
 		// eslint-disable-next-line react/display-name
-		render: (dao: {name: string; address: string}) => (
-			<Link to={`/dao/${dao.address}`}>{dao.name}</Link>
+		render: (dao: {name: string; gnosisAddress: string}) => (
+			<Link to={`/dao/${dao.gnosisAddress}`}>{dao.name}</Link>
 		)
 	},
 	{
@@ -50,10 +48,7 @@ const ProfileDAOs: FunctionComponent = () => {
 
 	return (
 		<>
-			<div className="profile__edit-buttons">
-				<CreateGalleryDAOModal />
-				<CreateHouseDAOModal />
-			</div>
+			<div className="profile__edit-buttons">{/* TODO: new creation modals	*/}</div>
 			<div className="profile__controls">
 				<div className="profile__search">
 					<Input placeholder="Search" borders="bottom" />
@@ -63,20 +58,19 @@ const ProfileDAOs: FunctionComponent = () => {
 			<div className="profile-daos__table">
 				<Table
 					data={DAOs.map(dao => {
-						const {name, tokenAddress, type, members} = dao
+						const {name, type, members} = dao
 						const member = members.find(m => m.address === account)
 						return {
 							name,
-							tokenAddress,
 							type,
 							memberSince: member?.memberSince?.split("T")[0] ?? "",
 							role: member?.role ?? "",
 							edit: "",
-							address: dao.address
+							gnosisAddress: dao.gnosisAddress
 						}
 					})}
 					columns={columns}
-					idCol="address"
+					idCol="gnosisAddress"
 				/>
 			</div>
 		</>

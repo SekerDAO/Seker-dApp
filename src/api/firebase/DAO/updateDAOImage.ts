@@ -3,14 +3,14 @@ const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
 const updateDAOImage = async (
 	file: File,
-	address: string,
+	gnosisAddress: string,
 	imageType: "profile" | "header"
 ): Promise<void> => {
 	const token = await firebase.auth().currentUser?.getIdToken(true)
 	if (!token) {
 		throw new Error("Not authorized in firebase")
 	}
-	const imageRef = firebase.storage().ref(`daos/${imageType}s/${address}`)
+	const imageRef = firebase.storage().ref(`daos/${imageType}s/${gnosisAddress}`)
 	const snapshot = await imageRef.put(file)
 	const url = await snapshot.ref.getDownloadURL()
 
@@ -21,7 +21,7 @@ const updateDAOImage = async (
 			authorization: `Bearer ${token}`
 		},
 		body: JSON.stringify({
-			address,
+			gnosisAddress,
 			[`${imageType}Image`]: url.split("&")[0]
 		})
 	})

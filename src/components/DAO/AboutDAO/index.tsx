@@ -55,7 +55,7 @@ const AboutDAO: FunctionComponent<{
 				</p>
 			</div>
 			<div className="dao__param">
-				<h2>{dao.votingThreshold}</h2>
+				<h2>{dao.daoVotingThreshold}</h2>
 				<p>
 					Voting
 					<br />

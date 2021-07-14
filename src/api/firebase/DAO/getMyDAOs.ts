@@ -20,7 +20,7 @@ const getMyDAOs = async (account: string): Promise<DAO[]> => {
 				.get()
 			return {
 				...snapshot.data(),
-				address: snapshot.id,
+				gnosisAddress: snapshot.id,
 				members: daoMembers.docs.map(d => d.data())
 			}
 		})

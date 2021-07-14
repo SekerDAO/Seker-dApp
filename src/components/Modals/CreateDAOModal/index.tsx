@@ -6,11 +6,15 @@ import Select from "../../Controls/Select"
 import CreateERC20Token from "../../DAO/CreateERC20Token"
 import CreateDAO from "../../DAO/CreateDAO"
 import useMyERC20Tokens from "../../../customHooks/getters/useMyERC20Tokens"
+import {DAOType} from "../../../types/DAO"
 
-type CreateGalleryDAOStage = "chooseToken" | "createToken" | "enterInfo" | "success"
+type CreateDAOStage = "chooseToken" | "createToken" | "enterInfo" | "success"
 
-const CreateGalleryDAOModalContent: FunctionComponent = () => {
-	const [stage, setStage] = useState<CreateGalleryDAOStage>("chooseToken")
+const CreateDAOModalContent: FunctionComponent<{
+	gnosisAddress: string
+	type: DAOType
+}> = ({gnosisAddress, type}) => {
+	const [stage, setStage] = useState<CreateDAOStage>("chooseToken")
 	const [tokenSource, setTokenSource] = useState<"new" | "existing" | "import">("existing")
 	const [token, setToken] = useState("")
 	const [name, setName] = useState("")
@@ -111,19 +115,19 @@ const CreateGalleryDAOModalContent: FunctionComponent = () => {
 			{stage === "createToken" && <CreateERC20Token afterCreate={handleERC20Create} />}
 			{stage === "enterInfo" && (
 				<CreateDAO
+					gnosisAddress={gnosisAddress}
 					afterCreate={handleSubmit}
 					tokenAddress={token}
 					initialName={name}
 					totalSupply={Number(totalSupply)}
 					DAOType="gallery"
-					tokenType="ERC20"
 				/>
 			)}
 			{stage === "success" && (
 				<>
 					<h2>Success!</h2>
 					<p>
-						You can now see the gallery DAO you have created (along with
+						You can now see the {type} DAO you have created (along with
 						<br />
 						other DAOs you currently belong to) and access the DAO dashboard
 						<br />
@@ -135,7 +139,10 @@ const CreateGalleryDAOModalContent: FunctionComponent = () => {
 	)
 }
 
-const CreateGalleryDAOModal: FunctionComponent = () => {
+const CreateDAOModal: FunctionComponent<{
+	gnosisAddress: string
+	type: DAOType
+}> = ({gnosisAddress, type}) => {
 	const [isOpened, setIsOpened] = useState(false)
 
 	return (
@@ -146,7 +153,7 @@ const CreateGalleryDAOModal: FunctionComponent = () => {
 					setIsOpened(true)
 				}}
 			>
-				Create A Gallery DAO
+				Create A {type === "gallery" ? "Gallery" : "House"} DAO
 			</Button>
 			<Modal
 				show={isOpened}
@@ -154,10 +161,10 @@ const CreateGalleryDAOModal: FunctionComponent = () => {
 					setIsOpened(false)
 				}}
 			>
-				<CreateGalleryDAOModalContent />
+				<CreateDAOModalContent gnosisAddress={gnosisAddress} type={type} />
 			</Modal>
 		</>
 	)
 }
 
-export default CreateGalleryDAOModal
+export default CreateDAOModal

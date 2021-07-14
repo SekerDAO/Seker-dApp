@@ -8,8 +8,6 @@ export type DAOMemberRole = HouseDAORole | GalleryDAORole
 
 export type DAODecisionMakingSpeed = "slow" | "medium" | "fast"
 
-export type HouseDAOTokenType = "ERC20" | "NFT"
-
 export type Member = {
 	address: string
 	role: DAOMemberRole
@@ -24,18 +22,22 @@ export type FirebaseDAOUser = Member & {
 export type DAOType = "gallery" | "house"
 
 export type DAO = {
-	address: string
+	// Main properties, required at the moment of gnosis-safe deployment
+	gnosisAddress: string
 	type: DAOType
-	houseTokenType?: HouseDAOTokenType
-	tokenAddress: string
 	name: string
 	estimated: string
-	totalSupply: number
 	members: Member[]
-	decisionMakingSpeed: DAODecisionMakingSpeed
-	votingThreshold: number
+	gnosisVotingThreshold: number
+	// Properties set at the moment of DAO contract deployment
+	daoAddress?: string
+	tokenAddress?: string
+	totalSupply?: number
+	decisionMakingSpeed?: DAODecisionMakingSpeed
 	tax?: number
-	minProposalAmount: number
+	minProposalAmount?: number
+	daoVotingThreshold?: number
+	// Optional properties, only present in Firebase
 	description?: string
 	website?: string
 	twitter?: string
@@ -63,7 +65,7 @@ export type DAOQueryParams = {
 
 export type DAOListItemProps = Pick<
 	DAO,
-	"address" | "name" | "type" | "houseTokenType" | "description" | "profileImage"
+	"gnosisAddress" | "name" | "description" | "profileImage"
 > & {
 	membersCount: number
 }

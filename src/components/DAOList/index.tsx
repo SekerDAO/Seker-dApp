@@ -4,25 +4,19 @@ import {DAOListItemProps} from "../../types/DAO"
 import "./styles.scss"
 
 const DAOListItem: FunctionComponent<DAOListItemProps> = ({
-	address,
+	gnosisAddress,
 	name,
 	description,
-	type,
-	houseTokenType,
 	membersCount,
 	profileImage
 }) => (
-	<Link to={`/dao/${address}`}>
+	<Link to={`/dao/${gnosisAddress}`}>
 		<div className="dao-list__item">
 			<div
 				className="dao-list__item-image"
 				style={{backgroundImage: `url("${profileImage ?? "/assets/DAODashboard_Photo.png"}")`}}
 			/>
 			<h3>{name}</h3>
-			<p>
-				<b>Type:</b>
-			</p>
-			<p>{`${type === "house" ? `${houseTokenType} ` : ""}${type}`}</p>
 			<p>
 				<b>Size:</b>
 			</p>
@@ -41,13 +35,11 @@ const DAOList: FunctionComponent<{
 	<div className="dao-list">
 		{DAOs.map(dao => (
 			<DAOListItem
-				key={dao.address}
-				address={dao.address}
-				type={dao.type}
+				key={dao.gnosisAddress}
+				gnosisAddress={dao.gnosisAddress}
 				name={dao.name}
 				description={dao.description}
 				membersCount={dao.membersCount}
-				houseTokenType={dao.houseTokenType}
 				profileImage={dao.profileImage}
 			/>
 		))}
