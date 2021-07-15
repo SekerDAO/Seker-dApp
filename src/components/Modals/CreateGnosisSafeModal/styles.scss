@@ -1,0 +1,37 @@
+.create-gnosis-safe {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+
+  &__row {
+    display: flex;
+    align-items: center;
+    min-height: 32px;
+    margin: 5px 0;
+
+    input[type="text"] {
+      flex: 1;
+      height: 36px;
+    }
+
+    button {
+      margin-left: 15px;
+      padding: 10px 15px;
+    }
+  }
+
+  h2 {
+    margin: 50px 0 10px 0;
+  }
+
+  > button {
+    align-self: flex-start;
+    margin-top: 20px;
+  }
+
+  > label {
+    margin: 15px 0 5px 0;
+  }
+}

@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@ethersproject/bignumber": "^5.3.0",
+    "@ethersproject/constants": "^5.4.0",
     "@ethersproject/contracts": "^5.2.0",
     "@ethersproject/providers": "^5.2.0",
     "@ethersproject/units": "^5.3.0",

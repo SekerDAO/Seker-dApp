@@ -8,6 +8,7 @@ import ErrorPlaceholder from "../../ErrorPlaceholder"
 import {AuthContext} from "../../../context/AuthContext"
 import {Link} from "react-router-dom"
 import SearchIcon from "../../../icons/SearchIcon"
+import CreateGnosisSafeModal from "../../Modals/CreateGnosisSafeModal"
 
 const columns = [
 	{
@@ -48,7 +49,10 @@ const ProfileDAOs: FunctionComponent = () => {
 
 	return (
 		<>
-			<div className="profile__edit-buttons">{/* TODO: new creation modals	*/}</div>
+			<div className="profile__edit-buttons">
+				<CreateGnosisSafeModal daoType="gallery" />
+				<CreateGnosisSafeModal daoType="house" />
+			</div>
 			<div className="profile__controls">
 				<div className="profile__search">
 					<Input placeholder="Search" borders="bottom" />

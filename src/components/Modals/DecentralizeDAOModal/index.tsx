@@ -7,14 +7,15 @@ import CreateERC20Token from "../../DAO/CreateERC20Token"
 import CreateDAO from "../../DAO/CreateDAO"
 import useMyERC20Tokens from "../../../customHooks/getters/useMyERC20Tokens"
 import {DAOType} from "../../../types/DAO"
+import {capitalize} from "../../../utlls"
 
-type CreateDAOStage = "chooseToken" | "createToken" | "enterInfo" | "success"
+type DecentralizeDAOStage = "chooseToken" | "createToken" | "enterInfo" | "success"
 
-const CreateDAOModalContent: FunctionComponent<{
+const DecentralizeDAOModalContent: FunctionComponent<{
 	gnosisAddress: string
 	type: DAOType
 }> = ({gnosisAddress, type}) => {
-	const [stage, setStage] = useState<CreateDAOStage>("chooseToken")
+	const [stage, setStage] = useState<DecentralizeDAOStage>("chooseToken")
 	const [tokenSource, setTokenSource] = useState<"new" | "existing" | "import">("existing")
 	const [token, setToken] = useState("")
 	const [name, setName] = useState("")
@@ -64,12 +65,12 @@ const CreateDAOModalContent: FunctionComponent<{
 		<div className={`create-dao${stage === "enterInfo" ? " create-dao--wide" : ""}`}>
 			{stage === "chooseToken" && (
 				<>
-					<h2>Create A Gallery DAO</h2>
+					<h2>Decentralize A {capitalize(type)} DAO</h2>
 					<p>Step 1. Choose one.</p>
 					<div className="create-dao__row">
 						<RadioButton
 							label="Your Existing Token(s)"
-							id="create-gallery-dao-existing-token"
+							id="create-dao-existing-token"
 							checked={tokenSource === "existing"}
 							onChange={() => {
 								setTokenSource("existing")
@@ -89,7 +90,7 @@ const CreateDAOModalContent: FunctionComponent<{
 					<div className="create-dao__row">
 						<RadioButton
 							label="Create New Token"
-							id="create-gallery-dao-new-token"
+							id="create-dao-new-token"
 							checked={tokenSource === "new"}
 							onChange={() => {
 								setTokenSource("new")
@@ -120,7 +121,7 @@ const CreateDAOModalContent: FunctionComponent<{
 					tokenAddress={token}
 					initialName={name}
 					totalSupply={Number(totalSupply)}
-					DAOType="gallery"
+					DAOType={type}
 				/>
 			)}
 			{stage === "success" && (
@@ -139,7 +140,7 @@ const CreateDAOModalContent: FunctionComponent<{
 	)
 }
 
-const CreateDAOModal: FunctionComponent<{
+const DecentralizeDAOModal: FunctionComponent<{
 	gnosisAddress: string
 	type: DAOType
 }> = ({gnosisAddress, type}) => {
@@ -153,7 +154,7 @@ const CreateDAOModal: FunctionComponent<{
 					setIsOpened(true)
 				}}
 			>
-				Create A {type === "gallery" ? "Gallery" : "House"} DAO
+				Create A {capitalize(type)} DAO
 			</Button>
 			<Modal
 				show={isOpened}
@@ -161,10 +162,10 @@ const CreateDAOModal: FunctionComponent<{
 					setIsOpened(false)
 				}}
 			>
-				<CreateDAOModalContent gnosisAddress={gnosisAddress} type={type} />
+				<DecentralizeDAOModalContent gnosisAddress={gnosisAddress} type={type} />
 			</Modal>
 		</>
 	)
 }
 
-export default CreateDAOModal
+export default DecentralizeDAOModal
