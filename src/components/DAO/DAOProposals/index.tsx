@@ -209,11 +209,12 @@ const DAOProposalCard: FunctionComponent<{
 }
 
 const DAOProposals: FunctionComponent<{
+	gnosisAddress: string
 	daoAddress: string
 	isMember: boolean
-}> = ({daoAddress, isMember}) => {
+}> = ({gnosisAddress, daoAddress, isMember}) => {
 	const {provider} = useContext(EthersContext)
-	const {proposals, loading, error} = useERC20HouseDAOProposals(daoAddress)
+	const {proposals, loading, error} = useERC20HouseDAOProposals(gnosisAddress)
 
 	if (!provider) return <div>TODO: please connect wallet</div>
 	if (error) return <ErrorPlaceholder />

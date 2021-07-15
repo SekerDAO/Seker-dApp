@@ -3,7 +3,9 @@ import firebase from "firebase"
 const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
 const editDAO = async (
-	dao: Omit<DAO, "type" | "estimated" | "members" | "gnosisVotingThreshold">
+	dao: Omit<DAO, "type" | "estimated" | "members" | "gnosisVotingThreshold" | "name"> & {
+		name?: string
+	}
 ): Promise<void> => {
 	const token = await firebase.auth().currentUser?.getIdToken(true)
 	if (!token) {

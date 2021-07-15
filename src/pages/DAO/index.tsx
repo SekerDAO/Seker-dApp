@@ -19,6 +19,7 @@ import {PURPLE_2} from "../../constants/colors"
 import TelegramIcon from "../../icons/TelegramIcon"
 import DiscordIcon from "../../icons/DiscordIcon"
 import DashboardHeader from "../../components/DashboardHeader"
+import DecentralizeDAOModal from "../../components/Modals/DecentralizeDAOModal"
 
 const houseMenuEntries = ["About", "Members", "Proposals", "Create Proposal", "Collection"]
 const galleryMenuEntries = ["Collection", "About", "Members", "Proposals", "Create Proposal"]
@@ -112,14 +113,17 @@ const DAOPage: FunctionComponent = () => {
 								)}
 							</div>
 							{isOwner ? (
-								<Button
-									buttonType="primary"
-									onClick={() => {
-										setEditOpened(true)
-									}}
-								>
-									Edit House Profile
-								</Button>
+								<>
+									<Button
+										buttonType="primary"
+										onClick={() => {
+											setEditOpened(true)
+										}}
+									>
+										Edit House Profile
+									</Button>
+									<DecentralizeDAOModal gnosisAddress={dao.gnosisAddress} type={dao.type} />
+								</>
 							) : (
 								<>
 									<Button buttonType="primary">Join House</Button>
@@ -148,7 +152,11 @@ const DAOPage: FunctionComponent = () => {
 								{menuEntries[activeMenuIndex] === "About" && <AboutDAO dao={dao} />}
 								{menuEntries[activeMenuIndex] === "Proposals" &&
 									(dao.daoAddress ? (
-										<DAOProposals daoAddress={dao.daoAddress} isMember={isMember} />
+										<DAOProposals
+											gnosisAddress={dao.gnosisAddress}
+											daoAddress={dao.daoAddress}
+											isMember={isMember}
+										/>
 									) : (
 										<p>TODO: DAO not decentralized</p>
 									))}
