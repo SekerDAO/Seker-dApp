@@ -19,7 +19,7 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 	afterCreate: () => void
 }> = ({daoType, afterCreate}) => {
 	const {account} = useContext(AuthContext)
-	const {provider, signer} = useContext(EthersContext)
+	const {signer} = useContext(EthersContext)
 	const [processing, setProcessing] = useState(false)
 	const [stage, setStage] = useState<CreateGnosisSafeStage>("chooseOption")
 	const [newGnosis, setNewGnosis] = useState(true)
@@ -63,15 +63,10 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 				console.log("TODO")
 			}
 		} else if (stage === "create") {
-			if (!(account && provider && signer && votingThreshold)) return
+			if (!(account && signer && votingThreshold)) return
 			setProcessing(true)
 			try {
-				const gnosisAddress = await createGnosisSafe(
-					members,
-					Number(votingThreshold),
-					provider,
-					signer
-				)
+				const gnosisAddress = await createGnosisSafe(members, Number(votingThreshold), signer)
 				await addDAO(
 					{
 						gnosisAddress,
