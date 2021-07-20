@@ -35,7 +35,7 @@ const DAOPage: FunctionComponent = () => {
 	if (!dao || loading) return <Loader />
 
 	const isMember = connected && !!dao.members.find(m => m.address === account)
-	const isOwner = !!dao.members.find(
+	const isAdmin = !!dao.members.find(
 		m => ["head", "admin"].includes(m.role) && m.address === account
 	)
 
@@ -44,7 +44,7 @@ const DAOPage: FunctionComponent = () => {
 	return (
 		<>
 			<DashboardHeader background={dao.headerImage}>
-				{isOwner && (
+				{isAdmin && (
 					<UploadImageModal
 						initialUrl={dao.headerImage}
 						buttonName="Edit Header"
@@ -66,7 +66,7 @@ const DAOPage: FunctionComponent = () => {
 								backgroundImage: `url(${dao.profileImage ?? "/assets/DAODashboard_Photo.png"})`
 							}}
 						>
-							{isOwner && (
+							{isAdmin && (
 								<UploadImageModal
 									initialUrl={dao.profileImage}
 									buttonName="Edit Image"
@@ -112,7 +112,7 @@ const DAOPage: FunctionComponent = () => {
 									</a>
 								)}
 							</div>
-							{isOwner ? (
+							{isAdmin ? (
 								<>
 									<Button
 										buttonType="primary"
@@ -150,22 +150,21 @@ const DAOPage: FunctionComponent = () => {
 									}}
 								/>
 								{menuEntries[activeMenuIndex] === "About" && <AboutDAO dao={dao} />}
-								{menuEntries[activeMenuIndex] === "Proposals" &&
-									(dao.daoAddress ? (
-										<DAOProposals
-											gnosisAddress={dao.gnosisAddress}
-											daoAddress={dao.daoAddress}
-											isMember={isMember}
-										/>
-									) : (
-										<p>TODO: DAO not decentralized</p>
-									))}
-								{menuEntries[activeMenuIndex] === "Create Proposal" &&
-									(dao.daoAddress ? (
-										<CreateDAOProposal isMember={isMember} daoAddress={dao.daoAddress} />
-									) : (
-										<p>TODO: DAO not decentralized</p>
-									))}
+								{menuEntries[activeMenuIndex] === "Proposals" && (
+									<DAOProposals
+										gnosisAddress={dao.gnosisAddress}
+										daoAddress={dao.daoAddress}
+										isMember={isMember}
+									/>
+								)}
+								{menuEntries[activeMenuIndex] === "Create Proposal" && (
+									<CreateDAOProposal
+										isMember={isMember}
+										isAdmin={isAdmin}
+										daoAddress={dao.daoAddress}
+										gnosisAddress={dao.gnosisAddress}
+									/>
+								)}
 								{menuEntries[activeMenuIndex] === "Collection" && (
 									<DAOCollection daoAddress={dao.gnosisAddress} />
 								)}

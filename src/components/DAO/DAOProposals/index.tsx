@@ -26,13 +26,13 @@ const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 const DAOProposalCard: FunctionComponent<{
 	proposal: Proposal
 	isMember: boolean
-	daoAddress: string
+	daoAddress?: string
 }> = ({proposal, isMember, daoAddress}) => {
 	const [processing, setProcessing] = useState(false)
 	const {provider, signer} = useContext(EthersContext)
 
 	const handleVote = async (yes: boolean) => {
-		if (!(provider && signer)) return
+		if (!(provider && signer && daoAddress)) return
 		setProcessing(true)
 		try {
 			await voteForERC20DAOProposal(daoAddress, proposal.id!, yes, provider, signer)
@@ -45,7 +45,7 @@ const DAOProposalCard: FunctionComponent<{
 	}
 
 	const startGracePeriod = async () => {
-		if (!(provider && signer)) return
+		if (!(provider && signer && daoAddress)) return
 		setProcessing(true)
 		try {
 			if (["changeRole", "joinHouse"].includes(proposal.type)) {
@@ -62,7 +62,7 @@ const DAOProposalCard: FunctionComponent<{
 	}
 
 	const execute = async () => {
-		if (!(provider && signer)) return
+		if (!(provider && signer && daoAddress)) return
 		setProcessing(true)
 		try {
 			if (proposal.type === "changeRole") {
@@ -208,7 +208,7 @@ const DAOProposalCard: FunctionComponent<{
 
 const DAOProposals: FunctionComponent<{
 	gnosisAddress: string
-	daoAddress: string
+	daoAddress?: string
 	isMember: boolean
 }> = ({gnosisAddress, daoAddress, isMember}) => {
 	const {provider} = useContext(EthersContext)

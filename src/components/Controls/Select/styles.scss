@@ -15,4 +15,8 @@
     cursor: pointer;
     background-color: transparent;
   }
+
+  &--full-width select {
+    width: 100%;
+  }
 }

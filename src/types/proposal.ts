@@ -1,6 +1,13 @@
 import {DAOMemberRole} from "./DAO"
 
-export type DAOProposalType = "joinHouse" | "requestFunding" | "changeRole"
+export type DAOProposalType =
+	| "joinHouse"
+	| "requestFunding"
+	| "changeRole"
+	| "createZoraAuction"
+	| "approveZoraAuction"
+	| "endZoraAuction"
+	| "cancelZoraAuction"
 
 type DAOState = "active" | "canceled" | "executed" | "passed" | "failed" | "queued" | "waiting"
 
@@ -51,5 +58,9 @@ export type Proposal = {
 export const DAOProposalsTypeNames = {
 	joinHouse: "Join House",
 	requestFunding: "Request Funding",
-	changeRole: "Change Role / Kick"
+	changeRole: "Change Role / Kick",
+	createZoraAuction: "Create Zora Auction",
+	approveZoraAuction: "Approve Zora Auction",
+	endZoraAuction: "End Zora Auction",
+	cancelZoraAuction: "Cancel Zora Auction"
 } as const

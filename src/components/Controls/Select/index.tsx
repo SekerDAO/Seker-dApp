@@ -5,12 +5,13 @@ const Select: FunctionComponent<
 	{
 		options: {name: string; value: string | number}[]
 		label?: string
+		fullWidth?: boolean
 	} & SelectHTMLAttributes<HTMLSelectElement>
-> = ({options, label, ...selectProps}) => {
+> = ({options, label, fullWidth, ...selectProps}) => {
 	if (!Array.isArray(options) || options.length < 1) return null
 
 	return (
-		<div className="select">
+		<div className={`select${fullWidth ? " select--full-width" : ""}`}>
 			{label && <label>{label}</label>}
 
 			<select className="select__field" {...selectProps}>
