@@ -28,17 +28,6 @@ const useERC20HouseDAOProposals = (
 				const firebaseData = (await getDAOProposals(_gnosisAddress)).docs.map(doc => doc.data())
 				const ethersData = await Promise.all(
 					firebaseData.map(async p => {
-						if (p.type === "applyForCommission") {
-							return {
-								yesVotes: 0,
-								noVotes: 0,
-								state: "active" as const,
-								deadline: new Date().toISOString(),
-								gracePeriod: null,
-								userAddress: dao.daoAddress!,
-								type: "applyForCommission" as const
-							}
-						}
 						if (p.type === "joinHouse") {
 							const balance = await getERC20Balance(dao.tokenAddress!, p.userAddress, _provider)
 							const proposalData = await getHouseERC20DAOProposal(

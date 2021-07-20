@@ -1,6 +1,5 @@
 import React, {FunctionComponent, useContext, useState} from "react"
 import Select from "../../Controls/Select"
-import ApplyForCommission from "./ApplyForCommission"
 import "./styles.scss"
 import JoinHouse from "./JoinHouse"
 import RequestFunding from "./RequestFunding"
@@ -13,9 +12,7 @@ const CreateDAOProposal: FunctionComponent<{
 	daoAddress: string
 }> = ({isMember, daoAddress}) => {
 	const {connected} = useContext(AuthContext)
-	const [type, setType] = useState<DAOProposalType>(
-		isMember ? "requestFunding" : "applyForCommission"
-	)
+	const [type, setType] = useState<DAOProposalType>(isMember ? "requestFunding" : "joinHouse")
 
 	if (!connected) return <div>TODO: Please connect wallet</div>
 
@@ -25,16 +22,14 @@ const CreateDAOProposal: FunctionComponent<{
 			<Select
 				value={type}
 				options={[
-					{name: DAOProposalsTypeNames.applyForCommission, value: "applyForCommission"},
 					{name: DAOProposalsTypeNames.joinHouse, value: "joinHouse"},
 					{name: DAOProposalsTypeNames.requestFunding, value: "requestFunding"},
 					{name: DAOProposalsTypeNames.changeRole, value: "changeRole"}
-				].slice(...(isMember ? [2] : [0, 2]))}
+				].slice(...(isMember ? [1] : [0, 1]))}
 				onChange={e => {
 					setType(e.target.value as DAOProposalType)
 				}}
 			/>
-			{type === "applyForCommission" && <ApplyForCommission daoAddress={daoAddress} />}
 			{type === "joinHouse" && <JoinHouse daoAddress={daoAddress} />}
 			{type === "requestFunding" && <RequestFunding daoAddress={daoAddress} />}
 			{type === "changeRole" && <ChangeRole daoAddress={daoAddress} />}

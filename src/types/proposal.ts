@@ -1,6 +1,6 @@
 import {DAOMemberRole} from "./DAO"
 
-export type DAOProposalType = "applyForCommission" | "joinHouse" | "requestFunding" | "changeRole"
+export type DAOProposalType = "joinHouse" | "requestFunding" | "changeRole"
 
 type DAOState = "active" | "canceled" | "executed" | "passed" | "failed" | "queued" | "waiting"
 
@@ -49,7 +49,6 @@ export type Proposal = {
 }
 
 export const DAOProposalsTypeNames = {
-	applyForCommission: "Apply for Commission",
 	joinHouse: "Join House",
 	requestFunding: "Request Funding",
 	changeRole: "Change Role / Kick"

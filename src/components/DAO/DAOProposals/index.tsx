@@ -145,65 +145,63 @@ const DAOProposalCard: FunctionComponent<{
 					</div>
 				</>
 			)}
-			{proposal.type !== "applyForCommission" && (
-				<div className="dao-proposals__card-footer">
-					<div className="dao-proposals__voting">
-						<div className="dao-proposals__voting-legend">
-							<p>Yes</p>
-							<p>No</p>
-						</div>
-						<div className="dao-proposals__voting-bar">
-							<div
-								className="dao-proposals__voting-bar-inner"
-								style={{
-									width:
-										proposal.noVotes === 0
-											? "100%"
-											: `${Math.round((proposal.yesVotes * 100) / proposal.noVotes)}%`
-								}}
-							/>
-						</div>
+			<div className="dao-proposals__card-footer">
+				<div className="dao-proposals__voting">
+					<div className="dao-proposals__voting-legend">
+						<p>Yes</p>
+						<p>No</p>
 					</div>
-					<div className="dao-proposals__voting-buttons">
-						{isMember &&
-							proposal.state === "active" &&
-							(processing ? (
-								"Voting..."
-							) : (
-								<>
-									<Button
-										disabled={processing}
-										buttonType="primary"
-										onClick={() => {
-											handleVote(true)
-										}}
-									>
-										Yes
-									</Button>
-									<Button
-										disabled={processing}
-										buttonType="secondary"
-										onClick={() => {
-											handleVote(false)
-										}}
-									>
-										No
-									</Button>
-								</>
-							))}
-						{proposal.state === "passed" && (
-							<Button onClick={startGracePeriod} disabled={processing}>
-								{processing ? "Processing..." : "Queue"}
-							</Button>
-						)}
-						{proposal.state === "waiting" && (
-							<Button onClick={execute} disabled={processing}>
-								{processing ? "Processing..." : "Execute"}
-							</Button>
-						)}
+					<div className="dao-proposals__voting-bar">
+						<div
+							className="dao-proposals__voting-bar-inner"
+							style={{
+								width:
+									proposal.noVotes === 0
+										? "100%"
+										: `${Math.round((proposal.yesVotes * 100) / proposal.noVotes)}%`
+							}}
+						/>
 					</div>
 				</div>
-			)}
+				<div className="dao-proposals__voting-buttons">
+					{isMember &&
+						proposal.state === "active" &&
+						(processing ? (
+							"Voting..."
+						) : (
+							<>
+								<Button
+									disabled={processing}
+									buttonType="primary"
+									onClick={() => {
+										handleVote(true)
+									}}
+								>
+									Yes
+								</Button>
+								<Button
+									disabled={processing}
+									buttonType="secondary"
+									onClick={() => {
+										handleVote(false)
+									}}
+								>
+									No
+								</Button>
+							</>
+						))}
+					{proposal.state === "passed" && (
+						<Button onClick={startGracePeriod} disabled={processing}>
+							{processing ? "Processing..." : "Queue"}
+						</Button>
+					)}
+					{proposal.state === "waiting" && (
+						<Button onClick={execute} disabled={processing}>
+							{processing ? "Processing..." : "Execute"}
+						</Button>
+					)}
+				</div>
+			</div>
 		</div>
 	)
 }
