@@ -44,7 +44,7 @@ interface MetaTransaction {
 	operation: number
 }
 
-interface SafeTransaction extends MetaTransaction {
+export interface SafeTransaction extends MetaTransaction {
 	safeTxGas: string | number
 	baseGas: string | number
 	gasPrice: string | number

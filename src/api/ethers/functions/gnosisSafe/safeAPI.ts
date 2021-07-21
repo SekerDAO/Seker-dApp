@@ -1,7 +1,7 @@
 import {JsonRpcSigner, Web3Provider} from "@ethersproject/providers"
 import {Contract} from "@ethersproject/contracts"
 import {formatEther} from "@ethersproject/units"
-import {buildContractCall, safeSignMessage, SafeSignature} from "../testFunctions"
+import {buildContractCall, safeSignMessage, SafeSignature, executeTx, SafeTransaction} from "../testFunctions"
 import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
 
 export const signAddOwner = async (
@@ -16,4 +16,15 @@ export const signAddOwner = async (
 	const call = buildContractCall(safeContract, "addOwnerThreshold", [adminAddress, newThreshold], nonce)
 	const signature = await safeSignMessage(signer, safeContract, call)
 	return signature
+}
+
+export const executeSafeTx = async (
+	safeAddress: string,
+	call: SafeTransaction,
+	signatures: [SafeSignature],
+	provider: Web3Provider
+): Promise<boolean> => {
+	const safeContract = new Contract(safeAddress, GnosisSafeL2.abi, provider)
+	await executeTx(safeContract, call, signatures)
+	return true
 }
