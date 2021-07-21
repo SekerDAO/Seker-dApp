@@ -8,8 +8,9 @@ import {toastError, toastSuccess} from "../../Toast"
 import {createERC20DAOFundingProposal} from "../../../api/ethers/functions/ERC20DAO/createERC20DAOProposals"
 
 const RequestFunding: FunctionComponent<{
+	gnosisAddress: string
 	daoAddress: string
-}> = ({daoAddress}) => {
+}> = ({gnosisAddress, daoAddress}) => {
 	const {account} = useContext(AuthContext)
 	const {provider, signer} = useContext(EthersContext)
 	const [loading, setLoading] = useState(false)
@@ -40,7 +41,7 @@ const RequestFunding: FunctionComponent<{
 			await addProposal({
 				id: proposalId,
 				type: "requestFunding",
-				daoAddress,
+				gnosisAddress,
 				userAddress: account,
 				title,
 				...(description ? {description} : {}),

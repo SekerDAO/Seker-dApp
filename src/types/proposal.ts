@@ -1,4 +1,5 @@
 import {DAOMemberRole} from "./DAO"
+import {SafeSignature} from "../api/ethers/functions/gnosisSafe/safeUtils"
 
 export type DAOProposalType =
 	| "joinHouse"
@@ -15,13 +16,15 @@ export type ProposalFirebaseData = Pick<
 	Proposal,
 	| "id"
 	| "type"
-	| "daoAddress"
+	| "gnosisAddress"
 	| "userAddress"
 	| "title"
 	| "description"
 	| "amount"
 	| "recipientAddress"
 	| "newRole"
+	| "newThreshold"
+	| "signatures"
 >
 
 export type ProposalEtherData = Pick<
@@ -40,7 +43,7 @@ export type ProposalEtherData = Pick<
 export type Proposal = {
 	id?: number
 	type: DAOProposalType
-	daoAddress: string
+	gnosisAddress: string
 	userAddress: string
 	title: string
 	description?: string
@@ -53,6 +56,8 @@ export type Proposal = {
 	noVotes: number
 	yesVotes: number
 	balance?: number
+	newThreshold?: number
+	signatures?: SafeSignature[]
 }
 
 export const DAOProposalsTypeNames = {

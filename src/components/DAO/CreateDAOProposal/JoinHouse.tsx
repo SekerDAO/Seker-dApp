@@ -8,8 +8,9 @@ import addProposal from "../../../api/firebase/proposal/addProposal"
 import {AuthContext} from "../../../context/AuthContext"
 
 const JoinHouse: FunctionComponent<{
+	gnosisAddress: string
 	daoAddress: string
-}> = ({daoAddress}) => {
+}> = ({gnosisAddress, daoAddress}) => {
 	const {account} = useContext(AuthContext)
 	const {provider, signer} = useContext(EthersContext)
 	const [loading, setLoading] = useState(false)
@@ -24,7 +25,7 @@ const JoinHouse: FunctionComponent<{
 			await addProposal({
 				id: proposalId,
 				type: "joinHouse",
-				daoAddress,
+				gnosisAddress,
 				userAddress: account,
 				title,
 				...(description ? {description} : {})

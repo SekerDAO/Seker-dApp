@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useContext, useState} from "react"
+import React, {ChangeEvent, FunctionComponent, useContext, useState} from "react"
 import Input from "../../Controls/Input"
 import Button from "../../Controls/Button"
 import {HouseDAORole} from "../../../types/DAO"
@@ -8,10 +8,18 @@ import EthersContext from "../../../context/EthersContext"
 import addProposal from "../../../api/firebase/proposal/addProposal"
 import {toastError, toastSuccess} from "../../Toast"
 import {createERC20DAOChangeRoleProposal} from "../../../api/ethers/functions/ERC20DAO/createERC20DAOProposals"
+import {SafeSignature} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
+import {
+	executeAddOwner,
+	signAddOwner
+} from "../../../api/ethers/functions/gnosisSafe/addRemoveOwner"
 
 const ChangeRole: FunctionComponent<{
-	daoAddress: string
-}> = ({daoAddress}) => {
+	gnosisAddress: string
+	daoAddress?: string
+	isAdmin: boolean
+	gnosisVotingThreshold: number
+}> = ({daoAddress, gnosisAddress, isAdmin, gnosisVotingThreshold}) => {
 	const {account} = useContext(AuthContext)
 	const {provider, signer} = useContext(EthersContext)
 	const [loading, setLoading] = useState(false)
@@ -19,39 +27,95 @@ const ChangeRole: FunctionComponent<{
 	const [description, setDescription] = useState("")
 	const [address, setAddress] = useState("")
 	const [newRole, setNewRole] = useState<HouseDAORole | "kick" | "">("")
+	const [newThreshold, setNewThreshold] = useState("")
+
+	const handleThresholdChange = (e: ChangeEvent<HTMLInputElement>) => {
+		if (Number(e.target.value) < 1) {
+			setNewThreshold("1")
+		} else if (Number(e.target.value) > gnosisVotingThreshold + 1) {
+			setNewThreshold(String(gnosisVotingThreshold + 1))
+		} else {
+			setNewThreshold(e.target.value)
+		}
+	}
 
 	const handleSubmit = async () => {
 		if (!(provider && signer && account && address && newRole)) return
-		setLoading(true)
 		try {
-			const proposalId = await createERC20DAOChangeRoleProposal(
-				daoAddress,
-				newRole,
-				address,
-				provider,
-				signer
-			)
-			await addProposal({
-				id: proposalId,
-				type: "changeRole",
-				daoAddress,
-				userAddress: account,
-				title,
-				...(description ? {description} : {}),
-				recipientAddress: address,
-				newRole
-			})
-			toastSuccess("Proposal successfully created")
-			setTitle("")
-			setDescription("")
-			setAddress("")
-			setNewRole("")
+			if (newRole === "member") {
+				// processing proposal for DAO module
+				if (!daoAddress) return
+				setLoading(true)
+				const proposalId = await createERC20DAOChangeRoleProposal(
+					daoAddress,
+					newRole,
+					address,
+					provider,
+					signer
+				)
+				await addProposal({
+					id: proposalId,
+					type: "changeRole",
+					gnosisAddress,
+					userAddress: account,
+					title,
+					...(description ? {description} : {}),
+					recipientAddress: address,
+					newRole
+				})
+				toastSuccess("Proposal successfully created")
+				setTitle("")
+				setDescription("")
+				setAddress("")
+				setNewRole("")
+				setLoading(false)
+			} else if (["admin", "head"].includes(newRole)) {
+				// processing proposal for safe module
+				if (!newThreshold || isNaN(Number(newThreshold))) return
+				setLoading(true)
+				const signatures: SafeSignature[] = []
+				if (isAdmin) {
+					const newSignature = await signAddOwner(
+						gnosisAddress,
+						address,
+						Number(newThreshold),
+						provider,
+						signer
+					)
+					signatures.push(newSignature)
+					if (gnosisVotingThreshold === 1) {
+						await executeAddOwner(gnosisAddress, address, Number(newThreshold), signatures, signer)
+						// TODO: update firebase function for updating dao users and call it
+					}
+				}
+				// TODO: should we create the proposal if threshold == 1 and admin is already added?
+				await addProposal({
+					type: "changeRole",
+					userAddress: account,
+					gnosisAddress,
+					title,
+					...(description ? {description} : {}),
+					recipientAddress: address,
+					newThreshold: Number(newThreshold),
+					newRole,
+					signatures
+				})
+				toastSuccess("Proposal successfully created")
+				setLoading(false)
+			} else {
+				// TODO: for kick we should check the old role to determine which module to call
+				console.log("TODO: kick not implemented")
+			}
 		} catch (e) {
 			console.error(e)
 			toastError("Failed to create proposal")
 		}
-		setLoading(false)
 	}
+
+	// TODO: check old role and require new threshold if the old role is admin for kick
+	const submitButtonDisabled =
+		!(title && address && newRole) ||
+		(["head", "admin"].includes(newRole) && (!newThreshold || isNaN(Number(newThreshold))))
 
 	return (
 		<>
@@ -90,7 +154,7 @@ const ChangeRole: FunctionComponent<{
 					<Select
 						options={[
 							{name: "Choose One", value: ""},
-							{name: "Member", value: "member"},
+							...(daoAddress ? [{name: "Member", value: "member"}] : []),
 							{name: "Head", value: "head"},
 							{name: "Kick", value: "kick"}
 						]}
@@ -101,7 +165,19 @@ const ChangeRole: FunctionComponent<{
 					/>
 				</div>
 			</div>
-			<Button onClick={handleSubmit} disabled={loading || !(title && address && newRole)}>
+			{["admin", "head"].includes(newRole) && (
+				<>
+					<label htmlFor="change-role-threshold">New Threshold</label>
+					<Input
+						id="change-role-threshold"
+						borders="all"
+						number
+						value={newThreshold}
+						onChange={handleThresholdChange}
+					/>
+				</>
+			)}
+			<Button onClick={handleSubmit} disabled={loading || submitButtonDisabled}>
 				{loading ? "Processing..." : "Create Proposal"}
 			</Button>
 		</>

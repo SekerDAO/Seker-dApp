@@ -163,6 +163,7 @@ const DAOPage: FunctionComponent = () => {
 										isAdmin={isAdmin}
 										daoAddress={dao.daoAddress}
 										gnosisAddress={dao.gnosisAddress}
+										gnosisVotingThreshold={dao.gnosisVotingThreshold}
 									/>
 								)}
 								{menuEntries[activeMenuIndex] === "Collection" && (

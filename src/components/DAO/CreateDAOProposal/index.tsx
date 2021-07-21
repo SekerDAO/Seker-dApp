@@ -16,7 +16,8 @@ const CreateDAOProposal: FunctionComponent<{
 	isAdmin: boolean
 	daoAddress?: string
 	gnosisAddress: string
-}> = ({isMember, isAdmin, daoAddress, gnosisAddress}) => {
+	gnosisVotingThreshold: number
+}> = ({isMember, isAdmin, daoAddress, gnosisAddress, gnosisVotingThreshold}) => {
 	const {connected} = useContext(AuthContext)
 	const [type, setType] = useState<DAOProposalType>(isMember ? "requestFunding" : "joinHouse")
 
@@ -41,14 +42,25 @@ const CreateDAOProposal: FunctionComponent<{
 					setType(e.target.value as DAOProposalType)
 				}}
 			/>
-			{type === "joinHouse" && daoAddress && <JoinHouse daoAddress={daoAddress} />}
+			{type === "joinHouse" && daoAddress && (
+				<JoinHouse gnosisAddress={gnosisAddress} daoAddress={daoAddress} />
+			)}
 			{type === "createZoraAuction" && <CreateZoraAuction gnosisAddress={gnosisAddress} />}
 			{type === "approveZoraAuction" && <ApproveZoraAuction gnosisAddress={gnosisAddress} />}
 			{type === "endZoraAuction" && <EndZoraAuction gnosisAddress={gnosisAddress} />}
 			{type === "cancelZoraAuction" && <CancelZoraAuction gnosisAddress={gnosisAddress} />}
-			{/* TODO: refactor API for these 2 types of proposals and remove non-null assertions */}
-			{type === "requestFunding" && <RequestFunding daoAddress={daoAddress!} />}
-			{type === "changeRole" && <ChangeRole daoAddress={daoAddress!} />}
+			{type === "changeRole" && (
+				<ChangeRole
+					gnosisVotingThreshold={gnosisVotingThreshold}
+					gnosisAddress={gnosisAddress}
+					daoAddress={daoAddress}
+					isAdmin={isAdmin}
+				/>
+			)}
+			{/* TODO: refactor API for this type of proposal and remove non-null assertions */}
+			{type === "requestFunding" && (
+				<RequestFunding gnosisAddress={gnosisAddress} daoAddress={daoAddress!} />
+			)}
 		</div>
 	)
 }
