@@ -1,20 +1,79 @@
-import React, {FunctionComponent, useState} from "react"
+import React, {ChangeEvent, FunctionComponent, useState} from "react"
 import Input from "../../Controls/Input"
 import Select from "../../Controls/Select"
 import Button from "../../Controls/Button"
+import useNFTs from "../../../customHooks/getters/useNFTs"
+import ErrorPlaceholder from "../../ErrorPlaceholder"
+import Loader from "../../Loader"
+import {NFT} from "../../../types/NFT"
+import {toastError} from "../../Toast"
 
 const CreateZoraAuction: FunctionComponent<{
 	gnosisAddress: string
-}> = () => {
+}> = ({gnosisAddress}) => {
+	const {NFTs, loading, error} = useNFTs({user: gnosisAddress, limit: 0, after: null})
+	const [processing, setProcessing] = useState(false)
 	const [title, setTitle] = useState("")
 	const [description, setDescription] = useState("")
-	const [nftTokenId, setNftTokenId] = useState("")
+	const [nft, setNft] = useState<NFT | null>(null)
 	const [reservePrice, setReservePrice] = useState("")
 	const [customCurrency, setCustomCurrency] = useState<"" | "ETH" | "custom">("")
 	const [currencyToken, setCurrencyToken] = useState("")
 	const [curatorAddress, setCuratorAddress] = useState("")
 	const [curatorFee, setCuratorFee] = useState("")
 	const [duration, setDuration] = useState("")
+
+	if (error) return <ErrorPlaceholder />
+	if (!NFTs || loading) return <Loader />
+
+	const handlePriceChange = (e: ChangeEvent<HTMLInputElement>) => {
+		if (Number(e.target.value) < 0) {
+			setReservePrice("0")
+		} else {
+			setReservePrice(e.target.value)
+		}
+	}
+
+	const handleFeeChange = (e: ChangeEvent<HTMLInputElement>) => {
+		if (Number(e.target.value) < 0) {
+			setCuratorFee("0")
+		} else {
+			setCuratorFee(e.target.value)
+		}
+	}
+
+	const handleDurationChange = (e: ChangeEvent<HTMLInputElement>) => {
+		if (Number(e.target.value) < 0) {
+			setDuration("0")
+		} else {
+			setDuration(e.target.value)
+		}
+	}
+
+	const handleSubmit = async () => {
+		setProcessing(true)
+		try {
+			console.log("TODO: mock create")
+		} catch (e) {
+			console.error(e)
+			toastError("Failed to create Zora Auction proposal")
+		}
+		setProcessing(false)
+	}
+
+	const submitButtonDisabled =
+		!(
+			title &&
+			nft &&
+			reservePrice &&
+			(customCurrency === "ETH" || (customCurrency === "custom" && currencyToken)) &&
+			curatorAddress &&
+			curatorFee &&
+			duration
+		) ||
+		isNaN(Number(reservePrice)) ||
+		isNaN(Number(curatorFee)) ||
+		isNaN(Number(duration))
 
 	return (
 		<>
@@ -36,23 +95,35 @@ const CreateZoraAuction: FunctionComponent<{
 					setDescription(e.target.value)
 				}}
 			/>
-			<label htmlFor="create-zora-auction-nft-token">NFT Token ID</label>
-			<Input
-				borders="all"
-				value={nftTokenId}
-				id="create-zora-auction-nft-token"
+			<label htmlFor="create-zora-auction-nft-token">Select NFT</label>
+			<Select
+				fullWidth
+				id="create-zora-auction-custom-currency"
+				options={[
+					{name: "Choose One", value: ""},
+					...NFTs.data.map(s => {
+						const {name, id} = s.data()
+						return {name, value: id}
+					})
+				]}
 				onChange={e => {
-					setNftTokenId(e.target.value)
+					const shapshot = NFTs.data.find(s => s.data().id === Number(e.target.value))
+					if (shapshot) {
+						setNft(shapshot.data())
+					} else {
+						setNft(null)
+					}
 				}}
+				value={nft?.id ?? ""}
 			/>
 			<label htmlFor="create-zora-auction-price">Reserve Price</label>
 			<Input
+				number
+				min={0}
 				borders="all"
 				value={reservePrice}
 				id="create-zora-auction-price"
-				onChange={e => {
-					setReservePrice(e.target.value)
-				}}
+				onChange={handlePriceChange}
 			/>
 			<label htmlFor="create-zora-auction-custom-currency">Auction Currency</label>
 			<Select
@@ -96,25 +167,27 @@ const CreateZoraAuction: FunctionComponent<{
 				<div className="create-dao-proposal__col">
 					<label htmlFor="create-zora-auction-curator-fee">Curator&apos;s Fee (%)</label>
 					<Input
+						number
+						min={0}
 						id="create-zora-auction-curator-fee"
 						borders="all"
 						value={curatorFee}
-						onChange={e => {
-							setCuratorFee(e.target.value)
-						}}
+						onChange={handleFeeChange}
 					/>
 				</div>
 			</div>
-			<label htmlFor="create-zora-auction-curator-duration">Duration</label>
+			<label htmlFor="create-zora-auction-curator-duration">Duration (Hours)</label>
 			<Input
+				number
+				min={0}
 				id="create-zora-auction-curator-duration"
 				borders="all"
 				value={duration}
-				onChange={e => {
-					setDuration(e.target.value)
-				}}
+				onChange={handleDurationChange}
 			/>
-			<Button>Create Proposal</Button>
+			<Button disabled={submitButtonDisabled || processing} onClick={handleSubmit}>
+				{processing ? "Processing..." : "Create Proposal"}
+			</Button>
 		</>
 	)
 }

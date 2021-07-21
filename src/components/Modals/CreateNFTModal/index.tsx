@@ -28,8 +28,8 @@ type CreateNFTModalStage =
 	| "success"
 
 const CreateNFTModal: FunctionComponent<{
-	daoAddress?: string
-}> = ({daoAddress}) => {
+	gnosisAddress?: string
+}> = ({gnosisAddress}) => {
 	const [isOpened, setIsOpened] = useState(false)
 	const [loading, setLoading] = useState(false)
 	const [stage, setStage] = useState<CreateNFTModalStage>("chooseOption")
@@ -104,8 +104,8 @@ const CreateNFTModal: FunctionComponent<{
 					attributes: metadata.attributes,
 					category: "art" // TODO
 				}
-				if (daoAddress) {
-					await addDAONFT(nft, daoAddress)
+				if (gnosisAddress) {
+					await addDAONFT(nft, gnosisAddress)
 				} else {
 					await addNFT(nft, account)
 				}

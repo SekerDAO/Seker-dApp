@@ -166,7 +166,7 @@ const DAOPage: FunctionComponent = () => {
 									/>
 								)}
 								{menuEntries[activeMenuIndex] === "Collection" && (
-									<DAOCollection daoAddress={dao.gnosisAddress} />
+									<DAOCollection gnosisAddress={dao.gnosisAddress} />
 								)}
 							</>
 						)}

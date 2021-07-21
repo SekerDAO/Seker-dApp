@@ -3,13 +3,13 @@ import NFTGallery from "../../NFTGallery"
 import CreateNFTModal from "../../Modals/CreateNFTModal"
 import "./styles.scss"
 
-const DAOCollection: FunctionComponent<{daoAddress: string}> = ({daoAddress}) => {
+const DAOCollection: FunctionComponent<{gnosisAddress: string}> = ({gnosisAddress}) => {
 	return (
 		<div className="dao-collection">
 			<div className="dao-collection__edit-buttons">
-				<CreateNFTModal daoAddress={daoAddress} />
+				<CreateNFTModal gnosisAddress={gnosisAddress} />
 			</div>
-			<NFTGallery account={daoAddress} />
+			<NFTGallery account={gnosisAddress} />
 		</div>
 	)
 }
