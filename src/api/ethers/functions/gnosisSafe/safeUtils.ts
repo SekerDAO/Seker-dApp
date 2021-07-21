@@ -183,6 +183,19 @@ export const buildSafeTransaction = (template: {
 
 // TODO: unused stuff
 
+// export const signTransaction = async (
+// 	safeAddress: string,
+// 	call: SafeTransaction,
+// 	signatures: [SafeSignature],
+// 	signer: JsonRpcSigner,
+// 	provider: Web3Provider
+// ): Promise<[SafeSignature]> => {
+// 	const safeContract = new Contract(safeAddress, GnosisSafeL2.abi, provider)
+// 	const signature = await safeSignMessage(signer, safeContract, call)
+// 	signatures.push(signature)
+// 	return signatures
+// }
+
 // export const calculateSafeDomainSeparator = (safe: Contract, chainId: BigNumberish): string =>
 // 	_TypedDataEncoder.hashDomain({verifyingContract: safe.address, chainId})
 
