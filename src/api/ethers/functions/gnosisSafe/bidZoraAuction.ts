@@ -13,32 +13,23 @@ export const signBidZoraAuction = async (
 	signer: JsonRpcSigner
 ): Promise<SafeSignature> => {
 	const safeContract = new Contract(safeAddress, GnosisSafeL2.abi, provider)
-	const auction = new Contract(REACT_APP_ZORA_ADDRESS, Auction.abi, provider)
+	const auction = new Contract(REACT_APP_ZORA_ADDRESS!, Auction.abi, provider)
 	const nonce = await safeContract.nonce()
-	const call = buildContractCall(
-		auction,
-		"createBid",
-		[auctionID, amount],
-		nonce
-	)
+	const call = buildContractCall(auction, "createBid", [auctionID, amount], nonce)
 	return safeSignMessage(signer, safeContract, call)
 }
 
 export const executeBidZoraAuction = async (
 	safeAddress: string,
 	auctionID: number,
+	amount: number,
 	signatures: SafeSignature[],
 	signer: JsonRpcSigner
 ): Promise<void> => {
 	const safeContract = new Contract(safeAddress, GnosisSafeL2.abi, signer)
-	const auction = new Contract(REACT_APP_ZORA_ADDRESS, Auction.abi, provider)
+	const auction = new Contract(REACT_APP_ZORA_ADDRESS!, Auction.abi, signer)
 	const nonce = await safeContract.nonce()
-	const call = buildContractCall(
-		auction,
-		"createBid",
-		[auctionID, amount],
-		nonce
-	)
+	const call = buildContractCall(auction, "createBid", [auctionID, amount], nonce)
 	const tx = await executeTx(safeContract, call, signatures)
 	await tx.wait()
 }
