@@ -2,7 +2,8 @@ import {JsonRpcSigner} from "@ethersproject/providers"
 import {Contract} from "@ethersproject/contracts"
 import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
 import Auction from "../../abis/ZoraAuction.json"
-import {buildContractCall, executeTx, SafeSignature, safeSignMessage} from "./safeUtils"
+import {buildContractCall, executeTx, SafeSignature, safeSignMessage} from "../gnosisSafe/safeUtils"
+import {parseEther} from "@ethersproject/units"
 const {REACT_APP_ZORA_ADDRESS} = process.env
 
 export const signCreateZoraAuction = async (
@@ -22,7 +23,15 @@ export const signCreateZoraAuction = async (
 	const call = buildContractCall(
 		auction,
 		"createAuction",
-		[nftID, nftAddress, duration, reservePrice, curator, curatorFeePercentage, auctionCurrency],
+		[
+			nftID,
+			nftAddress,
+			duration,
+			parseEther(String(reservePrice)),
+			curator,
+			curatorFeePercentage,
+			auctionCurrency
+		],
 		nonce
 	)
 	return safeSignMessage(signer, safeContract, call)
@@ -46,7 +55,15 @@ export const executeCreateZoraAuction = async (
 	const call = buildContractCall(
 		auction,
 		"createAuction",
-		[nftID, nftAddress, duration, reservePrice, curator, curatorFeePercentage, auctionCurrency],
+		[
+			nftID,
+			nftAddress,
+			duration,
+			parseEther(String(reservePrice)),
+			curator,
+			curatorFeePercentage,
+			auctionCurrency
+		],
 		nonce
 	)
 	const tx = await executeTx(safeContract, call, signatures)

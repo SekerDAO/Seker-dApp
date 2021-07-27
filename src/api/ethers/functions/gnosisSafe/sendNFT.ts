@@ -18,7 +18,7 @@ export const signSendNFT = async (
 	return safeSignMessage(signer, safeContract, call)
 }
 
-export const executeCreateZoraAuction = async (
+export const executeSendNFT = async (
 	safeAddress: string,
 	nftID: number,
 	nftAddress: string,

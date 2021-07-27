@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FunctionComponent, useState} from "react"
+import React, {ChangeEvent, FunctionComponent, useContext, useState} from "react"
 import Input from "../../Controls/Input"
 import Select from "../../Controls/Select"
 import Button from "../../Controls/Button"
@@ -7,10 +7,22 @@ import ErrorPlaceholder from "../../ErrorPlaceholder"
 import Loader from "../../Loader"
 import {NFT} from "../../../types/NFT"
 import {toastError} from "../../Toast"
+import addProposal from "../../../api/firebase/proposal/addProposal"
+import {AuthContext} from "../../../context/AuthContext"
+import {SafeSignature} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
+import {
+	executeCreateZoraAuction,
+	signCreateZoraAuction
+} from "../../../api/ethers/functions/zoraAuction/createZoraAuction"
+import EthersContext from "../../../context/EthersContext"
 
 const CreateZoraAuction: FunctionComponent<{
 	gnosisAddress: string
-}> = ({gnosisAddress}) => {
+	isAdmin: boolean
+	gnosisVotingThreshold: number
+}> = ({gnosisAddress, isAdmin, gnosisVotingThreshold}) => {
+	const {account} = useContext(AuthContext)
+	const {signer} = useContext(EthersContext)
 	const {NFTs, loading, error} = useNFTs({user: gnosisAddress, limit: 0, after: null})
 	const [processing, setProcessing] = useState(false)
 	const [title, setTitle] = useState("")
@@ -20,7 +32,7 @@ const CreateZoraAuction: FunctionComponent<{
 	const [customCurrency, setCustomCurrency] = useState<"" | "ETH" | "custom">("")
 	const [currencyToken, setCurrencyToken] = useState("")
 	const [curatorAddress, setCuratorAddress] = useState("")
-	const [curatorFee, setCuratorFee] = useState("")
+	const [curatorFeePercentage, setCuratorFeePercentage] = useState("")
 	const [duration, setDuration] = useState("")
 
 	if (error) return <ErrorPlaceholder />
@@ -36,9 +48,9 @@ const CreateZoraAuction: FunctionComponent<{
 
 	const handleFeeChange = (e: ChangeEvent<HTMLInputElement>) => {
 		if (Number(e.target.value) < 0) {
-			setCuratorFee("0")
+			setCuratorFeePercentage("0")
 		} else {
-			setCuratorFee(e.target.value)
+			setCuratorFeePercentage(e.target.value)
 		}
 	}
 
@@ -50,10 +62,63 @@ const CreateZoraAuction: FunctionComponent<{
 		}
 	}
 
+	const handleNFTChange = (e: ChangeEvent<HTMLSelectElement>) => {
+		const snapshot = NFTs.data.find(s => s.data().id === Number(e.target.value))
+		if (snapshot) {
+			setNft(snapshot.data())
+		} else {
+			setNft(null)
+		}
+	}
+
 	const handleSubmit = async () => {
+		if (!(account && nft && signer)) return
 		setProcessing(true)
 		try {
-			console.log("TODO: mock create")
+			const signatures: SafeSignature[] = []
+			if (isAdmin) {
+				const signature = await signCreateZoraAuction(
+					gnosisAddress,
+					nft.id,
+					nft.address,
+					Number(duration),
+					Number(reservePrice),
+					curatorAddress,
+					Number(curatorFeePercentage),
+					customCurrency === "custom" ? currencyToken : "ETH",
+					signer
+				)
+				signatures.push(signature)
+				if (gnosisVotingThreshold === 1) {
+					await executeCreateZoraAuction(
+						gnosisAddress,
+						nft.id,
+						nft.address,
+						Number(duration),
+						Number(reservePrice),
+						curatorAddress,
+						Number(curatorFeePercentage),
+						customCurrency === "custom" ? currencyToken : "ETH",
+						signatures,
+						signer
+					)
+				}
+			}
+			await addProposal({
+				type: "createZoraAuction",
+				userAddress: account,
+				gnosisAddress,
+				title,
+				...(description ? {description} : {}),
+				nftId: nft.id,
+				nftAddress: nft.address,
+				duration: Number(duration),
+				reservePrice: Number(reservePrice),
+				curatorAddress,
+				curatorFeePercentage: Number(curatorFeePercentage),
+				auctionCurrency: customCurrency === "custom" ? currencyToken : "ETH",
+				signatures
+			})
 		} catch (e) {
 			console.error(e)
 			toastError("Failed to create Zora Auction proposal")
@@ -68,11 +133,11 @@ const CreateZoraAuction: FunctionComponent<{
 			reservePrice &&
 			(customCurrency === "ETH" || (customCurrency === "custom" && currencyToken)) &&
 			curatorAddress &&
-			curatorFee &&
+			curatorFeePercentage &&
 			duration
 		) ||
 		isNaN(Number(reservePrice)) ||
-		isNaN(Number(curatorFee)) ||
+		isNaN(Number(curatorFeePercentage)) ||
 		isNaN(Number(duration))
 
 	return (
@@ -106,14 +171,7 @@ const CreateZoraAuction: FunctionComponent<{
 						return {name, value: id}
 					})
 				]}
-				onChange={e => {
-					const shapshot = NFTs.data.find(s => s.data().id === Number(e.target.value))
-					if (shapshot) {
-						setNft(shapshot.data())
-					} else {
-						setNft(null)
-					}
-				}}
+				onChange={handleNFTChange}
 				value={nft?.id ?? ""}
 			/>
 			<label htmlFor="create-zora-auction-price">Reserve Price</label>
@@ -171,7 +229,7 @@ const CreateZoraAuction: FunctionComponent<{
 						min={0}
 						id="create-zora-auction-curator-fee"
 						borders="all"
-						value={curatorFee}
+						value={curatorFeePercentage}
 						onChange={handleFeeChange}
 					/>
 				</div>

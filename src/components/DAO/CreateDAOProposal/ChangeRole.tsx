@@ -88,7 +88,6 @@ const ChangeRole: FunctionComponent<{
 						// TODO: update firebase function for updating dao users and call it
 					}
 				}
-				// TODO: should we create the proposal if threshold == 1 and admin is already added?
 				await addProposal({
 					type: "changeRole",
 					userAddress: account,

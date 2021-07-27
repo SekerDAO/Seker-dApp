@@ -25,6 +25,13 @@ export type ProposalFirebaseData = Pick<
 	| "newRole"
 	| "newThreshold"
 	| "signatures"
+	| "nftId"
+	| "nftAddress"
+	| "duration"
+	| "reservePrice"
+	| "curatorAddress"
+	| "curatorFeePercentage"
+	| "auctionCurrency"
 >
 
 export type ProposalEtherData = Pick<
@@ -48,7 +55,7 @@ export type Proposal = {
 	title: string
 	description?: string
 	amount?: number
-	recipientAddress?: string
+	recipientAddress?: string // for request funding and change role
 	newRole?: DAOMemberRole | "kick"
 	state: DAOState
 	deadline: string
@@ -56,8 +63,17 @@ export type Proposal = {
 	noVotes: number
 	yesVotes: number
 	balance?: number
+	// for changeRole for gnosis safe module
 	newThreshold?: number
 	signatures?: SafeSignature[]
+	// for Zora auction
+	nftId?: number
+	nftAddress?: string
+	duration?: number
+	reservePrice?: number
+	curatorAddress?: string
+	curatorFeePercentage?: number
+	auctionCurrency?: string
 }
 
 export const DAOProposalsTypeNames = {

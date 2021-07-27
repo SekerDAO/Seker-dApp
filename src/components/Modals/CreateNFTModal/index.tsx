@@ -105,6 +105,7 @@ const CreateNFTModal: FunctionComponent<{
 					category: "art" // TODO
 				}
 				if (gnosisAddress) {
+					// TODO: transfer NFT on blockchain level
 					await addDAONFT(nft, gnosisAddress)
 				} else {
 					await addNFT(nft, account)

@@ -45,7 +45,13 @@ const CreateDAOProposal: FunctionComponent<{
 			{type === "joinHouse" && daoAddress && (
 				<JoinHouse gnosisAddress={gnosisAddress} daoAddress={daoAddress} />
 			)}
-			{type === "createZoraAuction" && <CreateZoraAuction gnosisAddress={gnosisAddress} />}
+			{type === "createZoraAuction" && (
+				<CreateZoraAuction
+					gnosisAddress={gnosisAddress}
+					isAdmin={isAdmin}
+					gnosisVotingThreshold={gnosisVotingThreshold}
+				/>
+			)}
 			{type === "approveZoraAuction" && <ApproveZoraAuction gnosisAddress={gnosisAddress} />}
 			{type === "endZoraAuction" && <EndZoraAuction gnosisAddress={gnosisAddress} />}
 			{type === "cancelZoraAuction" && <CancelZoraAuction gnosisAddress={gnosisAddress} />}
