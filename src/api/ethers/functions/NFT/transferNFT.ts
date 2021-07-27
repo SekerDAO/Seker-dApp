@@ -1,8 +1,6 @@
-import {JsonRpcSigner, Web3Provider} from "@ethersproject/providers"
-import TWDomainToken from "../../abis/TWDomainToken.json"
+import {JsonRpcSigner} from "@ethersproject/providers"
 import MultiArtToken from "../../abis/MultiArtToken.json"
 import {Contract} from "@ethersproject/contracts"
-const {REACT_APP_DOMAIN_ADDRESS} = process.env
 
 export const transferNFT = async (
 	senderAddress: string,
@@ -11,7 +9,7 @@ export const transferNFT = async (
 	daoAddress: string,
 	signer: JsonRpcSigner
 ): Promise<boolean> => {
-	const nft = new Contract(nftAddress!, MultiArtToken.abi, signer)
+	const nft = new Contract(nftAddress, MultiArtToken.abi, signer)
 	const tx = await nft.trasnferFrom(senderAddress, daoAddress, nftID)
 	await tx.wait()
 	return true
