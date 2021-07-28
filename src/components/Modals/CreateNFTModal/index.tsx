@@ -128,7 +128,8 @@ const CreateNFTModal: FunctionComponent<{
 			!isNaN(Number(existingNFTId)) &&
 			tokenAddress &&
 			account &&
-			provider
+			provider &&
+			signer
 		) {
 			setLoading(true)
 			try {
@@ -139,21 +140,30 @@ const CreateNFTModal: FunctionComponent<{
 					return
 				}
 				const metadata = await getNFTMetadata(tokenAddress, existingNFTId, provider)
-				await addNFT(
-					{
-						id: Number(existingNFTId),
-						address: tokenAddress,
-						createdDate: new Date().toISOString(),
-						name: metadata.name,
-						desc: metadata.description,
-						thumbnail: metadata.image,
-						externalUrl: metadata.external_url,
-						media: metadata.media,
-						attributes: metadata.attributes,
-						category: "art"
-					},
-					account
-				)
+				const nft: NFT = {
+					id: Number(existingNFTId),
+					address: tokenAddress,
+					createdDate: new Date().toISOString(),
+					name: metadata.name,
+					desc: metadata.description,
+					thumbnail: metadata.image,
+					externalUrl: metadata.external_url,
+					media: metadata.media,
+					attributes: metadata.attributes,
+					category: "art"
+				}
+				if (gnosisAddress) {
+					await transferNFT(
+						account,
+						Number(existingNFTId),
+						gnosisAddress,
+						signer,
+						customDomain ? customDomainAddress : undefined
+					)
+					await addDAONFT(nft, gnosisAddress)
+				} else {
+					await addNFT(nft, account)
+				}
 				setStage("success")
 			} catch (e) {
 				console.error(e)
