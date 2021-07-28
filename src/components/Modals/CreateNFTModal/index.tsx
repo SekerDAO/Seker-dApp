@@ -18,6 +18,7 @@ import "./styles.scss"
 import {toastError} from "../../Toast"
 import {NFT} from "../../../types/NFT"
 import addDAONFT from "../../../api/firebase/NFT/addDAONFT"
+import transferNFT from "../../../api/ethers/functions/NFT/transferNFT"
 const {REACT_APP_DOMAIN_ADDRESS} = process.env
 
 type CreateNFTModalStage =
@@ -105,7 +106,13 @@ const CreateNFTModal: FunctionComponent<{
 					category: "art" // TODO
 				}
 				if (gnosisAddress) {
-					// TODO: transfer NFT on blockchain level
+					await transferNFT(
+						account,
+						id,
+						gnosisAddress,
+						signer,
+						customDomain ? customDomainAddress : undefined
+					)
 					await addDAONFT(nft, gnosisAddress)
 				} else {
 					await addNFT(nft, account)

@@ -1,16 +1,23 @@
 import {JsonRpcSigner} from "@ethersproject/providers"
 import MultiArtToken from "../../abis/MultiArtToken.json"
 import {Contract} from "@ethersproject/contracts"
+import TWDomainToken from "../../abis/TWDomainToken.json"
+const {REACT_APP_DOMAIN_ADDRESS} = process.env
 
-export const transferNFT = async (
-	senderAddress: string,
+const transferNFT = async (
+	from: string,
 	nftID: number,
-	nftAddress: string,
-	daoAddress: string,
-	signer: JsonRpcSigner
-): Promise<boolean> => {
-	const nft = new Contract(nftAddress, MultiArtToken.abi, signer)
-	const tx = await nft.trasnferFrom(senderAddress, daoAddress, nftID)
+	to: string,
+	signer: JsonRpcSigner,
+	customDomain?: string
+): Promise<void> => {
+	const nft = new Contract(
+		customDomain ?? REACT_APP_DOMAIN_ADDRESS!,
+		customDomain ? MultiArtToken.abi : TWDomainToken.abi,
+		signer
+	)
+	const tx = await nft.transferFrom(from, to, nftID)
 	await tx.wait()
-	return true
 }
+
+export default transferNFT
