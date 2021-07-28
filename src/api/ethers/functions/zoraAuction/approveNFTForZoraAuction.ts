@@ -1,12 +1,11 @@
 import {JsonRpcSigner} from "@ethersproject/providers"
 import {Contract} from "@ethersproject/contracts"
 import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
-import Auction from "../../abis/ZoraAuction.json"
+import TWDomainToken from "../../abis/TWDomainToken.json"
 import {buildContractCall, executeTx, SafeSignature, safeSignMessage} from "../gnosisSafe/safeUtils"
-import {parseEther} from "@ethersproject/units"
 const {REACT_APP_ZORA_ADDRESS} = process.env
 
-export const signCreateZoraAuction = async (
+export const signApproveNFTForZoraAuction = async (
 	safeAddress: string,
 	nftID: number,
 	nftAddress: string,
@@ -18,54 +17,23 @@ export const signCreateZoraAuction = async (
 	signer: JsonRpcSigner
 ): Promise<SafeSignature> => {
 	const safeContract = new Contract(safeAddress, GnosisSafeL2.abi, signer)
-	const auction = new Contract(REACT_APP_ZORA_ADDRESS!, Auction.abi, signer)
+	const nft = new Contract(nftAddress, TWDomainToken.abi, signer)
 	const nonce = await safeContract.nonce()
-	const call = buildContractCall(
-		auction,
-		"createAuction",
-		[
-			nftID,
-			nftAddress,
-			duration,
-			parseEther(String(reservePrice)),
-			curator,
-			curatorFeePercentage,
-			auctionCurrency
-		],
-		nonce + 1
-	)
+	const call = buildContractCall(nft, "approve", [REACT_APP_ZORA_ADDRESS, nftID], nonce)
 	return safeSignMessage(signer, safeContract, call)
 }
 
-export const executeCreateZoraAuction = async (
+export const executeApproveNFTForZoraAuction = async (
 	safeAddress: string,
 	nftID: number,
 	nftAddress: string,
-	duration: number,
-	reservePrice: number,
-	curator: string,
-	curatorFeePercentage: number,
-	auctionCurrency: string,
 	signatures: SafeSignature[],
 	signer: JsonRpcSigner
 ): Promise<void> => {
 	const safeContract = new Contract(safeAddress, GnosisSafeL2.abi, signer)
-	const auction = new Contract(REACT_APP_ZORA_ADDRESS!, Auction.abi, signer)
+	const nft = new Contract(nftAddress, TWDomainToken.abi, signer)
 	const nonce = await safeContract.nonce()
-	const call = buildContractCall(
-		auction,
-		"createAuction",
-		[
-			nftID,
-			nftAddress,
-			duration,
-			parseEther(String(reservePrice)),
-			curator,
-			curatorFeePercentage,
-			auctionCurrency
-		],
-		nonce
-	)
+	const call = buildContractCall(nft, "approve", [REACT_APP_ZORA_ADDRESS, nftID], nonce)
 	const tx = await executeTx(safeContract, call, signatures)
 	await tx.wait()
 }

@@ -6,7 +6,7 @@ import useNFTs from "../../../customHooks/getters/useNFTs"
 import ErrorPlaceholder from "../../ErrorPlaceholder"
 import Loader from "../../Loader"
 import {NFT} from "../../../types/NFT"
-import {toastError} from "../../Toast"
+import {toastError, toastSuccess} from "../../Toast"
 import addProposal from "../../../api/firebase/proposal/addProposal"
 import {AuthContext} from "../../../context/AuthContext"
 import {SafeSignature} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
@@ -15,6 +15,10 @@ import {
 	signCreateZoraAuction
 } from "../../../api/ethers/functions/zoraAuction/createZoraAuction"
 import EthersContext from "../../../context/EthersContext"
+import {
+	executeApproveNFTForZoraAuction,
+	signApproveNFTForZoraAuction
+} from "../../../api/ethers/functions/zoraAuction/approveNFTForZoraAuction"
 
 const CreateZoraAuction: FunctionComponent<{
 	gnosisAddress: string
@@ -75,21 +79,32 @@ const CreateZoraAuction: FunctionComponent<{
 		if (!(account && nft && signer)) return
 		setProcessing(true)
 		try {
-			const signatures: SafeSignature[] = []
+			const approveSignatures: SafeSignature[] = []
+			const createSignatures: SafeSignature[] = []
+			const signingArgs = [
+				gnosisAddress,
+				nft.id,
+				nft.address,
+				Number(duration),
+				Number(reservePrice),
+				curatorAddress,
+				Number(curatorFeePercentage),
+				customCurrency === "custom" ? currencyToken : "ETH",
+				signer
+			] as const
 			if (isAdmin) {
-				const signature = await signCreateZoraAuction(
-					gnosisAddress,
-					nft.id,
-					nft.address,
-					Number(duration),
-					Number(reservePrice),
-					curatorAddress,
-					Number(curatorFeePercentage),
-					customCurrency === "custom" ? currencyToken : "ETH",
-					signer
-				)
-				signatures.push(signature)
+				const approveSignature = await signApproveNFTForZoraAuction(...signingArgs)
+				const createSignature = await signCreateZoraAuction(...signingArgs)
+				approveSignatures.push(approveSignature)
+				createSignatures.push(createSignature)
 				if (gnosisVotingThreshold === 1) {
+					await executeApproveNFTForZoraAuction(
+						gnosisAddress,
+						nft.id,
+						nft.address,
+						approveSignatures,
+						signer
+					)
 					await executeCreateZoraAuction(
 						gnosisAddress,
 						nft.id,
@@ -99,7 +114,7 @@ const CreateZoraAuction: FunctionComponent<{
 						curatorAddress,
 						Number(curatorFeePercentage),
 						customCurrency === "custom" ? currencyToken : "ETH",
-						signatures,
+						createSignatures,
 						signer
 					)
 				}
@@ -117,8 +132,10 @@ const CreateZoraAuction: FunctionComponent<{
 				curatorAddress,
 				curatorFeePercentage: Number(curatorFeePercentage),
 				auctionCurrency: customCurrency === "custom" ? currencyToken : "ETH",
-				signatures
+				signatures: approveSignatures,
+				signaturesStep2: createSignatures
 			})
+			toastSuccess("Proposal successfully created")
 		} catch (e) {
 			console.error(e)
 			toastError("Failed to create Zora Auction proposal")

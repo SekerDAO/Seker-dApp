@@ -25,6 +25,7 @@ export type ProposalFirebaseData = Pick<
 	| "newRole"
 	| "newThreshold"
 	| "signatures"
+	| "signaturesStep2"
 	| "nftId"
 	| "nftAddress"
 	| "duration"
@@ -66,6 +67,7 @@ export type Proposal = {
 	// for changeRole for gnosis safe module
 	newThreshold?: number
 	signatures?: SafeSignature[]
+	signaturesStep2?: SafeSignature[]
 	// for Zora auction
 	nftId?: number
 	nftAddress?: string
