@@ -19,6 +19,8 @@ import {
 	executeApproveNFTForZoraAuction,
 	signApproveNFTForZoraAuction
 } from "../../../api/ethers/functions/zoraAuction/approveNFTForZoraAuction"
+import currencies from "../../../constants/currencies"
+import addZoraAuction from "../../../api/firebase/zoraAuction/addZoraAuction"
 
 const CreateZoraAuction: FunctionComponent<{
 	gnosisAddress: string
@@ -33,8 +35,8 @@ const CreateZoraAuction: FunctionComponent<{
 	const [description, setDescription] = useState("")
 	const [nft, setNft] = useState<NFT | null>(null)
 	const [reservePrice, setReservePrice] = useState("")
-	const [customCurrency, setCustomCurrency] = useState<"" | "ETH" | "custom">("")
-	const [currencyToken, setCurrencyToken] = useState("")
+	const [currencySymbol, setCurrencySymbol] = useState("")
+	const [currencyAddress, setCurrencyAddress] = useState("")
 	const [curatorAddress, setCuratorAddress] = useState("")
 	const [curatorFeePercentage, setCuratorFeePercentage] = useState("")
 	const [duration, setDuration] = useState("")
@@ -75,8 +77,13 @@ const CreateZoraAuction: FunctionComponent<{
 		}
 	}
 
+	const handleCurrencyChange = (e: ChangeEvent<HTMLSelectElement>) => {
+		setCurrencySymbol(e.target.value)
+		setCurrencyAddress(currencies.find(c => c.symbol === e.target.value)?.address ?? "")
+	}
+
 	const handleSubmit = async () => {
-		if (!(account && nft && signer)) return
+		if (!(account && nft && signer && currencySymbol)) return
 		setProcessing(true)
 		try {
 			const approveSignatures: SafeSignature[] = []
@@ -89,7 +96,7 @@ const CreateZoraAuction: FunctionComponent<{
 				Number(reservePrice),
 				curatorAddress,
 				Number(curatorFeePercentage),
-				customCurrency === "custom" ? currencyToken : "ETH",
+				currencyAddress,
 				signer
 			] as const
 			if (isAdmin) {
@@ -113,10 +120,21 @@ const CreateZoraAuction: FunctionComponent<{
 						Number(reservePrice),
 						curatorAddress,
 						Number(curatorFeePercentage),
-						customCurrency === "custom" ? currencyToken : "ETH",
+						currencyAddress,
 						createSignatures,
 						signer
 					)
+					await addZoraAuction({
+						gnosisAddress,
+						nftId: nft.id,
+						nftAddress: nft.address,
+						duration: Number(duration),
+						reservePrice: Number(reservePrice),
+						curatorAddress,
+						curatorFeePercentage: Number(curatorFeePercentage),
+						tokenSymbol: currencySymbol,
+						tokenAddress: currencyAddress
+					})
 				}
 			}
 			await addProposal({
@@ -131,7 +149,8 @@ const CreateZoraAuction: FunctionComponent<{
 				reservePrice: Number(reservePrice),
 				curatorAddress,
 				curatorFeePercentage: Number(curatorFeePercentage),
-				auctionCurrency: customCurrency === "custom" ? currencyToken : "ETH",
+				auctionCurrencySymbol: currencySymbol,
+				auctionCurrencyAddress: currencyAddress,
 				signatures: approveSignatures,
 				signaturesStep2: createSignatures
 			})
@@ -148,7 +167,7 @@ const CreateZoraAuction: FunctionComponent<{
 			title &&
 			nft &&
 			reservePrice &&
-			(customCurrency === "ETH" || (customCurrency === "custom" && currencyToken)) &&
+			(currencySymbol === "custom" ? currencyAddress : currencySymbol) &&
 			curatorAddress &&
 			curatorFeePercentage &&
 			duration
@@ -206,23 +225,21 @@ const CreateZoraAuction: FunctionComponent<{
 				id="create-zora-auction-custom-currency"
 				options={[
 					{name: "Choose One", value: ""},
-					{name: "ETH", value: "ETH"},
+					...currencies.map(cur => ({name: cur.symbol, value: cur.symbol})),
 					{name: "Custom Currency", value: "custom"}
 				]}
-				onChange={e => {
-					setCustomCurrency(e.target.value as "")
-				}}
-				value={customCurrency}
+				onChange={handleCurrencyChange}
+				value={currencySymbol}
 			/>
-			{customCurrency === "custom" && (
+			{currencySymbol === "custom" && (
 				<>
-					<label htmlFor="create-zora-auction-currency-id">Custom Currency Token ID</label>
+					<label htmlFor="create-zora-auction-currency-id">Custom Currency Token Address</label>
 					<Input
 						borders="all"
-						value={currencyToken}
+						value={currencyAddress}
 						id="create-zora-auction-currency-id"
 						onChange={e => {
-							setCurrencyToken(e.target.value)
+							setCurrencyAddress(e.target.value)
 						}}
 					/>
 				</>

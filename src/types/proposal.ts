@@ -32,7 +32,8 @@ export type ProposalFirebaseData = Pick<
 	| "reservePrice"
 	| "curatorAddress"
 	| "curatorFeePercentage"
-	| "auctionCurrency"
+	| "auctionCurrencySymbol"
+	| "auctionCurrencyAddress"
 >
 
 export type ProposalEtherData = Pick<
@@ -75,7 +76,8 @@ export type Proposal = {
 	reservePrice?: number
 	curatorAddress?: string
 	curatorFeePercentage?: number
-	auctionCurrency?: string
+	auctionCurrencySymbol?: string
+	auctionCurrencyAddress?: string
 }
 
 export const DAOProposalsTypeNames = {
