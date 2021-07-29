@@ -23,7 +23,9 @@ export const useAuth = (): AuthContext => {
 	useEffect(() => {
 		if (account) {
 			getUser(account).then(user => {
-				setUrl(user.url ?? null)
+				if (user?.url) {
+					setUrl(user.url)
+				}
 			})
 		}
 	}, [account])
@@ -31,7 +33,7 @@ export const useAuth = (): AuthContext => {
 	const init = async () => {
 		const accounts = await provider!.listAccounts()
 		if (accounts[0]) {
-			setAccount(accounts[0])
+			setAccount(accounts[0].toLowerCase())
 		}
 	}
 	useEffect(() => {
@@ -52,8 +54,8 @@ export const useAuth = (): AuthContext => {
 				currentAccount = account
 			} else {
 				const metamaskAccounts = await window.ethereum.request({method: "eth_requestAccounts"})
-				setAccount(metamaskAccounts[0])
-				currentAccount = metamaskAccounts[0]
+				setAccount(metamaskAccounts[0].toLowerCase())
+				currentAccount = metamaskAccounts[0].toLowerCase()
 			}
 			const signature = await signer.signMessage(
 				JSON.stringify({account: currentAccount, token: "tokenwalk"})
