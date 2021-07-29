@@ -112,7 +112,7 @@ const CreateZoraAuction: FunctionComponent<{
 						approveSignatures,
 						signer
 					)
-					await executeCreateZoraAuction(
+					const id = await executeCreateZoraAuction(
 						gnosisAddress,
 						nft.id,
 						nft.address,
@@ -125,6 +125,7 @@ const CreateZoraAuction: FunctionComponent<{
 						signer
 					)
 					await addZoraAuction({
+						id,
 						gnosisAddress,
 						nftId: nft.id,
 						nftAddress: nft.address,

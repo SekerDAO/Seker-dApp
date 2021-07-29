@@ -1,4 +1,5 @@
 export type ZoraAuction = {
+	id: number
 	gnosisAddress: string
 	nftAddress: string
 	nftId: number

@@ -48,24 +48,33 @@ export const executeCreateZoraAuction = async (
 	auctionCurrency: string,
 	signatures: SafeSignature[],
 	signer: JsonRpcSigner
-): Promise<void> => {
-	const safeContract = new Contract(safeAddress, GnosisSafeL2.abi, signer)
-	const auction = new Contract(REACT_APP_ZORA_ADDRESS!, Auction.abi, signer)
-	const nonce = await safeContract.nonce()
-	const call = buildContractCall(
-		auction,
-		"createAuction",
-		[
-			nftID,
-			nftAddress,
-			duration,
-			parseEther(String(reservePrice)),
-			curator,
-			curatorFeePercentage,
-			auctionCurrency
-		],
-		nonce
-	)
-	const tx = await executeTx(safeContract, call, signatures)
-	await tx.wait()
-}
+): Promise<number> =>
+	new Promise(async (resolve, reject) => {
+		try {
+			const safeContract = new Contract(safeAddress, GnosisSafeL2.abi, signer)
+			const auction = new Contract(REACT_APP_ZORA_ADDRESS!, Auction.abi, signer)
+			const nonce = await safeContract.nonce()
+			const call = buildContractCall(
+				auction,
+				"createAuction",
+				[
+					nftID,
+					nftAddress,
+					duration,
+					parseEther(String(reservePrice)),
+					curator,
+					curatorFeePercentage,
+					auctionCurrency
+				],
+				nonce
+			)
+
+			auction.on("AuctionCreated", id => {
+				resolve(id.toString())
+			})
+
+			await executeTx(safeContract, call, signatures)
+		} catch (e) {
+			reject(e)
+		}
+	})
