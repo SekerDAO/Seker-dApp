@@ -24,33 +24,39 @@ const useERC20DAOProposals = (
 		setError(false)
 		try {
 			const dao = await getDAO(_gnosisAddress)
-			if (dao.daoAddress) {
-				const firebaseData = (await getDAOProposals(_gnosisAddress)).docs.map(doc => doc.data())
-				const ethersData = await Promise.all(
-					firebaseData.map(async p => {
-						if (p.type === "joinHouse") {
-							const balance = await getERC20Balance(dao.tokenAddress!, p.userAddress, _provider)
-							const proposalData = await getHouseERC20DAOProposal(
-								dao.daoAddress!,
-								Number(p.id),
-								_provider
-							)
-							return {
-								...proposalData,
-								balance
-							}
+			const firebaseData = (await getDAOProposals(_gnosisAddress)).docs.map(doc => doc.data())
+			const ethersData = await Promise.all(
+				firebaseData.map(async p => {
+					if (p.type === "joinHouse") {
+						const balance = await getERC20Balance(dao.tokenAddress!, p.userAddress, _provider)
+						const proposalData = await getHouseERC20DAOProposal(
+							dao.daoAddress!,
+							Number(p.id),
+							_provider
+						)
+						return {
+							...proposalData,
+							balance
 						}
+					}
+					if (p.module === "DAO") {
 						return getHouseERC20DAOProposal(dao.daoAddress!, Number(p.id), _provider)
-					})
+					} else {
+						return {}
+					}
+				})
+			)
+			setProposals(
+				firebaseData.map(
+					(p, index) =>
+						({
+							...p,
+							...ethersData[index],
+							id: Number(p.id),
+							state: p.state!
+						} as Proposal)
 				)
-				setProposals(
-					firebaseData.map((p, index) => ({
-						...p,
-						...ethersData[index],
-						id: Number(p.id)
-					}))
-				)
-			}
+			)
 		} catch (e) {
 			console.error(e)
 			setError(true)

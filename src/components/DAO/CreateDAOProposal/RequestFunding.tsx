@@ -41,6 +41,7 @@ const RequestFunding: FunctionComponent<{
 			await addProposal({
 				id: proposalId,
 				type: "requestFunding",
+				module: "DAO",
 				gnosisAddress,
 				userAddress: account,
 				title,

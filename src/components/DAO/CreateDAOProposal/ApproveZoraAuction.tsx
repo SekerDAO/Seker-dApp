@@ -49,11 +49,13 @@ const ApproveZoraAuction: FunctionComponent<{
 			}
 			await addProposal({
 				type: "approveZoraAuction",
+				module: "gnosis",
 				userAddress: account,
 				title: `Approve Auction for ${selectedAuction.nftName}`,
 				auctionId: selectedAuction.id,
 				gnosisAddress,
-				signatures
+				signatures,
+				state: "active"
 			})
 			toastSuccess("Proposal successfully created")
 		} catch (e) {

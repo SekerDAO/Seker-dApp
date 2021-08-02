@@ -141,8 +141,10 @@ const CreateZoraAuction: FunctionComponent<{
 			}
 			await addProposal({
 				type: "createZoraAuction",
+				module: "gnosis",
 				userAddress: account,
 				gnosisAddress,
+				state: "active",
 				title,
 				...(description ? {description} : {}),
 				nftId: nft.id,
@@ -203,6 +205,7 @@ const CreateZoraAuction: FunctionComponent<{
 				fullWidth
 				id="create-zora-auction-custom-currency"
 				options={[
+					// TODO: filter out NFTs which are already on auction
 					{name: "Choose One", value: ""},
 					...NFTs.data.map(s => {
 						const {name, id} = s.data()

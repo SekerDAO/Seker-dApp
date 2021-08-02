@@ -56,6 +56,7 @@ const ChangeRole: FunctionComponent<{
 				await addProposal({
 					id: proposalId,
 					type: "changeRole",
+					module: "DAO",
 					gnosisAddress,
 					userAddress: account,
 					title,
@@ -91,13 +92,15 @@ const ChangeRole: FunctionComponent<{
 				await addProposal({
 					type: "changeRole",
 					userAddress: account,
+					module: "gnosis",
 					gnosisAddress,
 					title,
 					...(description ? {description} : {}),
 					recipientAddress: address,
 					newThreshold: Number(newThreshold),
 					newRole,
-					signatures
+					signatures,
+					state: "active"
 				})
 				toastSuccess("Proposal successfully created")
 				setLoading(false)

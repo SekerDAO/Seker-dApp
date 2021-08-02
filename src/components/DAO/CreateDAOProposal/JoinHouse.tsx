@@ -24,6 +24,7 @@ const JoinHouse: FunctionComponent<{
 			const proposalId = await createEnterERC20DAOProposal(daoAddress, provider, signer)
 			await addProposal({
 				id: proposalId,
+				module: "DAO",
 				type: "joinHouse",
 				gnosisAddress,
 				userAddress: account,

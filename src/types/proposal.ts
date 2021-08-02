@@ -20,6 +20,7 @@ export type ProposalFirebaseData = Pick<
 	| "userAddress"
 	| "title"
 	| "description"
+	| "module"
 	| "amount"
 	| "recipientAddress"
 	| "newRole"
@@ -35,10 +36,10 @@ export type ProposalFirebaseData = Pick<
 	| "auctionCurrencySymbol"
 	| "auctionCurrencyAddress"
 	| "auctionId"
->
+> & {state?: DAOState}
 
 export type ProposalEtherData = Pick<
-	Proposal,
+	DAOProposal,
 	| "id"
 	| "type"
 	| "userAddress"
@@ -50,7 +51,7 @@ export type ProposalEtherData = Pick<
 	| "gracePeriod"
 >
 
-export type Proposal = {
+type ProposalBase = {
 	id?: number
 	type: DAOProposalType
 	gnosisAddress: string
@@ -61,10 +62,6 @@ export type Proposal = {
 	recipientAddress?: string // for request funding and change role
 	newRole?: DAOMemberRole | "kick"
 	state: DAOState
-	deadline: string
-	gracePeriod: string | null
-	noVotes: number
-	yesVotes: number
 	balance?: number
 	// for changeRole for gnosis safe module
 	newThreshold?: number
@@ -81,6 +78,20 @@ export type Proposal = {
 	auctionCurrencySymbol?: string
 	auctionCurrencyAddress?: string
 }
+
+type DAOProposal = ProposalBase & {
+	module: "DAO"
+	deadline: string
+	gracePeriod: string | null
+	noVotes: number
+	yesVotes: number
+}
+
+type GnosisProposal = ProposalBase & {
+	module: "gnosis"
+}
+
+export type Proposal = DAOProposal | GnosisProposal
 
 export const DAOProposalsTypeNames = {
 	joinHouse: "Join House",

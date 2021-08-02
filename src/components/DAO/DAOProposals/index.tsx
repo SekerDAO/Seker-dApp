@@ -26,8 +26,9 @@ const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 const DAOProposalCard: FunctionComponent<{
 	proposal: Proposal
 	isMember: boolean
+	isAdmin: boolean
 	daoAddress?: string
-}> = ({proposal, isMember, daoAddress}) => {
+}> = ({proposal, isMember, daoAddress, isAdmin}) => {
 	const [processing, setProcessing] = useState(false)
 	const {provider, signer} = useContext(EthersContext)
 
@@ -146,26 +147,29 @@ const DAOProposalCard: FunctionComponent<{
 				</>
 			)}
 			<div className="dao-proposals__card-footer">
-				<div className="dao-proposals__voting">
-					<div className="dao-proposals__voting-legend">
-						<p>Yes</p>
-						<p>No</p>
+				{proposal.module === "DAO" && (
+					<div className="dao-proposals__voting">
+						<div className="dao-proposals__voting-legend">
+							<p>Yes</p>
+							<p>No</p>
+						</div>
+						<div className="dao-proposals__voting-bar">
+							<div
+								className="dao-proposals__voting-bar-inner"
+								style={{
+									width:
+										proposal.noVotes === 0
+											? "100%"
+											: `${Math.round((proposal.yesVotes * 100) / proposal.noVotes)}%`
+								}}
+							/>
+						</div>
 					</div>
-					<div className="dao-proposals__voting-bar">
-						<div
-							className="dao-proposals__voting-bar-inner"
-							style={{
-								width:
-									proposal.noVotes === 0
-										? "100%"
-										: `${Math.round((proposal.yesVotes * 100) / proposal.noVotes)}%`
-							}}
-						/>
-					</div>
-				</div>
+				)}
 				<div className="dao-proposals__voting-buttons">
 					{isMember &&
 						proposal.state === "active" &&
+						proposal.module === "DAO" &&
 						(processing ? (
 							"Voting..."
 						) : (
@@ -190,6 +194,7 @@ const DAOProposalCard: FunctionComponent<{
 								</Button>
 							</>
 						))}
+					{isAdmin && <Button>Vote</Button>}
 					{proposal.state === "passed" && (
 						<Button onClick={startGracePeriod} disabled={processing}>
 							{processing ? "Processing..." : "Queue"}
@@ -210,7 +215,8 @@ const DAOProposals: FunctionComponent<{
 	gnosisAddress: string
 	daoAddress?: string
 	isMember: boolean
-}> = ({gnosisAddress, daoAddress, isMember}) => {
+	isAdmin: boolean
+}> = ({gnosisAddress, daoAddress, isMember, isAdmin}) => {
 	const {provider} = useContext(EthersContext)
 	const {proposals, loading, error} = useERC20DAOProposals(gnosisAddress)
 
@@ -235,6 +241,7 @@ const DAOProposals: FunctionComponent<{
 					proposal={proposal}
 					key={index}
 					isMember={isMember}
+					isAdmin={isAdmin}
 				/>
 			))}
 		</div>

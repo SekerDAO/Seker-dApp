@@ -155,6 +155,7 @@ const DAOPage: FunctionComponent = () => {
 										gnosisAddress={dao.gnosisAddress}
 										daoAddress={dao.daoAddress}
 										isMember={isMember}
+										isAdmin={isAdmin}
 									/>
 								)}
 								{menuEntries[activeMenuIndex] === "Create Proposal" && (
