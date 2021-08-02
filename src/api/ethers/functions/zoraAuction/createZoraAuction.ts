@@ -32,7 +32,7 @@ export const signCreateZoraAuction = async (
 			curatorFeePercentage,
 			auctionCurrency
 		],
-		nonce + 1
+		nonce.add(1)
 	)
 	return safeSignMessage(signer, safeContract, call)
 }
