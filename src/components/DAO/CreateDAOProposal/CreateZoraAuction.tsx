@@ -37,7 +37,7 @@ const CreateZoraAuction: FunctionComponent<{
 	const [reservePrice, setReservePrice] = useState("")
 	const [currencySymbol, setCurrencySymbol] = useState("")
 	const [currencyAddress, setCurrencyAddress] = useState("")
-	const [curatorAddress, setCuratorAddress] = useState("")
+	const [curatorAddress, setCuratorAddress] = useState(gnosisAddress)
 	const [curatorFeePercentage, setCuratorFeePercentage] = useState("")
 	const [duration, setDuration] = useState("")
 
@@ -129,6 +129,7 @@ const CreateZoraAuction: FunctionComponent<{
 						gnosisAddress,
 						nftId: nft.id,
 						nftAddress: nft.address,
+						nftName: nft.name,
 						duration: Number(duration),
 						reservePrice: Number(reservePrice),
 						curatorAddress,

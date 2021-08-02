@@ -7,7 +7,7 @@ import EthersContext from "../../context/EthersContext"
 import getERC20Balance from "../../api/ethers/functions/ERC20Token/getERC20Balance"
 import getDAO from "../../api/firebase/DAO/getDAO"
 
-const useERC20HouseDAOProposals = (
+const useERC20DAOProposals = (
 	gnosisAddress: string
 ): {
 	proposals: Proposal[]
@@ -71,4 +71,4 @@ const useERC20HouseDAOProposals = (
 	}
 }
 
-export default useERC20HouseDAOProposals
+export default useERC20DAOProposals

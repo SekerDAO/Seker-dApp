@@ -1,9 +1,86 @@
-import React, {FunctionComponent} from "react"
+import React, {ChangeEvent, FunctionComponent, useContext, useState} from "react"
+import useDAOZoraAuctions from "../../../customHooks/getters/useDAOZoraAuctions"
+import ErrorPlaceholder from "../../ErrorPlaceholder"
+import Loader from "../../Loader"
+import {ZoraAuction} from "../../../types/zoraAuction"
+import Select from "../../Controls/Select"
+import Button from "../../Controls/Button"
+import {toastError, toastSuccess} from "../../Toast"
+import {SafeSignature} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
+import {
+	executeApproveZoraAuction,
+	signApproveZoraAuction
+} from "../../../api/ethers/functions/zoraAuction/approveZoraAuction"
+import EthersContext from "../../../context/EthersContext"
+import addProposal from "../../../api/firebase/proposal/addProposal"
+import {AuthContext} from "../../../context/AuthContext"
+import approveZoraAuction from "../../../api/firebase/zoraAuction/approveZoraAuction"
 
 const ApproveZoraAuction: FunctionComponent<{
 	gnosisAddress: string
-}> = () => {
-	return <div>TODO: approve zora auction</div>
+	isAdmin: boolean
+	gnosisVotingThreshold: number
+}> = ({gnosisAddress, isAdmin, gnosisVotingThreshold}) => {
+	const {signer} = useContext(EthersContext)
+	const {account} = useContext(AuthContext)
+	const {auctions, loading, error} = useDAOZoraAuctions(gnosisAddress)
+	const [selectedAuction, setSelectedAuction] = useState<ZoraAuction | null>(null)
+	const [processing, setProcessing] = useState(false)
+
+	if (error) return <ErrorPlaceholder />
+	if (loading) return <Loader />
+
+	const handleAuctionChange = (e: ChangeEvent<HTMLSelectElement>) => {
+		setSelectedAuction(auctions.find(a => String(a.id) === e.target.value) ?? null)
+	}
+
+	const handleSubmit = async () => {
+		if (!(account && signer && selectedAuction)) return
+		setProcessing(true)
+		try {
+			const signatures: SafeSignature[] = []
+			if (isAdmin) {
+				const signature = await signApproveZoraAuction(gnosisAddress, selectedAuction.id, signer)
+				signatures.push(signature)
+				if (gnosisVotingThreshold === 1) {
+					await executeApproveZoraAuction(gnosisAddress, selectedAuction.id, signatures, signer)
+					await approveZoraAuction(selectedAuction.id)
+				}
+			}
+			await addProposal({
+				type: "approveZoraAuction",
+				userAddress: account,
+				title: `Approve Auction for ${selectedAuction.nftName}`,
+				auctionId: selectedAuction.id,
+				gnosisAddress,
+				signatures
+			})
+			toastSuccess("Proposal successfully created")
+		} catch (e) {
+			console.error(e)
+			toastError("Failed to create proposal")
+		}
+		setProcessing(false)
+	}
+
+	return (
+		<>
+			<label htmlFor="approve-auction-id">Auction ID</label>
+			<Select
+				options={[{name: "Choose One", value: ""}].concat(
+					auctions
+						.filter(a => !a.approved)
+						.map(a => ({name: String(a.nftName), value: String(a.id)}))
+				)}
+				onChange={handleAuctionChange}
+				id="approve-auction-id"
+				fullWidth
+			/>
+			<Button disabled={processing || !selectedAuction} onClick={handleSubmit}>
+				{processing ? "Processing..." : "Create Proposal"}
+			</Button>
+		</>
+	)
 }
 
 export default ApproveZoraAuction

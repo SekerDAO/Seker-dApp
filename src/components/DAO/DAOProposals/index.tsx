@@ -1,5 +1,5 @@
 import React, {useContext, FunctionComponent, useState} from "react"
-import useERC20HouseDAOProposals from "../../../customHooks/getters/useERC20HouseDAOProposals"
+import useERC20DAOProposals from "../../../customHooks/getters/useERC20DAOProposals"
 import Loader from "../../Loader"
 import ErrorPlaceholder from "../../ErrorPlaceholder"
 import EthersContext from "../../../context/EthersContext"
@@ -212,7 +212,7 @@ const DAOProposals: FunctionComponent<{
 	isMember: boolean
 }> = ({gnosisAddress, daoAddress, isMember}) => {
 	const {provider} = useContext(EthersContext)
-	const {proposals, loading, error} = useERC20HouseDAOProposals(gnosisAddress)
+	const {proposals, loading, error} = useERC20DAOProposals(gnosisAddress)
 
 	if (!provider) return <div>TODO: please connect wallet</div>
 	if (error) return <ErrorPlaceholder />

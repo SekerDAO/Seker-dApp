@@ -1,6 +1,7 @@
 export type ZoraAuction = {
 	id: number
 	gnosisAddress: string
+	nftName: string
 	nftAddress: string
 	nftId: number
 	duration: number
@@ -10,5 +11,6 @@ export type ZoraAuction = {
 	tokenSymbol: string
 	tokenAddress: string
 	creationDate: string
+	approved: boolean
 	// TODO: add properties fetched from blockchain, e.g. bids
 }

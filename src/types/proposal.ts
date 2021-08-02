@@ -34,6 +34,7 @@ export type ProposalFirebaseData = Pick<
 	| "curatorFeePercentage"
 	| "auctionCurrencySymbol"
 	| "auctionCurrencyAddress"
+	| "auctionId"
 >
 
 export type ProposalEtherData = Pick<
@@ -70,6 +71,7 @@ export type Proposal = {
 	signatures?: SafeSignature[]
 	signaturesStep2?: SafeSignature[]
 	// for Zora auction
+	auctionId?: number
 	nftId?: number
 	nftAddress?: string
 	duration?: number
