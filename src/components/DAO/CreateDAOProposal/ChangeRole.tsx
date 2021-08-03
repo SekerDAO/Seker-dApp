@@ -13,6 +13,7 @@ import {
 	executeAddOwner,
 	signAddOwner
 } from "../../../api/ethers/functions/gnosisSafe/addRemoveOwner"
+import {DAOState} from "../../../types/proposal"
 
 const ChangeRole: FunctionComponent<{
 	gnosisAddress: string
@@ -75,6 +76,7 @@ const ChangeRole: FunctionComponent<{
 				if (!newThreshold || isNaN(Number(newThreshold))) return
 				setLoading(true)
 				const signatures: SafeSignature[] = []
+				let state: DAOState = "active"
 				if (isAdmin) {
 					const newSignature = await signAddOwner(
 						gnosisAddress,
@@ -86,6 +88,7 @@ const ChangeRole: FunctionComponent<{
 					signatures.push(newSignature)
 					if (gnosisVotingThreshold === 1) {
 						await executeAddOwner(gnosisAddress, address, Number(newThreshold), signatures, signer)
+						state = "executed"
 						// TODO: update firebase function for updating dao users and call it
 					}
 				}
@@ -100,7 +103,7 @@ const ChangeRole: FunctionComponent<{
 					newThreshold: Number(newThreshold),
 					newRole,
 					signatures,
-					state: "active"
+					state
 				})
 				toastSuccess("Proposal successfully created")
 				setLoading(false)

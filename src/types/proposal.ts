@@ -10,7 +10,14 @@ export type DAOProposalType =
 	| "endZoraAuction"
 	| "cancelZoraAuction"
 
-type DAOState = "active" | "canceled" | "executed" | "passed" | "failed" | "queued" | "waiting"
+export type DAOState =
+	| "active"
+	| "canceled"
+	| "executed"
+	| "passed"
+	| "failed"
+	| "queued"
+	| "waiting"
 
 export type ProposalFirebaseData = Pick<
 	Proposal,

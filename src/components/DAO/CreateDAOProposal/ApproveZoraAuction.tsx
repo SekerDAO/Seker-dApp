@@ -15,6 +15,7 @@ import EthersContext from "../../../context/EthersContext"
 import addProposal from "../../../api/firebase/proposal/addProposal"
 import {AuthContext} from "../../../context/AuthContext"
 import approveZoraAuction from "../../../api/firebase/zoraAuction/approveZoraAuction"
+import {DAOState} from "../../../types/proposal"
 
 const ApproveZoraAuction: FunctionComponent<{
 	gnosisAddress: string
@@ -39,12 +40,14 @@ const ApproveZoraAuction: FunctionComponent<{
 		setProcessing(true)
 		try {
 			const signatures: SafeSignature[] = []
+			let state: DAOState = "active"
 			if (isAdmin) {
 				const signature = await signApproveZoraAuction(gnosisAddress, selectedAuction.id, signer)
 				signatures.push(signature)
 				if (gnosisVotingThreshold === 1) {
 					await executeApproveZoraAuction(gnosisAddress, selectedAuction.id, signatures, signer)
 					await approveZoraAuction(selectedAuction.id)
+					state = "executed"
 				}
 			}
 			await addProposal({
@@ -55,7 +58,7 @@ const ApproveZoraAuction: FunctionComponent<{
 				auctionId: selectedAuction.id,
 				gnosisAddress,
 				signatures,
-				state: "active"
+				state
 			})
 			toastSuccess("Proposal successfully created")
 		} catch (e) {
