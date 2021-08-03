@@ -26,7 +26,7 @@ export const signCreateZoraAuction = async (
 		[
 			nftID,
 			nftAddress,
-			duration,
+			duration * 3600,
 			parseEther(String(reservePrice)),
 			curator,
 			curatorFeePercentage,
@@ -60,7 +60,7 @@ export const executeCreateZoraAuction = async (
 				[
 					nftID,
 					nftAddress,
-					duration,
+					duration * 3600,
 					parseEther(String(reservePrice)),
 					curator,
 					curatorFeePercentage,

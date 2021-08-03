@@ -32,6 +32,7 @@
 
   &__image {
     display: flex;
+    flex: 1;
 
     img {
       width: 100%;
@@ -40,6 +41,7 @@
 
   &__auction {
     min-width: 250px;
+    max-width: 250px;
     margin-left: 40px;
 
     &-card {

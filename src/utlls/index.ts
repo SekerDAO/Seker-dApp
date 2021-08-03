@@ -14,3 +14,9 @@ export const throttle = <T extends unknown[]>(
 		}, delay)
 	}
 }
+
+export const formatTimeDifference = (ms: number): string => {
+	const hours = Math.floor(ms / 3600000)
+	const minutes = Math.floor((ms % 3600000) / 60000)
+	return `${hours > 0 ? `${hours} h ` : ""}${minutes} m`
+}

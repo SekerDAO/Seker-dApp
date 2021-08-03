@@ -1,4 +1,4 @@
-export type ZoraAuction = {
+export type ZoraAuctionFirebaseData = {
 	id: number
 	gnosisAddress: string
 	nftName: string
@@ -12,5 +12,12 @@ export type ZoraAuction = {
 	tokenAddress: string
 	creationDate: string
 	approved: boolean
-	// TODO: add properties fetched from blockchain, e.g. bids
 }
+
+export type ZoraAuctionEthersData = {
+	price: number
+	state: "waitingApproval" | "approved" | "live" | "ended"
+	endTime?: number
+}
+
+export type ZoraAuction = ZoraAuctionEthersData & ZoraAuctionFirebaseData
