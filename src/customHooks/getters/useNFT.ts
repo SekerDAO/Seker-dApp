@@ -21,8 +21,11 @@ const useNFT = (
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
 
-	const getData = async (nftId: string, _provider: Web3Provider) => {
+	const getData = async (nftId: string, _provider: Web3Provider | null) => {
 		const _nft = await getNFT(nftId)
+		if (!_provider) {
+			return {nft: _nft}
+		}
 		const _auctions = await getNFTZoraAuctions(_nft.id, _nft.address)
 
 		return {
@@ -34,21 +37,21 @@ const useNFT = (
 	}
 
 	useEffect(() => {
-		if (provider) {
-			setLoading(true)
-			setError(false)
-			getData(id, provider)
-				.then(res => {
-					setNft(res.nft)
+		setLoading(true)
+		setError(false)
+		getData(id, provider)
+			.then(res => {
+				setNft(res.nft)
+				if (res.auctions) {
 					setAuctions(res.auctions)
-					setLoading(false)
-				})
-				.catch(e => {
-					console.error(e)
-					setError(true)
-					setLoading(false)
-				})
-		}
+				}
+				setLoading(false)
+			})
+			.catch(e => {
+				console.error(e)
+				setError(true)
+				setLoading(false)
+			})
 	}, [id, provider])
 
 	return {
