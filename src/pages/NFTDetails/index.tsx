@@ -8,6 +8,8 @@ import Table from "../../components/Table"
 import Button from "../../components/Controls/Button"
 import {ZoraAuction} from "../../types/zoraAuction"
 import {formatTimeDifference} from "../../utlls"
+import BidAuctionModal from "../../components/Modals/BidAuctionModal"
+const {REACT_APP_CHAIN_ID} = process.env
 
 const columns = [
 	{
@@ -76,13 +78,20 @@ const NFTCard: FunctionComponent = () => {
 					<p>
 						<b>Token ID:</b>
 					</p>
-					<p>TODO</p>
+					<p>{nft.id}</p>
 					<p>
 						<b>Token Address:</b>
 					</p>
-					<p>TODO</p>
-					{/* TODO */}
-					<Button buttonType="secondary">View on Etherscan</Button>
+					<p>{`${nft.address.slice(0, 3)}...${nft.address.slice(-4)}`}</p>
+					<a
+						target="_blank"
+						rel="noopener noreferrer"
+						href={`https://${REACT_APP_CHAIN_ID === "0x4" ? "rinkeby." : ""}etherscan.io/token/${
+							nft.address
+						}?a=${nft.id}`}
+					>
+						<Button buttonType="secondary">View on Etherscan</Button>
+					</a>
 				</div>
 				<div className="nft__right-col">
 					<div className="nft__main">
@@ -97,7 +106,13 @@ const NFTCard: FunctionComponent = () => {
 							{auction && (
 								<div className="nft__auction-card">
 									<h3>{`${auction.price} ${auction.tokenSymbol}`}</h3>
-									<Button>Place Bid</Button>
+									<BidAuctionModal
+										auctionId={auction.id}
+										minBid={auction.price}
+										auctionTokenAddress={
+											auction.tokenSymbol === "ETH" ? undefined : auction.tokenAddress
+										}
+									/>
 									<p>
 										<b>Auction ID:</b>
 									</p>

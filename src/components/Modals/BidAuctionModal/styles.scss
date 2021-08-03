@@ -1,0 +1,14 @@
+.create-bid {
+  display: flex;
+  flex-direction: column;
+  margin-top: 50px;
+  align-items: stretch;
+
+  input {
+    margin: 10px 0 20px 0;
+  }
+
+  button {
+    align-self: flex-start;
+  }
+}
