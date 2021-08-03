@@ -11,11 +11,11 @@ const getAuctionDetails = async (
 ): Promise<ZoraAuctionEthersData> => {
 	const auction = new Contract(REACT_APP_ZORA_ADDRESS!, Auction.abi, provider)
 	const {amount, approved, firstBidTime, duration, reservePrice} = await auction.auctions(auctionId)
-
 	const endTime = (Number(firstBidTime.toString()) + Number(duration.toString())) * 1000
+	// TODO: ended state
 	const state = approved
 		? Number(firstBidTime.toString()) > 0
-			? endTime > new Date().getTime()
+			? endTime < new Date().getTime()
 				? "ended"
 				: "live"
 			: "approved"

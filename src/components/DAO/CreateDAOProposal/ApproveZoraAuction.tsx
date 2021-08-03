@@ -74,7 +74,7 @@ const ApproveZoraAuction: FunctionComponent<{
 			<Select
 				options={[{name: "Choose One", value: ""}].concat(
 					auctions
-						.filter(a => !a.approved)
+						.filter(a => a.state === "waitingApproval")
 						.map(a => ({name: String(a.nftName), value: String(a.id)}))
 				)}
 				onChange={handleAuctionChange}

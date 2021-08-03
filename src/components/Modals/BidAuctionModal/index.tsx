@@ -10,10 +10,11 @@ import approveERC20 from "../../../api/ethers/functions/ERC20Token/approveERC20"
 const {REACT_APP_ZORA_ADDRESS} = process.env
 
 const BidAuctionModal: FunctionComponent<{
+	disabled: boolean
 	auctionId: number
 	minBid: number
 	auctionTokenAddress?: string
-}> = ({auctionId, minBid, auctionTokenAddress}) => {
+}> = ({disabled, auctionId, minBid, auctionTokenAddress}) => {
 	const [isOpened, setIsOpened] = useState(false)
 	const [processing, setProcessing] = useState(false)
 	const {provider, signer} = useContext(EthersContext)
@@ -32,7 +33,7 @@ const BidAuctionModal: FunctionComponent<{
 					signer
 				)
 			}
-			await bidZoraAuction(auctionId, Number(bid), signer)
+			await bidZoraAuction(auctionId, Number(bid), !!auctionTokenAddress, signer)
 			toastSuccess("Bid successfully placed!")
 			setIsOpened(false)
 		} catch (e) {
@@ -55,6 +56,7 @@ const BidAuctionModal: FunctionComponent<{
 	return (
 		<>
 			<Button
+				disabled={disabled}
 				onClick={() => {
 					setIsOpened(true)
 				}}

@@ -1,6 +1,9 @@
 import {ZoraAuction} from "../../types/zoraAuction"
-import {useEffect, useState} from "react"
+import {useContext, useEffect, useState} from "react"
 import getDAOZoraAuctions from "../../api/firebase/zoraAuction/getDAOZoraAuctions"
+import EthersContext from "../../context/EthersContext"
+import {Web3Provider} from "@ethersproject/providers"
+import getAuctionDetails from "../../api/ethers/functions/zoraAuction/getAuctionDetails"
 
 const useDAOZoraAuctions = (
 	gnosisAddress: string
@@ -9,15 +12,26 @@ const useDAOZoraAuctions = (
 	loading: boolean
 	error: boolean
 } => {
+	const {provider} = useContext(EthersContext)
 	const [auctions, setAuctions] = useState<ZoraAuction[]>([])
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
 
+	const getData = async (address: string, _provider: Web3Provider) => {
+		const _auctions = await getDAOZoraAuctions(address)
+		return Promise.all(
+			_auctions.map(async a => ({
+				...a,
+				...(await getAuctionDetails(a.id, _provider))
+			}))
+		)
+	}
+
 	useEffect(() => {
-		if (gnosisAddress) {
+		if (provider) {
 			setLoading(true)
 			setError(false)
-			getDAOZoraAuctions(gnosisAddress)
+			getData(gnosisAddress, provider)
 				.then(res => {
 					setAuctions(res)
 					setLoading(false)
@@ -28,7 +42,7 @@ const useDAOZoraAuctions = (
 					setLoading(false)
 				})
 		}
-	}, [gnosisAddress])
+	}, [gnosisAddress, provider])
 
 	return {
 		auctions,

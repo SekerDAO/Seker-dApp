@@ -58,7 +58,13 @@ const CreateDAOProposal: FunctionComponent<{
 					gnosisVotingThreshold={gnosisVotingThreshold}
 				/>
 			)}
-			{type === "cancelZoraAuction" && <CancelZoraAuction gnosisAddress={gnosisAddress} />}
+			{type === "cancelZoraAuction" && (
+				<CancelZoraAuction
+					gnosisAddress={gnosisAddress}
+					isAdmin={isAdmin}
+					gnosisVotingThreshold={gnosisVotingThreshold}
+				/>
+			)}
 			{type === "changeRole" && (
 				<ChangeRole
 					gnosisVotingThreshold={gnosisVotingThreshold}

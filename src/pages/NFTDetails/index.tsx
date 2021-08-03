@@ -107,6 +107,7 @@ const NFTCard: FunctionComponent = () => {
 								<div className="nft__auction-card">
 									<h3>{`${auction.price} ${auction.tokenSymbol}`}</h3>
 									<BidAuctionModal
+										disabled={auction.state !== "approved" && auction.state !== "live"}
 										auctionId={auction.id}
 										minBid={auction.price}
 										auctionTokenAddress={
