@@ -16,7 +16,6 @@ import Textarea from "../../Controls/Textarea"
 import useMyDomains from "../../../customHooks/getters/useMyDomains"
 import "./styles.scss"
 import {toastError} from "../../Toast"
-import {NFT} from "../../../types/NFT"
 import addDAONFT from "../../../api/firebase/NFT/addDAONFT"
 import transferNFT from "../../../api/ethers/functions/NFT/transferNFT"
 const {REACT_APP_DOMAIN_ADDRESS} = process.env
@@ -93,7 +92,7 @@ const CreateNFTModal: FunctionComponent<{
 					provider,
 					customDomainAddress || undefined
 				)
-				const nft: NFT = {
+				const nft = {
 					id,
 					address: customDomain ? customDomainAddress : REACT_APP_DOMAIN_ADDRESS!,
 					createdDate: new Date().toISOString(),
@@ -103,7 +102,7 @@ const CreateNFTModal: FunctionComponent<{
 					externalUrl: metadata.external_url,
 					media: metadata.media,
 					attributes: metadata.attributes,
-					category: "art" // TODO
+					category: "art" as const // TODO
 				}
 				if (gnosisAddress) {
 					await transferNFT(
@@ -140,7 +139,7 @@ const CreateNFTModal: FunctionComponent<{
 					return
 				}
 				const metadata = await getNFTMetadata(tokenAddress, existingNFTId, provider)
-				const nft: NFT = {
+				const nft = {
 					id: Number(existingNFTId),
 					address: tokenAddress,
 					createdDate: new Date().toISOString(),
@@ -150,7 +149,7 @@ const CreateNFTModal: FunctionComponent<{
 					externalUrl: metadata.external_url,
 					media: metadata.media,
 					attributes: metadata.attributes,
-					category: "art"
+					category: "art" as const
 				}
 				if (gnosisAddress) {
 					await transferNFT(

@@ -2,7 +2,7 @@ import {NFT} from "../../../types/NFT"
 import firebase from "firebase"
 const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
-const addDAONFT = async (nft: NFT, address: string): Promise<void> => {
+const addDAONFT = async (nft: Omit<NFT, "nftAdminUserUID">, address: string): Promise<void> => {
 	const token = await firebase.auth().currentUser?.getIdToken(true)
 	if (!token) {
 		throw new Error("Not authorized in firebase")

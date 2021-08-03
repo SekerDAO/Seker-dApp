@@ -19,6 +19,7 @@ export type NFT = {
 	media: NFTMediaInfo
 	attributes?: Record<string, string | number | boolean>
 	category: "art" | "exhibit"
+	nftAdminUserUID: string
 }
 
 export type NFTMetadata = {
