@@ -8,7 +8,6 @@ import {AuthContext} from "../../../context/AuthContext"
 import {DAOProposalsTypeNames, DAOProposalType} from "../../../types/proposal"
 import CreateZoraAuction from "./CreateZoraAuction"
 import ApproveZoraAuction from "./ApproveZoraAuction"
-import EndZoraAuction from "./EndZoraAuction"
 import CancelZoraAuction from "./CancelZoraAuction"
 
 const CreateDAOProposal: FunctionComponent<{
@@ -59,7 +58,6 @@ const CreateDAOProposal: FunctionComponent<{
 					gnosisVotingThreshold={gnosisVotingThreshold}
 				/>
 			)}
-			{type === "endZoraAuction" && <EndZoraAuction gnosisAddress={gnosisAddress} />}
 			{type === "cancelZoraAuction" && <CancelZoraAuction gnosisAddress={gnosisAddress} />}
 			{type === "changeRole" && (
 				<ChangeRole

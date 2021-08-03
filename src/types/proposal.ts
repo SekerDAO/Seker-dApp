@@ -7,7 +7,6 @@ export type DAOProposalType =
 	| "changeRole"
 	| "createZoraAuction"
 	| "approveZoraAuction"
-	| "endZoraAuction"
 	| "cancelZoraAuction"
 
 export type DAOState =
