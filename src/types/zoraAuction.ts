@@ -17,7 +17,7 @@ export type ZoraAuctionFirebaseData = {
 
 export type ZoraAuctionEthersData = {
 	price: number
-	state: "waitingApproval" | "approved" | "live" | "ended"
+	state: "waitingApproval" | "approved" | "live" | "ended" | "finalized"
 	endTime?: number
 }
 

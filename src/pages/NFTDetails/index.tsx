@@ -1,4 +1,4 @@
-import React, {FunctionComponent} from "react"
+import React, {FunctionComponent, useContext, useState} from "react"
 import {useParams} from "react-router-dom"
 import useNFT from "../../customHooks/getters/useNFT"
 import Loader from "../../components/Loader"
@@ -9,6 +9,9 @@ import Button from "../../components/Controls/Button"
 import {ZoraAuction} from "../../types/zoraAuction"
 import {formatTimeDifference} from "../../utlls"
 import BidAuctionModal from "../../components/Modals/BidAuctionModal"
+import {toastError, toastSuccess} from "../../components/Toast"
+import endZoraAuction from "../../api/ethers/functions/zoraAuction/endZoraAuction"
+import EthersContext from "../../context/EthersContext"
 const {REACT_APP_CHAIN_ID} = process.env
 
 const columns = [
@@ -44,11 +47,26 @@ const mockBids = [
 const NFTCard: FunctionComponent = () => {
 	const {id} = useParams<{id: string}>()
 	const {nft, auctions, loading, error} = useNFT(id)
+	const [processing, setProcessing] = useState(false)
+	const {signer} = useContext(EthersContext)
 
 	if (loading) return <Loader />
 	if (error || !nft) return <ErrorPlaceholder />
 
 	const auction: ZoraAuction | undefined = auctions[auctions.length - 1]
+
+	const handleEnd = async () => {
+		setProcessing(true)
+		try {
+			if (!(auction && signer)) return
+			await endZoraAuction(auction.id, signer)
+			toastSuccess("Auction successfully ended!")
+		} catch (e) {
+			console.error(e)
+			toastError("Failed to end auction")
+		}
+		setProcessing(false)
+	}
 
 	return (
 		<div className="main__container">
@@ -103,17 +121,23 @@ const NFTCard: FunctionComponent = () => {
 							)}
 						</div>
 						<div className="nft__auction">
-							{auction && (
+							{auction && auction.state !== "finalized" && (
 								<div className="nft__auction-card">
 									<h3>{`${auction.price} ${auction.tokenSymbol}`}</h3>
-									<BidAuctionModal
-										disabled={auction.state !== "approved" && auction.state !== "live"}
-										auctionId={auction.id}
-										minBid={auction.price}
-										auctionTokenAddress={
-											auction.tokenSymbol === "ETH" ? undefined : auction.tokenAddress
-										}
-									/>
+									{auction.state === "ended" ? (
+										<Button disabled={processing} onClick={handleEnd}>
+											{processing ? "Processing..." : "End Auction"}
+										</Button>
+									) : (
+										<BidAuctionModal
+											disabled={auction.state !== "approved" && auction.state !== "live"}
+											auctionId={auction.id}
+											minBid={auction.price}
+											auctionTokenAddress={
+												auction.tokenSymbol === "ETH" ? undefined : auction.tokenAddress
+											}
+										/>
+									)}
 									<p>
 										<b>Auction ID:</b>
 									</p>
