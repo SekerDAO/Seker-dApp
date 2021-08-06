@@ -126,7 +126,6 @@ const CreateZoraAuction: FunctionComponent<{
 						createSignatures,
 						signer
 					)
-					// TODO: auction is approved when owner is the same as curator
 					await addZoraAuction({
 						id,
 						gnosisAddress,

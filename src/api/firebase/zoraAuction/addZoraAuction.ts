@@ -3,7 +3,7 @@ import {ZoraAuctionFirebaseData} from "../../../types/zoraAuction"
 const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
 const addZoraAuction = async (
-	auction: Omit<ZoraAuctionFirebaseData, "creationDate" | "approved" | "canceled">
+	auction: Omit<ZoraAuctionFirebaseData, "creationDate">
 ): Promise<void> => {
 	const token = await firebase.auth().currentUser?.getIdToken(true)
 	if (!token) {

@@ -15,7 +15,6 @@ import {
 	executeCancelZoraAuction,
 	signCancelZoraAuction
 } from "../../../api/ethers/functions/zoraAuction/cancelZoraAuction"
-import cancelZoraAuction from "../../../api/firebase/zoraAuction/cancelZoraAuction"
 
 const CancelZoraAuction: FunctionComponent<{
 	gnosisAddress: string
@@ -46,7 +45,6 @@ const CancelZoraAuction: FunctionComponent<{
 				signatures.push(signature)
 				if (gnosisVotingThreshold === 1) {
 					await executeCancelZoraAuction(gnosisAddress, selectedAuction.id, signatures, signer)
-					await cancelZoraAuction(selectedAuction.id)
 					state = "executed"
 				}
 			}

@@ -14,7 +14,6 @@ import {
 import EthersContext from "../../../context/EthersContext"
 import addProposal from "../../../api/firebase/proposal/addProposal"
 import {AuthContext} from "../../../context/AuthContext"
-import approveZoraAuction from "../../../api/firebase/zoraAuction/approveZoraAuction"
 import {DAOState} from "../../../types/proposal"
 
 const ApproveZoraAuction: FunctionComponent<{
@@ -46,7 +45,6 @@ const ApproveZoraAuction: FunctionComponent<{
 				signatures.push(signature)
 				if (gnosisVotingThreshold === 1) {
 					await executeApproveZoraAuction(gnosisAddress, selectedAuction.id, signatures, signer)
-					await approveZoraAuction(selectedAuction.id)
 					state = "executed"
 				}
 			}

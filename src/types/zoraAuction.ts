@@ -11,8 +11,6 @@ export type ZoraAuctionFirebaseData = {
 	tokenSymbol: string
 	tokenAddress: string
 	creationDate: string
-	approved: boolean
-	canceled: boolean
 }
 
 export type ZoraAuctionEthersData = {
