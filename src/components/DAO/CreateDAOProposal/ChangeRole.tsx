@@ -13,7 +13,7 @@ import {
 	executeAddOwner,
 	signAddOwner
 } from "../../../api/ethers/functions/gnosisSafe/addRemoveOwner"
-import {DAOState} from "../../../types/proposal"
+import {DAOProposalState} from "../../../types/proposal"
 
 const ChangeRole: FunctionComponent<{
 	gnosisAddress: string
@@ -76,13 +76,12 @@ const ChangeRole: FunctionComponent<{
 				if (!newThreshold || isNaN(Number(newThreshold))) return
 				setLoading(true)
 				const signatures: SafeSignature[] = []
-				let state: DAOState = "active"
+				let state: DAOProposalState = "active"
 				if (isAdmin) {
 					const newSignature = await signAddOwner(
 						gnosisAddress,
 						address,
 						Number(newThreshold),
-						provider,
 						signer
 					)
 					signatures.push(newSignature)

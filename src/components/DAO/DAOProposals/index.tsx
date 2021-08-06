@@ -21,16 +21,41 @@ import {
 	executeERC20DAOJoin,
 	executeERC20DAORoleChange
 } from "../../../api/ethers/functions/ERC20DAO/executeERC20DAOProposals"
+import addProposalSignature from "../../../api/firebase/proposal/addProposalSignature"
+import {SafeSignature} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
+import {
+	executeApproveNFTForZoraAuction,
+	signApproveNFTForZoraAuction
+} from "../../../api/ethers/functions/zoraAuction/approveNFTForZoraAuction"
+import {
+	executeCreateZoraAuction,
+	signCreateZoraAuction
+} from "../../../api/ethers/functions/zoraAuction/createZoraAuction"
+import {
+	executeApproveZoraAuction,
+	signApproveZoraAuction
+} from "../../../api/ethers/functions/zoraAuction/approveZoraAuction"
+import {
+	executeCancelZoraAuction,
+	signCancelZoraAuction
+} from "../../../api/ethers/functions/zoraAuction/cancelZoraAuction"
+import {
+	executeAddOwner,
+	signAddOwner
+} from "../../../api/ethers/functions/gnosisSafe/addRemoveOwner"
+import {AuthContext} from "../../../context/AuthContext"
 const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
 const DAOProposalCard: FunctionComponent<{
-	proposal: Proposal
+	gnosisVotingThreshold: number
+	proposal: Proposal & {proposalId: string}
 	isMember: boolean
 	isAdmin: boolean
 	daoAddress?: string
-}> = ({proposal, isMember, daoAddress, isAdmin}) => {
+}> = ({gnosisVotingThreshold, proposal, isMember, daoAddress, isAdmin}) => {
 	const [processing, setProcessing] = useState(false)
 	const {provider, signer} = useContext(EthersContext)
+	const {account} = useContext(AuthContext)
 
 	const handleVote = async (yes: boolean) => {
 		if (!(provider && signer && daoAddress)) return
@@ -105,6 +130,123 @@ const DAOProposalCard: FunctionComponent<{
 		} catch (e) {
 			console.error(e)
 			toastError("Failed to execute proposal")
+		}
+		setProcessing(false)
+	}
+
+	const sign = async () => {
+		if (!(signer && isAdmin)) return
+		setProcessing(true)
+		try {
+			let signature: SafeSignature | undefined = undefined
+			let signatureStep2: SafeSignature | undefined = undefined
+			let executed = false
+			switch (proposal.type) {
+				case "createZoraAuction":
+					const signingArgs = [
+						proposal.gnosisAddress,
+						Number(proposal.nftId),
+						proposal.nftAddress!,
+						proposal.duration!,
+						proposal.reservePrice!,
+						proposal.curatorAddress!,
+						proposal.curatorFeePercentage!,
+						proposal.auctionCurrencyAddress!,
+						signer
+					] as const
+					signature = await signApproveNFTForZoraAuction(...signingArgs)
+					signatureStep2 = await signCreateZoraAuction(...signingArgs)
+					if (proposal.signatures?.length === gnosisVotingThreshold - 1) {
+						await executeApproveNFTForZoraAuction(
+							proposal.gnosisAddress,
+							proposal.nftId!,
+							proposal.nftAddress!,
+							[...proposal.signatures, signature],
+							signer
+						)
+						await executeCreateZoraAuction(
+							proposal.gnosisAddress,
+							Number(proposal.nftId),
+							proposal.nftAddress!,
+							proposal.duration!,
+							proposal.reservePrice!,
+							proposal.curatorAddress!,
+							proposal.curatorFeePercentage!,
+							proposal.auctionCurrencyAddress!,
+							[...proposal.signaturesStep2!, signatureStep2],
+							signer
+						)
+						executed = true
+					}
+					break
+				case "approveZoraAuction":
+					signature = await signApproveZoraAuction(
+						proposal.gnosisAddress,
+						proposal.auctionId!,
+						signer
+					)
+					if (proposal.signatures?.length === gnosisVotingThreshold - 1) {
+						await executeApproveZoraAuction(
+							proposal.gnosisAddress,
+							proposal.auctionId!,
+							[...proposal.signatures, signature],
+							signer
+						)
+						executed = true
+					}
+					break
+				case "cancelZoraAuction":
+					signature = await signCancelZoraAuction(
+						proposal.gnosisAddress,
+						proposal.auctionId!,
+						signer
+					)
+					if (proposal.signatures?.length === gnosisVotingThreshold - 1) {
+						await executeCancelZoraAuction(
+							proposal.gnosisAddress,
+							proposal.auctionId!,
+							[...proposal.signatures, signature],
+							signer
+						)
+						executed = true
+					}
+					break
+				case "changeRole":
+					if (["head", "admin"].includes(proposal.newRole!)) {
+						signature = await signAddOwner(
+							proposal.gnosisAddress,
+							proposal.recipientAddress!,
+							proposal.newThreshold!,
+							signer
+						)
+						if (proposal.signatures?.length === gnosisVotingThreshold - 1) {
+							await executeAddOwner(
+								proposal.gnosisAddress,
+								proposal.recipientAddress!,
+								proposal.newThreshold!,
+								[...proposal.signatures, signature],
+								signer
+							)
+							executed = true
+							// TODO: call BE function to update owners
+						}
+					} else {
+						console.log("Handling kick not implemented")
+					}
+					break
+				default:
+					console.log("Unexpected proposal type to sign")
+			}
+			await addProposalSignature({
+				proposalId: proposal.proposalId,
+				signature: signature!,
+				signatureStep2,
+				...(executed ? {newState: "executed"} : {})
+			})
+			toastSuccess("Successfully signed!")
+		} catch (e) {
+			console.error(e)
+			toastError("Failed to sign proposal")
 		}
 		setProcessing(false)
 	}
@@ -194,7 +336,13 @@ const DAOProposalCard: FunctionComponent<{
 								</Button>
 							</>
 						))}
-					{isAdmin && <Button>Vote</Button>}
+					{isAdmin &&
+						proposal.state === "active" &&
+						!proposal.signatures?.find(s => s.signer.toLowerCase() === account) && (
+							<Button onClick={sign} disabled={processing}>
+								{processing ? "Processing..." : "Sign"}
+							</Button>
+						)}
 					{proposal.state === "passed" && (
 						<Button onClick={startGracePeriod} disabled={processing}>
 							{processing ? "Processing..." : "Queue"}
@@ -213,10 +361,11 @@ const DAOProposalCard: FunctionComponent<{
 
 const DAOProposals: FunctionComponent<{
 	gnosisAddress: string
+	gnosisVotingThreshold: number
 	daoAddress?: string
 	isMember: boolean
 	isAdmin: boolean
-}> = ({gnosisAddress, daoAddress, isMember, isAdmin}) => {
+}> = ({gnosisVotingThreshold, gnosisAddress, daoAddress, isMember, isAdmin}) => {
 	const {provider} = useContext(EthersContext)
 	const {proposals, loading, error} = useERC20DAOProposals(gnosisAddress)
 
@@ -237,6 +386,7 @@ const DAOProposals: FunctionComponent<{
 			</div>
 			{proposals.map((proposal, index) => (
 				<DAOProposalCard
+					gnosisVotingThreshold={gnosisVotingThreshold}
 					daoAddress={daoAddress}
 					proposal={proposal}
 					key={index}

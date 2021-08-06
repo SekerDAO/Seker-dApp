@@ -9,7 +9,7 @@ export type DAOProposalType =
 	| "approveZoraAuction"
 	| "cancelZoraAuction"
 
-export type DAOState =
+export type DAOProposalState =
 	| "active"
 	| "canceled"
 	| "executed"
@@ -42,7 +42,7 @@ export type ProposalFirebaseData = Pick<
 	| "auctionCurrencySymbol"
 	| "auctionCurrencyAddress"
 	| "auctionId"
-> & {state?: DAOState}
+> & {state?: DAOProposalState}
 
 export type ProposalEtherData = Pick<
 	DAOProposal,
@@ -67,7 +67,7 @@ type ProposalBase = {
 	amount?: number
 	recipientAddress?: string // for request funding and change role
 	newRole?: DAOMemberRole | "kick"
-	state: DAOState
+	state: DAOProposalState
 	balance?: number
 	// for changeRole for gnosis safe module
 	newThreshold?: number

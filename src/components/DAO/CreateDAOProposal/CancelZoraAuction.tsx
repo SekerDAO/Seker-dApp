@@ -10,7 +10,7 @@ import {SafeSignature} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
 import EthersContext from "../../../context/EthersContext"
 import addProposal from "../../../api/firebase/proposal/addProposal"
 import {AuthContext} from "../../../context/AuthContext"
-import {DAOState} from "../../../types/proposal"
+import {DAOProposalState} from "../../../types/proposal"
 import {
 	executeCancelZoraAuction,
 	signCancelZoraAuction
@@ -39,7 +39,7 @@ const CancelZoraAuction: FunctionComponent<{
 		setProcessing(true)
 		try {
 			const signatures: SafeSignature[] = []
-			let state: DAOState = "active"
+			let state: DAOProposalState = "active"
 			if (isAdmin) {
 				const signature = await signCancelZoraAuction(gnosisAddress, selectedAuction.id, signer)
 				signatures.push(signature)

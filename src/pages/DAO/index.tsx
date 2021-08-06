@@ -151,6 +151,7 @@ const DAOPage: FunctionComponent = () => {
 								{menuEntries[activeMenuIndex] === "About" && <AboutDAO dao={dao} />}
 								{menuEntries[activeMenuIndex] === "Proposals" && (
 									<DAOProposals
+										gnosisVotingThreshold={dao.gnosisVotingThreshold}
 										gnosisAddress={dao.gnosisAddress}
 										daoAddress={dao.daoAddress}
 										isMember={isMember}

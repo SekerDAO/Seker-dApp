@@ -10,12 +10,12 @@ import getDAO from "../../api/firebase/DAO/getDAO"
 const useERC20DAOProposals = (
 	gnosisAddress: string
 ): {
-	proposals: Proposal[]
+	proposals: (Proposal & {proposalId: string})[]
 	loading: boolean
 	error: boolean
 } => {
 	const {provider} = useContext(EthersContext)
-	const [proposals, setProposals] = useState<Proposal[]>([])
+	const [proposals, setProposals] = useState<(Proposal & {proposalId: string})[]>([])
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
 
@@ -24,7 +24,10 @@ const useERC20DAOProposals = (
 		setError(false)
 		try {
 			const dao = await getDAO(_gnosisAddress)
-			const firebaseData = (await getDAOProposals(_gnosisAddress)).docs.map(doc => doc.data())
+			const firebaseData = (await getDAOProposals(_gnosisAddress)).docs.map(doc => ({
+				...doc.data(),
+				proposalId: doc.id
+			}))
 			const ethersData = await Promise.all(
 				firebaseData.map(async p => {
 					if (p.type === "joinHouse") {
@@ -54,7 +57,7 @@ const useERC20DAOProposals = (
 							...ethersData[index],
 							id: Number(p.id),
 							state: p.state!
-						} as Proposal)
+						} as Proposal & {proposalId: string})
 				)
 			)
 		} catch (e) {
