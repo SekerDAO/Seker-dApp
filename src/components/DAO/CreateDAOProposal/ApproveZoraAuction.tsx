@@ -51,10 +51,10 @@ const ApproveZoraAuction: FunctionComponent<{
 			await addProposal({
 				type: "approveZoraAuction",
 				module: "gnosis",
-				userAddress: account,
+				userAddress: account.toLowerCase(),
 				title: `Approve Auction for ${selectedAuction.nftName}`,
 				auctionId: selectedAuction.id,
-				gnosisAddress,
+				gnosisAddress: gnosisAddress.toLowerCase(),
 				signatures,
 				state
 			})

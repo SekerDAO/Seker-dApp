@@ -11,7 +11,7 @@ const updateUserImage = async (
 	await firebase
 		.firestore()
 		.collection("users")
-		.doc(account)
+		.doc(account.toLowerCase())
 		.update({[`${imageType}Image`]: url.split("&")[0]})
 }
 

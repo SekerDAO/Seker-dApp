@@ -8,6 +8,7 @@ import {
 	getERC20HouseDAOBalance,
 	getERC20HouseDAOFundedProjects
 } from "../../api/ethers/functions/ERC20DAO/getERC20DAO"
+import getVotingThreshold from "../../api/ethers/functions/gnosisSafe/getVotingThreshold"
 
 const useDAO = (
 	gnosisAddress: string
@@ -26,6 +27,7 @@ const useDAO = (
 		setError(false)
 		try {
 			const _dao = await getDAO(_gnosisAddress)
+			const gnosisVotingThreshold = await getVotingThreshold(_gnosisAddress, _provider)
 			let tokenSymbol = ""
 			let balance = 0
 			let fundedProjects = 0
@@ -40,7 +42,8 @@ const useDAO = (
 				..._dao,
 				tokenSymbol,
 				balance,
-				fundedProjects
+				fundedProjects,
+				gnosisVotingThreshold
 			})
 		} catch (e) {
 			console.error(e)

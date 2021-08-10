@@ -5,7 +5,7 @@ const getDAOZoraAuctions = async (gnosisAddress: string): Promise<ZoraAuctionFir
 	const snapshot = await firebase
 		.firestore()
 		.collection("zoraAuctions")
-		.where("gnosisAddress", "==", gnosisAddress)
+		.where("gnosisAddress", "==", gnosisAddress.toLowerCase())
 		.get()
 	return snapshot.docs.map(doc => doc.data() as ZoraAuctionFirebaseData)
 }

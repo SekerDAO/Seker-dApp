@@ -8,7 +8,7 @@ const getNFTZoraAuctions = async (
 	const auctions = await firebase
 		.firestore()
 		.collection("zoraAuctions")
-		.where("nftAddress", "==", nftAddress)
+		.where("nftAddress", "==", nftAddress.toLowerCase())
 		.where("nftId", "==", nftId)
 		.orderBy("creationDate")
 		.get()

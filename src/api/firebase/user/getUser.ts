@@ -5,7 +5,7 @@ const getUser = async (account: string): Promise<UserWithAccount | null> => {
 	const userByURLSnapshot = await firebase
 		.firestore()
 		.collection("users")
-		.where("url", "==", account)
+		.where("url", "==", account.toLowerCase())
 		.get()
 	if (!userByURLSnapshot.empty) {
 		return {
@@ -13,7 +13,7 @@ const getUser = async (account: string): Promise<UserWithAccount | null> => {
 			account: userByURLSnapshot.docs[0].id
 		}
 	}
-	const snapshot = await firebase.firestore().collection("users").doc(account).get()
+	const snapshot = await firebase.firestore().collection("users").doc(account.toLowerCase()).get()
 	if (!snapshot.exists) {
 		return null
 	}

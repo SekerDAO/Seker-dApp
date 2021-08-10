@@ -6,15 +6,13 @@ const addDAO = async (
 		gnosisAddress,
 		name,
 		type,
-		members,
-		gnosisVotingThreshold
-	}: Omit<DAO, "estimated" | "members"> & {members: string[]},
+		members
+	}: Omit<DAO, "estimated" | "members" | "gnosisVotingThreshold"> & {members: string[]},
 	account: string
 ): Promise<void> => {
-	await firebase.firestore().collection("DAOs").doc(gnosisAddress).set({
+	await firebase.firestore().collection("DAOs").doc(gnosisAddress.toLowerCase()).set({
 		name,
 		type,
-		gnosisVotingThreshold,
 		estimated: new Date().toISOString(),
 		owner: account
 	})
@@ -23,8 +21,8 @@ const addDAO = async (
 			.firestore()
 			.collection("daoUsers")
 			.add({
-				dao: gnosisAddress,
-				address: member,
+				dao: gnosisAddress.toLowerCase(),
+				address: member.toLowerCase(),
 				memberSince: new Date().toISOString(),
 				role: type === "gallery" ? "admin" : "head"
 			})

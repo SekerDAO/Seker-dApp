@@ -21,7 +21,7 @@ const updateDAOImage = async (
 			authorization: `Bearer ${token}`
 		},
 		body: JSON.stringify({
-			gnosisAddress,
+			gnosisAddress: gnosisAddress.toLowerCase(),
 			[`${imageType}Image`]: url.split("&")[0]
 		})
 	})

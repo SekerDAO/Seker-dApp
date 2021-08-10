@@ -6,7 +6,7 @@ const checkUserUrl = async (url: string, address: string): Promise<boolean> => {
 		return true
 	}
 	const docs = snapshot.docs
-	return docs[0].id === address
+	return docs[0].id === address.toLowerCase()
 }
 
 export default checkUserUrl

@@ -9,7 +9,7 @@ const addDomain = async (
 	await firebase
 		.firestore()
 		.collection("domains")
-		.doc(address)
+		.doc(address.toLowerCase())
 		.set({name, symbol, address, owner: account})
 }
 

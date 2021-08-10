@@ -14,7 +14,7 @@ const getNFTs = async (
 		ref = ref.where("nftCategory", "==", params.category)
 	}
 	if (params.user) {
-		ref = ref.where("nftAdminUserUID", "==", params.user)
+		ref = ref.where("nftAdminUserUID", "==", params.user.toLowerCase())
 	}
 	const totalSnapshot = await ref.get()
 	if (params.after) {

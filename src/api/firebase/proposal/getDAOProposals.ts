@@ -7,7 +7,7 @@ const getDAOProposals = async (
 	firebase
 		.firestore()
 		.collection("proposals")
-		.where("gnosisAddress", "==", address)
+		.where("gnosisAddress", "==", address.toLowerCase())
 		.get() as Promise<firebase.firestore.QuerySnapshot<ProposalFirebaseData>>
 
 export default getDAOProposals

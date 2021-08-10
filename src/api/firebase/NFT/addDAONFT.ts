@@ -15,7 +15,7 @@ const addDAONFT = async (nft: Omit<NFT, "nftAdminUserUID">, address: string): Pr
 		},
 		body: JSON.stringify({
 			nft,
-			address
+			address: address.toLowerCase()
 		})
 	})
 	if (res.status !== 200) {

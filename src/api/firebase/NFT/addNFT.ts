@@ -7,7 +7,7 @@ const addNFT = async (nft: Omit<NFT, "nftAdminUserUID">, account: string): Promi
 		.collection("nfts")
 		.add({
 			...nft,
-			nftAdminUserUID: account
+			nftAdminUserUID: account.toLowerCase()
 		})
 }
 

@@ -5,7 +5,7 @@ const getMyDAOs = async (account: string): Promise<DAO[]> => {
 	const usersSnapshot = await firebase
 		.firestore()
 		.collection("daoUsers")
-		.where("address", "==", account)
+		.where("address", "==", account.toLowerCase())
 		.get()
 	const users = usersSnapshot.docs.map(u => u.data()) as FirebaseDAOUser[]
 	const daoSnapshots = await Promise.all(

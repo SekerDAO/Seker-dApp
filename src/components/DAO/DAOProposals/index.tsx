@@ -41,10 +41,12 @@ import {
 } from "../../../api/ethers/functions/zoraAuction/cancelZoraAuction"
 import {
 	executeAddOwner,
-	signAddOwner
+	executeRemoveOwner,
+	signAddOwner,
+	signRemoveOwner
 } from "../../../api/ethers/functions/gnosisSafe/addRemoveOwner"
 import {AuthContext} from "../../../context/AuthContext"
-const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
+import updateDAOUser from "../../../api/firebase/DAO/updateDaoUser"
 
 const DAOProposalCard: FunctionComponent<{
 	gnosisVotingThreshold: number
@@ -93,36 +95,10 @@ const DAOProposalCard: FunctionComponent<{
 		try {
 			if (proposal.type === "changeRole") {
 				await executeERC20DAORoleChange(daoAddress, proposal.id!, provider, signer)
-
-				const res = await fetch(`${REACT_APP_CLOUD_FUNCTIONS_URL}/updateDaoUser`, {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json"
-					},
-					body: JSON.stringify({
-						daoAddress,
-						memberAddress: proposal.recipientAddress
-					})
-				})
-				if (res.status !== 200) {
-					throw new Error("Failed to add member")
-				}
+				await updateDAOUser(proposal.gnosisAddress, proposal.recipientAddress!)
 			} else if (proposal.type === "joinHouse") {
 				await executeERC20DAOJoin(daoAddress, proposal.id!, provider, signer)
-
-				const res = await fetch(`${REACT_APP_CLOUD_FUNCTIONS_URL}/updateDaoUser`, {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json"
-					},
-					body: JSON.stringify({
-						daoAddress,
-						memberAddress: proposal.userAddress
-					})
-				})
-				if (res.status !== 200) {
-					throw new Error("Failed to add member")
-				}
+				await updateDAOUser(proposal.gnosisAddress, proposal.userAddress)
 			} else if (proposal.type === "requestFunding") {
 				await executeERC20DAOFundingProposal(daoAddress, proposal.id!, provider, signer)
 			}
@@ -141,6 +117,10 @@ const DAOProposalCard: FunctionComponent<{
 			let signature: SafeSignature | undefined = undefined
 			let signatureStep2: SafeSignature | undefined = undefined
 			let executed = false
+			// Dirty way to handle the case when someone kicking himself.
+			// In this case user will not be able to add signature bc of access rights
+			// So we should add signature before we update the user, and avoid adding it twice
+			let signatureAdded = false
 			switch (proposal.type) {
 				case "createZoraAuction":
 					const signingArgs = [
@@ -228,21 +208,46 @@ const DAOProposalCard: FunctionComponent<{
 								signer
 							)
 							executed = true
-							// TODO: call BE function to update owners
+							await updateDAOUser(proposal.gnosisAddress, proposal.recipientAddress!)
 						}
 					} else {
-						console.log("Handling kick not implemented")
+						signature = await signRemoveOwner(
+							proposal.gnosisAddress,
+							proposal.recipientAddress!,
+							proposal.newThreshold!,
+							signer
+						)
+						if (proposal.signatures?.length === gnosisVotingThreshold - 1) {
+							await executeRemoveOwner(
+								proposal.gnosisAddress,
+								proposal.recipientAddress!,
+								proposal.newThreshold!,
+								[...proposal.signatures, signature],
+								signer
+							)
+							executed = true
+							await addProposalSignature({
+								proposalId: proposal.proposalId,
+								signature: signature!,
+								signatureStep2,
+								...(executed ? {newState: "executed"} : {})
+							})
+							signatureAdded = true
+							await updateDAOUser(proposal.gnosisAddress, proposal.recipientAddress!)
+						}
 					}
 					break
 				default:
-					console.log("Unexpected proposal type to sign")
+					throw new Error("Unexpected proposal type to sign")
 			}
-			await addProposalSignature({
-				proposalId: proposal.proposalId,
-				signature: signature!,
-				signatureStep2,
-				...(executed ? {newState: "executed"} : {})
-			})
+			if (!signatureAdded) {
+				await addProposalSignature({
+					proposalId: proposal.proposalId,
+					signature: signature!,
+					signatureStep2,
+					...(executed ? {newState: "executed"} : {})
+				})
+			}
 			toastSuccess("Successfully signed!")
 		} catch (e) {
 			console.error(e)

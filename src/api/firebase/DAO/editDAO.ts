@@ -11,7 +11,11 @@ const editDAO = async (
 	if (!token) {
 		throw new Error("Not authorized in firebase")
 	}
-	const snapshot = await firebase.firestore().collection("DAOs").doc(dao.gnosisAddress).get()
+	const snapshot = await firebase
+		.firestore()
+		.collection("DAOs")
+		.doc(dao.gnosisAddress.toLowerCase())
+		.get()
 	if (!snapshot.exists) {
 		throw new Error("DAO not found")
 	}

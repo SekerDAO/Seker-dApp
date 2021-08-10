@@ -10,7 +10,7 @@ const addERC20Token = async (
 	await firebase
 		.firestore()
 		.collection("ERC20Tokens")
-		.doc(address)
+		.doc(address.toLowerCase())
 		.set({name, symbol, totalSupply, address, owner: account})
 }
 

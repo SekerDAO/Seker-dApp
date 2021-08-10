@@ -72,8 +72,7 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 						gnosisAddress,
 						name: daoName,
 						type: daoType,
-						members,
-						gnosisVotingThreshold: Number(votingThreshold)
+						members
 					},
 					account
 				)
