@@ -208,12 +208,13 @@ const CreateZoraAuction: FunctionComponent<{
 				fullWidth
 				id="create-zora-auction-custom-currency"
 				options={[
-					// TODO: filter out NFTs which are already on auction
 					{name: "Choose One", value: ""},
-					...NFTs.data.map(s => {
-						const {name, id} = s.data()
-						return {name, value: id}
-					})
+					...NFTs.data
+						.filter((d, index) => !NFTs.nftsAreOnAuctions[index])
+						.map(s => {
+							const {name, id} = s.data()
+							return {name, value: id}
+						})
 				]}
 				onChange={handleNFTChange}
 				value={nft?.id ?? ""}
