@@ -41,18 +41,28 @@ const ChangeRole: FunctionComponent<{
 	if (!dao || loading) return <Loader />
 
 	const handleThresholdChange = (e: ChangeEvent<HTMLInputElement>) => {
-		if (Number(e.target.value) < 1) {
+		if (e.target.value && Number(e.target.value) < 1) {
 			setNewThreshold("1")
-		} else if (Number(e.target.value) > gnosisVotingThreshold + 1) {
-			setNewThreshold(String(gnosisVotingThreshold + 1))
+		} else if (
+			Number(e.target.value) >
+			(newRole === "kick" ? gnosisVotingThreshold - 1 : gnosisVotingThreshold + 1)
+		) {
+			setNewThreshold(
+				String(newRole === "kick" ? gnosisVotingThreshold - 1 : gnosisVotingThreshold + 1)
+			)
 		} else {
 			setNewThreshold(e.target.value)
 		}
 	}
 
 	const handleRoleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-		setAddress("")
+		if (e.target.value === "kick") {
+			setAddress("")
+		}
 		setNewRole(e.target.value as "")
+		if (Number(newThreshold) > gnosisVotingThreshold - 1) {
+			setNewThreshold(String(gnosisVotingThreshold - 1))
+		}
 	}
 
 	const handleSubmit = async () => {

@@ -9,6 +9,9 @@ import {DAOProposalsTypeNames, DAOProposalType} from "../../../types/proposal"
 import CreateZoraAuction from "./CreateZoraAuction"
 import ApproveZoraAuction from "./ApproveZoraAuction"
 import CancelZoraAuction from "./CancelZoraAuction"
+import useDAOProposals from "../../../customHooks/getters/useDAOProposals"
+import ErrorPlaceholder from "../../ErrorPlaceholder"
+import Loader from "../../Loader"
 
 const CreateDAOProposal: FunctionComponent<{
 	isMember: boolean
@@ -19,7 +22,17 @@ const CreateDAOProposal: FunctionComponent<{
 }> = ({isMember, isAdmin, daoAddress, gnosisAddress, gnosisVotingThreshold}) => {
 	const {connected} = useContext(AuthContext)
 	const [type, setType] = useState<DAOProposalType>(isMember ? "requestFunding" : "joinHouse")
+	const {proposals, loading, error} = useDAOProposals(gnosisAddress)
 
+	if (error) return <ErrorPlaceholder />
+	if (loading) return <Loader />
+	if (proposals?.filter(p => p.state === "active").length > 0)
+		return (
+			<div>
+				TODO: This DAO already has an active proposal. No more than 1 proposal at a time can be
+				created.
+			</div>
+		)
 	if (!connected) return <div>TODO: Please connect wallet</div>
 	if (!isMember && !daoAddress) return <div>TODO: You cannot create proposals for this DAO</div>
 
