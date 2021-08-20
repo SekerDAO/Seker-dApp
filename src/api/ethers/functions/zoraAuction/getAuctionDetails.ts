@@ -1,4 +1,4 @@
-import {Web3Provider} from "@ethersproject/providers"
+import {JsonRpcProvider} from "@ethersproject/providers"
 import {Contract} from "@ethersproject/contracts"
 import Auction from "../../abis/ZoraAuction.json"
 import {ZoraAuctionEthersData} from "../../../../types/zoraAuction"
@@ -8,7 +8,7 @@ const {REACT_APP_ZORA_ADDRESS} = process.env
 
 const getAuctionDetails = async (
 	auctionId: number,
-	provider: Web3Provider
+	provider: JsonRpcProvider
 ): Promise<ZoraAuctionEthersData> => {
 	const auction = new Contract(REACT_APP_ZORA_ADDRESS!, Auction.abi, provider)
 	const {amount, approved, firstBidTime, duration, reservePrice, tokenOwner} =

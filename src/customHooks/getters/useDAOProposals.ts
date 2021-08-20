@@ -2,7 +2,7 @@ import {useContext, useEffect, useState} from "react"
 import {Proposal} from "../../types/proposal"
 import getDAOProposals from "../../api/firebase/proposal/getDAOProposals"
 import {getHouseERC20DAOProposal} from "../../api/ethers/functions/ERC20DAO/getERC20DAO"
-import {Web3Provider} from "@ethersproject/providers"
+import {JsonRpcProvider} from "@ethersproject/providers"
 import EthersContext from "../../context/EthersContext"
 import getERC20Balance from "../../api/ethers/functions/ERC20Token/getERC20Balance"
 import getDAO from "../../api/firebase/DAO/getDAO"
@@ -19,7 +19,7 @@ const useDAOProposals = (
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
 
-	const getProposals = async (_gnosisAddress: string, _provider: Web3Provider) => {
+	const getProposals = async (_gnosisAddress: string, _provider: JsonRpcProvider) => {
 		setLoading(true)
 		setError(false)
 		try {

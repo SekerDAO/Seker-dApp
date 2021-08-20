@@ -5,7 +5,7 @@ import {ZoraAuction} from "../../types/zoraAuction"
 import getNFTZoraAuctions from "../../api/firebase/zoraAuction/getNFTZoraAuctions"
 import getAuctionDetails from "../../api/ethers/functions/zoraAuction/getAuctionDetails"
 import EthersContext from "../../context/EthersContext"
-import {Web3Provider} from "@ethersproject/providers"
+import {JsonRpcProvider} from "@ethersproject/providers"
 
 const useNFT = (
 	id: string
@@ -21,7 +21,7 @@ const useNFT = (
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
 
-	const getData = async (nftId: string, _provider: Web3Provider | null) => {
+	const getData = async (nftId: string, _provider: JsonRpcProvider | null) => {
 		const _nft = await getNFT(nftId)
 		if (!_provider) {
 			return {nft: _nft}

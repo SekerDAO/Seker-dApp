@@ -1,40 +1,47 @@
-import {JsonRpcSigner, Web3Provider} from "@ethersproject/providers"
-import {createContext, useEffect, useState} from "react"
+import {
+	InfuraProvider,
+	JsonRpcSigner,
+	Web3Provider,
+	JsonRpcProvider
+} from "@ethersproject/providers"
+import {createContext, useEffect, useRef, useState} from "react"
+const {REACT_APP_INFURA_NETWORK, REACT_APP_INFURA_ID, REACT_APP_INFURA_SECRET} = process.env
 
 type EthersContext = {
 	chainId: string | null
-	provider: Web3Provider | null
+	provider: JsonRpcProvider
 	signer: JsonRpcSigner | null
 }
 
 export const useEthers = (): EthersContext => {
 	const [chainId, setChainId] = useState<string | null>(null)
-	const [provider, setProvider] = useState<Web3Provider | null>(null)
 	const [signer, setSigner] = useState<JsonRpcSigner | null>(null)
+	const provider = useRef(
+		new InfuraProvider(REACT_APP_INFURA_NETWORK, {
+			projectId: REACT_APP_INFURA_ID,
+			projectSecret: REACT_APP_INFURA_SECRET
+		})
+	)
 
-	const initEthers = async () => {
-		const newProvider = new Web3Provider(window.ethereum)
-		setProvider(newProvider)
-		const newSigner = newProvider.getSigner()
+	const initMetamask = async () => {
+		const metamaskProvider = new Web3Provider(window.ethereum)
+		const newSigner = metamaskProvider.getSigner()
 		setSigner(newSigner)
-		const accounts = await newProvider.listAccounts()
-		if (accounts[0]) {
-			const currentChainId = await window.ethereum.request({method: "eth_chainId"})
-			setChainId(currentChainId)
-		}
+		const currentChainId = await window.ethereum.request({method: "eth_chainId"})
+		setChainId(currentChainId)
 		window.ethereum.on("chainChanged", (newChainId: string) => {
 			setChainId(newChainId)
 		})
 	}
 	useEffect(() => {
 		if (window.ethereum) {
-			initEthers()
+			initMetamask()
 		}
 	}, [window.ethereum])
 
 	return {
 		chainId,
-		provider,
+		provider: provider.current,
 		signer
 	}
 }

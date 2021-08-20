@@ -3,7 +3,7 @@ import {DAOEnhanced} from "../../types/DAO"
 import getDAO from "../../api/firebase/DAO/getDAO"
 import getERC20Symbol from "../../api/ethers/functions/ERC20Token/getERC20Symbol"
 import EthersContext from "../../context/EthersContext"
-import {Web3Provider} from "@ethersproject/providers"
+import {JsonRpcProvider} from "@ethersproject/providers"
 import {
 	getERC20HouseDAOBalance,
 	getERC20HouseDAOFundedProjects
@@ -22,7 +22,7 @@ const useDAO = (
 	const [error, setError] = useState(false)
 	const {provider} = useContext(EthersContext)
 
-	const getInfo = async (_gnosisAddress: string, _provider: Web3Provider) => {
+	const getInfo = async (_gnosisAddress: string, _provider: JsonRpcProvider) => {
 		setLoading(true)
 		setError(false)
 		try {

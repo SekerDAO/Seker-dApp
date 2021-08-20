@@ -1,10 +1,10 @@
-import {JsonRpcSigner, Web3Provider} from "@ethersproject/providers"
+import {JsonRpcSigner, JsonRpcProvider} from "@ethersproject/providers"
 import {Contract} from "@ethersproject/contracts"
 import HouseTokenDAO from "../../abis/HouseTokenDAO.json"
 
 const initERC20DAO = (
 	address: string,
-	provider: Web3Provider,
+	provider: JsonRpcProvider,
 	signer: JsonRpcSigner
 ): Promise<void> =>
 	new Promise<void>(async (resolve, reject) => {

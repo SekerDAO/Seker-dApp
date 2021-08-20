@@ -1,4 +1,4 @@
-import {Web3Provider} from "@ethersproject/providers"
+import {JsonRpcProvider} from "@ethersproject/providers"
 import {Contract} from "@ethersproject/contracts"
 import MultiArtToken from "../../abis/MultiArtToken.json"
 
@@ -6,7 +6,7 @@ const checkNFTOwner = async (
 	account: string,
 	address: string,
 	id: string,
-	provider: Web3Provider
+	provider: JsonRpcProvider
 ): Promise<boolean> => {
 	const nftContract = new Contract(address, MultiArtToken.abi, provider)
 	const owner = await nftContract.ownerOf(id)

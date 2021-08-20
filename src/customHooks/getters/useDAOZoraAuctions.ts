@@ -2,7 +2,7 @@ import {ZoraAuction} from "../../types/zoraAuction"
 import {useContext, useEffect, useState} from "react"
 import getDAOZoraAuctions from "../../api/firebase/zoraAuction/getDAOZoraAuctions"
 import EthersContext from "../../context/EthersContext"
-import {Web3Provider} from "@ethersproject/providers"
+import {JsonRpcProvider} from "@ethersproject/providers"
 import getAuctionDetails from "../../api/ethers/functions/zoraAuction/getAuctionDetails"
 
 const useDAOZoraAuctions = (
@@ -17,7 +17,7 @@ const useDAOZoraAuctions = (
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
 
-	const getData = async (address: string, _provider: Web3Provider) => {
+	const getData = async (address: string, _provider: JsonRpcProvider) => {
 		const _auctions = await getDAOZoraAuctions(address)
 		return Promise.all(
 			_auctions.map(async a => ({

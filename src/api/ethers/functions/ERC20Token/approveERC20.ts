@@ -1,4 +1,4 @@
-import {JsonRpcSigner, Web3Provider} from "@ethersproject/providers"
+import {JsonRpcSigner, JsonRpcProvider} from "@ethersproject/providers"
 import {Contract} from "@ethersproject/contracts"
 import GovToken from "../../abis/GovToken.json"
 import {parseEther} from "@ethersproject/units"
@@ -7,7 +7,7 @@ const approveERC20 = (
 	governanceToken: string,
 	address: string,
 	totalSupply: number,
-	provider: Web3Provider,
+	provider: JsonRpcProvider,
 	signer: JsonRpcSigner
 ): Promise<void> =>
 	new Promise<void>(async (resolve, reject) => {

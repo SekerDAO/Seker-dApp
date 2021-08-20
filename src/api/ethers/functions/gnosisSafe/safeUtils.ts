@@ -188,7 +188,7 @@ export const buildSafeTransaction = (template: {
 // 	call: SafeTransaction,
 // 	signatures: [SafeSignature],
 // 	signer: JsonRpcSigner,
-// 	provider: Web3Provider
+// 	provider: JsonRpcProvider
 // ): Promise<[SafeSignature]> => {
 // 	const safeContract = new Contract(safeAddress, GnosisSafeL2.abi, provider)
 // 	const signature = await safeSignMessage(signer, safeContract, call)

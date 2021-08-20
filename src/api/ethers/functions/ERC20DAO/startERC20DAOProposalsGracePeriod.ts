@@ -1,4 +1,4 @@
-import {JsonRpcSigner, Web3Provider} from "@ethersproject/providers"
+import {JsonRpcSigner, JsonRpcProvider} from "@ethersproject/providers"
 import {Contract} from "@ethersproject/contracts"
 import HouseTokenDAO from "../../abis/HouseTokenDAO.json"
 import {BigNumber} from "@ethersproject/bignumber"
@@ -6,7 +6,7 @@ import {BigNumber} from "@ethersproject/bignumber"
 export const startERC20DAOFundingGracePeriod = (
 	daoAddress: string,
 	proposalId: number,
-	provider: Web3Provider,
+	provider: JsonRpcProvider,
 	signer: JsonRpcSigner
 ): Promise<string> =>
 	new Promise<string>(async (resolve, reject) => {
@@ -41,7 +41,7 @@ export const startERC20DAOFundingGracePeriod = (
 export const startERC20DAORoleChangeGracePeriod = (
 	daoAddress: string,
 	proposalId: number,
-	provider: Web3Provider,
+	provider: JsonRpcProvider,
 	signer: JsonRpcSigner
 ): Promise<string> =>
 	new Promise<string>(async (resolve, reject) => {

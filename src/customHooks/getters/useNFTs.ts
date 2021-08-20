@@ -3,7 +3,7 @@ import {NFTQueryParams, NFTSnapshot} from "../../types/NFT"
 import getNFTs from "../../api/firebase/NFT/getNFTs"
 import getNFTZoraAuctions from "../../api/firebase/zoraAuction/getNFTZoraAuctions"
 import getAuctionDetails from "../../api/ethers/functions/zoraAuction/getAuctionDetails"
-import {Web3Provider} from "@ethersproject/providers"
+import {JsonRpcProvider} from "@ethersproject/providers"
 import EthersContext from "../../context/EthersContext"
 
 const useNFTs = ({
@@ -34,7 +34,7 @@ const useNFTs = ({
 	const [error, setError] = useState(false)
 
 	const getData = async (
-		_provider: Web3Provider,
+		_provider: JsonRpcProvider,
 		_category?: string,
 		_user?: string,
 		_limit?: number,

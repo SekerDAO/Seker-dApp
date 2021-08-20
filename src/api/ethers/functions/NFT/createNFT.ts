@@ -1,4 +1,4 @@
-import {JsonRpcSigner, Web3Provider} from "@ethersproject/providers"
+import {JsonRpcSigner, JsonRpcProvider} from "@ethersproject/providers"
 import TWDomainToken from "../../abis/TWDomainToken.json"
 import MultiArtToken from "../../abis/MultiArtToken.json"
 import {Contract} from "@ethersproject/contracts"
@@ -8,7 +8,7 @@ const createNFT = async (
 	hashes: string[],
 	numberOfEditions: number,
 	signer: JsonRpcSigner,
-	provider: Web3Provider,
+	provider: JsonRpcProvider,
 	customDomain?: string
 ): Promise<number> =>
 	new Promise<number>(async resolve => {

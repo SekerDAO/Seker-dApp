@@ -3,6 +3,7 @@ import decode from "jwt-decode"
 import EthersContext from "./EthersContext"
 import firebase from "firebase"
 import getUser from "../api/firebase/user/getUser"
+import {Web3Provider} from "@ethersproject/providers"
 const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
 type AuthContext = {
@@ -18,7 +19,7 @@ export const useAuth = (): AuthContext => {
 	const [account, setAccount] = useState<string | null>(null)
 	const [connected, setConnected] = useState(false)
 	const [connecting, setConnecting] = useState(false)
-	const {provider, signer} = useContext(EthersContext)
+	const {signer} = useContext(EthersContext)
 	const [url, setUrl] = useState<string | null>(null)
 	useEffect(() => {
 		if (account) {
@@ -31,19 +32,20 @@ export const useAuth = (): AuthContext => {
 	}, [account])
 
 	const init = async () => {
-		const accounts = await provider!.listAccounts()
+		const metamaskProvider = new Web3Provider(window.ethereum)
+		const accounts = await metamaskProvider.listAccounts()
 		if (accounts[0]) {
 			setAccount(accounts[0].toLowerCase())
 		}
 	}
 	useEffect(() => {
-		if (provider && signer) {
+		if (window.ethereum) {
 			init()
 		}
-	}, [provider, signer])
+	}, [window.ethereum])
 
 	const connectWallet = async () => {
-		if (!(provider && signer)) {
+		if (!signer) {
 			window.open("https://metamask.io/", "blank")
 			return
 		}

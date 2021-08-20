@@ -1,4 +1,4 @@
-import {Web3Provider} from "@ethersproject/providers"
+import {JsonRpcProvider} from "@ethersproject/providers"
 import {Contract} from "@ethersproject/contracts"
 import MultiArtToken from "../../abis/MultiArtToken.json"
 import {NFTMetadata} from "../../../../types/NFT"
@@ -6,7 +6,7 @@ import {NFTMetadata} from "../../../../types/NFT"
 const getNFTMetadata = async (
 	nftAddress: string,
 	nftId: string,
-	provider: Web3Provider
+	provider: JsonRpcProvider
 ): Promise<NFTMetadata> => {
 	const nftContract = new Contract(nftAddress, MultiArtToken.abi, provider)
 	const uri = await nftContract.tokenURI(nftId)

@@ -1,4 +1,4 @@
-import {JsonRpcSigner, Web3Provider} from "@ethersproject/providers"
+import {JsonRpcSigner, JsonRpcProvider} from "@ethersproject/providers"
 import {Contract} from "@ethersproject/contracts"
 import HouseTokenDAO from "../../abis/HouseTokenDAO.json"
 import {HouseDAORole} from "../../../../types/DAO"
@@ -9,7 +9,7 @@ export const createERC20DAOFundingProposal = (
 	daoAddress: string,
 	fundTarget: string,
 	amount: number,
-	provider: Web3Provider,
+	provider: JsonRpcProvider,
 	signer: JsonRpcSigner
 ): Promise<number> =>
 	new Promise<number>(async (resolve, reject) => {
@@ -43,7 +43,7 @@ export const createERC20DAOFundingProposal = (
 
 export const createEnterERC20DAOProposal = (
 	daoAddress: string,
-	provider: Web3Provider,
+	provider: JsonRpcProvider,
 	signer: JsonRpcSigner
 ): Promise<number> =>
 	new Promise<number>(async (resolve, reject) => {
@@ -81,7 +81,7 @@ export const createERC20DAOChangeRoleProposal = (
 	daoAddress: string,
 	role: HouseDAORole | "kick",
 	fundTarget: string,
-	provider: Web3Provider,
+	provider: JsonRpcProvider,
 	signer: JsonRpcSigner
 ): Promise<number> =>
 	new Promise<number>(async (resolve, reject) => {

@@ -1,5 +1,5 @@
 import HouseTokenDAO from "../../abis/HouseTokenDAO.json"
-import {JsonRpcSigner, Web3Provider} from "@ethersproject/providers"
+import {JsonRpcSigner, JsonRpcProvider} from "@ethersproject/providers"
 import {ContractFactory} from "@ethersproject/contracts"
 import {parseEther} from "@ethersproject/units"
 import approveERC20 from "../ERC20Token/approveERC20"
@@ -14,7 +14,7 @@ const deployERC20DAO = async (
 	governanceTokenSupply: number,
 	votingThreshold: number,
 	minProposalAmount: number,
-	provider: Web3Provider,
+	provider: JsonRpcProvider,
 	signer: JsonRpcSigner
 ): Promise<string> => {
 	const dao = new ContractFactory(HouseTokenDAO.abi, HouseTokenDAO.bytecode, signer)

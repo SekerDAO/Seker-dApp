@@ -1,4 +1,4 @@
-import {Web3Provider} from "@ethersproject/providers"
+import {JsonRpcProvider} from "@ethersproject/providers"
 import {Contract} from "@ethersproject/contracts"
 
 import HouseTokenDAO from "../../abis/HouseTokenDAO.json"
@@ -7,7 +7,7 @@ import {formatEther} from "@ethersproject/units"
 
 export const getERC20HouseDAOBalance = async (
 	daoAddress: string,
-	provider: Web3Provider
+	provider: JsonRpcProvider
 ): Promise<number> => {
 	const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
 	const balance = await daoContract.balance()
@@ -17,7 +17,7 @@ export const getERC20HouseDAOBalance = async (
 // todo: getHouseERC721Balance + getGalleryBalance
 export const getERC20HouseDAOFundedProjects = async (
 	daoAddress: string,
-	provider: Web3Provider
+	provider: JsonRpcProvider
 ): Promise<number> => {
 	const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
 	const projects = await daoContract.fundedProjects()
@@ -27,7 +27,7 @@ export const getERC20HouseDAOFundedProjects = async (
 // todo: getHouseERC721FundedProjects
 export const getERC20HouseDAOMemberCount = async (
 	daoAddress: string,
-	provider: Web3Provider
+	provider: JsonRpcProvider
 ): Promise<number> => {
 	const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
 	return daoContract.memberCount()
@@ -36,7 +36,7 @@ export const getERC20HouseDAOMemberCount = async (
 export const getHouseERC20DAOProposal = async (
 	daoAddress: string,
 	proposalId: number,
-	provider: Web3Provider
+	provider: JsonRpcProvider
 ): Promise<ProposalEtherData> => {
 	const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
 	const votingThreshold = await daoContract.threshold()
@@ -82,7 +82,7 @@ export const getHouseERC20DAOProposal = async (
 export const getHouseERC20MemberHeadOfHouse = async (
 	daoAddress: string,
 	member: string,
-	provider: Web3Provider
+	provider: JsonRpcProvider
 ): Promise<boolean> => {
 	const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
 	const _member = await daoContract.members(member)
@@ -91,7 +91,7 @@ export const getHouseERC20MemberHeadOfHouse = async (
 export const getHouseERC20Member = async (
 	daoAddress: string,
 	member: string,
-	provider: Web3Provider
+	provider: JsonRpcProvider
 ): Promise<boolean> => {
 	const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
 	const _member = await daoContract.members(member)
@@ -100,7 +100,7 @@ export const getHouseERC20Member = async (
 export const getHouseERC20MemberShares = async (
 	daoAddress: string,
 	member: string,
-	provider: Web3Provider
+	provider: JsonRpcProvider
 ): Promise<number> => {
 	const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
 	const _member = await daoContract.members(member)
@@ -109,7 +109,7 @@ export const getHouseERC20MemberShares = async (
 export const getHouseERC20MemberActiveProposal = async (
 	daoAddress: string,
 	member: string,
-	provider: Web3Provider
+	provider: JsonRpcProvider
 ): Promise<boolean> => {
 	const daoContract = new Contract(daoAddress, HouseTokenDAO.abi, provider)
 	const _member = await daoContract.members(member)
