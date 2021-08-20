@@ -41,7 +41,7 @@ const columns = [
 ] as const
 
 const ProfileDAOs: FunctionComponent = () => {
-	const {DAOs, loading, error} = useMyDAOs()
+	const {DAOs, loading, error, refetch} = useMyDAOs()
 	const {account} = useContext(AuthContext)
 
 	if (error) return <ErrorPlaceholder />
@@ -50,8 +50,8 @@ const ProfileDAOs: FunctionComponent = () => {
 	return (
 		<>
 			<div className="profile__edit-buttons">
-				<CreateGnosisSafeModal daoType="gallery" />
-				<CreateGnosisSafeModal daoType="house" />
+				<CreateGnosisSafeModal daoType="gallery" afterCreate={refetch} />
+				<CreateGnosisSafeModal daoType="house" afterCreate={refetch} />
 			</div>
 			<div className="profile__controls">
 				<div className="profile__search">

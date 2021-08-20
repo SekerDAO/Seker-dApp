@@ -2,7 +2,6 @@ import {useContext, useEffect, useState} from "react"
 import {Proposal} from "../../types/proposal"
 import getDAOProposals from "../../api/firebase/proposal/getDAOProposals"
 import {getHouseERC20DAOProposal} from "../../api/ethers/functions/ERC20DAO/getERC20DAO"
-import {JsonRpcProvider} from "@ethersproject/providers"
 import EthersContext from "../../context/EthersContext"
 import getERC20Balance from "../../api/ethers/functions/ERC20Token/getERC20Balance"
 import getDAO from "../../api/firebase/DAO/getDAO"
@@ -13,29 +12,30 @@ const useDAOProposals = (
 	proposals: (Proposal & {proposalId: string})[]
 	loading: boolean
 	error: boolean
+	refetch: () => void
 } => {
 	const {provider} = useContext(EthersContext)
 	const [proposals, setProposals] = useState<(Proposal & {proposalId: string})[]>([])
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
 
-	const getProposals = async (_gnosisAddress: string, _provider: JsonRpcProvider) => {
+	const getProposals = async () => {
 		setLoading(true)
 		setError(false)
 		try {
-			const dao = await getDAO(_gnosisAddress)
-			const firebaseData = (await getDAOProposals(_gnosisAddress)).docs.map(doc => ({
+			const dao = await getDAO(gnosisAddress)
+			const firebaseData = (await getDAOProposals(gnosisAddress)).docs.map(doc => ({
 				...doc.data(),
 				proposalId: doc.id
 			}))
 			const ethersData = await Promise.all(
 				firebaseData.map(async p => {
 					if (p.type === "joinHouse") {
-						const balance = await getERC20Balance(dao.tokenAddress!, p.userAddress, _provider)
+						const balance = await getERC20Balance(dao.tokenAddress!, p.userAddress, provider)
 						const proposalData = await getHouseERC20DAOProposal(
 							dao.daoAddress!,
 							Number(p.id),
-							_provider
+							provider
 						)
 						return {
 							...proposalData,
@@ -43,7 +43,7 @@ const useDAOProposals = (
 						}
 					}
 					if (p.module === "DAO") {
-						return getHouseERC20DAOProposal(dao.daoAddress!, Number(p.id), _provider)
+						return getHouseERC20DAOProposal(dao.daoAddress!, Number(p.id), provider)
 					} else {
 						return {}
 					}
@@ -68,15 +68,14 @@ const useDAOProposals = (
 	}
 
 	useEffect(() => {
-		if (gnosisAddress && provider) {
-			getProposals(gnosisAddress, provider)
-		}
-	}, [gnosisAddress, provider])
+		getProposals()
+	}, [gnosisAddress])
 
 	return {
 		proposals,
 		loading,
-		error
+		error,
+		refetch: getProposals
 	}
 }
 

@@ -9,8 +9,9 @@ import editDAO from "../../../api/firebase/DAO/editDAO"
 //TODO: url validations
 const EditDAO: FunctionComponent<{
 	dao: DAO
+	afterEdit: () => void
 	onClose: () => void
-}> = ({dao, onClose}) => {
+}> = ({dao, afterEdit, onClose}) => {
 	const [processing, setProcessing] = useState(false)
 	const [name, setName] = useState(dao.name)
 	const [description, setDescription] = useState(dao.description ?? "")
@@ -33,6 +34,7 @@ const EditDAO: FunctionComponent<{
 				discord
 			})
 			toastSuccess("DAO Successfully edited")
+			afterEdit()
 			onClose()
 		} catch (e) {
 			console.error(e)
@@ -72,7 +74,7 @@ const EditDAO: FunctionComponent<{
 			/>
 			<label htmlFor="edit-dao-tw">Twitter URL</label>
 			<div className="edit-dao__url-container">
-				<div className="edit-dao__url-placeholder">twitter.com</div>
+				<div className="edit-dao__url-placeholder">twitter.com/</div>
 				<Input
 					borders="all"
 					value={twitter}
@@ -84,7 +86,7 @@ const EditDAO: FunctionComponent<{
 			</div>
 			<label htmlFor="edit-dao-tg">Telegram URL</label>
 			<div className="edit-dao__url-container">
-				<div className="edit-dao__url-placeholder">t.me</div>
+				<div className="edit-dao__url-placeholder">t.me/</div>
 				<Input
 					borders="all"
 					value={telegram}
@@ -96,7 +98,7 @@ const EditDAO: FunctionComponent<{
 			</div>
 			<label htmlFor="edit-dao-discord">Discord URL</label>
 			<div className="edit-dao__url-container">
-				<div className="edit-dao__url-placeholder">discord.gg</div>
+				<div className="edit-dao__url-placeholder">discord.gg/</div>
 				<Input
 					borders="all"
 					value={discord}

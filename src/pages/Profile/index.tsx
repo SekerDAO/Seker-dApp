@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useContext} from "react"
+import React, {FunctionComponent, useContext, useState} from "react"
 import {useHistory, useLocation, useParams} from "react-router-dom"
 import "./styles.scss"
 import {AuthContext} from "../../context/AuthContext"
@@ -25,21 +25,28 @@ const Profile: FunctionComponent = () => {
 	const {push} = useHistory()
 	const {pathname, search} = useLocation()
 	const {userId} = useParams<{userId: string}>()
-	const {user, loading, error} = useUser(userId)
+	const {user, loading, error, refetch} = useUser(userId)
 	const isOwner = connected && user?.account === userAccount
 	const page: ProfilePage = (isOwner && (parse(search).page as ProfilePage)) || "nfts"
+	const [galleryKey, setGalleryKey] = useState(Math.random())
 
 	if (error) return <ErrorPlaceholder />
 	if (loading || !user) return <Loader />
 
+	const updateGallery = () => {
+		setGalleryKey(Math.random())
+	}
+
 	const handleUploadProfileImage = async (file: File) => {
 		if (!user.account) return
 		await updateUserImage(file, user.account, "profile")
+		refetch()
 	}
 
 	const handleUploadHeaderImage = async (file: File) => {
 		if (!user.account) return
 		await updateUserImage(file, user.account, "header")
+		refetch()
 	}
 
 	return (
@@ -149,11 +156,13 @@ const Profile: FunctionComponent = () => {
 						{page === "nfts" && isOwner && (
 							<div className="profile__edit-buttons">
 								<CreateCustomDomainModal />
-								<CreateNFTModal />
+								<CreateNFTModal afterCreate={updateGallery} />
 							</div>
 						)}
-						{["nfts", "profile"].includes(page) && <NFTGallery account={user.account} />}
-						{page === "edit" && <ProfileEdit user={user} />}
+						{["nfts", "profile"].includes(page) && (
+							<NFTGallery key={galleryKey} account={user.account} />
+						)}
+						{page === "edit" && <ProfileEdit user={user} afterSubmit={refetch} />}
 						{page === "daos" && <ProfileDAOs />}
 					</div>
 				</div>

@@ -18,7 +18,8 @@ type DecentralizeDAOStage = "chooseToken" | "createToken" | "enterInfo" | "succe
 const DecentralizeDAOModalContent: FunctionComponent<{
 	gnosisAddress: string
 	type: DAOType
-}> = ({gnosisAddress, type}) => {
+	afterSubmit: () => void
+}> = ({gnosisAddress, type, afterSubmit}) => {
 	const [stage, setStage] = useState<DecentralizeDAOStage>("chooseToken")
 	const [tokenSource, setTokenSource] = useState<"new" | "existing" | "import">("existing")
 	const [token, setToken] = useState("")
@@ -45,6 +46,7 @@ const DecentralizeDAOModalContent: FunctionComponent<{
 				setStage("enterInfo")
 			}
 		} else if (stage === "enterInfo") {
+			afterSubmit()
 			setStage("success")
 		}
 	}
@@ -148,7 +150,8 @@ const DecentralizeDAOModalContent: FunctionComponent<{
 const DecentralizeDAOModal: FunctionComponent<{
 	gnosisAddress: string
 	type: DAOType
-}> = ({gnosisAddress, type}) => {
+	afterSubmit: () => void
+}> = ({gnosisAddress, type, afterSubmit}) => {
 	const [isOpened, setIsOpened] = useState(false)
 
 	return (
@@ -167,7 +170,11 @@ const DecentralizeDAOModal: FunctionComponent<{
 					setIsOpened(false)
 				}}
 			>
-				<DecentralizeDAOModalContent gnosisAddress={gnosisAddress} type={type} />
+				<DecentralizeDAOModalContent
+					afterSubmit={afterSubmit}
+					gnosisAddress={gnosisAddress}
+					type={type}
+				/>
 			</Modal>
 		</>
 	)

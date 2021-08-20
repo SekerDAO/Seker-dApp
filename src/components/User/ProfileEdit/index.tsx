@@ -9,7 +9,10 @@ import {User} from "../../../types/user"
 import useValidation from "../../../customHooks/useValidation"
 import checkUserUrl from "../../../api/firebase/user/checkUserUrl"
 
-const ProfileEdit: FunctionComponent<{user: User}> = ({user}) => {
+const ProfileEdit: FunctionComponent<{
+	user: User
+	afterSubmit: () => void
+}> = ({user, afterSubmit}) => {
 	const [name, setName] = useState(user.name ?? "")
 	const [url, setUrl] = useState(user.url ?? "")
 	const [bio, setBio] = useState(user.bio ?? "")
@@ -47,6 +50,7 @@ const ProfileEdit: FunctionComponent<{user: User}> = ({user}) => {
 				},
 				account
 			)
+			afterSubmit()
 			toastSuccess("Profile successfully edited!")
 		} catch (e) {
 			console.error(e)

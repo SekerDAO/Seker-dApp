@@ -49,12 +49,13 @@ import {AuthContext} from "../../../context/AuthContext"
 import updateDAOUser from "../../../api/firebase/DAO/updateDaoUser"
 
 const DAOProposalCard: FunctionComponent<{
+	refetch: () => void
 	gnosisVotingThreshold: number
 	proposal: Proposal & {proposalId: string}
 	isMember: boolean
 	isAdmin: boolean
 	daoAddress?: string
-}> = ({gnosisVotingThreshold, proposal, isMember, daoAddress, isAdmin}) => {
+}> = ({gnosisVotingThreshold, proposal, isMember, daoAddress, isAdmin, refetch}) => {
 	const [processing, setProcessing] = useState(false)
 	const {provider, signer} = useContext(EthersContext)
 	const {account} = useContext(AuthContext)
@@ -64,6 +65,7 @@ const DAOProposalCard: FunctionComponent<{
 		setProcessing(true)
 		try {
 			await voteForERC20DAOProposal(daoAddress, proposal.id!, yes, provider, signer)
+			refetch()
 			toastSuccess("Vote successful!")
 		} catch (e) {
 			console.error(e)
@@ -81,6 +83,7 @@ const DAOProposalCard: FunctionComponent<{
 			} else if (proposal.type === "requestFunding") {
 				await startERC20DAOFundingGracePeriod(daoAddress, proposal.id!, provider, signer)
 			}
+			refetch()
 			toastSuccess("Grace period started")
 		} catch (e) {
 			console.error(e)
@@ -102,6 +105,7 @@ const DAOProposalCard: FunctionComponent<{
 			} else if (proposal.type === "requestFunding") {
 				await executeERC20DAOFundingProposal(daoAddress, proposal.id!, provider, signer)
 			}
+			refetch()
 			toastSuccess("Proposal successfully executed")
 		} catch (e) {
 			console.error(e)
@@ -248,6 +252,7 @@ const DAOProposalCard: FunctionComponent<{
 					...(executed ? {newState: "executed"} : {})
 				})
 			}
+			refetch()
 			toastSuccess("Successfully signed!")
 		} catch (e) {
 			console.error(e)
@@ -372,7 +377,7 @@ const DAOProposals: FunctionComponent<{
 	isAdmin: boolean
 }> = ({gnosisVotingThreshold, gnosisAddress, daoAddress, isMember, isAdmin}) => {
 	const {provider} = useContext(EthersContext)
-	const {proposals, loading, error} = useDAOProposals(gnosisAddress)
+	const {proposals, loading, error, refetch} = useDAOProposals(gnosisAddress)
 
 	if (!provider) return <div>TODO: please connect wallet</div>
 	if (error) return <ErrorPlaceholder />
@@ -391,6 +396,7 @@ const DAOProposals: FunctionComponent<{
 			</div>
 			{proposals.map((proposal, index) => (
 				<DAOProposalCard
+					refetch={refetch}
 					gnosisVotingThreshold={gnosisVotingThreshold}
 					daoAddress={daoAddress}
 					proposal={proposal}

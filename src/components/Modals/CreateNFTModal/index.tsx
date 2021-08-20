@@ -27,10 +27,10 @@ type CreateNFTModalStage =
 	| "loadExisting"
 	| "success"
 
-const CreateNFTModal: FunctionComponent<{
+const CreateNFTModalContent: FunctionComponent<{
 	gnosisAddress?: string
-}> = ({gnosisAddress}) => {
-	const [isOpened, setIsOpened] = useState(false)
+	afterCreate?: () => void
+}> = ({gnosisAddress, afterCreate}) => {
 	const [loading, setLoading] = useState(false)
 	const [stage, setStage] = useState<CreateNFTModalStage>("chooseOption")
 	const [loadExisting, setLoadExisting] = useState(false)
@@ -45,18 +45,6 @@ const CreateNFTModal: FunctionComponent<{
 	const {provider, signer} = useContext(EthersContext)
 	const {account} = useContext(AuthContext)
 	const {domains, loading: domainsLoading, error: domainsError} = useMyDomains()
-
-	const handleClose = () => {
-		setIsOpened(false)
-		setStage("chooseOption")
-		setLoadExisting(false)
-		setCustomDomain(false)
-		setFile(null)
-		setTitle("")
-		setNumberOfEditions("")
-		setTokenAddress("")
-		setExistingNFTId("")
-	}
 
 	const handleSubmit = async () => {
 		if (stage === "chooseOption") {
@@ -117,6 +105,9 @@ const CreateNFTModal: FunctionComponent<{
 					await addNFT(nft, account)
 				}
 				setStage("success")
+				if (afterCreate) {
+					afterCreate()
+				}
 			} catch (e) {
 				console.error(e)
 				toastError("Failed to create NFT")
@@ -163,6 +154,9 @@ const CreateNFTModal: FunctionComponent<{
 				} else {
 					await addNFT(nft, account)
 				}
+				if (afterCreate) {
+					afterCreate()
+				}
 				setStage("success")
 			} catch (e) {
 				console.error(e)
@@ -177,6 +171,171 @@ const CreateNFTModal: FunctionComponent<{
 		(stage === "loadExisting" && !(existingNFTId && existingNFTId))
 
 	return (
+		<div className="create-nft">
+			{stage === "chooseOption" && (
+				<>
+					<h2>Create / Load NFT</h2>
+					<p>Step 1: Choose one.</p>
+					<div className="create-nft__row">
+						<RadioButton
+							id="create-new-nft-radio"
+							label="Create New NFT"
+							checked={!loadExisting}
+							onChange={() => {
+								setLoadExisting(false)
+							}}
+						/>
+					</div>
+					<div className="create-nft__row">
+						<RadioButton
+							id="load-existing-nft-radio"
+							label="Load Existing NFT"
+							checked={loadExisting}
+							onChange={() => {
+								setLoadExisting(true)
+							}}
+						/>
+					</div>
+				</>
+			)}
+			{stage === "chooseDomain" && (
+				<>
+					<h2>Create NFT</h2>
+					<p>Step 2. Choose domain option.</p>
+					<div className="create-nft__row">
+						<RadioButton
+							label="Your Custom Domain(s)"
+							id="create-nft-radio-pers-domain"
+							checked={customDomain}
+							onChange={() => {
+								setCustomDomain(true)
+							}}
+						/>
+						<Select
+							value={customDomainAddress}
+							options={[
+								{
+									name: "Select Domain",
+									value: ""
+								}
+							].concat(domains.map(domain => ({name: domain.name, value: domain.address})))}
+							disabled={!customDomain || domainsLoading || domainsError}
+							onChange={e => {
+								setCustomDomainAddress(e.target.value)
+							}}
+						/>
+					</div>
+					<div className="create-nft__row">
+						<RadioButton
+							label="TokenWalk Domain"
+							id="create-nft-radio-tw-domain"
+							checked={!customDomain}
+							onChange={() => {
+								setCustomDomain(false)
+							}}
+						/>
+					</div>
+				</>
+			)}
+			{stage === "uploadFile" && (
+				<>
+					<h2>Create NFT</h2>
+					<p>Step 3. Input NFT information.</p>
+					<MediaUpload
+						onUpload={image => {
+							setFile(image)
+						}}
+					/>
+					<div className="create-nft__row">
+						<div className="create-nft__col">
+							<label>Title of Piece(s)</label>
+							<Input
+								borders="all"
+								value={title}
+								onChange={e => {
+									setTitle(e.target.value)
+								}}
+							/>
+						</div>
+						<div className="create-nft__col">
+							<label># of Editions</label>
+							<Input
+								number
+								max={50}
+								borders="all"
+								value={numberOfEditions}
+								onChange={e => {
+									setNumberOfEditions(e.target.value)
+								}}
+							/>
+						</div>
+					</div>
+					<label>Description</label>
+					<Textarea
+						borders="all"
+						value={description}
+						onChange={e => {
+							setDescription(e.target.value)
+						}}
+					/>
+				</>
+			)}
+			{stage === "loadExisting" && (
+				<>
+					<h2>Load NFT</h2>
+					<label>NFT Address</label>
+					<Input
+						borders="all"
+						value={tokenAddress}
+						onChange={e => {
+							setTokenAddress(e.target.value)
+						}}
+					/>
+					<label>NFT ID</label>
+					<Input
+						borders="all"
+						value={existingNFTId}
+						onChange={e => {
+							setExistingNFTId(e.target.value)
+						}}
+						number
+					/>
+				</>
+			)}
+			{stage === "success" ? (
+				<>
+					<h2>Success!</h2>
+					<p>
+						You now have the ability to delete, sign, or change the
+						<br />
+						visibility setting of your created NFT on the &quot;Create /<br />
+						Edit NFTs&quot; page of your profile dashboard.
+					</p>
+				</>
+			) : (
+				<Button
+					buttonType="primary"
+					onClick={handleSubmit}
+					disabled={submitButtonDisabled || loading}
+				>
+					{stage === "uploadFile" || stage === "loadExisting"
+						? loading
+							? "Processing..."
+							: "Submit"
+						: "Continue"}
+				</Button>
+			)}
+		</div>
+	)
+}
+
+const CreateNFTModal: FunctionComponent<{
+	gnosisAddress?: string
+	afterCreate?: () => void
+}> = ({gnosisAddress, afterCreate}) => {
+	const [isOpened, setIsOpened] = useState(false)
+
+	return (
 		<>
 			<Button
 				buttonType="secondary"
@@ -186,162 +345,13 @@ const CreateNFTModal: FunctionComponent<{
 			>
 				Create / Load NFT
 			</Button>
-			<Modal show={isOpened} onClose={handleClose}>
-				<div className="create-nft">
-					{stage === "chooseOption" && (
-						<>
-							<h2>Create / Load NFT</h2>
-							<p>Step 1: Choose one.</p>
-							<div className="create-nft__row">
-								<RadioButton
-									id="create-new-nft-radio"
-									label="Create New NFT"
-									checked={!loadExisting}
-									onChange={() => {
-										setLoadExisting(false)
-									}}
-								/>
-							</div>
-							<div className="create-nft__row">
-								<RadioButton
-									id="load-existing-nft-radio"
-									label="Load Existing NFT"
-									checked={loadExisting}
-									onChange={() => {
-										setLoadExisting(true)
-									}}
-								/>
-							</div>
-						</>
-					)}
-					{stage === "chooseDomain" && (
-						<>
-							<h2>Create NFT</h2>
-							<p>Step 2. Choose domain option.</p>
-							<div className="create-nft__row">
-								<RadioButton
-									label="Your Custom Domain(s)"
-									id="create-nft-radio-pers-domain"
-									checked={customDomain}
-									onChange={() => {
-										setCustomDomain(true)
-									}}
-								/>
-								<Select
-									value={customDomainAddress}
-									options={[
-										{
-											name: "Select Domain",
-											value: ""
-										}
-									].concat(domains.map(domain => ({name: domain.name, value: domain.address})))}
-									disabled={!customDomain || domainsLoading || domainsError}
-									onChange={e => {
-										setCustomDomainAddress(e.target.value)
-									}}
-								/>
-							</div>
-							<div className="create-nft__row">
-								<RadioButton
-									label="TokenWalk Domain"
-									id="create-nft-radio-tw-domain"
-									checked={!customDomain}
-									onChange={() => {
-										setCustomDomain(false)
-									}}
-								/>
-							</div>
-						</>
-					)}
-					{stage === "uploadFile" && (
-						<>
-							<h2>Create NFT</h2>
-							<p>Step 3. Input NFT information.</p>
-							<MediaUpload
-								onUpload={image => {
-									setFile(image)
-								}}
-							/>
-							<div className="create-nft__row">
-								<div className="create-nft__col">
-									<label>Title of Piece(s)</label>
-									<Input
-										borders="all"
-										value={title}
-										onChange={e => {
-											setTitle(e.target.value)
-										}}
-									/>
-								</div>
-								<div className="create-nft__col">
-									<label># of Editions</label>
-									<Input
-										number
-										max={50}
-										borders="all"
-										value={numberOfEditions}
-										onChange={e => {
-											setNumberOfEditions(e.target.value)
-										}}
-									/>
-								</div>
-							</div>
-							<label>Description</label>
-							<Textarea
-								borders="all"
-								value={description}
-								onChange={e => {
-									setDescription(e.target.value)
-								}}
-							/>
-						</>
-					)}
-					{stage === "loadExisting" && (
-						<>
-							<h2>Load NFT</h2>
-							<label>NFT Address</label>
-							<Input
-								borders="all"
-								value={tokenAddress}
-								onChange={e => {
-									setTokenAddress(e.target.value)
-								}}
-							/>
-							<label>NFT ID</label>
-							<Input
-								borders="all"
-								value={existingNFTId}
-								onChange={e => {
-									setExistingNFTId(e.target.value)
-								}}
-								number
-							/>
-						</>
-					)}
-					{stage === "success" ? (
-						<>
-							<h2>Success!</h2>
-							<p>
-								You now have the ability to delete, sign, or change the
-								<br />
-								visibility setting of your created NFT on the &quot;Create /<br />
-								Edit NFTs&quot; page of your profile dashboard.
-							</p>
-						</>
-					) : (
-						<Button
-							buttonType="primary"
-							onClick={handleSubmit}
-							disabled={submitButtonDisabled || loading}
-						>
-							{stage === "uploadFile" || stage === "loadExisting"
-								? loading
-									? "Processing..."
-									: "Submit"
-								: "Continue"}
-						</Button>
-					)}
-				</div>
+			<Modal
+				show={isOpened}
+				onClose={() => {
+					setIsOpened(false)
+				}}
+			>
+				<CreateNFTModalContent gnosisAddress={gnosisAddress} afterCreate={afterCreate} />
 			</Modal>
 		</>
 	)

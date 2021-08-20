@@ -27,7 +27,7 @@ const galleryMenuEntries = ["Collection", "About", "Members", "Proposals", "Crea
 const DAOPage: FunctionComponent = () => {
 	const {account, connected} = useContext(AuthContext)
 	const {address} = useParams<{address: string}>()
-	const {dao, loading, error} = useDAO(address)
+	const {dao, loading, error, refetch} = useDAO(address)
 	const [editOpened, setEditOpened] = useState(false)
 	const [activeMenuIndex, setActiveMenuIndex] = useState(0)
 
@@ -51,6 +51,7 @@ const DAOPage: FunctionComponent = () => {
 						titleText="Edit DAO Header"
 						onUpload={async file => {
 							await updateDAOImage(file, dao!.gnosisAddress, "header")
+							refetch()
 						}}
 						successToastText="DAO header successfully updated"
 						errorToastText="Failed to update DAO header"
@@ -73,6 +74,7 @@ const DAOPage: FunctionComponent = () => {
 									titleText="Edit DAO Image"
 									onUpload={async file => {
 										await updateDAOImage(file, dao!.gnosisAddress, "profile")
+										refetch()
 									}}
 									successToastText="DAO image successfully updated"
 									errorToastText="Failed to update DAO image"
@@ -122,7 +124,11 @@ const DAOPage: FunctionComponent = () => {
 									>
 										Edit House Profile
 									</Button>
-									<DecentralizeDAOModal gnosisAddress={dao.gnosisAddress} type={dao.type} />
+									<DecentralizeDAOModal
+										afterSubmit={refetch}
+										gnosisAddress={dao.gnosisAddress}
+										type={dao.type}
+									/>
 								</>
 							) : (
 								<>
@@ -135,6 +141,7 @@ const DAOPage: FunctionComponent = () => {
 						{editOpened ? (
 							<EditDAO
 								dao={dao}
+								afterEdit={refetch}
 								onClose={() => {
 									setEditOpened(false)
 								}}

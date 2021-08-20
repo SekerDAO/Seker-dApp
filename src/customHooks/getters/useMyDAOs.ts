@@ -7,33 +7,37 @@ const useMyDAOs = (): {
 	DAOs: DAO[]
 	loading: boolean
 	error: boolean
+	refetch: () => Promise<void>
 } => {
 	const [DAOs, setDAOs] = useState<DAO[]>([])
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
 	const {account} = useContext(AuthContext)
 
-	useEffect(() => {
+	const getData = async () => {
 		if (account) {
 			setLoading(true)
 			setError(false)
-			getMyDAOs(account)
-				.then(res => {
-					setDAOs(res)
-					setLoading(false)
-				})
-				.catch(e => {
-					console.error(e)
-					setError(true)
-					setLoading(false)
-				})
+			try {
+				const res = await getMyDAOs(account)
+				setDAOs(res)
+			} catch (e) {
+				console.error(e)
+				setError(true)
+			}
+			setLoading(false)
 		}
+	}
+
+	useEffect(() => {
+		getData()
 	}, [account])
 
 	return {
 		DAOs,
 		loading,
-		error
+		error,
+		refetch: getData
 	}
 }
 

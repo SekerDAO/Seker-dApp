@@ -168,7 +168,8 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 
 const CreateGnosisSafeModal: FunctionComponent<{
 	daoType: DAOType
-}> = ({daoType}) => {
+	afterCreate: () => void
+}> = ({daoType, afterCreate}) => {
 	const [isOpened, setIsOpened] = useState(false)
 
 	return (
@@ -191,6 +192,7 @@ const CreateGnosisSafeModal: FunctionComponent<{
 					daoType={daoType}
 					afterCreate={() => {
 						setIsOpened(false)
+						afterCreate()
 					}}
 				/>
 			</Modal>
