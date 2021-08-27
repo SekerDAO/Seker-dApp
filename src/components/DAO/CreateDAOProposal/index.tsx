@@ -12,6 +12,7 @@ import CancelZoraAuction from "./CancelZoraAuction"
 import useDAOProposals from "../../../customHooks/getters/useDAOProposals"
 import ErrorPlaceholder from "../../ErrorPlaceholder"
 import Loader from "../../Loader"
+import GeneralEVM from "./GeneralEVM"
 
 const CreateDAOProposal: FunctionComponent<{
 	isMember: boolean
@@ -48,7 +49,8 @@ const CreateDAOProposal: FunctionComponent<{
 					{name: DAOProposalsTypeNames.createZoraAuction, value: "createZoraAuction"},
 					{name: DAOProposalsTypeNames.approveZoraAuction, value: "approveZoraAuction"},
 					{name: DAOProposalsTypeNames.cancelZoraAuction, value: "cancelZoraAuction"},
-					{name: DAOProposalsTypeNames.endZoraAuction, value: "endZoraAuction"}
+					{name: DAOProposalsTypeNames.endZoraAuction, value: "endZoraAuction"},
+					{name: DAOProposalsTypeNames.generalEVM, value: "generalEVM"}
 				].slice(...(isAdmin ? [1] : isMember ? [1, 3] : [0, 1]))}
 				onChange={e => {
 					setType(e.target.value as DAOProposalType)
@@ -86,6 +88,7 @@ const CreateDAOProposal: FunctionComponent<{
 					isAdmin={isAdmin}
 				/>
 			)}
+			{type === "generalEVM" && <GeneralEVM />}
 			{/* TODO: refactor API for this type of proposal and remove non-null assertions */}
 			{type === "requestFunding" && (
 				<RequestFunding gnosisAddress={gnosisAddress} daoAddress={daoAddress!} />

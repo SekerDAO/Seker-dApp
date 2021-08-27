@@ -1,3 +1,5 @@
+@import "src/variables";
+
 .textarea {
   &__field {
     font-size: 16px;
@@ -10,5 +12,13 @@
     &--bordered {
       border: 1px solid black;
     }
+
+    &--bad {
+      border-color: $error;
+    }
+  }
+
+  &__validation {
+    color: $error;
   }
 }

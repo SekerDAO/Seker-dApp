@@ -8,6 +8,7 @@ export type DAOProposalType =
 	| "createZoraAuction"
 	| "approveZoraAuction"
 	| "cancelZoraAuction"
+	| "generalEVM"
 
 export type DAOProposalState =
 	| "active"
@@ -95,6 +96,7 @@ type DAOProposal = ProposalBase & {
 
 type GnosisProposal = ProposalBase & {
 	module: "gnosis"
+	abi?: string
 }
 
 export type Proposal = DAOProposal | GnosisProposal
@@ -106,5 +108,6 @@ export const DAOProposalsTypeNames = {
 	createZoraAuction: "Create Zora Auction",
 	approveZoraAuction: "Approve Zora Auction",
 	endZoraAuction: "End Zora Auction",
-	cancelZoraAuction: "Cancel Zora Auction"
+	cancelZoraAuction: "Cancel Zora Auction",
+	generalEVM: "General EVM"
 } as const
