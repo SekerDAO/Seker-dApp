@@ -1,5 +1,6 @@
 import {DAOMemberRole} from "./DAO"
 import {SafeSignature} from "../api/ethers/functions/gnosisSafe/safeUtils"
+import {Abi} from "./abi"
 
 export type DAOProposalType =
 	| "joinHouse"
@@ -43,6 +44,10 @@ export type ProposalFirebaseData = Pick<
 	| "auctionCurrencySymbol"
 	| "auctionCurrencyAddress"
 	| "auctionId"
+	| "contractAddress"
+	| "contractAbi"
+	| "contractMethod"
+	| "callArgs"
 > & {state?: DAOProposalState}
 
 export type ProposalEtherData = Pick<
@@ -84,6 +89,11 @@ type ProposalBase = {
 	curatorFeePercentage?: number
 	auctionCurrencySymbol?: string
 	auctionCurrencyAddress?: string
+	// For general EVM
+	contractAddress?: string
+	contractAbi?: Abi
+	contractMethod?: string
+	callArgs?: Record<string, string | boolean>
 }
 
 type DAOProposal = ProposalBase & {
@@ -96,7 +106,6 @@ type DAOProposal = ProposalBase & {
 
 type GnosisProposal = ProposalBase & {
 	module: "gnosis"
-	abi?: string
 }
 
 export type Proposal = DAOProposal | GnosisProposal

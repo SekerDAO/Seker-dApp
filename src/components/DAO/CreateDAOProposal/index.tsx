@@ -88,7 +88,13 @@ const CreateDAOProposal: FunctionComponent<{
 					isAdmin={isAdmin}
 				/>
 			)}
-			{type === "generalEVM" && <GeneralEVM />}
+			{type === "generalEVM" && (
+				<GeneralEVM
+					gnosisVotingThreshold={gnosisVotingThreshold}
+					gnosisAddress={gnosisAddress}
+					isAdmin={isAdmin}
+				/>
+			)}
 			{/* TODO: refactor API for this type of proposal and remove non-null assertions */}
 			{type === "requestFunding" && (
 				<RequestFunding gnosisAddress={gnosisAddress} daoAddress={daoAddress!} />

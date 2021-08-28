@@ -1,8 +1,6 @@
 import {JsonRpcSigner} from "@ethersproject/providers"
-import {Contract} from "@ethersproject/contracts"
-import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
 import TWDomainToken from "../../abis/TWDomainToken.json"
-import {buildContractCall, executeTx, SafeSignature, safeSignMessage} from "../gnosisSafe/safeUtils"
+import {createSafeSignature, executeSafeTx, SafeSignature} from "../gnosisSafe/safeUtils"
 const {REACT_APP_ZORA_ADDRESS} = process.env
 
 export const signApproveNFTForZoraAuction = async (
@@ -15,13 +13,15 @@ export const signApproveNFTForZoraAuction = async (
 	curatorFeePercentage: number,
 	auctionCurrency: string,
 	signer: JsonRpcSigner
-): Promise<SafeSignature> => {
-	const safeContract = new Contract(safeAddress, GnosisSafeL2.abi, signer)
-	const nft = new Contract(nftAddress, TWDomainToken.abi, signer)
-	const nonce = await safeContract.nonce()
-	const call = buildContractCall(nft, "approve", [REACT_APP_ZORA_ADDRESS, nftID], nonce)
-	return safeSignMessage(signer, safeContract, call)
-}
+): Promise<SafeSignature> =>
+	createSafeSignature(
+		safeAddress,
+		nftAddress,
+		TWDomainToken.abi,
+		"approve",
+		[REACT_APP_ZORA_ADDRESS, nftID],
+		signer
+	)
 
 export const executeApproveNFTForZoraAuction = async (
 	safeAddress: string,
@@ -29,11 +29,13 @@ export const executeApproveNFTForZoraAuction = async (
 	nftAddress: string,
 	signatures: SafeSignature[],
 	signer: JsonRpcSigner
-): Promise<void> => {
-	const safeContract = new Contract(safeAddress, GnosisSafeL2.abi, signer)
-	const nft = new Contract(nftAddress, TWDomainToken.abi, signer)
-	const nonce = await safeContract.nonce()
-	const call = buildContractCall(nft, "approve", [REACT_APP_ZORA_ADDRESS, nftID], nonce)
-	const tx = await executeTx(safeContract, call, signatures)
-	await tx.wait()
-}
+): Promise<void> =>
+	executeSafeTx(
+		safeAddress,
+		nftAddress,
+		TWDomainToken.abi,
+		"approve",
+		[REACT_APP_ZORA_ADDRESS, nftID],
+		signer,
+		signatures
+	)

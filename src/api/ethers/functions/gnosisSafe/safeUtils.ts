@@ -1,10 +1,10 @@
-import {Contract} from "@ethersproject/contracts"
+import {Contract, ContractInterface} from "@ethersproject/contracts"
 import {_TypedDataEncoder} from "@ethersproject/hash"
 import {BigNumber, BigNumberish} from "@ethersproject/bignumber"
 import {arrayify} from "@ethersproject/bytes"
 import {AddressZero} from "@ethersproject/constants"
 import {JsonRpcSigner} from "@ethersproject/providers"
-import {Wallet} from "@ethersproject/wallet"
+import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
 
 const EIP712_SAFE_TX_TYPE = {
 	SafeTx: [
@@ -19,10 +19,6 @@ const EIP712_SAFE_TX_TYPE = {
 		{type: "address", name: "refundReceiver"},
 		{type: "uint256", name: "nonce"}
 	]
-}
-
-const EIP712_SAFE_MESSAGE_TYPE = {
-	SafeMessage: [{type: "bytes", name: "message"}]
 }
 
 interface MetaTransaction {
@@ -46,42 +42,14 @@ export interface SafeSignature {
 	data: string
 }
 
-export const calculateSafeTransactionHash = (
+const calculateSafeTransactionHash = (
 	safe: Contract,
 	safeTx: SafeTransaction,
 	chainId: BigNumberish
 ): string =>
 	_TypedDataEncoder.hash({verifyingContract: safe.address, chainId}, EIP712_SAFE_TX_TYPE, safeTx)
 
-export const calculateSafeMessageHash = (
-	safe: Contract,
-	message: string,
-	chainId: BigNumberish
-): string =>
-	_TypedDataEncoder.hash({verifyingContract: safe.address, chainId}, EIP712_SAFE_MESSAGE_TYPE, {
-		message
-	})
-
-export const safeSignTypedData = async (
-	signer: Wallet,
-	safe: Contract,
-	safeTx: SafeTransaction,
-	chainId?: BigNumberish
-): Promise<SafeSignature> => {
-	if (!chainId && !signer.provider) throw new Error("Provider required to retrieve chainId")
-	const cid = (await signer.provider!.getNetwork()).chainId
-	const signerAddress = await signer.getAddress()
-	return {
-		signer: signerAddress,
-		data: await signer._signTypedData(
-			{verifyingContract: safe.address, chainId: cid},
-			EIP712_SAFE_TX_TYPE,
-			safeTx
-		)
-	}
-}
-
-export const signHash = async (signer: JsonRpcSigner, hash: string): Promise<SafeSignature> => {
+const signHash = async (signer: JsonRpcSigner, hash: string): Promise<SafeSignature> => {
 	const typedDataHash = arrayify(hash)
 	const signerAddress = await signer.getAddress()
 	return {
@@ -90,17 +58,7 @@ export const signHash = async (signer: JsonRpcSigner, hash: string): Promise<Saf
 	}
 }
 
-export const safeSignMessage = async (
-	signer: JsonRpcSigner,
-	safe: Contract,
-	safeTx: SafeTransaction,
-	chainId?: BigNumberish
-): Promise<SafeSignature> => {
-	const cid = chainId || (await signer.provider!.getNetwork()).chainId
-	return signHash(signer, calculateSafeTransactionHash(safe, safeTx, cid))
-}
-
-export const buildSignatureBytes = (signatures: SafeSignature[]): string => {
+const buildSignatureBytes = (signatures: SafeSignature[]): string => {
 	signatures.sort((left, right) =>
 		left.signer.toLowerCase().localeCompare(right.signer.toLowerCase())
 	)
@@ -111,26 +69,30 @@ export const buildSignatureBytes = (signatures: SafeSignature[]): string => {
 	return signatureBytes
 }
 
-export const executeTx = async (
-	safe: Contract,
-	safeTx: SafeTransaction,
-	signatures: SafeSignature[],
-	overrides?: unknown
-): Promise<any> => {
-	const signatureBytes = buildSignatureBytes(signatures)
-	return safe.execTransaction(
-		safeTx.to,
-		safeTx.value,
-		safeTx.data,
-		safeTx.operation,
-		safeTx.safeTxGas,
-		safeTx.baseGas,
-		safeTx.gasPrice,
-		safeTx.gasToken,
-		safeTx.refundReceiver,
-		signatureBytes,
-		overrides || {}
-	)
+const buildSafeTransaction = (template: {
+	to: string
+	value?: BigNumber | number | string
+	data?: string
+	operation?: number
+	safeTxGas?: number | string
+	baseGas?: number | string
+	gasPrice?: number | string
+	gasToken?: string
+	refundReceiver?: string
+	nonce: number
+}): SafeTransaction => {
+	return {
+		to: template.to,
+		value: template.value || 0,
+		data: template.data || "0x",
+		operation: template.operation || 0,
+		safeTxGas: template.safeTxGas || 0,
+		baseGas: template.baseGas || 0,
+		gasPrice: template.gasPrice || 0,
+		gasToken: template.gasToken || AddressZero,
+		refundReceiver: template.refundReceiver || AddressZero,
+		nonce: template.nonce
+	}
 }
 
 export const buildContractCall = (
@@ -155,28 +117,66 @@ export const buildContractCall = (
 	)
 }
 
-export const buildSafeTransaction = (template: {
-	to: string
-	value?: BigNumber | number | string
-	data?: string
-	operation?: number
-	safeTxGas?: number | string
-	baseGas?: number | string
-	gasPrice?: number | string
-	gasToken?: string
-	refundReceiver?: string
-	nonce: number
-}): SafeTransaction => {
-	return {
-		to: template.to,
-		value: template.value || 0,
-		data: template.data || "0x",
-		operation: template.operation || 0,
-		safeTxGas: template.safeTxGas || 0,
-		baseGas: template.baseGas || 0,
-		gasPrice: template.gasPrice || 0,
-		gasToken: template.gasToken || AddressZero,
-		refundReceiver: template.refundReceiver || AddressZero,
-		nonce: template.nonce
-	}
+export const executeTx = async (
+	safe: Contract,
+	safeTx: SafeTransaction,
+	signatures: SafeSignature[],
+	overrides?: unknown
+): Promise<any> => {
+	const signatureBytes = buildSignatureBytes(signatures)
+	return safe.execTransaction(
+		safeTx.to,
+		safeTx.value,
+		safeTx.data,
+		safeTx.operation,
+		safeTx.safeTxGas,
+		safeTx.baseGas,
+		safeTx.gasPrice,
+		safeTx.gasToken,
+		safeTx.refundReceiver,
+		signatureBytes,
+		overrides || {}
+	)
+}
+
+export const safeSignMessage = async (
+	signer: JsonRpcSigner,
+	safe: Contract,
+	safeTx: SafeTransaction,
+	chainId?: BigNumberish
+): Promise<SafeSignature> => {
+	const cid = chainId || (await signer.provider!.getNetwork()).chainId
+	return signHash(signer, calculateSafeTransactionHash(safe, safeTx, cid))
+}
+
+export const createSafeSignature = async (
+	safeAddress: string,
+	contractAddress: string,
+	contractAbi: ContractInterface,
+	method: string,
+	args: unknown[],
+	signer: JsonRpcSigner
+): Promise<SafeSignature> => {
+	const safeContract = new Contract(safeAddress, GnosisSafeL2.abi, signer)
+	const targetContract = new Contract(contractAddress, contractAbi, signer)
+	const nonce = await safeContract.nonce()
+	const call = buildContractCall(targetContract, method, args, nonce)
+	return safeSignMessage(signer, safeContract, call)
+}
+
+export const executeSafeTx = async (
+	safeAddress: string,
+	contractAddress: string,
+	contractAbi: ContractInterface,
+	method: string,
+	args: unknown[],
+	signer: JsonRpcSigner,
+	signatures: SafeSignature[]
+): Promise<void> => {
+	const safeContract = new Contract(safeAddress, GnosisSafeL2.abi, signer)
+	const targetContract = new Contract(contractAddress, contractAbi, signer)
+	const nonce = await safeContract.nonce()
+	const call = buildContractCall(targetContract, method, args, nonce)
+	const tx = await executeTx(safeContract, call, signatures)
+	await tx.wait()
 }

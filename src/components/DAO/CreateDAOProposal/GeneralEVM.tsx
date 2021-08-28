@@ -1,15 +1,40 @@
-import React, {ChangeEvent, Fragment, FunctionComponent, useEffect, useState} from "react"
+import React, {
+	ChangeEvent,
+	Fragment,
+	FunctionComponent,
+	useContext,
+	useEffect,
+	useState
+} from "react"
 import Input from "../../Controls/Input"
 import {isAddress} from "@ethersproject/address"
-import {toastWarning} from "../../Toast"
+import {toastError, toastSuccess, toastWarning} from "../../Toast"
 import fetchContractAbi from "../../../api/etherscan/fetchContractAbi"
 import Textarea from "../../Controls/Textarea"
 import {Abi, AbiFunction} from "../../../types/abi"
 import Select from "../../Controls/Select"
-import {validateArgument} from "../../../utlls"
+import {prepareArguments, validateArgument} from "../../../utlls"
 import Button from "../../Controls/Button"
+import {
+	createSafeSignature,
+	executeSafeTx,
+	SafeSignature
+} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
+import {DAOProposalState} from "../../../types/proposal"
+import EthersContext from "../../../context/EthersContext"
+import addProposal from "../../../api/firebase/proposal/addProposal"
+import {AuthContext} from "../../../context/AuthContext"
 
-const GeneralEVM: FunctionComponent = () => {
+const GeneralEVM: FunctionComponent<{
+	gnosisAddress: string
+	isAdmin: boolean
+	gnosisVotingThreshold: number
+}> = ({gnosisAddress, gnosisVotingThreshold, isAdmin}) => {
+	const {account} = useContext(AuthContext)
+	const {signer} = useContext(EthersContext)
+	const [processing, setProcessing] = useState(false)
+
+	const [title, setTitle] = useState("")
 	const [address, setAddress] = useState("")
 	const [addressBad, setAddressBad] = useState(false)
 
@@ -40,7 +65,7 @@ const GeneralEVM: FunctionComponent = () => {
 	const [args, setArgs] = useState<string[]>([])
 	const [argsBad, setArgsBad] = useState<boolean[]>([])
 	useEffect(() => {
-		if (selectedMethodIndex) {
+		if (selectedMethodIndex != null) {
 			setArgs(contractMethods[selectedMethodIndex].inputs.map(() => ""))
 			setArgsBad(contractMethods[selectedMethodIndex].inputs.map(() => false))
 		} else {
@@ -51,7 +76,7 @@ const GeneralEVM: FunctionComponent = () => {
 
 	const handleAddressChange = async (e: ChangeEvent<HTMLInputElement>) => {
 		setAddress(e.target.value)
-		setAddressBad(!!(address && !isAddress(address)))
+		setAddressBad(!!(e.target.value && !isAddress(e.target.value)))
 		if (isAddress(e.target.value)) {
 			setFetchingAbi(true)
 			try {
@@ -77,21 +102,89 @@ const GeneralEVM: FunctionComponent = () => {
 		)
 	}
 
-	const handleSubmit = () => {
-		console.log("TODO")
+	const handleSubmit = async () => {
+		if (!(selectedMethodIndex != null && signer && account)) return
+		setProcessing(true)
+		try {
+			const signatures: SafeSignature[] = []
+			let state: DAOProposalState = "active"
+			if (isAdmin) {
+				const signature = await createSafeSignature(
+					gnosisAddress,
+					address,
+					contractMethods,
+					contractMethods[selectedMethodIndex].name,
+					prepareArguments(
+						args,
+						contractMethods[selectedMethodIndex].inputs.map(i => i.type)
+					),
+					signer
+				)
+				signatures.push(signature)
+				if (gnosisVotingThreshold === 1) {
+					await executeSafeTx(
+						gnosisAddress,
+						address,
+						contractMethods,
+						contractMethods[selectedMethodIndex].name,
+						prepareArguments(
+							args,
+							contractMethods[selectedMethodIndex].inputs.map(i => i.type)
+						),
+						signer,
+						signatures
+					)
+					state = "executed"
+				}
+			}
+			await addProposal({
+				type: "generalEVM",
+				module: "gnosis",
+				userAddress: account,
+				title,
+				gnosisAddress,
+				signatures,
+				state,
+				contractAddress: address,
+				contractAbi: contractMethods,
+				contractMethod: contractMethods[selectedMethodIndex].name,
+				callArgs: args.reduce(
+					(acc, cur, index) => ({
+						...acc,
+						[contractMethods[selectedMethodIndex].inputs[index].name]: cur
+					}),
+					{}
+				)
+			})
+			toastSuccess("Proposal successfully created!")
+		} catch (e) {
+			console.error(e)
+			toastError("Failed to create proposal")
+		}
+		setProcessing(false)
 	}
 
 	const submitButtonDisabled =
+		!title ||
 		!address ||
 		addressBad ||
 		!abiString ||
 		abiBad ||
-		!selectedMethodIndex ||
+		selectedMethodIndex == null ||
 		!args.reduce((acc, cur) => acc && !!cur, true) ||
 		argsBad.reduce((acc, cur) => acc && cur, true)
 
 	return (
 		<>
+			<label htmlFor="general-evm-title">Proposal Title</label>
+			<Input
+				id="general-evm-title"
+				borders="all"
+				value={title}
+				onChange={e => {
+					setTitle(e.target.value)
+				}}
+			/>
 			<label htmlFor="general-evm-address">Contract Address</label>
 			<Input
 				id="general-evm-address"
@@ -114,7 +207,7 @@ const GeneralEVM: FunctionComponent = () => {
 				<>
 					<label>Select Method</label>
 					<Select
-						value={selectedMethodIndex ? String(selectedMethodIndex) : ""}
+						value={selectedMethodIndex != null ? String(selectedMethodIndex) : ""}
 						options={[{name: "Choose One", value: ""}].concat(
 							contractMethods.map((method, index) => ({name: method.name, value: String(index)}))
 						)}
@@ -153,8 +246,8 @@ const GeneralEVM: FunctionComponent = () => {
 									)}
 								</Fragment>
 							))}
-							<Button disabled={submitButtonDisabled} onClick={handleSubmit}>
-								Create Proposal
+							<Button disabled={submitButtonDisabled || processing} onClick={handleSubmit}>
+								{processing ? "Processing..." : "Create Proposal"}
 							</Button>
 						</>
 					)}

@@ -1,4 +1,4 @@
-type AbiScalar =
+export type AbiScalar =
 	| `uint${number}`
 	| "uint"
 	| `int${number}`
