@@ -10,12 +10,7 @@ export const signHookupProposalModule = async (
 ): Promise<SafeSignature> => {
 	const safeContract = new Contract(safeAddress, GnosisSafeL2.abi, signer)
 	const nonce = await safeContract.nonce()
-	const call = buildContractCall(
-		safeContract,
-		"enableModule",
-		[proposalModule],
-		nonce
-	)
+	const call = buildContractCall(safeContract, "enableModule", [proposalModule], nonce)
 	return safeSignMessage(signer, safeContract, call)
 }
 
@@ -27,12 +22,7 @@ export const executeHookupProposalModule = async (
 ): Promise<void> => {
 	const safeContract = new Contract(safeAddress, GnosisSafeL2.abi, signer)
 	const nonce = await safeContract.nonce()
-	const call = buildContractCall(
-		safeContract,
-		"enableModule",
-		[proposalModule],
-		nonce
-	)
+	const call = buildContractCall(safeContract, "enableModule", [proposalModule], nonce)
 	const tx = await executeTx(safeContract, call, signatures)
 	await tx.wait()
 }

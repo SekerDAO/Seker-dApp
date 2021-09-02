@@ -3,25 +3,15 @@ import useDAOProposals from "../../../customHooks/getters/useDAOProposals"
 import Loader from "../../Loader"
 import ErrorPlaceholder from "../../ErrorPlaceholder"
 import EthersContext from "../../../context/EthersContext"
-import {DAOProposalsTypeNames, Proposal} from "../../../types/proposal"
+import {ProposalsTypeNames, Proposal, isGnosisProposal} from "../../../types/proposal"
 import "./styles.scss"
 import Input from "../../Controls/Input"
 import Select from "../../Controls/Select"
 import {capitalize} from "../../../utlls"
 import Button from "../../Controls/Button"
 import {toastError, toastSuccess} from "../../Toast"
-import voteForERC20DAOProposal from "../../../api/ethers/functions/ERC20DAO/voteForERC20DAOProposal"
 import SearchIcon from "../../../icons/SearchIcon"
-import {
-	startERC20DAOFundingGracePeriod,
-	startERC20DAORoleChangeGracePeriod
-} from "../../../api/ethers/functions/ERC20DAO/startERC20DAOProposalsGracePeriod"
-import {
-	executeERC20DAOFundingProposal,
-	executeERC20DAOJoin,
-	executeERC20DAORoleChange
-} from "../../../api/ethers/functions/ERC20DAO/executeERC20DAOProposals"
-import addProposalSignature from "../../../api/firebase/proposal/addProposalSignature"
+import addSafeProposalSignature from "../../../api/firebase/proposal/addSafeProposalSignature"
 import {SafeSignature} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
 import {
 	executeApproveNFTForZoraAuction,
@@ -64,7 +54,8 @@ const DAOProposalCard: FunctionComponent<{
 		if (!(provider && signer && daoAddress)) return
 		setProcessing(true)
 		try {
-			await voteForERC20DAOProposal(daoAddress, proposal.id!, yes, provider, signer)
+			console.log("TODO")
+			// await voteForERC20DAOProposal(daoAddress, proposal.id!, yes, provider, signer)
 			refetch()
 			toastSuccess("Vote successful!")
 		} catch (e) {
@@ -78,11 +69,12 @@ const DAOProposalCard: FunctionComponent<{
 		if (!(provider && signer && daoAddress)) return
 		setProcessing(true)
 		try {
-			if (["changeRole", "joinHouse"].includes(proposal.type)) {
-				await startERC20DAORoleChangeGracePeriod(daoAddress, proposal.id!, provider, signer)
-			} else if (proposal.type === "requestFunding") {
-				await startERC20DAOFundingGracePeriod(daoAddress, proposal.id!, provider, signer)
-			}
+			console.log("TODO")
+			// if (["changeRole", "joinHouse"].includes(proposal.type)) {
+			// 	await startERC20DAORoleChangeGracePeriod(daoAddress, proposal.id!, provider, signer)
+			// } else if (proposal.type === "requestFunding") {
+			// 	await startERC20DAOFundingGracePeriod(daoAddress, proposal.id!, provider, signer)
+			// }
 			refetch()
 			toastSuccess("Grace period started")
 		} catch (e) {
@@ -96,15 +88,16 @@ const DAOProposalCard: FunctionComponent<{
 		if (!(provider && signer && daoAddress)) return
 		setProcessing(true)
 		try {
-			if (proposal.type === "changeRole") {
-				await executeERC20DAORoleChange(daoAddress, proposal.id!, provider, signer)
-				await updateDAOUser(proposal.gnosisAddress, proposal.recipientAddress!)
-			} else if (proposal.type === "joinHouse") {
-				await executeERC20DAOJoin(daoAddress, proposal.id!, provider, signer)
-				await updateDAOUser(proposal.gnosisAddress, proposal.userAddress)
-			} else if (proposal.type === "requestFunding") {
-				await executeERC20DAOFundingProposal(daoAddress, proposal.id!, provider, signer)
-			}
+			console.log("TODO")
+			// if (proposal.type === "changeRole") {
+			// 	await executeERC20DAORoleChange(daoAddress, proposal.id!, provider, signer)
+			// 	await updateDAOUser(proposal.gnosisAddress, proposal.recipientAddress!)
+			// } else if (proposal.type === "joinHouse") {
+			// 	await executeERC20DAOJoin(daoAddress, proposal.id!, provider, signer)
+			// 	await updateDAOUser(proposal.gnosisAddress, proposal.userAddress)
+			// } else if (proposal.type === "requestFunding") {
+			// 	await executeERC20DAOFundingProposal(daoAddress, proposal.id!, provider, signer)
+			// }
 			refetch()
 			toastSuccess("Proposal successfully executed")
 		} catch (e) {
@@ -127,6 +120,7 @@ const DAOProposalCard: FunctionComponent<{
 			let signatureAdded = false
 			switch (proposal.type) {
 				case "createZoraAuction":
+					if (!isGnosisProposal(proposal)) break
 					const signingArgs = [
 						proposal.gnosisAddress,
 						Number(proposal.nftId),
@@ -164,6 +158,7 @@ const DAOProposalCard: FunctionComponent<{
 					}
 					break
 				case "approveZoraAuction":
+					if (!isGnosisProposal(proposal)) break
 					signature = await signApproveZoraAuction(
 						proposal.gnosisAddress,
 						proposal.auctionId!,
@@ -180,6 +175,7 @@ const DAOProposalCard: FunctionComponent<{
 					}
 					break
 				case "cancelZoraAuction":
+					if (!isGnosisProposal(proposal)) break
 					signature = await signCancelZoraAuction(
 						proposal.gnosisAddress,
 						proposal.auctionId!,
@@ -196,6 +192,7 @@ const DAOProposalCard: FunctionComponent<{
 					}
 					break
 				case "changeRole":
+					if (!isGnosisProposal(proposal)) break
 					if (["head", "admin"].includes(proposal.newRole!)) {
 						signature = await signAddOwner(
 							proposal.gnosisAddress,
@@ -230,7 +227,7 @@ const DAOProposalCard: FunctionComponent<{
 								signer
 							)
 							executed = true
-							await addProposalSignature({
+							await addSafeProposalSignature({
 								proposalId: proposal.proposalId,
 								signature: signature!,
 								signatureStep2,
@@ -245,7 +242,7 @@ const DAOProposalCard: FunctionComponent<{
 					throw new Error("Unexpected proposal type to sign")
 			}
 			if (!signatureAdded) {
-				await addProposalSignature({
+				await addSafeProposalSignature({
 					proposalId: proposal.proposalId,
 					signature: signature!,
 					signatureStep2,
@@ -264,17 +261,18 @@ const DAOProposalCard: FunctionComponent<{
 	return (
 		<div className="dao-proposals__card">
 			<div className="dao-proposals__card-header">
-				<p>{DAOProposalsTypeNames[proposal.type]}</p>
+				<p>{ProposalsTypeNames[proposal.type]}</p>
 				<p>{capitalize(proposal.state)}</p>
 			</div>
 			<h2>{proposal.title}</h2>
-			{proposal.type === "joinHouse" && (
-				<div className="dao-proposals__card-section">
-					<b>Amount of governance token currently owned:</b>
-					{` ${proposal.balance}`}
-				</div>
-			)}
-			{proposal.type === "changeRole" && (
+			{/* TODO */}
+			{/*{proposal.type === "joinHouse" && (*/}
+			{/*	<div className="dao-proposals__card-section">*/}
+			{/*		<b>Amount of governance token currently owned:</b>*/}
+			{/*		{` ${proposal.balance}`}*/}
+			{/*	</div>*/}
+			{/*)}*/}
+			{isGnosisProposal(proposal) && proposal.type === "changeRole" && (
 				<>
 					<div className="dao-proposals__card-section">
 						<b>Member&apos;s Address:</b>
@@ -286,38 +284,40 @@ const DAOProposalCard: FunctionComponent<{
 					</div>
 				</>
 			)}
-			{["applyForCommission", "requestFunding"].includes(proposal.type) && (
-				<>
-					<div className="dao-proposals__card-section">
-						<b>Requested amount:</b>
-						{` ${proposal.amount} ETH`}
-					</div>
-					<div className="dao-proposals__card-section">
-						<b>Recipient:</b>
-						{` ${proposal.recipientAddress}`}
-					</div>
-				</>
-			)}
+			{/* TODO */}
+			{/*{["applyForCommission", "requestFunding"].includes(proposal.type) && (*/}
+			{/*	<>*/}
+			{/*		<div className="dao-proposals__card-section">*/}
+			{/*			<b>Requested amount:</b>*/}
+			{/*			{` ${proposal.amount} ETH`}*/}
+			{/*		</div>*/}
+			{/*		<div className="dao-proposals__card-section">*/}
+			{/*			<b>Recipient:</b>*/}
+			{/*			{` ${proposal.recipientAddress}`}*/}
+			{/*		</div>*/}
+			{/*	</>*/}
+			{/*)}*/}
 			<div className="dao-proposals__card-footer">
-				{proposal.module === "DAO" && (
-					<div className="dao-proposals__voting">
-						<div className="dao-proposals__voting-legend">
-							<p>Yes</p>
-							<p>No</p>
-						</div>
-						<div className="dao-proposals__voting-bar">
-							<div
-								className="dao-proposals__voting-bar-inner"
-								style={{
-									width:
-										proposal.noVotes === 0
-											? "100%"
-											: `${Math.round((proposal.yesVotes * 100) / proposal.noVotes)}%`
-								}}
-							/>
-						</div>
-					</div>
-				)}
+				{/* TODO */}
+				{/*{proposal.module === "DAO" && (*/}
+				{/*	<div className="dao-proposals__voting">*/}
+				{/*		<div className="dao-proposals__voting-legend">*/}
+				{/*			<p>Yes</p>*/}
+				{/*			<p>No</p>*/}
+				{/*		</div>*/}
+				{/*		<div className="dao-proposals__voting-bar">*/}
+				{/*			<div*/}
+				{/*				className="dao-proposals__voting-bar-inner"*/}
+				{/*				style={{*/}
+				{/*					width:*/}
+				{/*						proposal.noVotes === 0*/}
+				{/*							? "100%"*/}
+				{/*							: `${Math.round((proposal.yesVotes * 100) / proposal.noVotes)}%`*/}
+				{/*				}}*/}
+				{/*			/>*/}
+				{/*		</div>*/}
+				{/*	</div>*/}
+				{/*)}*/}
 				<div className="dao-proposals__voting-buttons">
 					{isMember &&
 						proposal.state === "active" &&
@@ -346,7 +346,8 @@ const DAOProposalCard: FunctionComponent<{
 								</Button>
 							</>
 						))}
-					{isAdmin &&
+					{isGnosisProposal(proposal) &&
+						isAdmin &&
 						proposal.state === "active" &&
 						!proposal.signatures?.find(s => s.signer.toLowerCase() === account) && (
 							<Button onClick={sign} disabled={processing}>

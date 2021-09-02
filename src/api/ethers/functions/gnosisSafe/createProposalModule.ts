@@ -1,9 +1,9 @@
 import ProposalModule from "../../abis/ProposalModule.json"
-import {Contract, ContractFactory} from "@ethersproject/contracts"
+import {ContractFactory} from "@ethersproject/contracts"
 import {JsonRpcSigner} from "@ethersproject/providers"
 
 const createProposalModule = async (
-	safeAddress: string, // the DAO address
+	safeAddress: string,
 	gracePeriodTime: number, // set to minutes for testing, days in production
 	votingThreshold: number,
 	signer: JsonRpcSigner

@@ -13,12 +13,7 @@ export const signHookupLinearVotingModule = async (
 	const safeContract = new Contract(safeAddress, GnosisSafeL2.abi, signer)
 	const proposalContract = new Contract(proposalModule, ProposalModule.abi, signer)
 	const nonce = await safeContract.nonce()
-	const call = buildContractCall(
-		proposalContract,
-		"enableModule",
-		[votingAddress],
-		nonce
-	)
+	const call = buildContractCall(proposalContract, "enableModule", [votingAddress], nonce)
 	return safeSignMessage(signer, proposalContract, call)
 }
 
@@ -32,12 +27,7 @@ export const executeHookupLinearVotingModule = async (
 	const safeContract = new Contract(safeAddress, GnosisSafeL2.abi, signer)
 	const proposalContract = new Contract(proposalModule, ProposalModule.abi, signer)
 	const nonce = await safeContract.nonce()
-	const call = buildContractCall(
-		proposalContract,
-		"enableModule",
-		[votingAddress],
-		nonce
-	)
+	const call = buildContractCall(proposalContract, "enableModule", [votingAddress], nonce)
 	const tx = await executeTx(safeContract, call, signatures)
 	await tx.wait()
 }

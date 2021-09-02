@@ -11,8 +11,17 @@ const createLinearVoting = async (
 	safeAddress: string, // address of the DAO
 	signer: JsonRpcSigner
 ): Promise<string> => {
-	const votingModule = new ContractFactory(LinearVotingModule.abi, LinearVotingModule.bytecode, signer)
-	const votingDeploy = await votingModule.deploy(governanceTokenAddress, proposalModuleAddress, undelegateDelay, safeAddress)
+	const votingModule = new ContractFactory(
+		LinearVotingModule.abi,
+		LinearVotingModule.bytecode,
+		signer
+	)
+	const votingDeploy = await votingModule.deploy(
+		governanceTokenAddress,
+		proposalModuleAddress,
+		undelegateDelay,
+		safeAddress
+	)
 	await votingDeploy.deployed()
 	const govenanceToken = new Contract(governanceTokenAddress, GovToken.abi, signer)
 	// maybe these transaction should be split out for better broadcasting to the user what is happening

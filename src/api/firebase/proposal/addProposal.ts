@@ -1,7 +1,7 @@
-import {ProposalFirebaseData} from "../../../types/proposal"
+import {Proposal} from "../../../types/proposal"
 import firebase from "firebase"
 
-const addProposal = async (proposal: ProposalFirebaseData): Promise<void> => {
+const addProposal = async (proposal: Proposal): Promise<void> => {
 	await firebase.firestore().collection("proposals").add(proposal)
 }
 

@@ -21,7 +21,7 @@ import {
 } from "../../../api/ethers/functions/zoraAuction/approveNFTForZoraAuction"
 import currencies from "../../../constants/currencies"
 import addZoraAuction from "../../../api/firebase/zoraAuction/addZoraAuction"
-import {DAOProposalState} from "../../../types/proposal"
+import {ProposalState} from "../../../types/proposal"
 
 const CreateZoraAuction: FunctionComponent<{
 	gnosisAddress: string
@@ -100,7 +100,7 @@ const CreateZoraAuction: FunctionComponent<{
 				currencyAddress,
 				signer
 			] as const
-			let state: DAOProposalState = "active"
+			let state: ProposalState = "active"
 			if (isAdmin) {
 				const approveSignature = await signApproveNFTForZoraAuction(...signingArgs)
 				const createSignature = await signCreateZoraAuction(...signingArgs)

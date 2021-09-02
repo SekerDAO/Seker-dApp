@@ -2,15 +2,13 @@ import React, {FunctionComponent, useContext, useState} from "react"
 import Input from "../../Controls/Input"
 import Button from "../../Controls/Button"
 import EthersContext from "../../../context/EthersContext"
-import {createEnterERC20DAOProposal} from "../../../api/ethers/functions/ERC20DAO/createERC20DAOProposals"
 import {toastError, toastSuccess} from "../../Toast"
-import addProposal from "../../../api/firebase/proposal/addProposal"
 import {AuthContext} from "../../../context/AuthContext"
 
 const JoinHouse: FunctionComponent<{
 	gnosisAddress: string
 	daoAddress: string
-}> = ({gnosisAddress, daoAddress}) => {
+}> = () => {
 	const {account} = useContext(AuthContext)
 	const {provider, signer} = useContext(EthersContext)
 	const [loading, setLoading] = useState(false)
@@ -21,16 +19,17 @@ const JoinHouse: FunctionComponent<{
 		if (!(provider && signer && account)) return
 		setLoading(true)
 		try {
-			const proposalId = await createEnterERC20DAOProposal(daoAddress, provider, signer)
-			await addProposal({
-				id: proposalId,
-				module: "DAO",
-				type: "joinHouse",
-				gnosisAddress,
-				userAddress: account,
-				title,
-				...(description ? {description} : {})
-			})
+			console.log("TODO")
+			// const proposalId = await createEnterERC20DAOProposal(daoAddress, provider, signer)
+			// await addProposal({
+			// 	id: proposalId,
+			// 	module: "DAO",
+			// 	type: "joinHouse",
+			// 	gnosisAddress,
+			// 	userAddress: account,
+			// 	title,
+			// 	...(description ? {description} : {})
+			// })
 			toastSuccess("Proposal successfully created")
 			setTitle("")
 			setDescription("")

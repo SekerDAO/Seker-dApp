@@ -1,5 +1,5 @@
 import {SafeSignature} from "../../ethers/functions/gnosisSafe/safeUtils"
-import {DAOProposalState} from "../../../types/proposal"
+import {ProposalState} from "../../../types/proposal"
 import firebase from "firebase"
 const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
@@ -12,13 +12,13 @@ const addProposalSignatures = async ({
 	proposalId: string
 	signature: SafeSignature
 	signatureStep2?: SafeSignature
-	newState?: DAOProposalState
+	newState?: ProposalState
 }): Promise<void> => {
 	const token = await firebase.auth().currentUser?.getIdToken(true)
 	if (!token) {
 		throw new Error("Not authorized in firebase")
 	}
-	const res = await fetch(`${REACT_APP_CLOUD_FUNCTIONS_URL}/addProposalSignatures`, {
+	const res = await fetch(`${REACT_APP_CLOUD_FUNCTIONS_URL}/addSafeProposalSignatures`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",

@@ -2,7 +2,8 @@ import {DAOMemberRole} from "./DAO"
 import {SafeSignature} from "../api/ethers/functions/gnosisSafe/safeUtils"
 import {Abi} from "./abi"
 
-export type DAOProposalType =
+// TODO: split this into DAO and Gnosis modules
+export type ProposalType =
 	| "joinHouse"
 	| "requestFunding"
 	| "changeRole"
@@ -11,7 +12,18 @@ export type DAOProposalType =
 	| "cancelZoraAuction"
 	| "generalEVM"
 
-export type DAOProposalState =
+export const ProposalsTypeNames = {
+	joinHouse: "Join House",
+	requestFunding: "Request Funding",
+	changeRole: "Change Role / Kick",
+	createZoraAuction: "Create Zora Auction",
+	approveZoraAuction: "Approve Zora Auction",
+	endZoraAuction: "End Zora Auction",
+	cancelZoraAuction: "Cancel Zora Auction",
+	generalEVM: "General EVM"
+} as const
+
+export type ProposalState =
 	| "active"
 	| "canceled"
 	| "executed"
@@ -20,60 +32,60 @@ export type DAOProposalState =
 	| "queued"
 	| "waiting"
 
-export type ProposalFirebaseData = Pick<
-	Proposal,
-	| "id"
-	| "type"
-	| "gnosisAddress"
-	| "userAddress"
-	| "title"
-	| "description"
-	| "module"
-	| "amount"
-	| "recipientAddress"
-	| "newRole"
-	| "newThreshold"
-	| "signatures"
-	| "signaturesStep2"
-	| "nftId"
-	| "nftAddress"
-	| "duration"
-	| "reservePrice"
-	| "curatorAddress"
-	| "curatorFeePercentage"
-	| "auctionCurrencySymbol"
-	| "auctionCurrencyAddress"
-	| "auctionId"
-	| "contractAddress"
-	| "contractAbi"
-	| "contractMethod"
-	| "callArgs"
-> & {state?: DAOProposalState}
+// export type DAOProposalFirebaseData = Pick<
+// 	DAOProposal,
+// 	| "id"
+// 	| "type"
+// 	| "gnosisAddress"
+// 	| "userAddress"
+// 	| "title"
+// 	| "description"
+// 	| "module"
+// 	| "amount"
+// 	| "recipientAddress"
+// 	| "newRole"
+// 	| "newThreshold"
+// 	| "signatures"
+// 	| "signaturesStep2"
+// 	| "nftId"
+// 	| "nftAddress"
+// 	| "duration"
+// 	| "reservePrice"
+// 	| "curatorAddress"
+// 	| "curatorFeePercentage"
+// 	| "auctionCurrencySymbol"
+// 	| "auctionCurrencyAddress"
+// 	| "auctionId"
+// 	| "contractAddress"
+// 	| "contractAbi"
+// 	| "contractMethod"
+// 	| "callArgs"
+// > & {state?: ProposalState}
 
-export type ProposalEtherData = Pick<
-	DAOProposal,
-	| "id"
-	| "type"
-	| "userAddress"
-	| "state"
-	| "amount"
-	| "yesVotes"
-	| "noVotes"
-	| "deadline"
-	| "gracePeriod"
->
-
+// TODO: review
 type ProposalBase = {
 	id?: number
-	type: DAOProposalType
+	type: ProposalType
 	gnosisAddress: string
-	userAddress: string
 	title: string
 	description?: string
+	state: ProposalState
+}
+
+export type DAOProposal = ProposalBase & {
+	module: "DAO"
+	// deadline: string
+	// gracePeriod: string | null
+	// noVotes: number
+	// yesVotes: number
+}
+
+export type GnosisProposal = ProposalBase & {
+	module: "gnosis"
+	userAddress: string
 	amount?: number
-	recipientAddress?: string // for request funding and change role
+	recipientAddress?: string // for change role
 	newRole?: DAOMemberRole | "kick"
-	state: DAOProposalState
 	balance?: number
 	// for changeRole for gnosis safe module
 	newThreshold?: number
@@ -96,27 +108,7 @@ type ProposalBase = {
 	callArgs?: Record<string, string | boolean>
 }
 
-type DAOProposal = ProposalBase & {
-	module: "DAO"
-	deadline: string
-	gracePeriod: string | null
-	noVotes: number
-	yesVotes: number
-}
-
-type GnosisProposal = ProposalBase & {
-	module: "gnosis"
-}
-
 export type Proposal = DAOProposal | GnosisProposal
 
-export const DAOProposalsTypeNames = {
-	joinHouse: "Join House",
-	requestFunding: "Request Funding",
-	changeRole: "Change Role / Kick",
-	createZoraAuction: "Create Zora Auction",
-	approveZoraAuction: "Approve Zora Auction",
-	endZoraAuction: "End Zora Auction",
-	cancelZoraAuction: "Cancel Zora Auction",
-	generalEVM: "General EVM"
-} as const
+export const isGnosisProposal = (proposal: Proposal): proposal is GnosisProposal =>
+	proposal.module === "gnosis"

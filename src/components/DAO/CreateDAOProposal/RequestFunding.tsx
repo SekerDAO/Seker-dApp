@@ -3,14 +3,12 @@ import Input from "../../Controls/Input"
 import Button from "../../Controls/Button"
 import {AuthContext} from "../../../context/AuthContext"
 import EthersContext from "../../../context/EthersContext"
-import addProposal from "../../../api/firebase/proposal/addProposal"
 import {toastError, toastSuccess} from "../../Toast"
-import {createERC20DAOFundingProposal} from "../../../api/ethers/functions/ERC20DAO/createERC20DAOProposals"
 
 const RequestFunding: FunctionComponent<{
 	gnosisAddress: string
 	daoAddress: string
-}> = ({gnosisAddress, daoAddress}) => {
+}> = () => {
 	const {account} = useContext(AuthContext)
 	const {provider, signer} = useContext(EthersContext)
 	const [loading, setLoading] = useState(false)
@@ -31,24 +29,25 @@ const RequestFunding: FunctionComponent<{
 		if (!(provider && signer && account && amount && recipient)) return
 		setLoading(true)
 		try {
-			const proposalId = await createERC20DAOFundingProposal(
-				daoAddress,
-				recipient,
-				Number(amount),
-				provider,
-				signer
-			)
-			await addProposal({
-				id: proposalId,
-				type: "requestFunding",
-				module: "DAO",
-				gnosisAddress,
-				userAddress: account,
-				title,
-				...(description ? {description} : {}),
-				recipientAddress: recipient,
-				amount: Number(amount)
-			})
+			console.log("TODO")
+			// const proposalId = await createERC20DAOFundingProposal(
+			// 	daoAddress,
+			// 	recipient,
+			// 	Number(amount),
+			// 	provider,
+			// 	signer
+			// )
+			// await addProposal({
+			// 	id: proposalId,
+			// 	type: "requestFunding",
+			// 	module: "DAO",
+			// 	gnosisAddress,
+			// 	userAddress: account,
+			// 	title,
+			// 	...(description ? {description} : {}),
+			// 	recipientAddress: recipient,
+			// 	amount: Number(amount)
+			// })
 			toastSuccess("Proposal successfully created")
 			setTitle("")
 			setDescription("")

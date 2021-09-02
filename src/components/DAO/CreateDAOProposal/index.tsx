@@ -5,7 +5,7 @@ import JoinHouse from "./JoinHouse"
 import RequestFunding from "./RequestFunding"
 import ChangeRole from "./ChangeRole"
 import {AuthContext} from "../../../context/AuthContext"
-import {DAOProposalsTypeNames, DAOProposalType} from "../../../types/proposal"
+import {ProposalsTypeNames, ProposalType} from "../../../types/proposal"
 import CreateZoraAuction from "./CreateZoraAuction"
 import ApproveZoraAuction from "./ApproveZoraAuction"
 import CancelZoraAuction from "./CancelZoraAuction"
@@ -22,7 +22,7 @@ const CreateDAOProposal: FunctionComponent<{
 	gnosisVotingThreshold: number
 }> = ({isMember, isAdmin, daoAddress, gnosisAddress, gnosisVotingThreshold}) => {
 	const {connected} = useContext(AuthContext)
-	const [type, setType] = useState<DAOProposalType>(isMember ? "requestFunding" : "joinHouse")
+	const [type, setType] = useState<ProposalType>(isMember ? "requestFunding" : "joinHouse")
 	const {proposals, loading, error} = useDAOProposals(gnosisAddress)
 
 	if (error) return <ErrorPlaceholder />
@@ -43,17 +43,17 @@ const CreateDAOProposal: FunctionComponent<{
 			<Select
 				value={type}
 				options={[
-					{name: DAOProposalsTypeNames.joinHouse, value: "joinHouse"},
-					{name: DAOProposalsTypeNames.requestFunding, value: "requestFunding"},
-					{name: DAOProposalsTypeNames.changeRole, value: "changeRole"},
-					{name: DAOProposalsTypeNames.createZoraAuction, value: "createZoraAuction"},
-					{name: DAOProposalsTypeNames.approveZoraAuction, value: "approveZoraAuction"},
-					{name: DAOProposalsTypeNames.cancelZoraAuction, value: "cancelZoraAuction"},
-					{name: DAOProposalsTypeNames.endZoraAuction, value: "endZoraAuction"},
-					{name: DAOProposalsTypeNames.generalEVM, value: "generalEVM"}
+					{name: ProposalsTypeNames.joinHouse, value: "joinHouse"},
+					{name: ProposalsTypeNames.requestFunding, value: "requestFunding"},
+					{name: ProposalsTypeNames.changeRole, value: "changeRole"},
+					{name: ProposalsTypeNames.createZoraAuction, value: "createZoraAuction"},
+					{name: ProposalsTypeNames.approveZoraAuction, value: "approveZoraAuction"},
+					{name: ProposalsTypeNames.cancelZoraAuction, value: "cancelZoraAuction"},
+					{name: ProposalsTypeNames.endZoraAuction, value: "endZoraAuction"},
+					{name: ProposalsTypeNames.generalEVM, value: "generalEVM"}
 				].slice(...(isAdmin ? [1] : isMember ? [1, 3] : [0, 1]))}
 				onChange={e => {
-					setType(e.target.value as DAOProposalType)
+					setType(e.target.value as ProposalType)
 				}}
 			/>
 			{type === "joinHouse" && daoAddress && (

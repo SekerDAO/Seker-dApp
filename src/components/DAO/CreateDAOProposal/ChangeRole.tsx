@@ -1,13 +1,12 @@
 import React, {ChangeEvent, FunctionComponent, useContext, useState} from "react"
 import Input from "../../Controls/Input"
 import Button from "../../Controls/Button"
-import {HouseDAORole} from "../../../types/DAO"
+import {DAOMemberRole} from "../../../types/DAO"
 import Select from "../../Controls/Select"
 import {AuthContext} from "../../../context/AuthContext"
 import EthersContext from "../../../context/EthersContext"
 import addProposal from "../../../api/firebase/proposal/addProposal"
 import {toastError, toastSuccess} from "../../Toast"
-import {createERC20DAOChangeRoleProposal} from "../../../api/ethers/functions/ERC20DAO/createERC20DAOProposals"
 import {SafeSignature} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
 import {
 	executeAddOwner,
@@ -15,7 +14,7 @@ import {
 	signAddOwner,
 	signRemoveOwner
 } from "../../../api/ethers/functions/gnosisSafe/addRemoveOwner"
-import {DAOProposalState} from "../../../types/proposal"
+import {ProposalState} from "../../../types/proposal"
 import updateDAOUser from "../../../api/firebase/DAO/updateDaoUser"
 import useDAO from "../../../customHooks/getters/useDAO"
 import ErrorPlaceholder from "../../ErrorPlaceholder"
@@ -34,7 +33,7 @@ const ChangeRole: FunctionComponent<{
 	const [title, setTitle] = useState("")
 	const [description, setDescription] = useState("")
 	const [address, setAddress] = useState("")
-	const [newRole, setNewRole] = useState<HouseDAORole | "kick" | "">("")
+	const [newRole, setNewRole] = useState<DAOMemberRole | "kick" | "">("")
 	const [newThreshold, setNewThreshold] = useState("")
 
 	if (error) return <ErrorPlaceholder />
@@ -76,31 +75,32 @@ const ChangeRole: FunctionComponent<{
 				// processing proposal for DAO module
 				if (!daoAddress) return
 				setProcessing(true)
-				const proposalId = await createERC20DAOChangeRoleProposal(
-					daoAddress,
-					newRole,
-					address,
-					provider,
-					signer
-				)
-				await addProposal({
-					id: proposalId,
-					type: "changeRole",
-					module: "DAO",
-					gnosisAddress,
-					userAddress: account,
-					title,
-					...(description ? {description} : {}),
-					recipientAddress: address,
-					newRole
-				})
+				console.log("TODO")
+				// const proposalId = await createERC20DAOChangeRoleProposal(
+				// 	daoAddress,
+				// 	newRole,
+				// 	address,
+				// 	provider,
+				// 	signer
+				// )
+				// await addProposal({
+				// 	id: proposalId,
+				// 	type: "changeRole",
+				// 	module: "DAO",
+				// 	gnosisAddress,
+				// 	userAddress: account,
+				// 	title,
+				// 	...(description ? {description} : {}),
+				// 	recipientAddress: address,
+				// 	newRole
+				// })
 				toastSuccess("Proposal successfully created")
 			} else {
 				// processing proposal for safe module
 				if (!newThreshold || isNaN(Number(newThreshold))) return
 				setProcessing(true)
 				const signatures: SafeSignature[] = []
-				let state: DAOProposalState = "active"
+				let state: ProposalState = "active"
 				if (isAdmin) {
 					if (["admin", "head"].includes(newRole)) {
 						// Processing add owner
@@ -171,12 +171,9 @@ const ChangeRole: FunctionComponent<{
 	}
 
 	const thresholdRequired =
-		["head", "admin"].includes(newRole) ||
+		newRole === "admin" ||
 		(newRole === "kick" &&
-			(!address ||
-				["head", "admin"].includes(
-					dao.members.find(m => m.address === address.toLowerCase())!.role
-				)))
+			(!address || dao.members.find(m => m.address === address.toLowerCase())?.role === "admin"))
 
 	const submitButtonDisabled =
 		!(title && address && newRole) ||

@@ -4,7 +4,6 @@ import RadioButton from "../../Controls/RadioButton"
 import Button from "../../Controls/Button"
 import {AuthContext} from "../../../context/AuthContext"
 import {DAODecisionMakingSpeed} from "../../../types/DAO"
-import deployERC20DAO from "../../../api/ethers/functions/ERC20DAO/deployERC20DAO"
 import EthersContext from "../../../context/EthersContext"
 import {toastError} from "../../Toast"
 import editDAO from "../../../api/firebase/DAO/editDAO"
@@ -38,26 +37,26 @@ const DecentralizeDAO: FunctionComponent<{
 		) {
 			setLoading(true)
 			try {
-				const daoAddress = await deployERC20DAO(
-					name,
-					members,
-					tokenAddress,
-					decisionMakingSpeed === "slow" ? 1 : decisionMakingSpeed === "medium" ? 2 : 3,
-					totalSupply * (1 - Number(foundersPercentage) / 100),
-					Number(votingThreshold),
-					Number(minProposalAmount),
-					provider,
-					signer
-				)
-				await editDAO({
-					gnosisAddress,
-					daoAddress,
-					tokenAddress,
-					totalSupply,
-					decisionMakingSpeed,
-					daoVotingThreshold: Number(votingThreshold),
-					minProposalAmount: Number(minProposalAmount)
-				})
+				// const daoAddress = await deployERC20DAO(
+				// 	name,
+				// 	members,
+				// 	tokenAddress,
+				// 	decisionMakingSpeed === "slow" ? 1 : decisionMakingSpeed === "medium" ? 2 : 3,
+				// 	totalSupply * (1 - Number(foundersPercentage) / 100),
+				// 	Number(votingThreshold),
+				// 	Number(minProposalAmount),
+				// 	provider,
+				// 	signer
+				// )
+				// await editDAO({
+				// 	gnosisAddress,
+				// 	daoAddress,
+				// 	tokenAddress,
+				// 	totalSupply,
+				// 	decisionMakingSpeed,
+				// 	daoVotingThreshold: Number(votingThreshold),
+				// 	minProposalAmount: Number(minProposalAmount)
+				// })
 				afterCreate()
 			} catch (e) {
 				console.error(e)

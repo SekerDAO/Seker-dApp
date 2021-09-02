@@ -20,7 +20,7 @@ import {
 	executeSafeTx,
 	SafeSignature
 } from "../../../api/ethers/functions/gnosisSafe/safeUtils"
-import {DAOProposalState} from "../../../types/proposal"
+import {ProposalState} from "../../../types/proposal"
 import EthersContext from "../../../context/EthersContext"
 import addProposal from "../../../api/firebase/proposal/addProposal"
 import {AuthContext} from "../../../context/AuthContext"
@@ -107,7 +107,7 @@ const GeneralEVM: FunctionComponent<{
 		setProcessing(true)
 		try {
 			const signatures: SafeSignature[] = []
-			let state: DAOProposalState = "active"
+			let state: ProposalState = "active"
 			if (isAdmin) {
 				const signature = await createSafeSignature(
 					gnosisAddress,
