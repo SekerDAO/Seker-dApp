@@ -2,7 +2,12 @@ import {JsonRpcSigner} from "@ethersproject/providers"
 import {Contract} from "@ethersproject/contracts"
 import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
 import ProposalModule from "../../abis/ProposalModule.json"
-import {buildContractCall, executeTx, SafeSignature, safeSignMessage} from "./safeUtils"
+import {
+	buildContractCall,
+	executeSafeTx,
+	SafeSignature,
+	safeSignMessage
+} from "../gnosisSafe/safeUtils"
 
 export const signHookupLinearVotingModule = async (
 	safeAddress: string,
@@ -13,8 +18,8 @@ export const signHookupLinearVotingModule = async (
 	const safeContract = new Contract(safeAddress, GnosisSafeL2.abi, signer)
 	const proposalContract = new Contract(proposalModule, ProposalModule.abi, signer)
 	const nonce = await safeContract.nonce()
-	const call = buildContractCall(proposalContract, "enableModule", [votingAddress], nonce)
-	return safeSignMessage(signer, proposalContract, call)
+	const call = buildContractCall(proposalContract, "enableModule", [votingAddress], nonce.add(1))
+	return safeSignMessage(signer, safeContract, call)
 }
 
 export const executeHookupLinearVotingModule = async (
@@ -23,11 +28,13 @@ export const executeHookupLinearVotingModule = async (
 	proposalModule: string,
 	signatures: SafeSignature[],
 	signer: JsonRpcSigner
-): Promise<void> => {
-	const safeContract = new Contract(safeAddress, GnosisSafeL2.abi, signer)
-	const proposalContract = new Contract(proposalModule, ProposalModule.abi, signer)
-	const nonce = await safeContract.nonce()
-	const call = buildContractCall(proposalContract, "enableModule", [votingAddress], nonce)
-	const tx = await executeTx(safeContract, call, signatures)
-	await tx.wait()
-}
+): Promise<void> =>
+	executeSafeTx(
+		safeAddress,
+		proposalModule,
+		ProposalModule.abi,
+		"enableModule",
+		[votingAddress],
+		signer,
+		signatures
+	)

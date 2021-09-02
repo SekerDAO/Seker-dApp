@@ -2,8 +2,6 @@ import firebase from "firebase"
 
 export type DAOMemberRole = "member" | "admin"
 
-export type DAODecisionMakingSpeed = "slow" | "medium" | "fast"
-
 export type Member = {
 	address: string
 	role: DAOMemberRole
@@ -25,15 +23,12 @@ export type DAO = {
 	estimated: string
 	members: Member[]
 	gnosisVotingThreshold: number
-	// TODO: review
 	// Properties set at the moment of DAO contract deployment
 	daoAddress?: string
+	daoVotingThreshold?: number
+	votingAddress?: string
 	tokenAddress?: string
 	totalSupply?: number
-	decisionMakingSpeed?: DAODecisionMakingSpeed
-	tax?: number
-	minProposalAmount?: number
-	daoVotingThreshold?: number
 	// Optional properties, only present in Firebase
 	description?: string
 	website?: string

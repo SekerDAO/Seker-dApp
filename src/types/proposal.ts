@@ -11,6 +11,7 @@ export type ProposalType =
 	| "approveZoraAuction"
 	| "cancelZoraAuction"
 	| "generalEVM"
+	| "decentralizeDAO"
 
 export const ProposalsTypeNames = {
 	joinHouse: "Join House",
@@ -20,7 +21,8 @@ export const ProposalsTypeNames = {
 	approveZoraAuction: "Approve Zora Auction",
 	endZoraAuction: "End Zora Auction",
 	cancelZoraAuction: "Cancel Zora Auction",
-	generalEVM: "General EVM"
+	generalEVM: "General EVM",
+	decentralizeDAO: "Decentralize DAO"
 } as const
 
 export type ProposalState =
@@ -31,36 +33,6 @@ export type ProposalState =
 	| "failed"
 	| "queued"
 	| "waiting"
-
-// export type DAOProposalFirebaseData = Pick<
-// 	DAOProposal,
-// 	| "id"
-// 	| "type"
-// 	| "gnosisAddress"
-// 	| "userAddress"
-// 	| "title"
-// 	| "description"
-// 	| "module"
-// 	| "amount"
-// 	| "recipientAddress"
-// 	| "newRole"
-// 	| "newThreshold"
-// 	| "signatures"
-// 	| "signaturesStep2"
-// 	| "nftId"
-// 	| "nftAddress"
-// 	| "duration"
-// 	| "reservePrice"
-// 	| "curatorAddress"
-// 	| "curatorFeePercentage"
-// 	| "auctionCurrencySymbol"
-// 	| "auctionCurrencyAddress"
-// 	| "auctionId"
-// 	| "contractAddress"
-// 	| "contractAbi"
-// 	| "contractMethod"
-// 	| "callArgs"
-// > & {state?: ProposalState}
 
 // TODO: review
 type ProposalBase = {
@@ -106,6 +78,9 @@ export type GnosisProposal = ProposalBase & {
 	contractAbi?: Abi
 	contractMethod?: string
 	callArgs?: Record<string, string | boolean>
+	// for decentralize DAO
+	daoVotingThreshold?: number
+	gracePeriod?: number
 }
 
 export type Proposal = DAOProposal | GnosisProposal

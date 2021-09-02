@@ -2,6 +2,7 @@ import LinearVotingModule from "../../abis/LinearVotingModule.json"
 import GovToken from "../../abis/GovToken.json"
 import {Contract, ContractFactory} from "@ethersproject/contracts"
 import {JsonRpcSigner} from "@ethersproject/providers"
+import {parseEther} from "@ethersproject/units"
 
 const createLinearVoting = async (
 	totalSupply: number, // total supply of governance token created in a previous step
@@ -24,8 +25,9 @@ const createLinearVoting = async (
 	)
 	await votingDeploy.deployed()
 	const govenanceToken = new Contract(governanceTokenAddress, GovToken.abi, signer)
-	// maybe these transaction should be split out for better broadcasting to the user what is happening
-	await govenanceToken.transfer(safeAddress, totalSupply)
+	// TODO: maybe these transaction should be split out for better broadcasting to the user what is happening
+	const tx = await govenanceToken.transfer(safeAddress, parseEther(String(totalSupply)))
+	await tx.wait()
 	return votingDeploy.address
 }
 

@@ -17,9 +17,10 @@ type DecentralizeDAOStage = "chooseToken" | "createToken" | "enterInfo" | "succe
 
 const DecentralizeDAOModalContent: FunctionComponent<{
 	gnosisAddress: string
+	gnosisVotingThreshold: number
 	type: DAOType
 	afterSubmit: () => void
-}> = ({gnosisAddress, type, afterSubmit}) => {
+}> = ({gnosisAddress, gnosisVotingThreshold, type, afterSubmit}) => {
 	const [stage, setStage] = useState<DecentralizeDAOStage>("chooseToken")
 	const [tokenSource, setTokenSource] = useState<"new" | "existing" | "import">("existing")
 	const [token, setToken] = useState("")
@@ -68,7 +69,7 @@ const DecentralizeDAOModalContent: FunctionComponent<{
 	const submitButtonDisabled = tokenSource === "existing" && !token
 
 	return (
-		<div className={`decentralize-dao${stage === "enterInfo" ? " decentralize-dao--wide" : ""}`}>
+		<div className="decentralize-dao">
 			{stage === "chooseToken" && (
 				<>
 					<h2>Decentralize A {capitalize(type)} DAO</h2>
@@ -122,13 +123,11 @@ const DecentralizeDAOModalContent: FunctionComponent<{
 			{stage === "createToken" && <CreateERC20Token afterCreate={handleERC20Create} />}
 			{stage === "enterInfo" && (
 				<DecentralizeDAO
-					name={dao.name}
-					members={dao.members.map(m => m.address)}
 					gnosisAddress={gnosisAddress}
+					gnosisVotingThreshold={gnosisVotingThreshold}
 					afterCreate={handleSubmit}
 					tokenAddress={token}
 					totalSupply={Number(totalSupply)}
-					DAOType={type}
 				/>
 			)}
 			{stage === "success" && (
@@ -149,9 +148,10 @@ const DecentralizeDAOModalContent: FunctionComponent<{
 
 const DecentralizeDAOModal: FunctionComponent<{
 	gnosisAddress: string
+	gnosisVotingThreshold: number
 	type: DAOType
 	afterSubmit: () => void
-}> = ({gnosisAddress, type, afterSubmit}) => {
+}> = ({gnosisAddress, type, afterSubmit, gnosisVotingThreshold}) => {
 	const [isOpened, setIsOpened] = useState(false)
 
 	return (
@@ -173,6 +173,7 @@ const DecentralizeDAOModal: FunctionComponent<{
 				<DecentralizeDAOModalContent
 					afterSubmit={afterSubmit}
 					gnosisAddress={gnosisAddress}
+					gnosisVotingThreshold={gnosisVotingThreshold}
 					type={type}
 				/>
 			</Modal>

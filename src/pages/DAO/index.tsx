@@ -21,8 +21,8 @@ import DiscordIcon from "../../icons/DiscordIcon"
 import DashboardHeader from "../../components/DashboardHeader"
 import DecentralizeDAOModal from "../../components/Modals/DecentralizeDAOModal"
 
-const houseMenuEntries = ["About", "Members", "Proposals", "Create Proposal", "Collection"]
-const galleryMenuEntries = ["Collection", "About", "Members", "Proposals", "Create Proposal"]
+const houseMenuEntries = ["About", "Members", "Proposals", "+Admin Proposal", "Collection"]
+const galleryMenuEntries = ["Collection", "About", "Members", "Proposals", "+Admin Proposal"]
 
 const DAOPage: FunctionComponent = () => {
 	const {account, connected} = useContext(AuthContext)
@@ -114,27 +114,26 @@ const DAOPage: FunctionComponent = () => {
 									</a>
 								)}
 							</div>
-							{isAdmin ? (
-								<>
-									<Button
-										buttonType="primary"
-										onClick={() => {
-											setEditOpened(true)
-										}}
-									>
-										Edit House Profile
-									</Button>
-									<DecentralizeDAOModal
-										afterSubmit={refetch}
-										gnosisAddress={dao.gnosisAddress}
-										type={dao.type}
-									/>
-								</>
-							) : (
-								<>
-									<Button buttonType="primary">Join House</Button>
-								</>
+							{isAdmin && (
+								<Button
+									buttonType="primary"
+									onClick={() => {
+										setEditOpened(true)
+									}}
+								>
+									Edit House Profile
+								</Button>
 							)}
+							{dao.daoAddress ? (
+								<p>TODO: Decentralized DAO</p>
+							) : isAdmin ? (
+								<DecentralizeDAOModal
+									afterSubmit={refetch}
+									gnosisAddress={dao.gnosisAddress}
+									gnosisVotingThreshold={dao.gnosisVotingThreshold}
+									type={dao.type}
+								/>
+							) : null}
 						</div>
 					</div>
 					<div className="dao__main">
