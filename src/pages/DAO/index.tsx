@@ -21,8 +21,7 @@ import DiscordIcon from "../../icons/DiscordIcon"
 import DashboardHeader from "../../components/DashboardHeader"
 import DecentralizeDAOModal from "../../components/Modals/DecentralizeDAOModal"
 
-const houseMenuEntries = ["About", "Members", "Proposals", "+Admin Proposal", "Collection"]
-const galleryMenuEntries = ["Collection", "About", "Members", "Proposals", "+Admin Proposal"]
+const menuEntries = ["Collection", "About", "Members", "Proposals", "+Admin Proposal"]
 
 const DAOPage: FunctionComponent = () => {
 	const {account, connected} = useContext(AuthContext)
@@ -38,8 +37,6 @@ const DAOPage: FunctionComponent = () => {
 	const isAdmin = !!dao.members.find(
 		m => ["head", "admin"].includes(m.role) && m.address === account
 	)
-
-	const menuEntries = dao.type === "house" ? houseMenuEntries : galleryMenuEntries
 
 	return (
 		<>
@@ -154,8 +151,9 @@ const DAOPage: FunctionComponent = () => {
 										setActiveMenuIndex(index)
 									}}
 								/>
-								{menuEntries[activeMenuIndex] === "About" && <AboutDAO dao={dao} />}
-								{menuEntries[activeMenuIndex] === "Proposals" && (
+								{activeMenuIndex === 0 && <DAOCollection gnosisAddress={dao.gnosisAddress} />}
+								{activeMenuIndex === 1 && <AboutDAO dao={dao} />}
+								{activeMenuIndex === 3 && (
 									<DAOProposals
 										gnosisVotingThreshold={dao.gnosisVotingThreshold}
 										gnosisAddress={dao.gnosisAddress}
@@ -164,7 +162,7 @@ const DAOPage: FunctionComponent = () => {
 										isAdmin={isAdmin}
 									/>
 								)}
-								{menuEntries[activeMenuIndex] === "Create Proposal" && (
+								{activeMenuIndex === 4 && (
 									<CreateDAOProposal
 										isMember={isMember}
 										isAdmin={isAdmin}
@@ -172,9 +170,6 @@ const DAOPage: FunctionComponent = () => {
 										gnosisAddress={dao.gnosisAddress}
 										gnosisVotingThreshold={dao.gnosisVotingThreshold}
 									/>
-								)}
-								{menuEntries[activeMenuIndex] === "Collection" && (
-									<DAOCollection gnosisAddress={dao.gnosisAddress} />
 								)}
 							</>
 						)}
