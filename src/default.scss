@@ -1,5 +1,21 @@
 @import "src/variables";
 
+@font-face {
+  font-family: 'Karla';
+  font-style: normal;
+  font-weight: normal;
+  src: url("/fonts/Karla-Regular.ttf");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Spectral';
+  font-style: normal;
+  font-weight: 600;
+  src: url("/fonts/Spectral-SemiBold.ttf");
+  font-display: swap;
+}
+
 html {
   font-size: 10px;
 }
@@ -19,7 +35,7 @@ body {
 }
 
 body {
-  font-family: 'Open Sans', sans-serif;
+  font-family: Spectral, 'Open Sans', sans-serif;
   font-size: 16px;
   line-height: 20px;
 }
