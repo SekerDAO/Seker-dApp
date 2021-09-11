@@ -2,7 +2,7 @@
 
 .profile {
   display: flex;
-  padding: 135px 0;
+  padding: 115px 0 40px 0;
   position: relative;
 
   &__photo {
@@ -29,7 +29,7 @@
     max-width: 250px;
     display: flex;
     flex-direction: column;
-    margin: 0 30px 0 40px;
+    margin: 0 40px;
 
     p {
       margin: 5px 0;
@@ -42,14 +42,14 @@
 
     > a {
       color: $purple2;
-      padding-bottom: 20px;
+      margin: 5px 0;
     }
   }
 
   &__socials {
     display: flex;
     align-items: center;
-    margin-top: 5px;
+    margin-top: 15px;
 
     svg {
       margin-right: 5px;
@@ -67,12 +67,16 @@
     align-items: center;
     justify-content: space-between;
     align-self: stretch;
-    padding: 0 20px 0 10px;
     margin-bottom: 10px;
   }
 
   &__search {
     position: relative;
+    width: calc(33% - 10px);
+
+    input {
+      width: 100%;
+    }
 
     svg {
       position: absolute;
@@ -103,10 +107,10 @@
   }
 
   &__edit-buttons {
-    margin: 0 0 30px 10px;
+    margin: 0 0 30px 0;
 
     > button {
-      margin-right: 10px;
+      margin-right: 20px;
     }
   }
 }

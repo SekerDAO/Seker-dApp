@@ -314,6 +314,7 @@ const CreateNFTModalContent: FunctionComponent<{
 				</>
 			) : (
 				<Button
+					extraClassName={["uploadFile", "loadExisting"].includes(stage) ? "no-margin-top" : ""}
 					buttonType="primary"
 					onClick={handleSubmit}
 					disabled={submitButtonDisabled || loading}

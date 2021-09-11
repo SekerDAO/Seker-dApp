@@ -91,7 +91,7 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 		<div className="create-gnosis-safe">
 			{stage === "chooseOption" && (
 				<>
-					<h2>Create DAO</h2>
+					<h2>Start a DAO</h2>
 					<div className="create-gnosis-safe__row">
 						<RadioButton
 							label="Create Gnosis Safe"
@@ -175,7 +175,7 @@ const CreateGnosisSafeModal: FunctionComponent<{
 					setIsOpened(true)
 				}}
 			>
-				Create DAO
+				Start a DAO
 			</Button>
 			<Modal
 				show={isOpened}

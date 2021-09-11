@@ -72,7 +72,7 @@ const ProfileEdit: FunctionComponent<{
 			/>
 			<label htmlFor="profile-edit-url">Custom URL</label>
 			<div className="profile-edit__url-container">
-				<div className="profile-edit__url-placeholder">tokenwalk.com/</div>
+				<div className="profile-edit__url-placeholder">tokenwalk.com</div>
 				<Input
 					validation={urlValidation}
 					id="profile-edit-url"

@@ -41,7 +41,7 @@
     margin-bottom: 20px;
   }
 
-  button:last-child {
+  button:not(.no-margin-top):last-child {
     margin-top: 20px;
     margin-bottom: 0;
   }

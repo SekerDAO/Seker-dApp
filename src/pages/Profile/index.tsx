@@ -52,7 +52,7 @@ const Profile: FunctionComponent = () => {
 	return (
 		<>
 			<DashboardHeader background={user.headerImage}>
-				{isOwner && (
+				{isOwner && page === "edit" && (
 					<UploadImageModal
 						titleText="Edit Header Image"
 						buttonName="Edit Header"
@@ -73,7 +73,7 @@ const Profile: FunctionComponent = () => {
 							}")`
 						}}
 					>
-						{isOwner && (
+						{isOwner && page === "edit" && (
 							<UploadImageModal
 								titleText="Edit Profile Image"
 								buttonName="Edit Image"
@@ -85,7 +85,7 @@ const Profile: FunctionComponent = () => {
 						)}
 					</div>
 					<div className="profile__info">
-						<h2>{user.name}</h2>
+						<h2>{user.name || "Unnamed user"}</h2>
 						<p>{`${user.account.slice(0, 3)}...${user.account.slice(-4)}`}</p>
 						<p>{user.location}</p>
 						<p>{user.email}</p>
@@ -100,7 +100,7 @@ const Profile: FunctionComponent = () => {
 								<a
 									target="_blank"
 									rel="noopener noreferrer"
-									href={`https://twiter.com/${user.twitter}`}
+									href={`https://twitter.com/${user.twitter}`}
 								>
 									<TwitterIcon fill={PURPLE_2} />
 								</a>
@@ -162,7 +162,15 @@ const Profile: FunctionComponent = () => {
 						{["nfts", "profile"].includes(page) && (
 							<NFTGallery key={galleryKey} account={user.account} />
 						)}
-						{page === "edit" && <ProfileEdit user={user} afterSubmit={refetch} />}
+						{page === "edit" && (
+							<ProfileEdit
+								user={user}
+								afterSubmit={() => {
+									refetch()
+									push(pathname)
+								}}
+							/>
+						)}
 						{page === "daos" && <ProfileDAOs />}
 					</div>
 				</div>
