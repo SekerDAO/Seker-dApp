@@ -6,8 +6,6 @@ import Select from "../../Controls/Select"
 import CreateERC20Token from "../../DAO/CreateERC20Token"
 import DecentralizeDAO from "../../DAO/DecentralizeDAO"
 import useMyERC20Tokens from "../../../customHooks/getters/useMyERC20Tokens"
-import {DAOType} from "../../../types/DAO"
-import {capitalize} from "../../../utlls"
 import useDAO from "../../../customHooks/getters/useDAO"
 import Loader from "../../Loader"
 import ErrorPlaceholder from "../../ErrorPlaceholder"
@@ -18,9 +16,8 @@ type DecentralizeDAOStage = "chooseToken" | "createToken" | "enterInfo" | "succe
 const DecentralizeDAOModalContent: FunctionComponent<{
 	gnosisAddress: string
 	gnosisVotingThreshold: number
-	type: DAOType
 	afterSubmit: () => void
-}> = ({gnosisAddress, gnosisVotingThreshold, type, afterSubmit}) => {
+}> = ({gnosisAddress, gnosisVotingThreshold, afterSubmit}) => {
 	const [stage, setStage] = useState<DecentralizeDAOStage>("chooseToken")
 	const [tokenSource, setTokenSource] = useState<"new" | "existing" | "import">("existing")
 	const [token, setToken] = useState("")
@@ -72,7 +69,7 @@ const DecentralizeDAOModalContent: FunctionComponent<{
 		<div className="decentralize-dao">
 			{stage === "chooseToken" && (
 				<>
-					<h2>Decentralize A {capitalize(type)} DAO</h2>
+					<h2>Decentralize DAO</h2>
 					<p>Step 1. Choose one.</p>
 					<div className="decentralize-dao__row">
 						<RadioButton
@@ -134,7 +131,7 @@ const DecentralizeDAOModalContent: FunctionComponent<{
 				<>
 					<h2>Success!</h2>
 					<p>
-						You can now see the {type} DAO you have created (along with
+						You can now see the DAO you have created (along with
 						<br />
 						other DAOs you currently belong to) and access the DAO dashboard
 						<br />
@@ -149,9 +146,8 @@ const DecentralizeDAOModalContent: FunctionComponent<{
 const DecentralizeDAOModal: FunctionComponent<{
 	gnosisAddress: string
 	gnosisVotingThreshold: number
-	type: DAOType
 	afterSubmit: () => void
-}> = ({gnosisAddress, type, afterSubmit, gnosisVotingThreshold}) => {
+}> = ({gnosisAddress, afterSubmit, gnosisVotingThreshold}) => {
 	const [isOpened, setIsOpened] = useState(false)
 
 	return (
@@ -174,7 +170,6 @@ const DecentralizeDAOModal: FunctionComponent<{
 					afterSubmit={afterSubmit}
 					gnosisAddress={gnosisAddress}
 					gnosisVotingThreshold={gnosisVotingThreshold}
-					type={type}
 				/>
 			</Modal>
 		</>

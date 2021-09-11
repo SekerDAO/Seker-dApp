@@ -13,12 +13,9 @@ export type FirebaseDAOUser = Member & {
 	dao: string
 }
 
-export type DAOType = "gallery" | "house"
-
 export type DAO = {
 	// Main properties, required at the moment of gnosis-safe deployment
 	gnosisAddress: string
-	type: DAOType
 	name: string
 	estimated: string
 	members: Member[]
@@ -50,7 +47,6 @@ export type DAOSnapshot = firebase.firestore.QueryDocumentSnapshot<
 >
 
 export type DAOQueryParams = {
-	type?: DAOType
 	limit?: number
 	after: DAOSnapshot | null
 }

@@ -128,7 +128,6 @@ const DAOPage: FunctionComponent = () => {
 									afterSubmit={refetch}
 									gnosisAddress={dao.gnosisAddress}
 									gnosisVotingThreshold={dao.gnosisVotingThreshold}
-									type={dao.type}
 								/>
 							) : null}
 						</div>

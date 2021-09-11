@@ -3,8 +3,6 @@ import Button from "../../Controls/Button"
 import Modal from "../Modal"
 import {AuthContext} from "../../../context/AuthContext"
 import RadioButton from "../../Controls/RadioButton"
-import {DAOType} from "../../../types/DAO"
-import {capitalize} from "../../../utlls"
 import Input from "../../Controls/Input"
 import createGnosisSafe from "../../../api/ethers/functions/gnosisSafe/createGnosisSafe"
 import EthersContext from "../../../context/EthersContext"
@@ -15,9 +13,8 @@ import "./styles.scss"
 type CreateGnosisSafeStage = "chooseOption" | "create" | "import" | "success"
 
 const CreateGnosisSafeModalContent: FunctionComponent<{
-	daoType: DAOType
 	afterCreate: () => void
-}> = ({daoType, afterCreate}) => {
+}> = ({afterCreate}) => {
 	const {account} = useContext(AuthContext)
 	const {signer} = useContext(EthersContext)
 	const [processing, setProcessing] = useState(false)
@@ -71,7 +68,6 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 					{
 						gnosisAddress,
 						name: daoName,
-						type: daoType,
 						members
 					},
 					account
@@ -95,7 +91,7 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 		<div className="create-gnosis-safe">
 			{stage === "chooseOption" && (
 				<>
-					<h2>Create a {capitalize(daoType)} DAO</h2>
+					<h2>Create DAO</h2>
 					<div className="create-gnosis-safe__row">
 						<RadioButton
 							label="Create Gnosis Safe"
@@ -167,20 +163,19 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 }
 
 const CreateGnosisSafeModal: FunctionComponent<{
-	daoType: DAOType
 	afterCreate: () => void
-}> = ({daoType, afterCreate}) => {
+}> = ({afterCreate}) => {
 	const [isOpened, setIsOpened] = useState(false)
 
 	return (
 		<>
 			<Button
-				buttonType={daoType === "gallery" ? "primary" : "secondary"}
+				buttonType="primary"
 				onClick={() => {
 					setIsOpened(true)
 				}}
 			>
-				Create a {capitalize(daoType)} DAO
+				Create DAO
 			</Button>
 			<Modal
 				show={isOpened}
@@ -189,7 +184,6 @@ const CreateGnosisSafeModal: FunctionComponent<{
 				}}
 			>
 				<CreateGnosisSafeModalContent
-					daoType={daoType}
 					afterCreate={() => {
 						setIsOpened(false)
 						afterCreate()

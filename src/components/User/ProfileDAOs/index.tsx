@@ -21,10 +21,6 @@ const columns = [
 		)
 	},
 	{
-		id: "type",
-		name: "DAO Type"
-	},
-	{
 		id: "memberSince",
 		name: "Member Since"
 	},
@@ -50,8 +46,7 @@ const ProfileDAOs: FunctionComponent = () => {
 	return (
 		<>
 			<div className="profile__edit-buttons">
-				<CreateGnosisSafeModal daoType="gallery" afterCreate={refetch} />
-				<CreateGnosisSafeModal daoType="house" afterCreate={refetch} />
+				<CreateGnosisSafeModal afterCreate={refetch} />
 			</div>
 			<div className="profile__controls">
 				<div className="profile__search">
@@ -62,11 +57,10 @@ const ProfileDAOs: FunctionComponent = () => {
 			<div className="profile-daos__table">
 				<Table
 					data={DAOs.map(dao => {
-						const {name, type, members} = dao
+						const {name, members} = dao
 						const member = members.find(m => m.address === account)
 						return {
 							name,
-							type,
 							memberSince: member?.memberSince?.split("T")[0] ?? "",
 							role: member?.role ?? "",
 							edit: "",

@@ -3,7 +3,6 @@ import {DAOQueryParams, DAOSnapshot} from "../../types/DAO"
 import getDAOs from "../../api/firebase/DAO/getDAOs"
 
 const useDAOs = ({
-	type,
 	limit,
 	after
 }: DAOQueryParams): {
@@ -30,7 +29,7 @@ const useDAOs = ({
 	useEffect(() => {
 		setLoading(true)
 		setError(false)
-		getDAOs({type, limit, after})
+		getDAOs({limit, after})
 			.then(res => {
 				setDAOs(prevState => ({
 					totalCount: res.totalCount,
@@ -47,7 +46,7 @@ const useDAOs = ({
 	useEffect(() => {
 		setLoading(true)
 		setError(false)
-		getDAOs({type, limit, after})
+		getDAOs({limit, after})
 			.then(res => {
 				setDAOs({
 					totalCount: res.totalCount,
@@ -60,7 +59,7 @@ const useDAOs = ({
 				setError(true)
 				setLoading(false)
 			})
-	}, [type, limit])
+	}, [limit])
 
 	return {
 		DAOs,

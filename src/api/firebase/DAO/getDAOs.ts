@@ -13,9 +13,6 @@ const getDAOs = async (
 	totalCount: number
 }> => {
 	let ref = firebase.firestore().collection("DAOs").orderBy("estimated")
-	if (params.type) {
-		ref = ref.where("type", "==", params.type)
-	}
 	const totalSnapshot = await ref.get()
 	if (params.after) {
 		ref = ref.startAfter(params.after)

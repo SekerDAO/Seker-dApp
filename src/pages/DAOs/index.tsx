@@ -8,13 +8,10 @@ import SearchIcon from "../../icons/SearchIcon"
 import DAOList from "../../components/DAOList"
 import Button from "../../components/Controls/Button"
 import "./styles.scss"
-import {useLocation} from "react-router-dom"
 
 const DAOsPage: FunctionComponent = () => {
-	const {pathname} = useLocation()
 	const [cursor, setCursor] = useState<DAOSnapshot | null>(null)
 	const {DAOs, loading, error} = useDAOs({
-		type: pathname.match("houses") ? "house" : "gallery",
 		after: cursor
 	})
 
@@ -28,7 +25,7 @@ const DAOsPage: FunctionComponent = () => {
 	return (
 		<div className="main__container">
 			<div className="daos">
-				<h1>{pathname.match("houses") ? "Houses" : "Galleries"}</h1>
+				<h1>DAOs</h1>
 				<div className="daos__controls">
 					<div className="daos__search">
 						<Input placeholder="Search" borders="bottom" />
@@ -37,12 +34,11 @@ const DAOsPage: FunctionComponent = () => {
 				</div>
 				<DAOList
 					DAOs={DAOs.data.map(({snapshot, membersCount}) => {
-						const {name, description, type, profileImage} = snapshot.data()
+						const {name, description, profileImage} = snapshot.data()
 						return {
 							gnosisAddress: snapshot.id,
 							name,
 							description,
-							type,
 							membersCount,
 							profileImage
 						}
