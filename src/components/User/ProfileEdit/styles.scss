@@ -1,3 +1,5 @@
+@import "src/variables";
+
 .profile-edit {
   display: flex;
   flex-direction: column;
@@ -28,7 +30,7 @@
   &__url-placeholder {
     padding: 6px;
     color: white;
-    background-color: black;
+    background-color: $black;
   }
 
   &__socials {

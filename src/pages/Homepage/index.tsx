@@ -8,18 +8,16 @@ const HomePage: FunctionComponent = () => {
 		<div className="home-page">
 			<video src="/assets/Homepage_Video.mp4" muted autoPlay loop />
 			<h1 className="home-page__title">
-				Welcome To <br /> TokenWalk
+				Welcome to <br /> TokenWalk
 			</h1>
 			<div className="home-page__buttons">
-				<Link to="/houses">
-					<Button>Houses</Button>
+				<Link to="/daos">
+					<Button>DAOs</Button>
 				</Link>
-				<Link to="/galleries">
-					<Button buttonType="secondary">Galleries</Button>
-				</Link>
+				<Button disabled>Exhibits</Button>
 			</div>
 			<Link className="home-page__link" to="/learn">
-				About Alpha
+				Learn More
 			</Link>
 		</div>
 	)

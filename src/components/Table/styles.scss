@@ -5,7 +5,7 @@
   border: none;
 
   tr {
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid $black;
   }
 
   th {
@@ -20,6 +20,6 @@
   }
 
   thead > tr {
-    border-top: 1px solid black;
+    border-top: 1px solid $black;
   }
 }

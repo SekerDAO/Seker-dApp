@@ -14,6 +14,14 @@ const Footer: FunctionComponent = () => {
 						<Logo />
 					</Link>
 					© TokenWalk 2021
+					<div className="footer__socials">
+						<a target="_blank" rel="noopener noreferrer" href="https://twitter.com/tokenwalk">
+							<TwitterIcon fill="white" />
+						</a>
+						<a target="_blank" rel="noopener noreferrer" href="https://discord.gg/zC5CuFJwqu">
+							<DiscordIcon fill="white" />
+						</a>
+					</div>
 				</div>
 				<div className="footer__col">
 					<h3>Resources</h3>
@@ -27,14 +35,6 @@ const Footer: FunctionComponent = () => {
 					<a>Contact</a>
 					<a>Terms of Service</a>
 					<a>Privacy Policy</a>
-					<div className="footer__socials">
-						<a target="_blank" rel="noopener noreferrer" href="https://twitter.com/tokenwalk">
-							<TwitterIcon fill="white" />
-						</a>
-						<a target="_blank" rel="noopener noreferrer" href="https://discord.gg/f2S3PZZc">
-							<DiscordIcon fill="white" />
-						</a>
-					</div>
 				</div>
 			</div>
 		</footer>

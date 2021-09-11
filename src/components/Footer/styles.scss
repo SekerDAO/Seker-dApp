@@ -7,6 +7,12 @@
   color: white;
   width: 100%;
 
+  a,
+  p,
+  h3 {
+    color: white;
+  }
+
   &__wrap {
     width: 1250px;
     padding: 60px 0 20px 0;
@@ -39,12 +45,14 @@
     }
 
     h3 {
-      font-size: 16px;
+      font-size: 20px;
+      line-height: 24px;
       margin-bottom: 10px;
     }
 
     a {
-      font-size: 14px;
+      font-size: 16px;
+      line-height: 20px;
     }
   }
 }
