@@ -174,7 +174,7 @@ const CreateNFTModalContent: FunctionComponent<{
 		<div className="create-nft">
 			{stage === "chooseOption" && (
 				<>
-					<h2>Create / Load NFT</h2>
+					<h2>Enter NFT</h2>
 					<p>Step 1: Choose one.</p>
 					<div className="create-nft__row">
 						<RadioButton
@@ -339,12 +339,11 @@ const CreateNFTModal: FunctionComponent<{
 	return (
 		<>
 			<Button
-				buttonType="secondary"
 				onClick={() => {
 					setIsOpened(true)
 				}}
 			>
-				Create / Load NFT
+				Enter NFT
 			</Button>
 			<Modal
 				show={isOpened}

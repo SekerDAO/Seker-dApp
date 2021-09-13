@@ -90,7 +90,7 @@ const Profile: FunctionComponent = () => {
 						<p>{user.location}</p>
 						<p>{user.email}</p>
 						{user.website && (
-							<a href={user.website.startsWith("http") ? user.website : `https://${user.website}`}>
+							<a href={`https://${user.website}`} target="_blank" rel="noopener noreferrer">
 								{user.website}
 							</a>
 						)}

@@ -39,7 +39,7 @@ const CreateDAOProposal: FunctionComponent<{
 
 	return (
 		<div className="create-dao-proposal">
-			<h2>Create Proposal</h2>
+			<h2>Create A New Proposal</h2>
 			<Select
 				value={type}
 				options={[

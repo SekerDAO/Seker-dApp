@@ -19,6 +19,12 @@ export const throttle = <T extends unknown[]>(
 	}
 }
 
+export const formatDate = (isoString: string): string => {
+	const date = isoString.split("T")[0]
+	const [year, month, day] = date.split("-")
+	return `${month.padStart(2, "0")}/${day.padStart(2, "0")}/${year.slice(2)}`
+}
+
 export const formatTimeDifference = (ms: number): string => {
 	const hours = Math.floor(ms / 3600000)
 	const minutes = Math.floor((ms % 3600000) / 60000)

@@ -72,7 +72,7 @@ const ProfileEdit: FunctionComponent<{
 			/>
 			<label htmlFor="profile-edit-url">Custom URL</label>
 			<div className="profile-edit__url-container">
-				<div className="profile-edit__url-placeholder">tokenwalk.com</div>
+				<div className="profile-edit__url-placeholder">tokenwalk.com/</div>
 				<Input
 					validation={urlValidation}
 					id="profile-edit-url"
@@ -112,19 +112,22 @@ const ProfileEdit: FunctionComponent<{
 				}}
 			/>
 			<label htmlFor="profile-edit-site">Website</label>
-			<Input
-				id="profile-edit-site"
-				borders="all"
-				value={website}
-				onChange={e => {
-					setWebsite(e.target.value)
-				}}
-			/>
+			<div className="profile-edit__url-container">
+				<div className="profile-edit__url-placeholder">https://</div>
+				<Input
+					id="profile-edit-site"
+					borders="all"
+					value={website}
+					onChange={e => {
+						setWebsite(e.target.value)
+					}}
+				/>
+			</div>
 			<div className="profile-edit__socials">
 				<div className="profile-edit__social">
 					<label htmlFor="profile-edit-tw">Twitter URL</label>
 					<div className="profile-edit__url-container">
-						<div className="profile-edit__url-placeholder">twitter.com</div>
+						<div className="profile-edit__url-placeholder">twitter.com/</div>
 						<Input
 							id="profile-edit-tw"
 							borders="all"
@@ -138,7 +141,7 @@ const ProfileEdit: FunctionComponent<{
 				<div className="profile-edit__social">
 					<label htmlFor="profile-edit-inst">Instagram URL</label>
 					<div className="profile-edit__url-container">
-						<div className="profile-edit__url-placeholder">instagram.com</div>
+						<div className="profile-edit__url-placeholder">instagram.com/</div>
 						<Input
 							id="profile-edit-inst"
 							borders="all"

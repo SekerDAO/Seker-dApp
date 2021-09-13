@@ -54,7 +54,7 @@ const EditDAO: FunctionComponent<{
 				}}
 				id="edit-dao-name"
 			/>
-			<label htmlFor="edit-dao-desc">About House</label>
+			<label htmlFor="edit-dao-desc">About</label>
 			<Input
 				borders="all"
 				value={description}
@@ -64,14 +64,17 @@ const EditDAO: FunctionComponent<{
 				id="edit-dao-desc"
 			/>
 			<label htmlFor="edit-dao-website">Website</label>
-			<Input
-				borders="all"
-				value={website}
-				onChange={e => {
-					setWebsite(e.target.value)
-				}}
-				id="edit-dao-website"
-			/>
+			<div className="edit-dao__url-container">
+				<div className="edit-dao__url-placeholder">https://</div>
+				<Input
+					borders="all"
+					value={website}
+					onChange={e => {
+						setWebsite(e.target.value)
+					}}
+					id="edit-dao-website"
+				/>
+			</div>
 			<label htmlFor="edit-dao-tw">Twitter URL</label>
 			<div className="edit-dao__url-container">
 				<div className="edit-dao__url-placeholder">twitter.com/</div>

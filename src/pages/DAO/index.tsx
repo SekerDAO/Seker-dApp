@@ -19,9 +19,9 @@ import {PURPLE_2} from "../../constants/colors"
 import TelegramIcon from "../../icons/TelegramIcon"
 import DiscordIcon from "../../icons/DiscordIcon"
 import DashboardHeader from "../../components/DashboardHeader"
-import DecentralizeDAOModal from "../../components/Modals/DecentralizeDAOModal"
+import {formatDate} from "../../utlls"
 
-const menuEntries = ["Collection", "About", "Members", "Proposals", "+Admin Proposal"]
+const menuEntries = ["Collection", "About", "Members", "Proposals", "+ Admin Proposal"]
 
 const DAOPage: FunctionComponent = () => {
 	const {account, connected} = useContext(AuthContext)
@@ -34,14 +34,12 @@ const DAOPage: FunctionComponent = () => {
 	if (!dao || loading) return <Loader />
 
 	const isMember = connected && !!dao.members.find(m => m.address === account)
-	const isAdmin = !!dao.members.find(
-		m => ["head", "admin"].includes(m.role) && m.address === account
-	)
+	const isAdmin = connected && !!dao.members.find(m => m.address === account && m.role === "admin")
 
 	return (
 		<>
 			<DashboardHeader background={dao.headerImage}>
-				{isAdmin && (
+				{isAdmin && editOpened && (
 					<UploadImageModal
 						initialUrl={dao.headerImage}
 						buttonName="Edit Header"
@@ -64,7 +62,7 @@ const DAOPage: FunctionComponent = () => {
 								backgroundImage: `url(${dao.profileImage ?? "/assets/DAODashboard_Photo.png"})`
 							}}
 						>
-							{isAdmin && (
+							{isAdmin && editOpened && (
 								<UploadImageModal
 									initialUrl={dao.profileImage}
 									buttonName="Edit Image"
@@ -80,37 +78,43 @@ const DAOPage: FunctionComponent = () => {
 						</div>
 						<div className="dao__info">
 							<h2>{dao.name}</h2>
-							<p>est. {dao.estimated.split("T")[0]}</p>
-							<p>{dao.website}</p>
-							<div className="dao__socials">
-								{dao.twitter && (
-									<a
-										target="_blank"
-										rel="noopener noreferrer"
-										href={`https://twitter.com/${dao.twitter}`}
-									>
-										<TwitterIcon fill={PURPLE_2} />
-									</a>
-								)}
-								{dao.telegram && (
-									<a
-										target="_blank"
-										rel="noopener noreferrer"
-										href={`https://t.me/${dao.telegram}`}
-									>
-										<TelegramIcon fill={PURPLE_2} />
-									</a>
-								)}
-								{dao.discord && (
-									<a
-										target="_blank"
-										rel="noopener noreferrer"
-										href={`https://discord.gg/${dao.discord}`}
-									>
-										<DiscordIcon fill={PURPLE_2} />
-									</a>
-								)}
-							</div>
+							<p>Est. {formatDate(dao.estimated)}</p>
+							{dao.website && (
+								<a href={`https://${dao.website}`} target="_blank" rel="noopener noreferrer">
+									{dao.website}
+								</a>
+							)}
+							{(dao.twitter || dao.telegram || dao.discord) && (
+								<div className="dao__socials">
+									{dao.twitter && (
+										<a
+											target="_blank"
+											rel="noopener noreferrer"
+											href={`https://twitter.com/${dao.twitter}`}
+										>
+											<TwitterIcon fill={PURPLE_2} />
+										</a>
+									)}
+									{dao.telegram && (
+										<a
+											target="_blank"
+											rel="noopener noreferrer"
+											href={`https://t.me/${dao.telegram}`}
+										>
+											<TelegramIcon fill={PURPLE_2} />
+										</a>
+									)}
+									{dao.discord && (
+										<a
+											target="_blank"
+											rel="noopener noreferrer"
+											href={`https://discord.gg/${dao.discord}`}
+										>
+											<DiscordIcon fill={PURPLE_2} />
+										</a>
+									)}
+								</div>
+							)}
 							{isAdmin && (
 								<Button
 									buttonType="primary"
@@ -118,18 +122,21 @@ const DAOPage: FunctionComponent = () => {
 										setEditOpened(true)
 									}}
 								>
-									Edit House Profile
+									Edit DAO Profile
 								</Button>
 							)}
-							{dao.daoAddress ? (
-								<p>TODO: Decentralized DAO</p>
-							) : isAdmin ? (
-								<DecentralizeDAOModal
-									afterSubmit={refetch}
-									gnosisAddress={dao.gnosisAddress}
-									gnosisVotingThreshold={dao.gnosisVotingThreshold}
-								/>
-							) : null}
+							{/* TODO: link */}
+							{!isMember && <Button>Purchase tokens</Button>}
+							{/* TODO: decentralize DAO modal */}
+							{/*{dao.daoAddress ? (*/}
+							{/*	<p>TODO: Decentralized DAO</p>*/}
+							{/*) : isAdmin ? (*/}
+							{/*	<DecentralizeDAOModal*/}
+							{/*		afterSubmit={refetch}*/}
+							{/*		gnosisAddress={dao.gnosisAddress}*/}
+							{/*		gnosisVotingThreshold={dao.gnosisVotingThreshold}*/}
+							{/*	/>*/}
+							{/*) : null}*/}
 						</div>
 					</div>
 					<div className="dao__main">
