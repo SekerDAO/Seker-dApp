@@ -96,7 +96,9 @@ const Profile: FunctionComponent = () => {
 						<h2>{user.name || "Unnamed user"}</h2>
 						<p>{`${user.account.slice(0, 3)}...${user.account.slice(-4)}`}</p>
 						<p>{user.location}</p>
-						<p>{user.email}</p>
+						<a target="_blank" rel="noopener noreferrer" href={`mailto:${user.email}`}>
+							{user.email}
+						</a>
 						{user.website && (
 							<a href={`https://${user.website}`} target="_blank" rel="noopener noreferrer">
 								{user.website}
