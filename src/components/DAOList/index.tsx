@@ -20,11 +20,20 @@ const DAOListItem: FunctionComponent<DAOListItemProps> = ({
 			<p>
 				<b>Size:</b>
 			</p>
-			<p>{membersCount} members</p>
 			<p>
-				<b>About:</b>
+				{membersCount} member{membersCount > 1 ? "s" : ""}
 			</p>
-			<p>{description}</p>
+			{description && (
+				<>
+					<p>
+						<b>About:</b>
+					</p>
+					<p>
+						{description.slice(0, 40)}
+						{description.length > 40 && "..."}
+					</p>
+				</>
+			)}
 		</div>
 	</Link>
 )
