@@ -3,13 +3,7 @@ import {Link} from "react-router-dom"
 import "./styles.scss"
 import {NFTGalleryItemProps} from "../../types/NFT"
 
-const GalleryItem: FunctionComponent<NFTGalleryItemProps> = ({
-	id,
-	thumbnail,
-	name,
-	price,
-	isVideo
-}) => (
+const GalleryItem: FunctionComponent<NFTGalleryItemProps> = ({id, thumbnail, name, isVideo}) => (
 	<div className="gallery__item">
 		<div className="gallery__item-thumb">
 			<Link to={`/nft/${id}`}>
@@ -21,7 +15,6 @@ const GalleryItem: FunctionComponent<NFTGalleryItemProps> = ({
 			<div className="gallery__details-name">
 				<Link to={`/nft/${id}`}>{name}</Link>
 			</div>
-			{price !== undefined && <div className="gallery__details-price">{price}Ξ</div>}
 		</div>
 	</div>
 )
@@ -34,7 +27,6 @@ const Gallery: FunctionComponent<{items: NFTGalleryItemProps[]}> = ({items}) => 
 				id={item.id}
 				thumbnail={item.thumbnail}
 				name={item.name}
-				price={item.price}
 				isVideo={item.isVideo}
 			/>
 		))}

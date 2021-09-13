@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useContext, useState} from "react"
+import React, {FunctionComponent, useContext, useEffect, useState} from "react"
 import {useHistory, useLocation, useParams} from "react-router-dom"
 import "./styles.scss"
 import {AuthContext} from "../../context/AuthContext"
@@ -17,18 +17,26 @@ import TwitterIcon from "../../icons/TwitterIcon"
 import InstagramIcon from "../../icons/InstagramIcon"
 import {PURPLE_2} from "../../constants/colors"
 import DashboardHeader from "../../components/DashboardHeader"
+import {isAddress} from "@ethersproject/address"
 
 type ProfilePage = "nfts" | "edit" | "daos" | "profile"
 
 const Profile: FunctionComponent = () => {
 	const {connected, account: userAccount} = useContext(AuthContext)
-	const {push} = useHistory()
+	const {push, replace} = useHistory()
 	const {pathname, search} = useLocation()
+	const [galleryKey, setGalleryKey] = useState(Math.random())
+
 	const {userId} = useParams<{userId: string}>()
 	const {user, loading, error, refetch} = useUser(userId)
+	useEffect(() => {
+		if (user && user.url && isAddress(userId)) {
+			replace(`/profile/${user.url}`)
+		}
+	}, [user])
+
 	const isOwner = connected && user?.account === userAccount
 	const page: ProfilePage = (isOwner && (parse(search).page as ProfilePage)) || "nfts"
-	const [galleryKey, setGalleryKey] = useState(Math.random())
 
 	if (error) return <ErrorPlaceholder />
 	if (loading || !user) return <Loader />

@@ -1,5 +1,5 @@
 import React, {FunctionComponent, useContext, useState} from "react"
-import {useParams} from "react-router-dom"
+import {Link, useParams} from "react-router-dom"
 import useNFT from "../../customHooks/getters/useNFT"
 import Loader from "../../components/Loader"
 import ErrorPlaceholder from "../../components/ErrorPlaceholder"
@@ -72,19 +72,30 @@ const NFTCard: FunctionComponent = () => {
 		<div className="main__container">
 			<div className="nft">
 				<div className="nft__left-col">
+					<Link to={`/${nft.ownerType === "dao" ? "dao" : "profile"}/${nft.owner}`}>
+						{"< Back"}
+					</Link>
 					<h3>{nft.name}</h3>
-					<p>
-						<b>Edition {nft.attributes?.editionNumber ?? "unknown"}</b>
-					</p>
+					{nft.attributes?.editionNumber && nft.attributes.numberOfEditions && (
+						<p>
+							<b>
+								Edition {nft.attributes.editionNumber} of {nft.attributes.numberOfEditions}
+							</b>
+						</p>
+					)}
 					<br />
 					<p>
 						<b>Creator:</b>
 					</p>
-					<p>TODO</p>
+					<Link to={`/profile/${nft.creator}`}>{`${nft.creator.slice(0, 3)}...${nft.creator.slice(
+						-4
+					)}`}</Link>
 					<p>
 						<b>Owner:</b>
 					</p>
-					<p>{`${nft.nftAdminUserUID.slice(0, 3)}...${nft.nftAdminUserUID.slice(-4)}`}</p>
+					<Link
+						to={`/${nft.ownerType === "dao" ? "dao" : "profile"}/${nft.owner}`}
+					>{`${nft.owner.slice(0, 3)}...${nft.owner.slice(-4)}`}</Link>
 					{nft.desc && (
 						<>
 							<p>

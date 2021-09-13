@@ -2,6 +2,7 @@ import {JsonRpcSigner, JsonRpcProvider} from "@ethersproject/providers"
 import TWDomainToken from "../../abis/TWDomainToken.json"
 import MultiArtToken from "../../abis/MultiArtToken.json"
 import {Contract} from "@ethersproject/contracts"
+import {BigNumber} from "@ethersproject/bignumber"
 const {REACT_APP_DOMAIN_ADDRESS} = process.env
 
 const createNFT = async (
@@ -10,28 +11,32 @@ const createNFT = async (
 	signer: JsonRpcSigner,
 	provider: JsonRpcProvider,
 	customDomain?: string
-): Promise<number> =>
-	new Promise<number>(async resolve => {
+): Promise<number[]> =>
+	new Promise<number[]>(async resolve => {
 		let isMined = false
-		let nftId: number
+		const ids: number[] = []
 		const nft = new Contract(
 			customDomain ?? REACT_APP_DOMAIN_ADDRESS!,
 			customDomain ? MultiArtToken.abi : TWDomainToken.abi,
 			signer
 		)
-		nft.once("Transfer", (_, __, id) => {
-			const _nftId = Number(id.toString())
-			if (isMined) {
-				resolve(_nftId)
-			} else {
-				nftId = _nftId
+		const address = await signer.getAddress()
+
+		const eventListener = (_: unknown, _address: string, id: BigNumber) => {
+			if (_address.toLowerCase() !== address.toLowerCase()) return
+			ids.push(Number(id.toString()))
+			if (isMined && ids.length === numberOfEditions) {
+				nft.off("Transfer", eventListener)
+				resolve(ids)
 			}
-		})
+		}
+
+		nft.on("Transfer", eventListener)
 
 		const tx = await nft.mintEdition(hashes, numberOfEditions)
 		provider.once(tx.hash, () => {
-			if (nftId !== undefined) {
-				resolve(nftId)
+			if (ids.length === numberOfEditions) {
+				resolve(ids)
 			} else {
 				isMined = true
 			}

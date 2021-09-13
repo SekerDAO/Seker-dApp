@@ -2,13 +2,26 @@
 
 .nft {
   display: flex;
-  margin: 40px 0;
+  margin: 90px 0 40px 0;
 
   &__left-col {
     display: flex;
     flex-direction: column;
     width: 250px;
     margin-right: 40px;
+
+    h3 {
+      font-size: 24px;
+      line-height: 28px;
+    }
+
+    a {
+      color: $purple1;
+
+      &:first-child {
+        margin-bottom: 40px;
+      }
+    }
 
     b {
       display: block;
@@ -33,6 +46,7 @@
   &__image {
     display: flex;
     flex: 1;
+    max-width: 590px;
 
     img {
       width: 100%;
@@ -62,12 +76,13 @@
   }
 
   &__bids {
-    h2 {
-      margin: 40px 0 20px 0;
-    }
-
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    max-width: 880px;
+
+    h2 {
+      margin: 40px 0 20px 0;
+    }
   }
 }

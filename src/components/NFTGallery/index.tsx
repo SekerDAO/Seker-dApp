@@ -31,12 +31,11 @@ const NFTGallery: FunctionComponent<{account: string}> = ({account}) => {
 			</div>
 			<Gallery
 				items={NFTs.data.map(doc => {
-					const {thumbnail, name, price, media} = doc.data()
+					const {thumbnail, name, media} = doc.data()
 					return {
 						id: doc.id,
 						thumbnail,
 						name,
-						price,
 						isVideo: media.mimeType.startsWith("video")
 					}
 				})}

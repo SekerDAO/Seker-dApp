@@ -13,13 +13,13 @@ export type NFT = {
 	createdDate: string
 	name: string
 	thumbnail: string
-	price?: number
 	desc: string
 	externalUrl?: string
 	media: NFTMediaInfo
 	attributes?: Record<string, string | number | boolean>
-	category: "art" | "exhibit"
-	nftAdminUserUID: string
+	owner: string
+	creator: string
+	ownerType: "user" | "dao"
 }
 
 export type NFTMetadata = {
@@ -40,7 +40,7 @@ export type NFTQueryParams = {
 	after: NFTSnapshot | null
 }
 
-export type NFTGalleryItemProps = Pick<NFT, "thumbnail" | "name" | "price"> & {
+export type NFTGalleryItemProps = Pick<NFT, "thumbnail" | "name"> & {
 	id: string
 	isVideo: boolean
 }

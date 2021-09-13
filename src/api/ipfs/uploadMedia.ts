@@ -7,7 +7,7 @@ const uploadMedia = async (
 	title: string,
 	description: string,
 	numberOfEditions: number
-): Promise<[NFTMetadata, string[]]> => {
+): Promise<[Omit<NFTMetadata, "attributes">, string[]]> => {
 	if (
 		numberOfEditions > 50 ||
 		numberOfEditions <= 0 ||
@@ -33,11 +33,6 @@ const uploadMedia = async (
 			dimensions,
 			size: file.size,
 			mimeType: file.type
-		},
-		attributes: {
-			original: true,
-			editionNumber: 0,
-			royalty: "10%" //todo
 		}
 	}
 	for (let i = 0; i < numberOfEditions; i++) {
@@ -45,8 +40,8 @@ const uploadMedia = async (
 			JSON.stringify({
 				...metadata,
 				attributes: {
-					...metadata.attributes,
-					editionNumber: i,
+					numberOfEditions,
+					editionNumber: i + 1,
 					original: i === 0
 				}
 			})

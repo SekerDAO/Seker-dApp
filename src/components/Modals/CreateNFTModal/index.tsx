@@ -73,7 +73,7 @@ const CreateNFTModalContent: FunctionComponent<{
 					description,
 					Number(numberOfEditions)
 				)
-				const id = await createNFT(
+				const ids = await createNFT(
 					hashes,
 					Number(numberOfEditions),
 					signer,
@@ -81,7 +81,6 @@ const CreateNFTModalContent: FunctionComponent<{
 					customDomainAddress || undefined
 				)
 				const nft = {
-					id,
 					address: customDomain ? customDomainAddress : REACT_APP_DOMAIN_ADDRESS!,
 					createdDate: new Date().toISOString(),
 					name: metadata.name,
@@ -89,20 +88,43 @@ const CreateNFTModalContent: FunctionComponent<{
 					thumbnail: metadata.image,
 					externalUrl: metadata.external_url,
 					media: metadata.media,
-					attributes: metadata.attributes,
-					category: "art" as const // TODO
+					creator: account
 				}
-				if (gnosisAddress) {
-					await transferNFT(
-						account,
-						id,
-						gnosisAddress,
-						signer,
-						customDomain ? customDomainAddress : undefined
-					)
-					await addDAONFT(nft, gnosisAddress)
-				} else {
-					await addNFT(nft, account)
+				for (let i = 0; i < ids.length; i++) {
+					if (gnosisAddress) {
+						await transferNFT(
+							account,
+							ids[i],
+							gnosisAddress,
+							signer,
+							customDomain ? customDomainAddress : undefined
+						)
+						await addDAONFT(
+							{
+								...nft,
+								id: ids[i],
+								attributes: {
+									numberOfEditions,
+									editionNumber: i + 1,
+									original: i === 0
+								}
+							},
+							gnosisAddress
+						)
+					} else {
+						await addNFT(
+							{
+								...nft,
+								id: ids[i],
+								attributes: {
+									numberOfEditions,
+									editionNumber: i + 1,
+									original: i === 0
+								}
+							},
+							account
+						)
+					}
 				}
 				setStage("success")
 				if (afterCreate) {
@@ -140,7 +162,7 @@ const CreateNFTModalContent: FunctionComponent<{
 					externalUrl: metadata.external_url,
 					media: metadata.media,
 					attributes: metadata.attributes,
-					category: "art" as const
+					creator: account
 				}
 				if (gnosisAddress) {
 					await transferNFT(
