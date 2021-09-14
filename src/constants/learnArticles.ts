@@ -9,7 +9,7 @@ const LEARN_ARTICLES: Learn = [
 			`For step-by-step guides, jump to Getting Started.`,
 
 			`For developers interested in using our tools to create their own dApps or build upon Zodiac or TokenWalk, Jump to the developers sections and you can find all of our code here:`,
-			`https://github.com/TokenWalk`
+			`<a href="https://github.com/TokenWalk" target="_blank" rel="noopener noreferrer">https://github.com/TokenWalk</a>`
 		],
 		childArticles: []
 	},
@@ -24,14 +24,14 @@ const LEARN_ARTICLES: Learn = [
 			{
 				title: "Zodiac Modules",
 				articles: [
-					`Zodiac modules are at the core of your DAOs infrastructure. For more information on Zodiac [article link coming soon].`,
-
-					`With the TokenWalk dApp you will be able to choose to use all or some of the following Zodiac compliant modules and modifiers.`,
-
-					`Seele: allows avatars to operate with trustless tokenized DeGov, similar to Compound or Gitcoin, with a time-boxed proposal core that can register swappable voting contracts, allowing DAOs to choose from various on-chain voting methods that best suit their needs. (Built by TokenWalk)`,
-					`Exit: allows users to redeem a designated token for a relative share of an avatars assets, similar to Moloch's infamous rageQuit() function. (Built by Gnosis Guild)`,
-					`Bridge: allows an address on one chain to control an avatar on another chain, via an arbitrary message bridge. (Built by Gnosis Guild)`,
-					`Reality: allows on-chain execution based on the outcome of events reported by Reality.eth. Used to build the SafeSnap module for Snapshot. (Built by Gnosis Guild)`,
+					`<ul>
+						<li>Zodiac modules are at the core of your DAOs infrastructure. For more information on Zodiac [article link coming soon].</li>
+						<li>With the TokenWalk dApp you will be able to choose to use all or some of the following Zodiac compliant modules and modifiers.</li>
+						<li>Seele: allows avatars to operate with trustless tokenized DeGov, similar to Compound or Gitcoin, with a time-boxed proposal core that can register swappable voting contracts, allowing DAOs to choose from various on-chain voting methods that best suit their needs. (Built by TokenWalk)</li>
+						<li>Exit: allows users to redeem a designated token for a relative share of an avatars assets, similar to Moloch's infamous rageQuit() function. (Built by Gnosis Guild)</li>
+						<li>Bridge: allows an address on one chain to control an avatar on another chain, via an arbitrary message bridge. (Built by Gnosis Guild)</li>
+						<li>Reality: allows on-chain execution based on the outcome of events reported by Reality.eth. Used to build the SafeSnap module for Snapshot. (Built by Gnosis Guild)</li>
+					</ul>`,
 					`More to come...`
 				],
 				childArticles: []

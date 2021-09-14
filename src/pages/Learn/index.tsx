@@ -14,15 +14,15 @@ const Learn: FunctionComponent = () => {
 			<div className="learn">
 				<LearnMenu entries={LEARN_ARTICLES} />
 				<div className="learn__articles">
-					<h1 id={`learn_${activeArticleIndex}`}>{activeArticle.title}</h1>
+					<h1>{activeArticle.title}</h1>
 					{activeArticle.articles.map((article, idx) => (
-						<p key={idx}>{article}</p>
+						<p key={idx} dangerouslySetInnerHTML={{__html: article}} />
 					))}
 					{activeArticle.childArticles.map((lv1Article, lv1Index) => (
 						<Fragment key={lv1Index}>
 							<h2 id={`learn_${activeArticleIndex}_${lv1Index}`}>{lv1Article.title}</h2>
 							{lv1Article.articles.map((article, idx) => (
-								<p key={idx}>{article}</p>
+								<p key={idx} dangerouslySetInnerHTML={{__html: article}} />
 							))}
 							{lv1Article.childArticles.map((lv2Article, lv2Index) => (
 								<Fragment key={lv2Index}>
@@ -30,7 +30,7 @@ const Learn: FunctionComponent = () => {
 										{lv2Article.title}
 									</h3>
 									{lv2Article.articles.map((article, idx) => (
-										<p key={idx}>{article}</p>
+										<p key={idx} dangerouslySetInnerHTML={{__html: article}} />
 									))}
 								</Fragment>
 							))}

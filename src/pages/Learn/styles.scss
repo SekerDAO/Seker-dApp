@@ -1,8 +1,13 @@
+@import "src/variables";
+
 .learn {
   display: flex;
   padding-bottom: 40px;
 
   &__articles {
+    margin-left: 305px;
+    max-width: 880px;
+
     h1 {
       font-size: 48px;
       line-height: 60px;
@@ -23,6 +28,10 @@
 
     p {
       margin: 20px 0;
+    }
+
+    a {
+      color: $purple1;
     }
   }
 }
