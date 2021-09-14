@@ -24,9 +24,9 @@ const LEARN_ARTICLES: Learn = [
 			{
 				title: "Zodiac Modules",
 				articles: [
+					`Zodiac modules are at the core of your DAOs infrastructure. For more information on Zodiac [article link coming soon].`,
+					`With the TokenWalk dApp you will be able to choose to use all or some of the following Zodiac compliant modules and modifiers.`,
 					`<ul>
-						<li>Zodiac modules are at the core of your DAOs infrastructure. For more information on Zodiac [article link coming soon].</li>
-						<li>With the TokenWalk dApp you will be able to choose to use all or some of the following Zodiac compliant modules and modifiers.</li>
 						<li>Seele: allows avatars to operate with trustless tokenized DeGov, similar to Compound or Gitcoin, with a time-boxed proposal core that can register swappable voting contracts, allowing DAOs to choose from various on-chain voting methods that best suit their needs. (Built by TokenWalk)</li>
 						<li>Exit: allows users to redeem a designated token for a relative share of an avatars assets, similar to Moloch's infamous rageQuit() function. (Built by Gnosis Guild)</li>
 						<li>Bridge: allows an address on one chain to control an avatar on another chain, via an arbitrary message bridge. (Built by Gnosis Guild)</li>
@@ -39,18 +39,21 @@ const LEARN_ARTICLES: Learn = [
 			{
 				title: "Zodiac Modifiers",
 				articles: [
-					`Delay: allows avatars to enforce a time delay between when a module initiates a transaction and when it will be executed by the avatar. (Built by Gnosis Guild)`
+					`<ul>
+						<li>Delay: allows avatars to enforce a time delay between when a module initiates a transaction and when it will be executed by the avatar. (Built by Gnosis Guild)</li>
+					</ul>`
 				],
 				childArticles: [
 					{
 						title: "Voting Modifiers",
 						articles: [
-							`Linear Voting ERC20 + delegation`,
-							`Linear Voting ERC20 + Membership`,
-							`Quadratic Voting ERC20 + Membership`,
-							`Single Voting`,
-							`Commitment ERC20 Voting`,
-
+							`<ul>
+								<li>Linear Voting ERC20 + delegation</li>
+								<li>Linear Voting ERC20 + Membership</li>
+								<li>Quadratic Voting ERC20 + Membership</li>
+								<li>Single Voting</li>
+								<li>Commitment ERC20 Voting</li>
+							</ul>`,
 							`We are building more modules and modifiers that extend the Zodiac ecosystem, such as exhibits and secure DeGov options to deal with issues like bribery. These novel extensions give rise to a new possibility of DAO implementations that allows for a progressive path to decentralization or to specific needs catered to any type of DAO.`
 						]
 					}
