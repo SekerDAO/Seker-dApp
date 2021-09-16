@@ -1,5 +1,5 @@
 import {useContext, useEffect, useState} from "react"
-import {NFTQueryParams, NFTSnapshot} from "../../types/NFT"
+import {NFTQueryParams, NFTSnapshot, NftSort} from "../../types/NFT"
 import getNFTs from "../../api/firebase/NFT/getNFTs"
 import getNFTZoraAuctions from "../../api/firebase/zoraAuction/getNFTZoraAuctions"
 import getAuctionDetails from "../../api/ethers/functions/zoraAuction/getAuctionDetails"
@@ -7,10 +7,10 @@ import {JsonRpcProvider} from "@ethersproject/providers"
 import EthersContext from "../../context/EthersContext"
 
 const useNFTs = ({
-	category,
 	user,
 	limit,
-	after
+	after,
+	sort
 }: NFTQueryParams): {
 	NFTs: {
 		totalCount: number
@@ -34,8 +34,9 @@ const useNFTs = ({
 	const [error, setError] = useState(false)
 
 	const getData = async (
+		reset: boolean,
 		_provider: JsonRpcProvider,
-		_category?: string,
+		_sort: NftSort,
 		_user?: string,
 		_limit?: number,
 		_after: NFTSnapshot | null = null
@@ -44,7 +45,7 @@ const useNFTs = ({
 		setError(false)
 		try {
 			const nftsSnapshot = await getNFTs({
-				category: _category,
+				sort: _sort,
 				user: _user,
 				limit: _limit,
 				after: _after
@@ -62,11 +63,19 @@ const useNFTs = ({
 					)
 				)
 			}
-			setNFTs(prevState => ({
-				totalCount: nftsSnapshot.totalCount,
-				data: [...prevState.data, ...nftsSnapshot.data],
-				nftsAreOnAuctions
-			}))
+			if (reset) {
+				setNFTs({
+					totalCount: nftsSnapshot.totalCount,
+					data: nftsSnapshot.data,
+					nftsAreOnAuctions
+				})
+			} else {
+				setNFTs(prevState => ({
+					totalCount: nftsSnapshot.totalCount,
+					data: [...prevState.data, ...nftsSnapshot.data],
+					nftsAreOnAuctions: [...prevState.nftsAreOnAuctions, ...nftsAreOnAuctions]
+				}))
+			}
 		} catch (e) {
 			console.error(e)
 			setError(true)
@@ -76,9 +85,9 @@ const useNFTs = ({
 
 	useEffect(() => {
 		if (provider) {
-			getData(provider, category, user, limit, after)
+			getData(after === null, provider, sort, user, limit, after)
 		}
-	}, [category, user, limit, after, provider])
+	}, [sort, user, limit, after, provider])
 
 	return {
 		NFTs,

@@ -6,7 +6,6 @@ import Button from "../../Controls/Button"
 import {toastError, toastSuccess} from "../../Toast"
 import editDAO from "../../../api/firebase/DAO/editDAO"
 
-//TODO: url validations
 const EditDAO: FunctionComponent<{
 	dao: DAO
 	afterEdit: () => void

@@ -377,10 +377,8 @@ const DAOProposals: FunctionComponent<{
 	isMember: boolean
 	isAdmin: boolean
 }> = ({gnosisVotingThreshold, gnosisAddress, daoAddress, isMember, isAdmin}) => {
-	const {provider} = useContext(EthersContext)
 	const {proposals, loading, error, refetch} = useDAOProposals(gnosisAddress)
 
-	if (!provider) return <div>TODO: please connect wallet</div>
 	if (error) return <ErrorPlaceholder />
 	if (loading) return <Loader />
 

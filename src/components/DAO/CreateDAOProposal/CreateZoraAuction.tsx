@@ -30,7 +30,12 @@ const CreateZoraAuction: FunctionComponent<{
 }> = ({gnosisAddress, isAdmin, gnosisVotingThreshold}) => {
 	const {account} = useContext(AuthContext)
 	const {signer} = useContext(EthersContext)
-	const {NFTs, loading, error} = useNFTs({user: gnosisAddress, limit: 0, after: null})
+	const {NFTs, loading, error} = useNFTs({
+		user: gnosisAddress,
+		limit: 0,
+		after: null,
+		sort: "nameAsc"
+	})
 	const [processing, setProcessing] = useState(false)
 	const [title, setTitle] = useState("")
 	const [description, setDescription] = useState("")

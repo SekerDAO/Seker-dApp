@@ -9,10 +9,13 @@ const getNFTs = async (
 	data: NFTSnapshot[]
 	totalCount: number
 }> => {
-	let ref = firebase.firestore().collection("nfts").orderBy("createdDate")
-	if (params.category) {
-		ref = ref.where("nftCategory", "==", params.category)
-	}
+	let ref = firebase
+		.firestore()
+		.collection("nfts")
+		.orderBy(
+			["nameAsc", "nameDesc"].includes(params.sort) ? "name" : "createdDate",
+			["nameAsc", "dateAsc"].includes(params.sort) ? "asc" : "desc"
+		)
 	if (params.user) {
 		ref = ref.where("owner", "==", params.user.toLowerCase())
 	}

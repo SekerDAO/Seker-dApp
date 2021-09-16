@@ -33,11 +33,13 @@ export type NFTMetadata = {
 
 export type NFTSnapshot = firebase.firestore.QueryDocumentSnapshot<NFT>
 
+export type NftSort = "dateAsc" | "dateDesc" | "nameAsc" | "nameDesc"
+
 export type NFTQueryParams = {
-	category?: string
 	user?: string
 	limit?: number
 	after: NFTSnapshot | null
+	sort: NftSort
 }
 
 export type NFTGalleryItemProps = Pick<NFT, "thumbnail" | "name"> & {
