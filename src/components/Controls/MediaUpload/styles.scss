@@ -14,13 +14,26 @@
   }
 
   &__preview {
-    min-height: 100px;
-    min-width: 213px;
+    height: 100px;
     border: 1px dashed $black;
+    max-width: 213px;
     margin-top: 10px;
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
+    display: flex;
+    position: relative;
+
+    &--empty {
+      min-width: 213px;
+    }
+  }
+
+  &__icon {
+    position: absolute;
+    color: red;
+    top: 50%;
+    left: 10%;
   }
 
   &.drag-over .image-upload__preview {

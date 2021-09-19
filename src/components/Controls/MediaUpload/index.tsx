@@ -49,11 +49,9 @@ const MediaUpload: FunctionComponent<{
 			<Button buttonType="secondary">
 				<label>Upload File</label>
 			</Button>
-			<div
-				className="image-upload__preview"
-				style={imageUrl ? {backgroundImage: `url("${imageUrl}")`} : undefined}
-			>
-				{isVideo && "TODO: video icon"}
+			<div className={`image-upload__preview${imageUrl ? "" : " image-upload__preview--empty"}`}>
+				{imageUrl && <img src={imageUrl} />}
+				{isVideo && <div className="image-upload__icon">TODO: video icon</div>}
 			</div>
 		</label>
 	)
