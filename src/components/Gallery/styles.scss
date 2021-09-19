@@ -11,6 +11,7 @@
     margin: 10px;
     cursor: pointer;
     border: 1px solid $light-grey;
+    position: relative;
 
     &:hover {
       border-color: $purple2;
@@ -31,6 +32,14 @@
         width: 100%;
         margin: 0;
       }
+    }
+
+    &-delete {
+      width: 30px;
+      height: 30px;
+      position: absolute;
+      top: 5px;
+      right: 5px;
     }
   }
 

@@ -15,7 +15,7 @@ const DAOCollection: FunctionComponent<{gnosisAddress: string}> = ({gnosisAddres
 			<div className="dao-collection__edit-buttons">
 				<CreateNFTModal gnosisAddress={gnosisAddress} afterCreate={updateGallery} />
 			</div>
-			<NFTGallery key={galleryKey} account={gnosisAddress} />
+			<NFTGallery key={galleryKey} account={gnosisAddress} isDao />
 		</div>
 	)
 }

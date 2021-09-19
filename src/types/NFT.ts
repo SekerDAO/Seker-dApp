@@ -45,4 +45,5 @@ export type NFTQueryParams = {
 export type NFTGalleryItemProps = Pick<NFT, "thumbnail" | "name"> & {
 	id: string
 	isVideo: boolean
+	onDelete: () => void
 }
