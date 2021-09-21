@@ -1,4 +1,4 @@
-import React, {FunctionComponent} from "react"
+import React, {Component, FunctionComponent} from "react"
 import {Switch, Route, BrowserRouter} from "react-router-dom"
 import {AuthContext, useAuth} from "./context/AuthContext"
 import Homepage from "./pages/Homepage"
@@ -15,6 +15,7 @@ import DAOPage from "./pages/DAO"
 import DAOsPage from "./pages/DAOs"
 import Header from "./components/Header"
 import Footer from "./components/Footer"
+import ErrorPlaceholder from "./components/ErrorPlaceholder"
 
 const AppWithEthers: FunctionComponent = () => {
 	const auth = useAuth()
@@ -51,4 +52,23 @@ const App: FunctionComponent = () => {
 	)
 }
 
-export default App
+export default class AppWithErrorBoundary extends Component<
+	{[k: string]: never},
+	{error: boolean}
+> {
+	state = {
+		error: false
+	}
+
+	componentDidCatch(e: Error): void {
+		console.error(e)
+		this.setState({error: true})
+	}
+
+	render(): JSX.Element {
+		if (this.state.error) {
+			return <ErrorPlaceholder />
+		}
+		return <App />
+	}
+}
