@@ -5,8 +5,12 @@
   cursor: pointer;
 
   button {
-    pointer-events: none;
     margin: 10px 0;
+    cursor: pointer;
+
+    * {
+      cursor: pointer;
+    }
   }
 
   input {
@@ -23,9 +27,12 @@
     background-repeat: no-repeat;
     display: flex;
     position: relative;
+    color: $black;
 
     &--empty {
       min-width: 213px;
+      align-items: center;
+      justify-content: center;
     }
   }
 
@@ -38,5 +45,6 @@
 
   &.drag-over .image-upload__preview {
     border-color: $purple2;
+    color: $purple2;
   }
 }

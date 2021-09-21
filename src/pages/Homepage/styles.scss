@@ -10,7 +10,7 @@
   &__link {
     color: white;
     font-size: 20px;
-    margin: 20px 50px;
+    margin: 20px 0 0 80px;
     text-decoration: underline;
   }
 
@@ -30,14 +30,14 @@
 
   &__title {
     color: white;
-    margin-left: 50px;
+    margin-left: 80px;
     font-size: 60px;
     line-height: 75px;
     margin-bottom: 20px;
   }
 
   &__buttons {
-    margin-left: 50px;
+    margin-left: 80px;
     display: flex;
     align-items: center;
 

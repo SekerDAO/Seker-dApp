@@ -50,7 +50,7 @@ const CreateCustomDomainModal: FunctionComponent = () => {
 					setIsOpened(true)
 				}}
 			>
-				Create A Custom Domain
+				Create a Custom Domain
 			</Button>
 			<Modal show={isOpened} onClose={handleClose}>
 				<div className="create-custom-domain">

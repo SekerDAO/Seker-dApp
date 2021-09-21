@@ -6,9 +6,13 @@ const DashboardHeader: FunctionComponent<{
 }> = ({background, children}) => (
 	<div
 		className="dashboard-header"
-		style={{
-			backgroundImage: `url("${background ?? "/assets/Dashboard_Header.png"}")`
-		}}
+		style={
+			background
+				? {
+						backgroundImage: `url("${background}")`
+				  }
+				: {}
+		}
 	>
 		{children}
 	</div>

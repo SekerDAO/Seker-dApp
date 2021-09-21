@@ -8,22 +8,22 @@
   &__row {
     display: flex;
     align-items: center;
-    min-height: 32px;
     margin: 5px 0;
 
     input[type="text"] {
       flex: 1;
-      height: 36px;
     }
 
     button {
       margin-left: 15px;
-      padding: 10px 15px;
+      padding: 0 15px;
+      height: 32px;
+      font-size: 20px;
     }
   }
 
   h2 {
-    margin: 50px 0 10px 0;
+    margin: 50px 0 20px 0;
   }
 
   > button {

@@ -9,10 +9,13 @@ const GalleryItem: FunctionComponent<NFTGalleryItemProps> = ({
 	thumbnail,
 	name,
 	isVideo,
-	onDelete
+	onDelete,
+	creator,
+	attributes
 }) => {
 	const handleDelete = (e: MouseEvent<HTMLDivElement>) => {
 		e.preventDefault()
+		if (!onDelete) return
 		onDelete()
 	}
 
@@ -20,17 +23,25 @@ const GalleryItem: FunctionComponent<NFTGalleryItemProps> = ({
 		<div className="gallery__item">
 			<div className="gallery__item-thumb">
 				<Link to={`/nft/${id}`}>
-					<div className="gallery__item-delete" onClick={handleDelete}>
-						<CloseIcon />
-					</div>
+					{onDelete && (
+						<div className="gallery__item-delete" onClick={handleDelete}>
+							<CloseIcon />
+						</div>
+					)}
 					{isVideo ? <video src={thumbnail} autoPlay muted /> : <img src={thumbnail} alt={name} />}
 				</Link>
 			</div>
 
 			<div className="gallery__details">
-				<div className="gallery__details-name">
-					<Link to={`/nft/${id}`}>{name}</Link>
+				<div>
+					<Link to={`/nft/${id}`}>Name: {name}</Link>
 				</div>
+				<div>{`Creator: ${creator.slice(0, 3)}...${creator.slice(-4)}`}</div>
+				{attributes?.editionNumber && attributes.numberOfEditions && (
+					<div>
+						Edition {attributes.editionNumber} of {attributes.numberOfEditions}
+					</div>
+				)}
 			</div>
 		</div>
 	)
@@ -46,6 +57,8 @@ const Gallery: FunctionComponent<{items: NFTGalleryItemProps[]}> = ({items}) => 
 				thumbnail={item.thumbnail}
 				name={item.name}
 				isVideo={item.isVideo}
+				attributes={item.attributes}
+				creator={item.creator}
 			/>
 		))}
 	</div>

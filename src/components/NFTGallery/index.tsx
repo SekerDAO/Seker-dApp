@@ -16,7 +16,8 @@ import ConfirmationModal from "../Modals/ConfirmationModal"
 const NFTGallery: FunctionComponent<{
 	account: string
 	isDao?: boolean
-}> = ({account, isDao = false}) => {
+	canDelete: boolean
+}> = ({account, canDelete, isDao = false}) => {
 	const [cursor, setCursor] = useState<NFTSnapshot | null>(null)
 	const [sort, setSort] = useState<NftSort>("nameAsc")
 	const [deleteOpened, setDeleteOpened] = useState<string | null>(null)
@@ -52,16 +53,18 @@ const NFTGallery: FunctionComponent<{
 
 	return (
 		<>
-			<ConfirmationModal
-				title="Delete Confirmation"
-				text="Are you sure you want to delete NFT?"
-				onSubmit={() => handleDelete(deleteOpened!)}
-				submitText="Delete"
-				isOpened={!!deleteOpened}
-				handleClose={() => {
-					setDeleteOpened(null)
-				}}
-			/>
+			{canDelete && (
+				<ConfirmationModal
+					title="Delete Confirmation"
+					text={`Are you sure you want to delete this NFT?\n\n(Note: This will not remove the NFT from the Ethereum Blockchain but rather just from our website's database and your profile. To recover an accidentally deleted NFT, follow the steps to load NFT.)`}
+					onSubmit={() => handleDelete(deleteOpened!)}
+					submitText="Delete"
+					isOpened={!!deleteOpened}
+					handleClose={() => {
+						setDeleteOpened(null)
+					}}
+				/>
+			)}
 			<div className="profile__controls">
 				<div className="profile__search">
 					<Input placeholder="Search" borders="bottom" />
@@ -70,8 +73,8 @@ const NFTGallery: FunctionComponent<{
 				<Select
 					value={sort}
 					options={[
-						{name: "Name A-Z", value: "nameAsc"},
-						{name: "Name Z-A", value: "nameDesc"},
+						{name: "Name (A-Z)", value: "nameAsc"},
+						{name: "Name (Z-A)", value: "nameDesc"},
 						{name: "Newest", value: "dateDesc"},
 						{name: "Oldest", value: "dateAsc"}
 					]}
@@ -82,15 +85,19 @@ const NFTGallery: FunctionComponent<{
 				items={NFTs.data
 					.filter(doc => !deletedNfts.includes(doc.id))
 					.map(doc => {
-						const {thumbnail, name, media} = doc.data()
+						const {thumbnail, name, media, creator, attributes} = doc.data()
 						return {
 							id: doc.id,
 							thumbnail,
 							name,
+							creator,
+							attributes,
 							isVideo: media.mimeType.startsWith("video"),
-							onDelete: () => {
-								setDeleteOpened(doc.id)
-							}
+							onDelete: canDelete
+								? () => {
+										setDeleteOpened(doc.id)
+								  }
+								: undefined
 						}
 					})}
 			/>

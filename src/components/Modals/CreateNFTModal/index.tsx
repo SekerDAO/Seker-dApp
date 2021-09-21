@@ -268,9 +268,9 @@ const CreateNFTModalContent: FunctionComponent<{
 							setFile(image)
 						}}
 					/>
-					<div className="create-nft__row">
+					<div className="create-nft__row create-nft__row--no-mg">
 						<div className="create-nft__col">
-							<label>Title of Piece(s)</label>
+							<label>Title of Piece</label>
 							<Input
 								borders="all"
 								value={title}
@@ -328,10 +328,9 @@ const CreateNFTModalContent: FunctionComponent<{
 				<>
 					<h2>Success!</h2>
 					<p>
-						You now have the ability to delete, sign, or change the
-						<br />
-						visibility setting of your created NFT on the &quot;Create /<br />
-						Edit NFTs&quot; page of your profile dashboard.
+						You now have the ability to view and / or delete <br />
+						your NFT on the &quot;{gnosisAddress ? "Collection" : "Create / Edit NFTs"}&quot; page
+						<br /> of your {gnosisAddress ? "DAO" : "profile"} dashboard.
 					</p>
 				</>
 			) : (
@@ -361,11 +360,12 @@ const CreateNFTModal: FunctionComponent<{
 	return (
 		<>
 			<Button
+				buttonType={gnosisAddress ? "primary" : "secondary"}
 				onClick={() => {
 					setIsOpened(true)
 				}}
 			>
-				Enter NFT
+				{gnosisAddress ? "Enter NFT" : "Create / Load NFT"}
 			</Button>
 			<Modal
 				show={isOpened}

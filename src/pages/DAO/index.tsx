@@ -58,9 +58,13 @@ const DAOPage: FunctionComponent = () => {
 					<div className="dao__left-section">
 						<div
 							className="dao__photo"
-							style={{
-								backgroundImage: `url(${dao.profileImage ?? "/assets/DAODashboard_Photo.png"})`
-							}}
+							style={
+								dao.profileImage
+									? {
+											backgroundImage: `url(${dao.profileImage})`
+									  }
+									: {}
+							}
 						>
 							{isAdmin && editOpened && (
 								<UploadImageModal
@@ -157,7 +161,9 @@ const DAOPage: FunctionComponent = () => {
 										setActiveMenuIndex(index)
 									}}
 								/>
-								{activeMenuIndex === 0 && <DAOCollection gnosisAddress={dao.gnosisAddress} />}
+								{activeMenuIndex === 0 && (
+									<DAOCollection gnosisAddress={dao.gnosisAddress} isAdmin={isAdmin} />
+								)}
 								{activeMenuIndex === 1 && <AboutDAO dao={dao} />}
 								{activeMenuIndex === 3 && (
 									<DAOProposals

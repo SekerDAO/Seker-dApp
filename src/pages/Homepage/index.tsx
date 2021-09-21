@@ -14,13 +14,11 @@ const HomePage: FunctionComponent = () => {
 				<Link to="/daos">
 					<Button>DAOs</Button>
 				</Link>
-				<Button disabled>Exhibits</Button>
+				<Button disabled>Events</Button>
 			</div>
-			<div style={{color: "white", margin: "20px 50px"}}>
-				We are currently in test phase <br />
-				but will be officially releasing in October 2021.
-				<br />
-				Stay tuned!
+			<div style={{color: "white", margin: "20px 80px"}}>
+				We are currently in test phase, but will be officially
+				<br /> releasing in October 2021. Stay tuned!
 			</div>
 			<Link className="home-page__link" to="/learn">
 				Learn More

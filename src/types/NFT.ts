@@ -42,8 +42,8 @@ export type NFTQueryParams = {
 	sort: NftSort
 }
 
-export type NFTGalleryItemProps = Pick<NFT, "thumbnail" | "name"> & {
+export type NFTGalleryItemProps = Pick<NFT, "thumbnail" | "name" | "creator" | "attributes"> & {
 	id: string
 	isVideo: boolean
-	onDelete: () => void
+	onDelete?: () => void
 }

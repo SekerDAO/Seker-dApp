@@ -6,11 +6,11 @@
   color: $black;
 
   tr {
-    border-bottom: 1px solid $black;
+    border-bottom: 1px solid $light-grey;
   }
 
   th {
-    font-weight: normal;
+    font-weight: bold;
     text-align: left;
     padding: 5px 0;
   }

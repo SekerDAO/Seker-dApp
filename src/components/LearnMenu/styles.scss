@@ -1,11 +1,13 @@
 @import "src/variables";
 
 .learn-menu {
-  min-width: 250px;
-  //margin: 15px 20px 0 0;
+  width: 250px;
   display: flex;
   flex-direction: column;
   position: fixed;
+  margin-left: 40px;
+  font-size: 14px;
+  line-height: 18px;
 
   &__link-lv0 {
     margin: 5px 0;
@@ -20,13 +22,14 @@
 
   &__link-lv1 {
     color: $black;
-    margin-left: 5px;
+    margin-left: 10px;
     line-height: 20px;
+    font-weight: bold;
   }
 
   &__link-lv2 {
     color: $black;
-    margin-left: 10px;
+    margin-left: 20px;
     font-size: 14px;
     line-height: 20px;
   }

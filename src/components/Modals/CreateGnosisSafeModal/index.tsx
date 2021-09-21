@@ -151,7 +151,7 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 							</Button>
 						</div>
 					))}
-					<label htmlFor="create-gnosis-threshold">Admin Voting threshold</label>
+					<label htmlFor="create-gnosis-threshold">Admin Voting Threshold</label>
 					<Input borders="all" number value={votingThreshold} onChange={handleThresholdChange} />
 				</>
 			)}

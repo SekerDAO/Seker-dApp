@@ -24,7 +24,7 @@ const ConfirmationModal: FunctionComponent<{
 	return (
 		<Modal show={isOpened} onClose={handleClose}>
 			<h2 className="confirmation-modal__title">{title}</h2>
-			<p>{text}</p>
+			<p className="confirmation-modal__text">{text}</p>
 			<div className="confirmation-modal__buttons">
 				<Button buttonType="secondary" onClick={handleClose}>
 					{cancelText ?? "Cancel"}

@@ -29,7 +29,9 @@ const HeaderMenu: FunctionComponent = () => {
 					<ul>
 						{account && connected && (
 							<li>
-								<Link to={`/profile/${url ?? account}`}>Profile</Link>
+								<Link to={`/profile/${url ?? account}`}>{`${account.slice(0, 3)}...${account.slice(
+									-4
+								)}`}</Link>
 							</li>
 						)}
 						<li>
@@ -41,7 +43,6 @@ const HeaderMenu: FunctionComponent = () => {
 						<li>
 							{account && connected ? (
 								<span>
-									{`${account.slice(0, 3)}...${account.slice(-4)} `}
 									<span onClick={disconnect}>Disconnect</span>
 								</span>
 							) : connecting ? (

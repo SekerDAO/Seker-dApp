@@ -75,11 +75,13 @@ const Profile: FunctionComponent = () => {
 				<div className="profile">
 					<div
 						className="profile__photo"
-						style={{
-							backgroundImage: `url("${
-								user.profileImage ?? "/assets/PersonalDashboard_Photo.png"
-							}")`
-						}}
+						style={
+							user.profileImage
+								? {
+										backgroundImage: `url("${user.profileImage}")`
+								  }
+								: {}
+						}
 					>
 						{isOwner && page === "edit" && (
 							<UploadImageModal
@@ -170,7 +172,11 @@ const Profile: FunctionComponent = () => {
 							</div>
 						)}
 						{["nfts", "profile"].includes(page) && (
-							<NFTGallery key={galleryKey} account={user.account} />
+							<NFTGallery
+								key={galleryKey}
+								account={user.account}
+								canDelete={isOwner && page === "nfts"}
+							/>
 						)}
 						{page === "edit" && (
 							<ProfileEdit

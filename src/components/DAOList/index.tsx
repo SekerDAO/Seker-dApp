@@ -14,7 +14,7 @@ const DAOListItem: FunctionComponent<DAOListItemProps> = ({
 		<div className="dao-list__item">
 			<div
 				className="dao-list__item-image"
-				style={{backgroundImage: `url("${profileImage ?? "/assets/DAODashboard_Photo.png"}")`}}
+				style={profileImage ? {backgroundImage: `url("${profileImage}")`} : {}}
 			/>
 			<h3>{name}</h3>
 			<p>
