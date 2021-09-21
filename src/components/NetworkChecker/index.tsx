@@ -19,7 +19,7 @@ const NetworkChecker: FunctionComponent = () => {
 					alignItems: "center"
 				}}
 			>
-				Wrong network
+				Wrong network: Please switch to Rinkeby
 			</div>
 		)
 	}
