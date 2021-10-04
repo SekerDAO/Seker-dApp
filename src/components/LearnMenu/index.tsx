@@ -52,7 +52,7 @@ const LearnMenu: FunctionComponent<{
 										key={lv2Index}
 										className="learn-menu__link-lv2"
 										onClick={() => {
-											handleLinkClick(`#learn_${lv0Index}_${lv1Index}_${lv2Index}`)
+											handleLinkClick(`learn_${lv0Index}_${lv1Index}_${lv2Index}`)
 										}}
 									>
 										{lv2Entry.title}
