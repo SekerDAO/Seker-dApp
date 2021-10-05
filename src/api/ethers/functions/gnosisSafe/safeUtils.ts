@@ -3,7 +3,7 @@ import {_TypedDataEncoder} from "@ethersproject/hash"
 import {BigNumber, BigNumberish} from "@ethersproject/bignumber"
 import {arrayify} from "@ethersproject/bytes"
 import {AddressZero} from "@ethersproject/constants"
-import {JsonRpcSigner} from "@ethersproject/providers"
+import {JsonRpcSigner, TransactionResponse} from "@ethersproject/providers"
 import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
 
 const EIP712_SAFE_TX_TYPE = {
@@ -122,7 +122,7 @@ export const executeTx = async (
 	safeTx: SafeTransaction,
 	signatures: SafeSignature[],
 	overrides?: unknown
-): Promise<any> => {
+): Promise<TransactionResponse> => {
 	const signatureBytes = buildSignatureBytes(signatures)
 	return safe.execTransaction(
 		safeTx.to,
