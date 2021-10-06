@@ -12,7 +12,8 @@ import checkUserUrl from "../../../api/firebase/user/checkUserUrl"
 const ProfileEdit: FunctionComponent<{
 	user: User
 	afterSubmit: () => void
-}> = ({user, afterSubmit}) => {
+	onCancel: () => void
+}> = ({user, afterSubmit, onCancel}) => {
 	const [name, setName] = useState(user.name ?? "")
 	const [url, setUrl] = useState(user.url ?? "")
 	const [bio, setBio] = useState(user.bio ?? "")
@@ -153,9 +154,18 @@ const ProfileEdit: FunctionComponent<{
 					</div>
 				</div>
 			</div>
-			<Button buttonType="primary" onClick={handleSubmit} disabled={processing || !!urlValidation}>
-				{processing ? "Saving..." : "Save"}
-			</Button>
+			<div className="profile-edit__buttons">
+				<Button
+					buttonType="primary"
+					onClick={handleSubmit}
+					disabled={processing || !!urlValidation}
+				>
+					{processing ? "Saving..." : "Save"}
+				</Button>
+				<Button buttonType="secondary" onClick={onCancel}>
+					Cancel
+				</Button>
+			</div>
 		</div>
 	)
 }

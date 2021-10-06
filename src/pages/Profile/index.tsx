@@ -185,6 +185,9 @@ const Profile: FunctionComponent = () => {
 									refetch()
 									push(pathname)
 								}}
+								onCancel={() => {
+									push(pathname)
+								}}
 							/>
 						)}
 						{page === "daos" && <ProfileDAOs />}
