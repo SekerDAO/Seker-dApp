@@ -33,10 +33,10 @@ const GalleryItem: FunctionComponent<NFTGalleryItemProps> = ({
 			</div>
 
 			<div className="gallery__details">
-				<div>
-					<Link to={`/nft/${id}`}>Name: {name}</Link>
-				</div>
-				<div>{`Creator: ${creator.slice(0, 3)}...${creator.slice(-4)}`}</div>
+				<b>
+					<Link to={`/nft/${id}`}>{name}</Link>
+				</b>
+				<div>{`${creator.slice(0, 3)}...${creator.slice(-4)}`}</div>
 				{attributes?.editionNumber && attributes.numberOfEditions && (
 					<div>
 						Edition {attributes.editionNumber} of {attributes.numberOfEditions}

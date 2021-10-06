@@ -69,7 +69,7 @@ const CreateCustomDomainModal: FunctionComponent = () => {
 						</>
 					) : (
 						<>
-							<h2>Create A Custom Domain</h2>
+							<h2>Create a Custom Domain</h2>
 							<label htmlFor="create-custom-domain-name">Domain Name</label>
 							<Input
 								id="create-custom-domain-name"

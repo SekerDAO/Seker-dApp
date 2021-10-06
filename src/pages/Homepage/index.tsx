@@ -17,7 +17,7 @@ const HomePage: FunctionComponent = () => {
 				<Button disabled>Events</Button>
 			</div>
 			<div style={{color: "white", margin: "20px 80px"}}>
-				We are currently in test phase, but will be officially
+				We are currently in test phase but will be officially
 				<br /> releasing in October 2021. Stay tuned!
 			</div>
 			<Link className="home-page__link" to="/learn">

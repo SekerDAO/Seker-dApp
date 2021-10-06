@@ -56,7 +56,7 @@ const NFTGallery: FunctionComponent<{
 			{canDelete && (
 				<ConfirmationModal
 					title="Delete Confirmation"
-					text={`Are you sure you want to delete this NFT?\n\n(Note: This will not remove the NFT from the Ethereum Blockchain but rather just from our website's database and your profile. To recover an accidentally deleted NFT, follow the steps to load NFT.)`}
+					text={`Are you sure you want to delete this NFT?\n\n(Note: This will not remove the NFT from the Ethereum Blockchain\n but rather just from our website's database and your profile. To recover\n an accidentally deleted NFT, follow the steps to load NFT.)`}
 					onSubmit={() => handleDelete(deleteOpened!)}
 					submitText="Delete"
 					isOpened={!!deleteOpened}
