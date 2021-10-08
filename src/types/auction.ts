@@ -1,4 +1,4 @@
-export type ZoraAuctionFirebaseData = {
+export type AuctionFirebaseData = {
 	id: number
 	gnosisAddress: string
 	nftName: string
@@ -13,10 +13,10 @@ export type ZoraAuctionFirebaseData = {
 	creationDate: string
 }
 
-export type ZoraAuctionEthersData = {
+export type AuctionEthersData = {
 	price: number
 	state: "waitingApproval" | "approved" | "live" | "ended" | "finalized"
 	endTime?: number
 }
 
-export type ZoraAuction = ZoraAuctionEthersData & ZoraAuctionFirebaseData
+export type Auction = AuctionEthersData & AuctionFirebaseData

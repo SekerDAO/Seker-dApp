@@ -1,9 +1,9 @@
 import {JsonRpcSigner} from "@ethersproject/providers"
-import Auction from "../../abis/ZoraAuction.json"
+import Auction from "../../abis/Auction.json"
 import {createSafeSignature, executeSafeTx, SafeSignature} from "../gnosisSafe/safeUtils"
 const {REACT_APP_ZORA_ADDRESS} = process.env
 
-export const signApproveZoraAuction = async (
+export const signApproveAuction = async (
 	safeAddress: string,
 	auctionID: number,
 	signer: JsonRpcSigner
@@ -17,7 +17,7 @@ export const signApproveZoraAuction = async (
 		signer
 	)
 
-export const executeApproveZoraAuction = async (
+export const executeApproveAuction = async (
 	safeAddress: string,
 	auctionID: number,
 	signatures: SafeSignature[],

@@ -1,12 +1,12 @@
 import {JsonRpcSigner} from "@ethersproject/providers"
 import {Contract} from "@ethersproject/contracts"
 import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
-import Auction from "../../abis/ZoraAuction.json"
+import Auction from "../../abis/Auction.json"
 import {buildContractCall, executeTx, SafeSignature, safeSignMessage} from "../gnosisSafe/safeUtils"
 import {parseEther} from "@ethersproject/units"
 const {REACT_APP_ZORA_ADDRESS} = process.env
 
-export const signCreateZoraAuction = async (
+export const signCreateAuction = async (
 	safeAddress: string,
 	nftID: number,
 	nftAddress: string,
@@ -37,7 +37,7 @@ export const signCreateZoraAuction = async (
 	return safeSignMessage(signer, safeContract, call)
 }
 
-export const executeCreateZoraAuction = async (
+export const executeCreateAuction = async (
 	safeAddress: string,
 	nftID: number,
 	nftAddress: string,

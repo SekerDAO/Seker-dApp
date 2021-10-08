@@ -7,9 +7,9 @@ export type ProposalType =
 	| "joinHouse"
 	| "requestFunding"
 	| "changeRole"
-	| "createZoraAuction"
-	| "approveZoraAuction"
-	| "cancelZoraAuction"
+	| "createAuction"
+	| "approveAuction"
+	| "cancelAuction"
 	| "generalEVM"
 	| "decentralizeDAO"
 
@@ -17,10 +17,10 @@ export const ProposalsTypeNames = {
 	joinHouse: "Join House",
 	requestFunding: "Request Funding",
 	changeRole: "Change Role / Kick",
-	createZoraAuction: "Create Zora Auction",
-	approveZoraAuction: "Approve Zora Auction",
-	endZoraAuction: "End Zora Auction",
-	cancelZoraAuction: "Cancel Zora Auction",
+	createAuction: "Create Auction",
+	approveAuction: "Approve Auction",
+	endAuction: "End Auction",
+	cancelAuction: "Cancel Auction",
 	generalEVM: "General EVM",
 	decentralizeDAO: "Decentralize DAO"
 } as const
@@ -63,7 +63,7 @@ export type GnosisProposal = ProposalBase & {
 	newThreshold?: number
 	signatures?: SafeSignature[]
 	signaturesStep2?: SafeSignature[]
-	// for Zora auction
+	// for auction
 	auctionId?: number
 	nftId?: number
 	nftAddress?: string

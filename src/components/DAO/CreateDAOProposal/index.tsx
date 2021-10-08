@@ -6,9 +6,9 @@ import RequestFunding from "./RequestFunding"
 import ChangeRole from "./ChangeRole"
 import {AuthContext} from "../../../context/AuthContext"
 import {ProposalsTypeNames, ProposalType} from "../../../types/proposal"
-import CreateZoraAuction from "./CreateZoraAuction"
-import ApproveZoraAuction from "./ApproveZoraAuction"
-import CancelZoraAuction from "./CancelZoraAuction"
+import CreateAuction from "./CreateAuction"
+import ApproveAuction from "./ApproveAuction"
+import CancelAuction from "./CancelAuction"
 import useDAOProposals from "../../../customHooks/getters/useDAOProposals"
 import ErrorPlaceholder from "../../ErrorPlaceholder"
 import Loader from "../../Loader"
@@ -39,42 +39,42 @@ const CreateDAOProposal: FunctionComponent<{
 
 	return (
 		<div className="create-dao-proposal">
-			<h2>Create A New Proposal</h2>
+			<h2>Create a New Proposal</h2>
 			<Select
 				value={type}
 				options={[
-					{name: ProposalsTypeNames.joinHouse, value: "joinHouse"},
-					{name: ProposalsTypeNames.requestFunding, value: "requestFunding"},
+					// {name: ProposalsTypeNames.joinHouse, value: "joinHouse"},
+					// {name: ProposalsTypeNames.requestFunding, value: "requestFunding"},
 					{name: ProposalsTypeNames.changeRole, value: "changeRole"},
-					{name: ProposalsTypeNames.createZoraAuction, value: "createZoraAuction"},
-					{name: ProposalsTypeNames.approveZoraAuction, value: "approveZoraAuction"},
-					{name: ProposalsTypeNames.cancelZoraAuction, value: "cancelZoraAuction"},
-					{name: ProposalsTypeNames.endZoraAuction, value: "endZoraAuction"},
+					{name: ProposalsTypeNames.createAuction, value: "createAuction"},
+					{name: ProposalsTypeNames.approveAuction, value: "approveAuction"}, // TODO: merge with create
+					{name: ProposalsTypeNames.cancelAuction, value: "cancelAuction"},
+					{name: ProposalsTypeNames.endAuction, value: "endAuction"},
 					{name: ProposalsTypeNames.generalEVM, value: "generalEVM"}
 				].slice(...(isAdmin ? [1] : isMember ? [1, 3] : [0, 1]))}
 				onChange={e => {
 					setType(e.target.value as ProposalType)
 				}}
 			/>
-			{type === "joinHouse" && daoAddress && (
-				<JoinHouse gnosisAddress={gnosisAddress} daoAddress={daoAddress} />
-			)}
-			{type === "createZoraAuction" && (
-				<CreateZoraAuction
+			{/*{type === "joinHouse" && daoAddress && (*/}
+			{/*	<JoinHouse gnosisAddress={gnosisAddress} daoAddress={daoAddress} />*/}
+			{/*)}*/}
+			{type === "createAuction" && (
+				<CreateAuction
 					gnosisAddress={gnosisAddress}
 					isAdmin={isAdmin}
 					gnosisVotingThreshold={gnosisVotingThreshold}
 				/>
 			)}
-			{type === "approveZoraAuction" && (
-				<ApproveZoraAuction
+			{type === "approveAuction" && (
+				<ApproveAuction
 					gnosisAddress={gnosisAddress}
 					isAdmin={isAdmin}
 					gnosisVotingThreshold={gnosisVotingThreshold}
 				/>
 			)}
-			{type === "cancelZoraAuction" && (
-				<CancelZoraAuction
+			{type === "cancelAuction" && (
+				<CancelAuction
 					gnosisAddress={gnosisAddress}
 					isAdmin={isAdmin}
 					gnosisVotingThreshold={gnosisVotingThreshold}

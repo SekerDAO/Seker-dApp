@@ -14,21 +14,21 @@ import SearchIcon from "../../../icons/SearchIcon"
 import addSafeProposalSignature from "../../../api/firebase/proposal/addSafeProposalSignature"
 import {SafeSignature} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
 import {
-	executeApproveNFTForZoraAuction,
-	signApproveNFTForZoraAuction
-} from "../../../api/ethers/functions/zoraAuction/approveNFTForZoraAuction"
+	executeApproveNFTForAuction,
+	signApproveNFTForAuction
+} from "../../../api/ethers/functions/auction/approveNFTForAuction"
 import {
-	executeCreateZoraAuction,
-	signCreateZoraAuction
-} from "../../../api/ethers/functions/zoraAuction/createZoraAuction"
+	executeCreateAuction,
+	signCreateAuction
+} from "../../../api/ethers/functions/auction/createAuction"
 import {
-	executeApproveZoraAuction,
-	signApproveZoraAuction
-} from "../../../api/ethers/functions/zoraAuction/approveZoraAuction"
+	executeApproveAuction,
+	signApproveAuction
+} from "../../../api/ethers/functions/auction/approveAuction"
 import {
-	executeCancelZoraAuction,
-	signCancelZoraAuction
-} from "../../../api/ethers/functions/zoraAuction/cancelZoraAuction"
+	executeCancelAuction,
+	signCancelAuction
+} from "../../../api/ethers/functions/auction/cancelAuction"
 import {
 	executeAddOwner,
 	executeRemoveOwner,
@@ -119,7 +119,7 @@ const DAOProposalCard: FunctionComponent<{
 			// So we should add signature before we update the user, and avoid adding it twice
 			let signatureAdded = false
 			switch (proposal.type) {
-				case "createZoraAuction":
+				case "createAuction":
 					if (!isGnosisProposal(proposal)) break
 					const signingArgs = [
 						proposal.gnosisAddress,
@@ -132,17 +132,17 @@ const DAOProposalCard: FunctionComponent<{
 						proposal.auctionCurrencyAddress!,
 						signer
 					] as const
-					signature = await signApproveNFTForZoraAuction(...signingArgs)
-					signatureStep2 = await signCreateZoraAuction(...signingArgs)
+					signature = await signApproveNFTForAuction(...signingArgs)
+					signatureStep2 = await signCreateAuction(...signingArgs)
 					if (proposal.signatures?.length === gnosisVotingThreshold - 1) {
-						await executeApproveNFTForZoraAuction(
+						await executeApproveNFTForAuction(
 							proposal.gnosisAddress,
 							proposal.nftId!,
 							proposal.nftAddress!,
 							[...proposal.signatures, signature],
 							signer
 						)
-						await executeCreateZoraAuction(
+						await executeCreateAuction(
 							proposal.gnosisAddress,
 							Number(proposal.nftId),
 							proposal.nftAddress!,
@@ -157,15 +157,11 @@ const DAOProposalCard: FunctionComponent<{
 						executed = true
 					}
 					break
-				case "approveZoraAuction":
+				case "approveAuction":
 					if (!isGnosisProposal(proposal)) break
-					signature = await signApproveZoraAuction(
-						proposal.gnosisAddress,
-						proposal.auctionId!,
-						signer
-					)
+					signature = await signApproveAuction(proposal.gnosisAddress, proposal.auctionId!, signer)
 					if (proposal.signatures?.length === gnosisVotingThreshold - 1) {
-						await executeApproveZoraAuction(
+						await executeApproveAuction(
 							proposal.gnosisAddress,
 							proposal.auctionId!,
 							[...proposal.signatures, signature],
@@ -174,15 +170,11 @@ const DAOProposalCard: FunctionComponent<{
 						executed = true
 					}
 					break
-				case "cancelZoraAuction":
+				case "cancelAuction":
 					if (!isGnosisProposal(proposal)) break
-					signature = await signCancelZoraAuction(
-						proposal.gnosisAddress,
-						proposal.auctionId!,
-						signer
-					)
+					signature = await signCancelAuction(proposal.gnosisAddress, proposal.auctionId!, signer)
 					if (proposal.signatures?.length === gnosisVotingThreshold - 1) {
-						await executeCancelZoraAuction(
+						await executeCancelAuction(
 							proposal.gnosisAddress,
 							proposal.auctionId!,
 							[...proposal.signatures, signature],

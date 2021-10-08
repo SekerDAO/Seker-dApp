@@ -3,7 +3,7 @@ import TWDomainToken from "../../abis/TWDomainToken.json"
 import {createSafeSignature, executeSafeTx, SafeSignature} from "../gnosisSafe/safeUtils"
 const {REACT_APP_ZORA_ADDRESS} = process.env
 
-export const signApproveNFTForZoraAuction = async (
+export const signApproveNFTForAuction = async (
 	safeAddress: string,
 	nftID: number,
 	nftAddress: string,
@@ -23,7 +23,7 @@ export const signApproveNFTForZoraAuction = async (
 		signer
 	)
 
-export const executeApproveNFTForZoraAuction = async (
+export const executeApproveNFTForAuction = async (
 	safeAddress: string,
 	nftID: number,
 	nftAddress: string,

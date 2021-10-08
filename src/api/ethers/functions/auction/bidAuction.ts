@@ -1,10 +1,10 @@
 import {JsonRpcSigner} from "@ethersproject/providers"
 import {Contract} from "@ethersproject/contracts"
-import Auction from "../../abis/ZoraAuction.json"
+import Auction from "../../abis/Auction.json"
 import {parseEther} from "@ethersproject/units"
 const {REACT_APP_ZORA_ADDRESS} = process.env
 
-const bidZoraAuction = async (
+const bidAuction = async (
 	auctionId: number,
 	amount: number,
 	customCurrency: boolean,
@@ -19,4 +19,4 @@ const bidZoraAuction = async (
 	await tx.wait()
 }
 
-export default bidZoraAuction
+export default bidAuction

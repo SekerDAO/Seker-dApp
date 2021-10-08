@@ -1,7 +1,7 @@
 import {JsonRpcProvider} from "@ethersproject/providers"
 import {Contract} from "@ethersproject/contracts"
-import Auction from "../../abis/ZoraAuction.json"
-import {ZoraAuctionEthersData} from "../../../../types/zoraAuction"
+import Auction from "../../abis/Auction.json"
+import {AuctionEthersData} from "../../../../types/auction"
 import {formatEther} from "@ethersproject/units"
 import {AddressZero} from "@ethersproject/constants"
 const {REACT_APP_ZORA_ADDRESS} = process.env
@@ -9,7 +9,7 @@ const {REACT_APP_ZORA_ADDRESS} = process.env
 const getAuctionDetails = async (
 	auctionId: number,
 	provider: JsonRpcProvider
-): Promise<ZoraAuctionEthersData> => {
+): Promise<AuctionEthersData> => {
 	const auction = new Contract(REACT_APP_ZORA_ADDRESS!, Auction.abi, provider)
 	const {amount, approved, firstBidTime, duration, reservePrice, tokenOwner} =
 		await auction.auctions(auctionId)

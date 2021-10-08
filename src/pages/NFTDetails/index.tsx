@@ -6,11 +6,11 @@ import ErrorPlaceholder from "../../components/ErrorPlaceholder"
 import "./styles.scss"
 import Table from "../../components/Table"
 import Button from "../../components/Controls/Button"
-import {ZoraAuction} from "../../types/zoraAuction"
+import {Auction} from "../../types/auction"
 import {formatTimeDifference} from "../../utlls"
 import BidAuctionModal from "../../components/Modals/BidAuctionModal"
 import {toastError, toastSuccess} from "../../components/Toast"
-import endZoraAuction from "../../api/ethers/functions/zoraAuction/endZoraAuction"
+import endAuction from "../../api/ethers/functions/auction/endAuction"
 import EthersContext from "../../context/EthersContext"
 const {REACT_APP_CHAIN_ID} = process.env
 
@@ -53,13 +53,13 @@ const NFTCard: FunctionComponent = () => {
 	if (loading) return <Loader />
 	if (error || !nft) return <ErrorPlaceholder />
 
-	const auction: ZoraAuction | undefined = auctions[auctions.length - 1]
+	const auction: Auction | undefined = auctions[auctions.length - 1]
 
 	const handleEnd = async () => {
 		setProcessing(true)
 		try {
 			if (!(auction && signer)) return
-			await endZoraAuction(auction.id, signer)
+			await endAuction(auction.id, signer)
 			toastSuccess("Auction successfully ended!")
 		} catch (e) {
 			console.error(e)

@@ -1,30 +1,30 @@
 import React, {ChangeEvent, FunctionComponent, useContext, useState} from "react"
-import useDAOZoraAuctions from "../../../customHooks/getters/useDAOZoraAuctions"
+import useDAOAuctions from "../../../customHooks/getters/useDAOAuctions"
 import ErrorPlaceholder from "../../ErrorPlaceholder"
 import Loader from "../../Loader"
-import {ZoraAuction} from "../../../types/zoraAuction"
+import {Auction} from "../../../types/auction"
 import Select from "../../Controls/Select"
 import Button from "../../Controls/Button"
 import {toastError, toastSuccess} from "../../Toast"
 import {SafeSignature} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
-import {
-	executeApproveZoraAuction,
-	signApproveZoraAuction
-} from "../../../api/ethers/functions/zoraAuction/approveZoraAuction"
 import EthersContext from "../../../context/EthersContext"
 import addProposal from "../../../api/firebase/proposal/addProposal"
 import {AuthContext} from "../../../context/AuthContext"
 import {ProposalState} from "../../../types/proposal"
+import {
+	executeCancelAuction,
+	signCancelAuction
+} from "../../../api/ethers/functions/auction/cancelAuction"
 
-const ApproveZoraAuction: FunctionComponent<{
+const CancelAuction: FunctionComponent<{
 	gnosisAddress: string
 	isAdmin: boolean
 	gnosisVotingThreshold: number
 }> = ({gnosisAddress, isAdmin, gnosisVotingThreshold}) => {
 	const {signer} = useContext(EthersContext)
 	const {account} = useContext(AuthContext)
-	const {auctions, loading, error} = useDAOZoraAuctions(gnosisAddress)
-	const [selectedAuction, setSelectedAuction] = useState<ZoraAuction | null>(null)
+	const {auctions, loading, error} = useDAOAuctions(gnosisAddress)
+	const [selectedAuction, setSelectedAuction] = useState<Auction | null>(null)
 	const [processing, setProcessing] = useState(false)
 
 	if (error) return <ErrorPlaceholder />
@@ -41,20 +41,20 @@ const ApproveZoraAuction: FunctionComponent<{
 			const signatures: SafeSignature[] = []
 			let state: ProposalState = "active"
 			if (isAdmin) {
-				const signature = await signApproveZoraAuction(gnosisAddress, selectedAuction.id, signer)
+				const signature = await signCancelAuction(gnosisAddress, selectedAuction.id, signer)
 				signatures.push(signature)
 				if (gnosisVotingThreshold === 1) {
-					await executeApproveZoraAuction(gnosisAddress, selectedAuction.id, signatures, signer)
+					await executeCancelAuction(gnosisAddress, selectedAuction.id, signatures, signer)
 					state = "executed"
 				}
 			}
 			await addProposal({
-				type: "approveZoraAuction",
+				type: "cancelAuction",
 				module: "gnosis",
-				userAddress: account.toLowerCase(),
-				title: `Approve Auction for ${selectedAuction.nftName}`,
+				userAddress: account,
+				title: `Cancel Auction for ${selectedAuction.nftName}`,
 				auctionId: selectedAuction.id,
-				gnosisAddress: gnosisAddress.toLowerCase(),
+				gnosisAddress,
 				signatures,
 				state
 			})
@@ -68,15 +68,15 @@ const ApproveZoraAuction: FunctionComponent<{
 
 	return (
 		<>
-			<label htmlFor="approve-auction-id">Auction ID</label>
+			<label htmlFor="cancel-auction-id">Auction ID</label>
 			<Select
 				options={[{name: "Choose One", value: ""}].concat(
 					auctions
-						.filter(a => a.state === "waitingApproval")
+						.filter(a => a.state === "approved")
 						.map(a => ({name: String(a.nftName), value: String(a.id)}))
 				)}
 				onChange={handleAuctionChange}
-				id="approve-auction-id"
+				id="cancel-auction-id"
 				fullWidth
 			/>
 			<Button disabled={processing || !selectedAuction} onClick={handleSubmit}>
@@ -86,4 +86,4 @@ const ApproveZoraAuction: FunctionComponent<{
 	)
 }
 
-export default ApproveZoraAuction
+export default CancelAuction

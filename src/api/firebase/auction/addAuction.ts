@@ -1,10 +1,8 @@
 import firebase from "firebase"
-import {ZoraAuctionFirebaseData} from "../../../types/zoraAuction"
+import {AuctionFirebaseData} from "../../../types/auction"
 const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
-const addZoraAuction = async (
-	auction: Omit<ZoraAuctionFirebaseData, "creationDate">
-): Promise<void> => {
+const addAuction = async (auction: Omit<AuctionFirebaseData, "creationDate">): Promise<void> => {
 	const token = await firebase.auth().currentUser?.getIdToken(true)
 	if (!token) {
 		throw new Error("Not authorized in firebase")
@@ -18,7 +16,7 @@ const addZoraAuction = async (
 		throw new Error("DAO not found")
 	}
 
-	const res = await fetch(`${REACT_APP_CLOUD_FUNCTIONS_URL}/addZoraAuction`, {
+	const res = await fetch(`${REACT_APP_CLOUD_FUNCTIONS_URL}/addAuction`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
@@ -27,8 +25,8 @@ const addZoraAuction = async (
 		body: JSON.stringify(auction)
 	})
 	if (res.status !== 200) {
-		throw new Error("Failed to add Zora Auction")
+		throw new Error("Failed to add Auction")
 	}
 }
 
-export default addZoraAuction
+export default addAuction

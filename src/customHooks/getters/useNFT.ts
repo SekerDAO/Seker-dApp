@@ -1,9 +1,9 @@
 import {useContext, useEffect, useState} from "react"
 import {NFT} from "../../types/NFT"
 import getNFT from "../../api/firebase/NFT/getNFT"
-import {ZoraAuction} from "../../types/zoraAuction"
-import getNFTZoraAuctions from "../../api/firebase/zoraAuction/getNFTZoraAuctions"
-import getAuctionDetails from "../../api/ethers/functions/zoraAuction/getAuctionDetails"
+import {Auction} from "../../types/auction"
+import getNFTAuctions from "../../api/firebase/auction/getNFTAuctions"
+import getAuctionDetails from "../../api/ethers/functions/auction/getAuctionDetails"
 import EthersContext from "../../context/EthersContext"
 import {JsonRpcProvider} from "@ethersproject/providers"
 
@@ -11,13 +11,13 @@ const useNFT = (
 	id: string
 ): {
 	nft: NFT | null
-	auctions: ZoraAuction[]
+	auctions: Auction[]
 	loading: boolean
 	error: boolean
 } => {
 	const {provider} = useContext(EthersContext)
 	const [nft, setNft] = useState<NFT | null>(null)
-	const [auctions, setAuctions] = useState<ZoraAuction[]>([])
+	const [auctions, setAuctions] = useState<Auction[]>([])
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
 
@@ -26,7 +26,7 @@ const useNFT = (
 		if (!_provider) {
 			return {nft: _nft}
 		}
-		const _auctions = await getNFTZoraAuctions(_nft.id, _nft.address)
+		const _auctions = await getNFTAuctions(_nft.id, _nft.address)
 
 		return {
 			nft: _nft,

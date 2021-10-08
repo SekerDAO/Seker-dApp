@@ -11,19 +11,19 @@ import addProposal from "../../../api/firebase/proposal/addProposal"
 import {AuthContext} from "../../../context/AuthContext"
 import {SafeSignature} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
 import {
-	executeCreateZoraAuction,
-	signCreateZoraAuction
-} from "../../../api/ethers/functions/zoraAuction/createZoraAuction"
+	executeCreateAuction,
+	signCreateAuction
+} from "../../../api/ethers/functions/auction/createAuction"
 import EthersContext from "../../../context/EthersContext"
 import {
-	executeApproveNFTForZoraAuction,
-	signApproveNFTForZoraAuction
-} from "../../../api/ethers/functions/zoraAuction/approveNFTForZoraAuction"
+	executeApproveNFTForAuction,
+	signApproveNFTForAuction
+} from "../../../api/ethers/functions/auction/approveNFTForAuction"
 import currencies from "../../../constants/currencies"
-import addZoraAuction from "../../../api/firebase/zoraAuction/addZoraAuction"
+import addAuction from "../../../api/firebase/auction/addAuction"
 import {ProposalState} from "../../../types/proposal"
 
-const CreateZoraAuction: FunctionComponent<{
+const CreateAuction: FunctionComponent<{
 	gnosisAddress: string
 	isAdmin: boolean
 	gnosisVotingThreshold: number
@@ -107,19 +107,19 @@ const CreateZoraAuction: FunctionComponent<{
 			] as const
 			let state: ProposalState = "active"
 			if (isAdmin) {
-				const approveSignature = await signApproveNFTForZoraAuction(...signingArgs)
-				const createSignature = await signCreateZoraAuction(...signingArgs)
+				const approveSignature = await signApproveNFTForAuction(...signingArgs)
+				const createSignature = await signCreateAuction(...signingArgs)
 				approveSignatures.push(approveSignature)
 				createSignatures.push(createSignature)
 				if (gnosisVotingThreshold === 1) {
-					await executeApproveNFTForZoraAuction(
+					await executeApproveNFTForAuction(
 						gnosisAddress,
 						nft.id,
 						nft.address,
 						approveSignatures,
 						signer
 					)
-					const id = await executeCreateZoraAuction(
+					const id = await executeCreateAuction(
 						gnosisAddress,
 						nft.id,
 						nft.address,
@@ -131,7 +131,7 @@ const CreateZoraAuction: FunctionComponent<{
 						createSignatures,
 						signer
 					)
-					await addZoraAuction({
+					await addAuction({
 						id,
 						gnosisAddress,
 						nftId: nft.id,
@@ -148,7 +148,7 @@ const CreateZoraAuction: FunctionComponent<{
 				}
 			}
 			await addProposal({
-				type: "createZoraAuction",
+				type: "createAuction",
 				module: "gnosis",
 				userAddress: account,
 				gnosisAddress,
@@ -169,7 +169,7 @@ const CreateZoraAuction: FunctionComponent<{
 			toastSuccess("Proposal successfully created")
 		} catch (e) {
 			console.error(e)
-			toastError("Failed to create Zora Auction proposal")
+			toastError("Failed to create Auction proposal")
 		}
 		setProcessing(false)
 	}
@@ -190,28 +190,28 @@ const CreateZoraAuction: FunctionComponent<{
 
 	return (
 		<>
-			<label htmlFor="create-zora-auction-title">Title</label>
+			<label htmlFor="create-auction-title">Title</label>
 			<Input
 				borders="all"
 				value={title}
-				id="create-zora-auction-title"
+				id="create-auction-title"
 				onChange={e => {
 					setTitle(e.target.value)
 				}}
 			/>
-			<label htmlFor="create-zora-auction-desc">Description</label>
+			<label htmlFor="create-auction-desc">Description</label>
 			<Input
 				borders="all"
 				value={description}
-				id="create-zora-auction-desc"
+				id="create-auction-desc"
 				onChange={e => {
 					setDescription(e.target.value)
 				}}
 			/>
-			<label htmlFor="create-zora-auction-nft-token">Select NFT</label>
+			<label htmlFor="create-auction-nft-token">Select NFT</label>
 			<Select
 				fullWidth
-				id="create-zora-auction-custom-currency"
+				id="create-auction-custom-currency"
 				options={[
 					{name: "Choose One", value: ""},
 					...NFTs.data
@@ -224,19 +224,19 @@ const CreateZoraAuction: FunctionComponent<{
 				onChange={handleNFTChange}
 				value={nft?.id ?? ""}
 			/>
-			<label htmlFor="create-zora-auction-price">Reserve Price</label>
+			<label htmlFor="create-auction-price">Reserve Price</label>
 			<Input
 				number
 				min={0}
 				borders="all"
 				value={reservePrice}
-				id="create-zora-auction-price"
+				id="create-auction-price"
 				onChange={handlePriceChange}
 			/>
-			<label htmlFor="create-zora-auction-custom-currency">Auction Currency</label>
+			<label htmlFor="create-auction-custom-currency">Auction Currency</label>
 			<Select
 				fullWidth
-				id="create-zora-auction-custom-currency"
+				id="create-auction-custom-currency"
 				options={[
 					{name: "Choose One", value: ""},
 					...currencies.map(cur => ({name: cur.symbol, value: cur.symbol})),
@@ -247,11 +247,11 @@ const CreateZoraAuction: FunctionComponent<{
 			/>
 			{currencySymbol === "custom" && (
 				<>
-					<label htmlFor="create-zora-auction-currency-id">Custom Currency Token Address</label>
+					<label htmlFor="create-auction-currency-id">Custom Currency Token Address</label>
 					<Input
 						borders="all"
 						value={currencyAddress}
-						id="create-zora-auction-currency-id"
+						id="create-auction-currency-id"
 						onChange={e => {
 							setCurrencyAddress(e.target.value)
 						}}
@@ -260,9 +260,9 @@ const CreateZoraAuction: FunctionComponent<{
 			)}
 			<div className="create-dao-proposal__row">
 				<div className="create-dao-proposal__col">
-					<label htmlFor="create-zora-auction-curator-address">Curator&apos;s Address</label>
+					<label htmlFor="create-auction-curator-address">Curator&apos;s Address</label>
 					<Input
-						id="create-zora-auction-curator-address"
+						id="create-auction-curator-address"
 						borders="all"
 						value={curatorAddress}
 						onChange={e => {
@@ -271,22 +271,22 @@ const CreateZoraAuction: FunctionComponent<{
 					/>
 				</div>
 				<div className="create-dao-proposal__col">
-					<label htmlFor="create-zora-auction-curator-fee">Curator&apos;s Fee (%)</label>
+					<label htmlFor="create-auction-curator-fee">Curator&apos;s Fee (%)</label>
 					<Input
 						number
 						min={0}
-						id="create-zora-auction-curator-fee"
+						id="create-auction-curator-fee"
 						borders="all"
 						value={curatorFeePercentage}
 						onChange={handleFeeChange}
 					/>
 				</div>
 			</div>
-			<label htmlFor="create-zora-auction-curator-duration">Duration (Hours)</label>
+			<label htmlFor="create-auction-curator-duration">Duration (Hours)</label>
 			<Input
 				number
 				min={0}
-				id="create-zora-auction-curator-duration"
+				id="create-auction-curator-duration"
 				borders="all"
 				value={duration}
 				onChange={handleDurationChange}
@@ -298,4 +298,4 @@ const CreateZoraAuction: FunctionComponent<{
 	)
 }
 
-export default CreateZoraAuction
+export default CreateAuction

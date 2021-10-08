@@ -1,7 +1,7 @@
 import React, {ChangeEvent, FunctionComponent, useContext, useState} from "react"
 import EthersContext from "../../../context/EthersContext"
 import {toastError, toastSuccess} from "../../Toast"
-import bidZoraAuction from "../../../api/ethers/functions/zoraAuction/bidZoraAuction"
+import bidAuction from "../../../api/ethers/functions/auction/bidAuction"
 import Button from "../../Controls/Button"
 import Modal from "../Modal"
 import Input from "../../Controls/Input"
@@ -33,7 +33,7 @@ const BidAuctionModal: FunctionComponent<{
 					signer
 				)
 			}
-			await bidZoraAuction(auctionId, Number(bid), !!auctionTokenAddress, signer)
+			await bidAuction(auctionId, Number(bid), !!auctionTokenAddress, signer)
 			toastSuccess("Bid successfully placed!")
 			setIsOpened(false)
 		} catch (e) {
