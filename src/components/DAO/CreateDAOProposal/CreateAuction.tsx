@@ -27,7 +27,10 @@ const CreateAuction: FunctionComponent<{
 	gnosisAddress: string
 	isAdmin: boolean
 	gnosisVotingThreshold: number
-}> = ({gnosisAddress, isAdmin, gnosisVotingThreshold}) => {
+	title: string
+	description: string
+	afterSubmit: () => void
+}> = ({gnosisAddress, isAdmin, gnosisVotingThreshold, title, description, afterSubmit}) => {
 	const {account} = useContext(AuthContext)
 	const {signer} = useContext(EthersContext)
 	const {NFTs, loading, error} = useNFTs({
@@ -37,8 +40,6 @@ const CreateAuction: FunctionComponent<{
 		sort: "nameAsc"
 	})
 	const [processing, setProcessing] = useState(false)
-	const [title, setTitle] = useState("")
-	const [description, setDescription] = useState("")
 	const [nft, setNft] = useState<NFT | null>(null)
 	const [reservePrice, setReservePrice] = useState("")
 	const [currencySymbol, setCurrencySymbol] = useState("")
@@ -166,6 +167,13 @@ const CreateAuction: FunctionComponent<{
 				signatures: approveSignatures,
 				signaturesStep2: createSignatures
 			})
+			setReservePrice("")
+			setCurrencySymbol("")
+			setCurrencyAddress("")
+			setCuratorAddress(gnosisAddress)
+			setCuratorFeePercentage("")
+			setDuration("")
+			afterSubmit()
 			toastSuccess("Proposal successfully created")
 		} catch (e) {
 			console.error(e)
@@ -190,24 +198,6 @@ const CreateAuction: FunctionComponent<{
 
 	return (
 		<>
-			<label htmlFor="create-auction-title">Title</label>
-			<Input
-				borders="all"
-				value={title}
-				id="create-auction-title"
-				onChange={e => {
-					setTitle(e.target.value)
-				}}
-			/>
-			<label htmlFor="create-auction-desc">Description</label>
-			<Input
-				borders="all"
-				value={description}
-				id="create-auction-desc"
-				onChange={e => {
-					setDescription(e.target.value)
-				}}
-			/>
 			<label htmlFor="create-auction-nft-token">Select NFT</label>
 			<Select
 				fullWidth

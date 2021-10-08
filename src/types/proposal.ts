@@ -4,8 +4,8 @@ import {Abi} from "./abi"
 
 // TODO: split this into DAO and Gnosis modules
 export type ProposalType =
-	| "joinHouse"
-	| "requestFunding"
+	// | "joinHouse"
+	// | "requestFunding"
 	| "changeRole"
 	| "createAuction"
 	| "approveAuction"
@@ -14,9 +14,9 @@ export type ProposalType =
 	| "decentralizeDAO"
 
 export const ProposalsTypeNames = {
-	joinHouse: "Join House",
-	requestFunding: "Request Funding",
-	changeRole: "Change Role / Kick",
+	// joinHouse: "Join House",
+	// requestFunding: "Request Funding",
+	changeRole: "Admin Membership",
 	createAuction: "Create Auction",
 	approveAuction: "Approve Auction",
 	endAuction: "End Auction",

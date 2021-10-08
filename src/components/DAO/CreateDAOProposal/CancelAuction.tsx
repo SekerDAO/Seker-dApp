@@ -20,7 +20,10 @@ const CancelAuction: FunctionComponent<{
 	gnosisAddress: string
 	isAdmin: boolean
 	gnosisVotingThreshold: number
-}> = ({gnosisAddress, isAdmin, gnosisVotingThreshold}) => {
+	title: string
+	description: string
+	afterSubmit: () => void
+}> = ({gnosisAddress, isAdmin, gnosisVotingThreshold, title, description, afterSubmit}) => {
 	const {signer} = useContext(EthersContext)
 	const {account} = useContext(AuthContext)
 	const {auctions, loading, error} = useDAOAuctions(gnosisAddress)
@@ -52,12 +55,15 @@ const CancelAuction: FunctionComponent<{
 				type: "cancelAuction",
 				module: "gnosis",
 				userAddress: account,
-				title: `Cancel Auction for ${selectedAuction.nftName}`,
+				title,
+				description,
 				auctionId: selectedAuction.id,
 				gnosisAddress,
 				signatures,
 				state
 			})
+			setSelectedAuction(null)
+			afterSubmit()
 			toastSuccess("Proposal successfully created")
 		} catch (e) {
 			console.error(e)

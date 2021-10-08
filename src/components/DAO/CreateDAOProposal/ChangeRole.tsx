@@ -25,13 +25,22 @@ const ChangeRole: FunctionComponent<{
 	daoAddress?: string
 	isAdmin: boolean
 	gnosisVotingThreshold: number
-}> = ({daoAddress, gnosisAddress, isAdmin, gnosisVotingThreshold}) => {
+	title: string
+	description: string
+	afterSubmit: () => void
+}> = ({
+	daoAddress,
+	gnosisAddress,
+	isAdmin,
+	gnosisVotingThreshold,
+	title,
+	description,
+	afterSubmit
+}) => {
 	const {dao, loading, error} = useDAO(gnosisAddress)
 	const {account} = useContext(AuthContext)
 	const {provider, signer} = useContext(EthersContext)
 	const [processing, setProcessing] = useState(false)
-	const [title, setTitle] = useState("")
-	const [description, setDescription] = useState("")
 	const [address, setAddress] = useState("")
 	const [newRole, setNewRole] = useState<DAOMemberRole | "kick" | "">("")
 	const [newThreshold, setNewThreshold] = useState("")
@@ -159,10 +168,9 @@ const ChangeRole: FunctionComponent<{
 				})
 				toastSuccess("Proposal successfully created")
 			}
-			setTitle("")
-			setDescription("")
 			setAddress("")
 			setNewRole("")
+			afterSubmit()
 		} catch (e) {
 			console.error(e)
 			toastError("Failed to create proposal")
@@ -181,24 +189,6 @@ const ChangeRole: FunctionComponent<{
 
 	return (
 		<>
-			<label htmlFor="change-role-title">Title</label>
-			<Input
-				borders="all"
-				id="change-role-title"
-				onChange={e => {
-					setTitle(e.target.value)
-				}}
-				value={title}
-			/>
-			<label htmlFor="change-role-desc">Description</label>
-			<Input
-				borders="all"
-				id="change-role-desc"
-				onChange={e => {
-					setDescription(e.target.value)
-				}}
-				value={description}
-			/>
 			<div className="create-dao-proposal__row">
 				<div className="create-dao-proposal__col">
 					<label htmlFor="change-role-address">Member&apos;s Address</label>

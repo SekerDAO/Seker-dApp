@@ -29,12 +29,14 @@ const GeneralEVM: FunctionComponent<{
 	gnosisAddress: string
 	isAdmin: boolean
 	gnosisVotingThreshold: number
-}> = ({gnosisAddress, gnosisVotingThreshold, isAdmin}) => {
+	title: string
+	description: string
+	afterSubmit: () => void
+}> = ({gnosisAddress, gnosisVotingThreshold, isAdmin, title, description, afterSubmit}) => {
 	const {account} = useContext(AuthContext)
 	const {signer} = useContext(EthersContext)
 	const [processing, setProcessing] = useState(false)
 
-	const [title, setTitle] = useState("")
 	const [address, setAddress] = useState("")
 	const [addressBad, setAddressBad] = useState(false)
 
@@ -156,6 +158,12 @@ const GeneralEVM: FunctionComponent<{
 					{}
 				)
 			})
+			setAddress("")
+			setAddressBad(false)
+			setAbiString("")
+			setAbiBad(false)
+			setContractMethods([])
+			afterSubmit()
 			toastSuccess("Proposal successfully created!")
 		} catch (e) {
 			console.error(e)
@@ -176,15 +184,6 @@ const GeneralEVM: FunctionComponent<{
 
 	return (
 		<>
-			<label htmlFor="general-evm-title">Proposal Title</label>
-			<Input
-				id="general-evm-title"
-				borders="all"
-				value={title}
-				onChange={e => {
-					setTitle(e.target.value)
-				}}
-			/>
 			<label htmlFor="general-evm-address">Contract Address</label>
 			<Input
 				id="general-evm-address"

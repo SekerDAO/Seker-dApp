@@ -20,7 +20,10 @@ const ApproveAuction: FunctionComponent<{
 	gnosisAddress: string
 	isAdmin: boolean
 	gnosisVotingThreshold: number
-}> = ({gnosisAddress, isAdmin, gnosisVotingThreshold}) => {
+	title: string
+	description: string
+	afterSubmit: () => void
+}> = ({gnosisAddress, isAdmin, gnosisVotingThreshold, title, description, afterSubmit}) => {
 	const {signer} = useContext(EthersContext)
 	const {account} = useContext(AuthContext)
 	const {auctions, loading, error} = useDAOAuctions(gnosisAddress)
@@ -52,13 +55,16 @@ const ApproveAuction: FunctionComponent<{
 				type: "approveAuction",
 				module: "gnosis",
 				userAddress: account.toLowerCase(),
-				title: `Approve Auction for ${selectedAuction.nftName}`,
+				title,
+				description,
 				auctionId: selectedAuction.id,
 				gnosisAddress: gnosisAddress.toLowerCase(),
 				signatures,
 				state
 			})
 			toastSuccess("Proposal successfully created")
+			setSelectedAuction(null)
+			afterSubmit()
 		} catch (e) {
 			console.error(e)
 			toastError("Failed to create proposal")

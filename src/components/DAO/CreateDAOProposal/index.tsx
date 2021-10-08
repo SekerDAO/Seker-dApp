@@ -1,8 +1,6 @@
 import React, {FunctionComponent, useContext, useState} from "react"
 import Select from "../../Controls/Select"
 import "./styles.scss"
-import JoinHouse from "./JoinHouse"
-import RequestFunding from "./RequestFunding"
 import ChangeRole from "./ChangeRole"
 import {AuthContext} from "../../../context/AuthContext"
 import {ProposalsTypeNames, ProposalType} from "../../../types/proposal"
@@ -13,6 +11,7 @@ import useDAOProposals from "../../../customHooks/getters/useDAOProposals"
 import ErrorPlaceholder from "../../ErrorPlaceholder"
 import Loader from "../../Loader"
 import GeneralEVM from "./GeneralEVM"
+import Input from "../../Controls/Input"
 
 const CreateDAOProposal: FunctionComponent<{
 	isMember: boolean
@@ -22,11 +21,14 @@ const CreateDAOProposal: FunctionComponent<{
 	gnosisVotingThreshold: number
 }> = ({isMember, isAdmin, daoAddress, gnosisAddress, gnosisVotingThreshold}) => {
 	const {connected} = useContext(AuthContext)
-	const [type, setType] = useState<ProposalType>(isMember ? "requestFunding" : "joinHouse")
+	const [type, setType] = useState<ProposalType>("changeRole")
+	const [title, setTitle] = useState("")
+	const [description, setDescription] = useState("")
 	const {proposals, loading, error} = useDAOProposals(gnosisAddress)
 
 	if (error) return <ErrorPlaceholder />
 	if (loading) return <Loader />
+
 	if (proposals?.filter(p => p.state === "active").length > 0)
 		return (
 			<div>
@@ -36,6 +38,11 @@ const CreateDAOProposal: FunctionComponent<{
 		)
 	if (!connected) return <div>TODO: Please connect wallet</div>
 	if (!isMember && !daoAddress) return <div>TODO: You cannot create proposals for this DAO</div>
+
+	const afterSubmit = () => {
+		setTitle("")
+		setDescription("")
+	}
 
 	return (
 		<div className="create-dao-proposal">
@@ -47,15 +54,34 @@ const CreateDAOProposal: FunctionComponent<{
 					// {name: ProposalsTypeNames.requestFunding, value: "requestFunding"},
 					{name: ProposalsTypeNames.changeRole, value: "changeRole"},
 					{name: ProposalsTypeNames.createAuction, value: "createAuction"},
-					{name: ProposalsTypeNames.approveAuction, value: "approveAuction"}, // TODO: merge with create
+					{name: ProposalsTypeNames.approveAuction, value: "approveAuction"},
 					{name: ProposalsTypeNames.cancelAuction, value: "cancelAuction"},
 					{name: ProposalsTypeNames.endAuction, value: "endAuction"},
 					{name: ProposalsTypeNames.generalEVM, value: "generalEVM"}
-				].slice(...(isAdmin ? [1] : isMember ? [1, 3] : [0, 1]))}
+				]}
 				onChange={e => {
 					setType(e.target.value as ProposalType)
 				}}
 			/>
+			<label htmlFor="change-role-title">Title</label>
+			<Input
+				borders="all"
+				id="change-role-title"
+				onChange={e => {
+					setTitle(e.target.value)
+				}}
+				value={title}
+			/>
+			<label htmlFor="change-role-desc">Description</label>
+			<Input
+				borders="all"
+				id="change-role-desc"
+				onChange={e => {
+					setDescription(e.target.value)
+				}}
+				value={description}
+			/>
+			<div className="create-dao-proposal__separator" />
 			{/*{type === "joinHouse" && daoAddress && (*/}
 			{/*	<JoinHouse gnosisAddress={gnosisAddress} daoAddress={daoAddress} />*/}
 			{/*)}*/}
@@ -64,6 +90,9 @@ const CreateDAOProposal: FunctionComponent<{
 					gnosisAddress={gnosisAddress}
 					isAdmin={isAdmin}
 					gnosisVotingThreshold={gnosisVotingThreshold}
+					title={title}
+					description={description}
+					afterSubmit={afterSubmit}
 				/>
 			)}
 			{type === "approveAuction" && (
@@ -71,6 +100,9 @@ const CreateDAOProposal: FunctionComponent<{
 					gnosisAddress={gnosisAddress}
 					isAdmin={isAdmin}
 					gnosisVotingThreshold={gnosisVotingThreshold}
+					title={title}
+					description={description}
+					afterSubmit={afterSubmit}
 				/>
 			)}
 			{type === "cancelAuction" && (
@@ -78,6 +110,9 @@ const CreateDAOProposal: FunctionComponent<{
 					gnosisAddress={gnosisAddress}
 					isAdmin={isAdmin}
 					gnosisVotingThreshold={gnosisVotingThreshold}
+					title={title}
+					description={description}
+					afterSubmit={afterSubmit}
 				/>
 			)}
 			{type === "changeRole" && (
@@ -86,6 +121,9 @@ const CreateDAOProposal: FunctionComponent<{
 					gnosisAddress={gnosisAddress}
 					daoAddress={daoAddress}
 					isAdmin={isAdmin}
+					title={title}
+					description={description}
+					afterSubmit={afterSubmit}
 				/>
 			)}
 			{type === "generalEVM" && (
@@ -93,12 +131,14 @@ const CreateDAOProposal: FunctionComponent<{
 					gnosisVotingThreshold={gnosisVotingThreshold}
 					gnosisAddress={gnosisAddress}
 					isAdmin={isAdmin}
+					title={title}
+					description={description}
+					afterSubmit={afterSubmit}
 				/>
 			)}
-			{/* TODO: refactor API for this type of proposal and remove non-null assertions */}
-			{type === "requestFunding" && (
-				<RequestFunding gnosisAddress={gnosisAddress} daoAddress={daoAddress!} />
-			)}
+			{/*{type === "requestFunding" && (*/}
+			{/*	<RequestFunding gnosisAddress={gnosisAddress} daoAddress={daoAddress!} />*/}
+			{/*)}*/}
 		</div>
 	)
 }
