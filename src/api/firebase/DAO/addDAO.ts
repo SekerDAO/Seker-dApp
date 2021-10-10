@@ -1,26 +1,30 @@
-import {DAO} from "../../../types/DAO"
 import firebase from "firebase"
+const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
-const addDAO = async (
-	{
-		gnosisAddress,
-		name,
-		members
-	}: Omit<DAO, "estimated" | "members" | "gnosisVotingThreshold"> & {members: string[]},
-	account: string
-): Promise<void> => {
-	await firebase.firestore().collection("DAOs").doc(gnosisAddress.toLowerCase()).set({
-		name,
-		estimated: new Date().toISOString(),
-		owner: account
+const addDAO = async (gnosisAddress: string): Promise<void> => {
+	const token = await firebase.auth().currentUser?.getIdToken(true)
+	if (!token) {
+		throw new Error("Not authorized in firebase")
+	}
+	const snapshot = await firebase
+		.firestore()
+		.collection("DAOs")
+		.doc(gnosisAddress.toLowerCase())
+		.get()
+	if (snapshot.exists) {
+		throw new Error("DAO already added")
+	}
+
+	const res = await fetch(`${REACT_APP_CLOUD_FUNCTIONS_URL}/addDao`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			authorization: `Bearer ${token}`
+		},
+		body: JSON.stringify({gnosisAddress})
 	})
-	for (const member of members) {
-		await firebase.firestore().collection("daoUsers").add({
-			dao: gnosisAddress.toLowerCase(),
-			address: member.toLowerCase(),
-			memberSince: new Date().toISOString(),
-			role: "admin"
-		})
+	if (res.status !== 200) {
+		throw new Error("Failed to add DAO")
 	}
 }
 

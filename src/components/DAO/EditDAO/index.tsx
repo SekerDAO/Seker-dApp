@@ -1,5 +1,5 @@
 import React, {FunctionComponent, useState} from "react"
-import {DAO} from "../../../types/DAO"
+import {DAOFirebaseData} from "../../../types/DAO"
 import "./styles.scss"
 import Input from "../../Controls/Input"
 import Button from "../../Controls/Button"
@@ -7,7 +7,7 @@ import {toastError, toastSuccess} from "../../Toast"
 import editDAO from "../../../api/firebase/DAO/editDAO"
 
 const EditDAO: FunctionComponent<{
-	dao: DAO
+	dao: DAOFirebaseData
 	afterEdit: () => void
 	onClose: () => void
 }> = ({dao, afterEdit, onClose}) => {

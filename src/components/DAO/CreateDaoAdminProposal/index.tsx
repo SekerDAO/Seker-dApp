@@ -5,7 +5,6 @@ import ChangeRole from "./ChangeRole"
 import {AuthContext} from "../../../context/AuthContext"
 import {ProposalsTypeNames, ProposalType} from "../../../types/proposal"
 import CreateAuction from "./CreateAuction"
-import ApproveAuction from "./ApproveAuction"
 import CancelAuction from "./CancelAuction"
 import useDAOProposals from "../../../customHooks/getters/useDAOProposals"
 import ErrorPlaceholder from "../../ErrorPlaceholder"
@@ -13,13 +12,10 @@ import Loader from "../../Loader"
 import GeneralEVM from "./GeneralEVM"
 import Input from "../../Controls/Input"
 
-const CreateDAOProposal: FunctionComponent<{
-	isMember: boolean
-	isAdmin: boolean
-	daoAddress?: string
+const CreateDaoAdminProposal: FunctionComponent<{
 	gnosisAddress: string
 	gnosisVotingThreshold: number
-}> = ({isMember, isAdmin, daoAddress, gnosisAddress, gnosisVotingThreshold}) => {
+}> = ({gnosisAddress, gnosisVotingThreshold}) => {
 	const {connected} = useContext(AuthContext)
 	const [type, setType] = useState<ProposalType>("changeRole")
 	const [title, setTitle] = useState("")
@@ -37,7 +33,6 @@ const CreateDAOProposal: FunctionComponent<{
 			</div>
 		)
 	if (!connected) return <div>TODO: Please connect wallet</div>
-	if (!isMember && !daoAddress) return <div>TODO: You cannot create proposals for this DAO</div>
 
 	const afterSubmit = () => {
 		setTitle("")
@@ -50,11 +45,8 @@ const CreateDAOProposal: FunctionComponent<{
 			<Select
 				value={type}
 				options={[
-					// {name: ProposalsTypeNames.joinHouse, value: "joinHouse"},
-					// {name: ProposalsTypeNames.requestFunding, value: "requestFunding"},
 					{name: ProposalsTypeNames.changeRole, value: "changeRole"},
 					{name: ProposalsTypeNames.createAuction, value: "createAuction"},
-					{name: ProposalsTypeNames.approveAuction, value: "approveAuction"},
 					{name: ProposalsTypeNames.cancelAuction, value: "cancelAuction"},
 					{name: ProposalsTypeNames.endAuction, value: "endAuction"},
 					{name: ProposalsTypeNames.generalEVM, value: "generalEVM"}
@@ -88,17 +80,6 @@ const CreateDAOProposal: FunctionComponent<{
 			{type === "createAuction" && (
 				<CreateAuction
 					gnosisAddress={gnosisAddress}
-					isAdmin={isAdmin}
-					gnosisVotingThreshold={gnosisVotingThreshold}
-					title={title}
-					description={description}
-					afterSubmit={afterSubmit}
-				/>
-			)}
-			{type === "approveAuction" && (
-				<ApproveAuction
-					gnosisAddress={gnosisAddress}
-					isAdmin={isAdmin}
 					gnosisVotingThreshold={gnosisVotingThreshold}
 					title={title}
 					description={description}
@@ -108,7 +89,6 @@ const CreateDAOProposal: FunctionComponent<{
 			{type === "cancelAuction" && (
 				<CancelAuction
 					gnosisAddress={gnosisAddress}
-					isAdmin={isAdmin}
 					gnosisVotingThreshold={gnosisVotingThreshold}
 					title={title}
 					description={description}
@@ -119,8 +99,6 @@ const CreateDAOProposal: FunctionComponent<{
 				<ChangeRole
 					gnosisVotingThreshold={gnosisVotingThreshold}
 					gnosisAddress={gnosisAddress}
-					daoAddress={daoAddress}
-					isAdmin={isAdmin}
 					title={title}
 					description={description}
 					afterSubmit={afterSubmit}
@@ -130,7 +108,6 @@ const CreateDAOProposal: FunctionComponent<{
 				<GeneralEVM
 					gnosisVotingThreshold={gnosisVotingThreshold}
 					gnosisAddress={gnosisAddress}
-					isAdmin={isAdmin}
 					title={title}
 					description={description}
 					afterSubmit={afterSubmit}
@@ -143,4 +120,4 @@ const CreateDAOProposal: FunctionComponent<{
 	)
 }
 
-export default CreateDAOProposal
+export default CreateDaoAdminProposal

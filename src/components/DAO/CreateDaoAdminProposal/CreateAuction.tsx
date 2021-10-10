@@ -7,30 +7,17 @@ import ErrorPlaceholder from "../../ErrorPlaceholder"
 import Loader from "../../Loader"
 import {NFT} from "../../../types/NFT"
 import {toastError, toastSuccess} from "../../Toast"
-import addProposal from "../../../api/firebase/proposal/addProposal"
 import {AuthContext} from "../../../context/AuthContext"
-import {SafeSignature} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
-import {
-	executeCreateAuction,
-	signCreateAuction
-} from "../../../api/ethers/functions/auction/createAuction"
 import EthersContext from "../../../context/EthersContext"
-import {
-	executeApproveNFTForAuction,
-	signApproveNFTForAuction
-} from "../../../api/ethers/functions/auction/approveNFTForAuction"
 import currencies from "../../../constants/currencies"
-import addAuction from "../../../api/firebase/auction/addAuction"
-import {ProposalState} from "../../../types/proposal"
 
 const CreateAuction: FunctionComponent<{
 	gnosisAddress: string
-	isAdmin: boolean
 	gnosisVotingThreshold: number
 	title: string
 	description: string
 	afterSubmit: () => void
-}> = ({gnosisAddress, isAdmin, gnosisVotingThreshold, title, description, afterSubmit}) => {
+}> = ({gnosisAddress, gnosisVotingThreshold, title, description, afterSubmit}) => {
 	const {account} = useContext(AuthContext)
 	const {signer} = useContext(EthersContext)
 	const {NFTs, loading, error} = useNFTs({
@@ -93,80 +80,26 @@ const CreateAuction: FunctionComponent<{
 		if (!(account && nft && signer && currencySymbol)) return
 		setProcessing(true)
 		try {
-			const approveSignatures: SafeSignature[] = []
-			const createSignatures: SafeSignature[] = []
-			const signingArgs = [
-				gnosisAddress,
-				nft.id,
-				nft.address,
-				Number(duration),
-				Number(reservePrice),
-				curatorAddress,
-				Number(curatorFeePercentage),
-				currencyAddress,
-				signer
-			] as const
-			let state: ProposalState = "active"
-			if (isAdmin) {
-				const approveSignature = await signApproveNFTForAuction(...signingArgs)
-				const createSignature = await signCreateAuction(...signingArgs)
-				approveSignatures.push(approveSignature)
-				createSignatures.push(createSignature)
-				if (gnosisVotingThreshold === 1) {
-					await executeApproveNFTForAuction(
-						gnosisAddress,
-						nft.id,
-						nft.address,
-						approveSignatures,
-						signer
-					)
-					const id = await executeCreateAuction(
-						gnosisAddress,
-						nft.id,
-						nft.address,
-						Number(duration),
-						Number(reservePrice),
-						curatorAddress,
-						Number(curatorFeePercentage),
-						currencyAddress,
-						createSignatures,
-						signer
-					)
-					await addAuction({
-						id,
-						gnosisAddress,
-						nftId: nft.id,
-						nftAddress: nft.address,
-						nftName: nft.name,
-						duration: Number(duration),
-						reservePrice: Number(reservePrice),
-						curatorAddress,
-						curatorFeePercentage: Number(curatorFeePercentage),
-						tokenSymbol: currencySymbol,
-						tokenAddress: currencyAddress
-					})
-					state = "executed"
-				}
-			}
-			await addProposal({
-				type: "createAuction",
-				module: "gnosis",
-				userAddress: account,
-				gnosisAddress,
-				state,
-				title,
-				...(description ? {description} : {}),
-				nftId: nft.id,
-				nftAddress: nft.address,
-				duration: Number(duration),
-				reservePrice: Number(reservePrice),
-				curatorAddress,
-				curatorFeePercentage: Number(curatorFeePercentage),
-				auctionCurrencySymbol: currencySymbol,
-				auctionCurrencyAddress: currencyAddress,
-				signatures: approveSignatures,
-				signaturesStep2: createSignatures
-			})
+			console.log("TODO")
+			// await addProposal({
+			// 	type: "createAuction",
+			// 	module: "gnosis",
+			// 	userAddress: account,
+			// 	gnosisAddress,
+			// 	state,
+			// 	title,
+			// 	...(description ? {description} : {}),
+			// 	nftId: nft.id,
+			// 	nftAddress: nft.address,
+			// 	duration: Number(duration),
+			// 	reservePrice: Number(reservePrice),
+			// 	curatorAddress,
+			// 	curatorFeePercentage: Number(curatorFeePercentage),
+			// 	auctionCurrencySymbol: currencySymbol,
+			// 	auctionCurrencyAddress: currencyAddress,
+			// 	signatures: approveSignatures,
+			// 	signaturesStep2: createSignatures
+			// })
 			setReservePrice("")
 			setCurrencySymbol("")
 			setCurrencyAddress("")

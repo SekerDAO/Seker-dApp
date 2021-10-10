@@ -7,7 +7,7 @@ const DAOListItem: FunctionComponent<DAOListItemProps> = ({
 	gnosisAddress,
 	name,
 	description,
-	membersCount,
+	owners,
 	profileImage
 }) => (
 	<Link to={`/dao/${gnosisAddress}`}>
@@ -21,7 +21,7 @@ const DAOListItem: FunctionComponent<DAOListItemProps> = ({
 				<b>Size:</b>
 			</p>
 			<p>
-				{membersCount} member{membersCount > 1 ? "s" : ""}
+				{owners.length} owner{owners.length > 1 ? "s" : ""}
 			</p>
 			{description && (
 				<>
@@ -48,7 +48,7 @@ const DAOList: FunctionComponent<{
 				gnosisAddress={dao.gnosisAddress}
 				name={dao.name}
 				description={dao.description}
-				membersCount={dao.membersCount}
+				owners={dao.owners}
 				profileImage={dao.profileImage}
 			/>
 		))}

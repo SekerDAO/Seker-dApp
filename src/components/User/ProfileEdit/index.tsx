@@ -10,7 +10,7 @@ import useValidation from "../../../customHooks/useValidation"
 import checkUserUrl from "../../../api/firebase/user/checkUserUrl"
 
 const ProfileEdit: FunctionComponent<{
-	user: User
+	user: Omit<User, "myDaos" | "myDomains">
 	afterSubmit: () => void
 	onCancel: () => void
 }> = ({user, afterSubmit, onCancel}) => {

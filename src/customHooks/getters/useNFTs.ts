@@ -1,10 +1,10 @@
 import {useContext, useEffect, useState} from "react"
 import {NFTQueryParams, NFTSnapshot, NftSort} from "../../types/NFT"
 import getNFTs from "../../api/firebase/NFT/getNFTs"
-import getNFTAuctions from "../../api/firebase/auction/getNFTAuctions"
 import getAuctionDetails from "../../api/ethers/functions/auction/getAuctionDetails"
 import {JsonRpcProvider} from "@ethersproject/providers"
 import EthersContext from "../../context/EthersContext"
+import {Auction} from "../../types/auction"
 
 const useNFTs = ({
 	user,
@@ -53,7 +53,7 @@ const useNFTs = ({
 			const nftsAreOnAuctions: boolean[] = []
 			for (let i = 0; i < nftsSnapshot.data.length; i++) {
 				const {id, address} = nftsSnapshot.data[i].data()
-				const nftAuctions = await getNFTAuctions(id, address)
+				const nftAuctions: Auction[] = [] // TODO
 				const details = await Promise.all(nftAuctions.map(a => getAuctionDetails(a.id, _provider)))
 				nftsAreOnAuctions.push(
 					details.reduce(

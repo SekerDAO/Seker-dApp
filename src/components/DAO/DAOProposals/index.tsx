@@ -22,10 +22,6 @@ import {
 	signCreateAuction
 } from "../../../api/ethers/functions/auction/createAuction"
 import {
-	executeApproveAuction,
-	signApproveAuction
-} from "../../../api/ethers/functions/auction/approveAuction"
-import {
 	executeCancelAuction,
 	signCancelAuction
 } from "../../../api/ethers/functions/auction/cancelAuction"
@@ -36,37 +32,19 @@ import {
 	signRemoveOwner
 } from "../../../api/ethers/functions/gnosisSafe/addRemoveOwner"
 import {AuthContext} from "../../../context/AuthContext"
-import updateDAOUser from "../../../api/firebase/DAO/updateDaoUser"
 
 const DAOProposalCard: FunctionComponent<{
 	refetch: () => void
 	gnosisVotingThreshold: number
 	proposal: Proposal & {proposalId: string}
-	isMember: boolean
 	isAdmin: boolean
-	daoAddress?: string
-}> = ({gnosisVotingThreshold, proposal, isMember, daoAddress, isAdmin, refetch}) => {
+}> = ({gnosisVotingThreshold, proposal, isAdmin, refetch}) => {
 	const [processing, setProcessing] = useState(false)
 	const {provider, signer} = useContext(EthersContext)
 	const {account} = useContext(AuthContext)
 
-	const handleVote = async (yes: boolean) => {
-		if (!(provider && signer && daoAddress)) return
-		setProcessing(true)
-		try {
-			console.log("TODO")
-			// await voteForERC20DAOProposal(daoAddress, proposal.id!, yes, provider, signer)
-			refetch()
-			toastSuccess("Vote successful!")
-		} catch (e) {
-			console.error(e)
-			toastError("Failed to vote")
-		}
-		setProcessing(false)
-	}
-
 	const startGracePeriod = async () => {
-		if (!(provider && signer && daoAddress)) return
+		if (!(provider && signer)) return
 		setProcessing(true)
 		try {
 			console.log("TODO")
@@ -85,7 +63,7 @@ const DAOProposalCard: FunctionComponent<{
 	}
 
 	const execute = async () => {
-		if (!(provider && signer && daoAddress)) return
+		if (!(provider && signer)) return
 		setProcessing(true)
 		try {
 			console.log("TODO")
@@ -157,19 +135,6 @@ const DAOProposalCard: FunctionComponent<{
 						executed = true
 					}
 					break
-				case "approveAuction":
-					if (!isGnosisProposal(proposal)) break
-					signature = await signApproveAuction(proposal.gnosisAddress, proposal.auctionId!, signer)
-					if (proposal.signatures?.length === gnosisVotingThreshold - 1) {
-						await executeApproveAuction(
-							proposal.gnosisAddress,
-							proposal.auctionId!,
-							[...proposal.signatures, signature],
-							signer
-						)
-						executed = true
-					}
-					break
 				case "cancelAuction":
 					if (!isGnosisProposal(proposal)) break
 					signature = await signCancelAuction(proposal.gnosisAddress, proposal.auctionId!, signer)
@@ -201,7 +166,6 @@ const DAOProposalCard: FunctionComponent<{
 								signer
 							)
 							executed = true
-							await updateDAOUser(proposal.gnosisAddress, proposal.recipientAddress!)
 						}
 					} else {
 						signature = await signRemoveOwner(
@@ -226,7 +190,6 @@ const DAOProposalCard: FunctionComponent<{
 								...(executed ? {newState: "executed"} : {})
 							})
 							signatureAdded = true
-							await updateDAOUser(proposal.gnosisAddress, proposal.recipientAddress!)
 						}
 					}
 					break
@@ -311,33 +274,6 @@ const DAOProposalCard: FunctionComponent<{
 				{/*	</div>*/}
 				{/*)}*/}
 				<div className="dao-proposals__voting-buttons">
-					{isMember &&
-						proposal.state === "active" &&
-						proposal.module === "DAO" &&
-						(processing ? (
-							"Voting..."
-						) : (
-							<>
-								<Button
-									disabled={processing}
-									buttonType="primary"
-									onClick={() => {
-										handleVote(true)
-									}}
-								>
-									Yes
-								</Button>
-								<Button
-									disabled={processing}
-									buttonType="secondary"
-									onClick={() => {
-										handleVote(false)
-									}}
-								>
-									No
-								</Button>
-							</>
-						))}
 					{isGnosisProposal(proposal) &&
 						isAdmin &&
 						proposal.state === "active" &&
@@ -365,10 +301,8 @@ const DAOProposalCard: FunctionComponent<{
 const DAOProposals: FunctionComponent<{
 	gnosisAddress: string
 	gnosisVotingThreshold: number
-	daoAddress?: string
-	isMember: boolean
 	isAdmin: boolean
-}> = ({gnosisVotingThreshold, gnosisAddress, daoAddress, isMember, isAdmin}) => {
+}> = ({gnosisVotingThreshold, gnosisAddress, isAdmin}) => {
 	const {proposals, loading, error, refetch} = useDAOProposals(gnosisAddress)
 
 	if (error) return <ErrorPlaceholder />
@@ -389,10 +323,8 @@ const DAOProposals: FunctionComponent<{
 				<DAOProposalCard
 					refetch={refetch}
 					gnosisVotingThreshold={gnosisVotingThreshold}
-					daoAddress={daoAddress}
 					proposal={proposal}
 					key={index}
-					isMember={isMember}
 					isAdmin={isAdmin}
 				/>
 			))}

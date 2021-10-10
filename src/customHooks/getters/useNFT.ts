@@ -2,8 +2,6 @@ import {useContext, useEffect, useState} from "react"
 import {NFT} from "../../types/NFT"
 import getNFT from "../../api/firebase/NFT/getNFT"
 import {Auction} from "../../types/auction"
-import getNFTAuctions from "../../api/firebase/auction/getNFTAuctions"
-import getAuctionDetails from "../../api/ethers/functions/auction/getAuctionDetails"
 import EthersContext from "../../context/EthersContext"
 import {JsonRpcProvider} from "@ethersproject/providers"
 
@@ -26,13 +24,10 @@ const useNFT = (
 		if (!_provider) {
 			return {nft: _nft}
 		}
-		const _auctions = await getNFTAuctions(_nft.id, _nft.address)
 
 		return {
 			nft: _nft,
-			auctions: await Promise.all(
-				_auctions.map(async a => ({...a, ...(await getAuctionDetails(a.id, _provider))}))
-			)
+			auctions: [] // TODO
 		}
 	}
 

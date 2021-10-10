@@ -9,6 +9,8 @@ export type User = {
 	instagram?: string
 	profileImage?: string
 	headerImage?: string
+	myDaos: string[]
+	myDomains: string[]
 }
 
 export type UserWithAccount = User & {account: string}

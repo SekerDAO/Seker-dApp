@@ -1,6 +1,7 @@
-import {useEffect, useState} from "react"
+import {useContext, useEffect, useState} from "react"
 import {DAOQueryParams, DAOSnapshot} from "../../types/DAO"
 import getDAOs from "../../api/firebase/DAO/getDAOs"
+import EthersContext from "../../context/EthersContext"
 
 const useDAOs = ({
 	limit,
@@ -10,17 +11,18 @@ const useDAOs = ({
 		totalCount: number
 		data: {
 			snapshot: DAOSnapshot
-			membersCount: number
+			owners: string[]
 		}[]
 	}
 	loading: boolean
 	error: boolean
 } => {
+	const {provider} = useContext(EthersContext)
 	const [DAOs, setDAOs] = useState<{
 		totalCount: number
 		data: {
 			snapshot: DAOSnapshot
-			membersCount: number
+			owners: string[]
 		}[]
 	}>({totalCount: 0, data: []})
 	const [loading, setLoading] = useState(false)
@@ -29,7 +31,7 @@ const useDAOs = ({
 	useEffect(() => {
 		setLoading(true)
 		setError(false)
-		getDAOs({limit, after})
+		getDAOs({limit, after}, provider)
 			.then(res => {
 				setDAOs(prevState => ({
 					totalCount: res.totalCount,
@@ -46,7 +48,7 @@ const useDAOs = ({
 	useEffect(() => {
 		setLoading(true)
 		setError(false)
-		getDAOs({limit, after})
+		getDAOs({limit, after}, provider)
 			.then(res => {
 				setDAOs({
 					totalCount: res.totalCount,

@@ -21,18 +21,8 @@ const columns = [
 		)
 	},
 	{
-		id: "memberSince",
-		name: "Member Since"
-	},
-	{
-		id: "role",
+		id: "isAdmin",
 		name: "DAO Role"
-	},
-	{
-		id: "edit",
-		name: "",
-		// eslint-disable-next-line react/display-name
-		render: () => <div className="profile-daos__edit" /> // TODO: icon
 	}
 ] as const
 
@@ -57,13 +47,11 @@ const ProfileDAOs: FunctionComponent = () => {
 			<div className="profile-daos__table">
 				<Table
 					data={DAOs.map(dao => {
-						const {name, members} = dao
-						const member = members.find(m => m.address === account)
+						const {name, owners} = dao
+						const isAdmin = account && owners.indexOf(account) !== -1 ? "Admin" : ""
 						return {
 							name,
-							memberSince: member?.memberSince?.split("T")[0] ?? "",
-							role: member?.role ?? "",
-							edit: "",
+							isAdmin,
 							gnosisAddress: dao.gnosisAddress
 						}
 					})}

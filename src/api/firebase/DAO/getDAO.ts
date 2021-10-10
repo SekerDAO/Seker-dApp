@@ -1,7 +1,7 @@
 import firebase from "firebase"
-import {DAO, Member} from "../../../types/DAO"
+import {DAOFirebaseData} from "../../../types/DAO"
 
-const getDAO = async (gnosisAddress: string): Promise<DAO> => {
+const getDAO = async (gnosisAddress: string): Promise<DAOFirebaseData> => {
 	const snapshot = await firebase
 		.firestore()
 		.collection("DAOs")
@@ -10,16 +10,10 @@ const getDAO = async (gnosisAddress: string): Promise<DAO> => {
 	if (!snapshot.exists) {
 		throw new Error("DAO not found")
 	}
-	const daoMembers = await firebase
-		.firestore()
-		.collection("daoUsers")
-		.where("dao", "==", gnosisAddress.toLowerCase())
-		.get()
 	return {
 		...snapshot.data(),
-		gnosisAddress: gnosisAddress.toLowerCase(),
-		members: daoMembers.docs.map(m => m.data() as Member)
-	} as DAO
+		gnosisAddress: gnosisAddress.toLowerCase()
+	} as DAOFirebaseData
 }
 
 export default getDAO

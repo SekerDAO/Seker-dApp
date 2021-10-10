@@ -8,7 +8,7 @@ import Loader from "../../components/Loader"
 import {AuthContext} from "../../context/AuthContext"
 import Button from "../../components/Controls/Button"
 import AboutDAO from "../../components/DAO/AboutDAO"
-import CreateDAOProposal from "../../components/DAO/CreateDAOProposal"
+import CreateDaoAdminProposal from "../../components/DAO/CreateDaoAdminProposal"
 import DAOProposals from "../../components/DAO/DAOProposals"
 import EditDAO from "../../components/DAO/EditDAO"
 import DAOCollection from "../../components/DAO/DAOCollection"
@@ -33,8 +33,7 @@ const DAOPage: FunctionComponent = () => {
 	if (error) return <ErrorPlaceholder />
 	if (!dao || loading) return <Loader />
 
-	const isMember = connected && !!dao.members.find(m => m.address === account)
-	const isAdmin = connected && !!dao.members.find(m => m.address === account && m.role === "admin")
+	const isAdmin = connected && !!dao.owners.find(addr => addr === account)
 
 	return (
 		<>
@@ -130,7 +129,7 @@ const DAOPage: FunctionComponent = () => {
 								</Button>
 							)}
 							{/* TODO: link */}
-							{!isMember && <Button>Purchase tokens</Button>}
+							<Button>Purchase tokens</Button>
 							{/* TODO: decentralize DAO modal */}
 							{/*{dao.daoAddress ? (*/}
 							{/*	<p>TODO: Decentralized DAO</p>*/}
@@ -155,7 +154,7 @@ const DAOPage: FunctionComponent = () => {
 						) : (
 							<>
 								<HorizontalMenu
-									entries={menuEntries}
+									entries={isAdmin ? menuEntries : menuEntries.slice(0, -1)}
 									activeIndex={activeMenuIndex}
 									onChange={index => {
 										setActiveMenuIndex(index)
@@ -169,16 +168,11 @@ const DAOPage: FunctionComponent = () => {
 									<DAOProposals
 										gnosisVotingThreshold={dao.gnosisVotingThreshold}
 										gnosisAddress={dao.gnosisAddress}
-										daoAddress={dao.daoAddress}
-										isMember={isMember}
 										isAdmin={isAdmin}
 									/>
 								)}
-								{activeMenuIndex === 4 && (
-									<CreateDAOProposal
-										isMember={isMember}
-										isAdmin={isAdmin}
-										daoAddress={dao.daoAddress}
+								{activeMenuIndex === 4 && isAdmin && (
+									<CreateDaoAdminProposal
 										gnosisAddress={dao.gnosisAddress}
 										gnosisVotingThreshold={dao.gnosisVotingThreshold}
 									/>

@@ -1,9 +1,9 @@
-import {DAO} from "../../../types/DAO"
+import {DAOFirebaseData} from "../../../types/DAO"
 import firebase from "firebase"
 const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
 const editDAO = async (
-	dao: Omit<DAO, "type" | "estimated" | "members" | "gnosisVotingThreshold" | "name"> & {
+	dao: Omit<DAOFirebaseData, "estimated" | "name"> & {
 		name?: string
 	}
 ): Promise<void> => {

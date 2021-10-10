@@ -1,14 +1,17 @@
 import {DAOQueryParams, DAOSnapshot} from "../../../types/DAO"
 import firebase from "firebase"
+import getOwners from "../../ethers/functions/gnosisSafe/getOwners"
+import {JsonRpcProvider} from "@ethersproject/providers"
 
 const defaultLimit = 6
 
 const getDAOs = async (
-	params: DAOQueryParams
+	params: DAOQueryParams,
+	provider: JsonRpcProvider
 ): Promise<{
 	data: {
 		snapshot: DAOSnapshot
-		membersCount: number
+		owners: string[]
 	}[]
 	totalCount: number
 }> => {
@@ -23,14 +26,10 @@ const getDAOs = async (
 	const snapshot = await ref.get()
 	const data = await Promise.all(
 		snapshot.docs.map(async s => {
-			const usersSnapshot = await firebase
-				.firestore()
-				.collection("daoUsers")
-				.where("dao", "==", s.id)
-				.get()
+			const owners = await getOwners(s.id, provider)
 			return {
 				snapshot: s as DAOSnapshot,
-				membersCount: usersSnapshot.size
+				owners
 			}
 		})
 	)

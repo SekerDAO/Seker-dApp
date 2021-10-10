@@ -33,13 +33,13 @@ const DAOsPage: FunctionComponent = () => {
 					</div>
 				</div>
 				<DAOList
-					DAOs={DAOs.data.map(({snapshot, membersCount}) => {
+					DAOs={DAOs.data.map(({snapshot, owners}) => {
 						const {name, description, profileImage} = snapshot.data()
 						return {
 							gnosisAddress: snapshot.id,
 							name,
 							description,
-							membersCount,
+							owners,
 							profileImage
 						}
 					})}

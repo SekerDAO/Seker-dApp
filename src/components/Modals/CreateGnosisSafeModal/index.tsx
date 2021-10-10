@@ -9,6 +9,7 @@ import EthersContext from "../../../context/EthersContext"
 import {toastError, toastSuccess} from "../../Toast"
 import addDAO from "../../../api/firebase/DAO/addDAO"
 import "./styles.scss"
+import editDAO from "../../../api/firebase/DAO/editDAO"
 
 type CreateGnosisSafeStage = "chooseOption" | "create" | "import" | "success"
 
@@ -64,14 +65,8 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 			setProcessing(true)
 			try {
 				const gnosisAddress = await createGnosisSafe(members, Number(votingThreshold), signer)
-				await addDAO(
-					{
-						gnosisAddress,
-						name: daoName,
-						members
-					},
-					account
-				)
+				await addDAO(gnosisAddress)
+				await editDAO({gnosisAddress, name: daoName})
 				toastSuccess("DAO successfully created!")
 				afterCreate()
 			} catch (e) {

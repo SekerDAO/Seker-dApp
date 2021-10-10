@@ -1,24 +1,17 @@
-import {DAOMemberRole} from "./DAO"
 import {SafeSignature} from "../api/ethers/functions/gnosisSafe/safeUtils"
 import {Abi} from "./abi"
 
 // TODO: split this into DAO and Gnosis modules
 export type ProposalType =
-	// | "joinHouse"
-	// | "requestFunding"
 	| "changeRole"
 	| "createAuction"
-	| "approveAuction"
 	| "cancelAuction"
 	| "generalEVM"
 	| "decentralizeDAO"
 
 export const ProposalsTypeNames = {
-	// joinHouse: "Join House",
-	// requestFunding: "Request Funding",
 	changeRole: "Admin Membership",
 	createAuction: "Create Auction",
-	approveAuction: "Approve Auction",
 	endAuction: "End Auction",
 	cancelAuction: "Cancel Auction",
 	generalEVM: "General EVM",
@@ -57,7 +50,7 @@ export type GnosisProposal = ProposalBase & {
 	userAddress: string
 	amount?: number
 	recipientAddress?: string // for change role
-	newRole?: DAOMemberRole | "kick"
+	newRole?: "admin" | "kick"
 	balance?: number
 	// for changeRole for gnosis safe module
 	newThreshold?: number

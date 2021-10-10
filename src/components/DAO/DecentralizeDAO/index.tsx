@@ -9,7 +9,6 @@ import {
 	executeHookupProposalModule,
 	signHookupProposalModule
 } from "../../../api/ethers/functions/gnosisSafe/hookupProposalModule"
-import editDAO from "../../../api/firebase/DAO/editDAO"
 import addProposal from "../../../api/firebase/proposal/addProposal"
 import createLinearVoting from "../../../api/ethers/functions/gnosisSafe/createLinearVoting"
 import {
@@ -81,14 +80,15 @@ const DecentralizeDAO: FunctionComponent<{
 						[votingHookupSignature],
 						signer
 					)
-					await editDAO({
-						gnosisAddress,
-						daoAddress,
-						tokenAddress,
-						totalSupply,
-						votingAddress: votingModule,
-						daoVotingThreshold: Number(votingThreshold)
-					})
+					console.log("TODO: add new function for decentralize DAO")
+					// await editDAO({
+					// 	gnosisAddress,
+					// 	daoAddress,
+					// 	tokenAddress,
+					// 	totalSupply,
+					// 	votingAddress: votingModule,
+					// 	daoVotingThreshold: Number(votingThreshold)
+					// })
 				}
 				await addProposal({
 					type: "decentralizeDAO",

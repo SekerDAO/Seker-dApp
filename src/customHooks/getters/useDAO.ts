@@ -1,18 +1,19 @@
 import {useContext, useEffect, useState} from "react"
-import {DAOEnhanced} from "../../types/DAO"
+import {DAO} from "../../types/DAO"
 import getDAO from "../../api/firebase/DAO/getDAO"
 import EthersContext from "../../context/EthersContext"
 import getVotingThreshold from "../../api/ethers/functions/gnosisSafe/getVotingThreshold"
+import getOwners from "../../api/ethers/functions/gnosisSafe/getOwners"
 
 const useDAO = (
 	gnosisAddress: string
 ): {
-	dao: DAOEnhanced | null
+	dao: DAO | null
 	loading: boolean
 	error: boolean
 	refetch: () => Promise<void>
 } => {
-	const [dao, setDao] = useState<DAOEnhanced | null>(null)
+	const [dao, setDao] = useState<DAO | null>(null)
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
 	const {provider} = useContext(EthersContext)
@@ -23,6 +24,7 @@ const useDAO = (
 		try {
 			const _dao = await getDAO(gnosisAddress)
 			const gnosisVotingThreshold = await getVotingThreshold(gnosisAddress, provider)
+			const owners = await getOwners(gnosisAddress, provider)
 			const tokenSymbol = ""
 			const balance = 0
 			const fundedProjects = 0
@@ -39,7 +41,8 @@ const useDAO = (
 				tokenSymbol,
 				balance,
 				fundedProjects,
-				gnosisVotingThreshold
+				gnosisVotingThreshold,
+				owners
 			})
 		} catch (e) {
 			console.error(e)

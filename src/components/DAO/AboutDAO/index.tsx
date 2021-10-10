@@ -2,17 +2,17 @@ import React, {FunctionComponent} from "react"
 import MembersIcon from "../../../icons/MembersIcon"
 import HouseIcon from "../../../icons/HouseIcon"
 import ShieldIcon from "../../../icons/ShieldIcon"
-import {DAOEnhanced} from "../../../types/DAO"
+import {DAO} from "../../../types/DAO"
 
 const AboutDAO: FunctionComponent<{
-	dao: DAOEnhanced
+	dao: DAO
 }> = ({dao}) => (
 	<>
 		<div className="dao__summary">
 			<div className="dao__summary-item">
 				<p>Active Members</p>
 				<MembersIcon />
-				<h2>{dao.members.length}</h2>
+				<h2>{dao.owners.length}</h2>
 			</div>
 			<div className="dao__summary-item">
 				<p>DAO Bank</p>

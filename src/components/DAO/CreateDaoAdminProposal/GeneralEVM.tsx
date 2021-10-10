@@ -17,22 +17,19 @@ import {prepareArguments, validateArgument} from "../../../utlls"
 import Button from "../../Controls/Button"
 import {
 	createSafeSignature,
-	executeSafeTx,
-	SafeSignature
+	executeSafeTx
 } from "../../../api/ethers/functions/gnosisSafe/safeUtils"
-import {ProposalState} from "../../../types/proposal"
 import EthersContext from "../../../context/EthersContext"
 import addProposal from "../../../api/firebase/proposal/addProposal"
 import {AuthContext} from "../../../context/AuthContext"
 
 const GeneralEVM: FunctionComponent<{
 	gnosisAddress: string
-	isAdmin: boolean
 	gnosisVotingThreshold: number
 	title: string
 	description: string
 	afterSubmit: () => void
-}> = ({gnosisAddress, gnosisVotingThreshold, isAdmin, title, description, afterSubmit}) => {
+}> = ({gnosisAddress, gnosisVotingThreshold, title, description, afterSubmit}) => {
 	const {account} = useContext(AuthContext)
 	const {signer} = useContext(EthersContext)
 	const [processing, setProcessing] = useState(false)
@@ -108,10 +105,19 @@ const GeneralEVM: FunctionComponent<{
 		if (!(selectedMethodIndex != null && signer && account)) return
 		setProcessing(true)
 		try {
-			const signatures: SafeSignature[] = []
-			let state: ProposalState = "active"
-			if (isAdmin) {
-				const signature = await createSafeSignature(
+			const signature = await createSafeSignature(
+				gnosisAddress,
+				address,
+				contractMethods,
+				contractMethods[selectedMethodIndex].name,
+				prepareArguments(
+					args,
+					contractMethods[selectedMethodIndex].inputs.map(i => i.type)
+				),
+				signer
+			)
+			if (gnosisVotingThreshold === 1) {
+				await executeSafeTx(
 					gnosisAddress,
 					address,
 					contractMethods,
@@ -120,33 +126,19 @@ const GeneralEVM: FunctionComponent<{
 						args,
 						contractMethods[selectedMethodIndex].inputs.map(i => i.type)
 					),
-					signer
+					signer,
+					[signature]
 				)
-				signatures.push(signature)
-				if (gnosisVotingThreshold === 1) {
-					await executeSafeTx(
-						gnosisAddress,
-						address,
-						contractMethods,
-						contractMethods[selectedMethodIndex].name,
-						prepareArguments(
-							args,
-							contractMethods[selectedMethodIndex].inputs.map(i => i.type)
-						),
-						signer,
-						signatures
-					)
-					state = "executed"
-				}
 			}
 			await addProposal({
 				type: "generalEVM",
 				module: "gnosis",
 				userAddress: account,
 				title,
+				description,
 				gnosisAddress,
-				signatures,
-				state,
+				signatures: [signature],
+				state: gnosisVotingThreshold === 1 ? "executed" : "active",
 				contractAddress: address,
 				contractAbi: contractMethods,
 				contractMethod: contractMethods[selectedMethodIndex].name,

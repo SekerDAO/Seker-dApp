@@ -1,31 +1,10 @@
 import firebase from "firebase"
 
-export type DAOMemberRole = "member" | "admin"
-
-export type Member = {
-	address: string
-	role: DAOMemberRole
-	memberSince?: string
-}
-
-export type FirebaseDAOUser = Member & {
-	id: string
-	dao: string
-}
-
-export type DAO = {
+export type DAOFirebaseData = {
 	// Main properties, required at the moment of gnosis-safe deployment
 	gnosisAddress: string
 	name: string
 	estimated: string
-	members: Member[]
-	gnosisVotingThreshold: number
-	// Properties set at the moment of DAO contract deployment
-	daoAddress?: string
-	daoVotingThreshold?: number
-	votingAddress?: string
-	tokenAddress?: string
-	totalSupply?: number
 	// Optional properties, only present in Firebase
 	description?: string
 	website?: string
@@ -36,14 +15,18 @@ export type DAO = {
 	headerImage?: string
 }
 
-export type DAOEnhanced = DAO & {
+type DAOEthersData = {
+	gnosisVotingThreshold: number
 	tokenSymbol: string
 	balance: number
 	fundedProjects: number
+	owners: string[]
 }
 
+export type DAO = DAOFirebaseData & DAOEthersData
+
 export type DAOSnapshot = firebase.firestore.QueryDocumentSnapshot<
-	Omit<DAO, "members"> & {membersCount: number}
+	Omit<DAOFirebaseData, "gnosisAddress">
 >
 
 export type DAOQueryParams = {
@@ -53,7 +36,5 @@ export type DAOQueryParams = {
 
 export type DAOListItemProps = Pick<
 	DAO,
-	"gnosisAddress" | "name" | "description" | "profileImage"
-> & {
-	membersCount: number
-}
+	"gnosisAddress" | "name" | "description" | "profileImage" | "owners"
+>
