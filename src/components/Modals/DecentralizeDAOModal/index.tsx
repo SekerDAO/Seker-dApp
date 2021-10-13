@@ -1,15 +1,15 @@
-import React, {ChangeEvent, FunctionComponent, useState} from "react"
+import React, {FunctionComponent, useState} from "react"
 import Button from "../../Controls/Button"
 import Modal from "../Modal"
 import RadioButton from "../../Controls/RadioButton"
-import Select from "../../Controls/Select"
 import CreateERC20Token from "../../DAO/CreateERC20Token"
 import DecentralizeDAO from "../../DAO/DecentralizeDAO"
-import useMyERC20Tokens from "../../../customHooks/getters/useMyERC20Tokens"
 import useDAO from "../../../customHooks/getters/useDAO"
 import Loader from "../../Loader"
 import ErrorPlaceholder from "../../ErrorPlaceholder"
 import "./styles.scss"
+import {ERC20Token} from "../../../types/ERC20Token"
+import Input from "../../Controls/Input"
 
 type DecentralizeDAOStage = "chooseToken" | "createToken" | "enterInfo" | "success"
 
@@ -22,19 +22,7 @@ const DecentralizeDAOModalContent: FunctionComponent<{
 	const [tokenSource, setTokenSource] = useState<"new" | "existing" | "import">("existing")
 	const [token, setToken] = useState("")
 	const [totalSupply, setTotalSupply] = useState("")
-	const {tokens, loading: tokensLoading, error: tokensError} = useMyERC20Tokens()
-	const {dao, loading: daoLoading, error: daoError} = useDAO(gnosisAddress)
-
-	const handleTokenChange = (e: ChangeEvent<HTMLSelectElement>) => {
-		const tkn = tokens.find(tok => tok.address === e.target.value)
-		if (!tkn) {
-			setToken("")
-			setTotalSupply("")
-			return
-		}
-		setToken(tkn.address)
-		setTotalSupply(String(tkn.totalSupply))
-	}
+	const {dao, loading, error} = useDAO(gnosisAddress)
 
 	const handleSubmit = () => {
 		if (stage === "chooseToken") {
@@ -49,19 +37,14 @@ const DecentralizeDAOModalContent: FunctionComponent<{
 		}
 	}
 
-	const handleERC20Create = (
-		newName: string,
-		symbol: string,
-		address: string,
-		newTotalSupply: number
-	) => {
-		setToken(address)
-		setTotalSupply(String(newTotalSupply))
+	const handleERC20Create = (_token: ERC20Token) => {
+		setToken(_token.address)
+		setTotalSupply(String(_token.totalSupply))
 		setStage("enterInfo")
 	}
 
-	if (!dao || daoLoading) return <Loader />
-	if (daoError || tokensError) return <ErrorPlaceholder />
+	if (!dao || loading) return <Loader />
+	if (error) return <ErrorPlaceholder />
 
 	const submitButtonDisabled = tokenSource === "existing" && !token
 
@@ -80,15 +63,12 @@ const DecentralizeDAOModalContent: FunctionComponent<{
 								setTokenSource("existing")
 							}}
 						/>
-						<Select
-							options={[
-								{
-									name: "Select Token",
-									value: ""
-								}
-							].concat(tokens.map(tkn => ({name: tkn.name, value: tkn.address})))}
-							disabled={tokenSource !== "existing" || tokensLoading || tokensError}
-							onChange={handleTokenChange}
+						<Input
+							borders="all"
+							onChange={e => {
+								setToken(e.target.value)
+							}}
+							value={token}
 						/>
 					</div>
 					<div className="decentralize-dao__row">

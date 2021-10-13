@@ -370,9 +370,9 @@ const CreateNFTModal: FunctionComponent<{
 					setIsOpened(false)
 				}}
 			>
-				{loading ? (
+				{!user || loading ? (
 					<Loader />
-				) : !user || error ? (
+				) : error ? (
 					<ErrorPlaceholder />
 				) : (
 					<CreateNFTModalContent

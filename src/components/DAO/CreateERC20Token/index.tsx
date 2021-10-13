@@ -4,12 +4,12 @@ import Button from "../../Controls/Button"
 import "./styles.scss"
 import deployERC20Token from "../../../api/ethers/functions/ERC20Token/deployERC20Token"
 import EthersContext from "../../../context/EthersContext"
-import addERC20Token from "../../../api/firebase/ERC20Token/addERC20Token"
 import {AuthContext} from "../../../context/AuthContext"
 import {toastError} from "../../Toast"
+import {ERC20Token} from "../../../types/ERC20Token"
 
 const CreateERC20Token: FunctionComponent<{
-	afterCreate?: (name: string, symbol: string, address: string, totalSupply: number) => void
+	afterCreate: (token: ERC20Token) => void
 }> = ({afterCreate}) => {
 	const [name, setName] = useState("")
 	const [symbol, setSymbol] = useState("")
@@ -31,10 +31,7 @@ const CreateERC20Token: FunctionComponent<{
 		setLoading(true)
 		try {
 			const address = await deployERC20Token(name, symbol, Number(totalSupply), signer)
-			await addERC20Token(name, symbol, address, Number(totalSupply), account)
-			if (afterCreate) {
-				afterCreate(name, symbol, address, Number(totalSupply))
-			}
+			afterCreate({name, symbol, address, totalSupply: Number(totalSupply)})
 			setLoading(false)
 		} catch (e) {
 			console.error(e)
