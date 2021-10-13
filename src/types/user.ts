@@ -1,3 +1,9 @@
+export type Domain = {
+	name: string
+	symbol: string
+	address: string
+}
+
 export type User = {
 	name?: string
 	url?: string
@@ -10,7 +16,7 @@ export type User = {
 	profileImage?: string
 	headerImage?: string
 	myDaos: string[]
-	myDomains: string[]
+	myDomains: Domain[]
 }
 
 export type UserWithAccount = User & {account: string}

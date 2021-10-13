@@ -5,11 +5,13 @@ import Input from "../../Controls/Input"
 import "./styles.scss"
 import EthersContext from "../../../context/EthersContext"
 import deployCustomDomain from "../../../api/ethers/functions/customDomain/deployCustomDomain"
-import addDomain from "../../../api/firebase/domain/addDomain"
 import {AuthContext} from "../../../context/AuthContext"
 import {toastError} from "../../Toast"
+import addDomain from "../../../api/firebase/user/addDomain"
 
-const CreateCustomDomainModal: FunctionComponent = () => {
+const CreateCustomDomainModal: FunctionComponent<{
+	afterCreate: () => void
+}> = ({afterCreate}) => {
 	const [isOpened, setIsOpened] = useState(false)
 	const [name, setName] = useState("")
 	const [symbol, setSymbol] = useState("")
@@ -23,10 +25,11 @@ const CreateCustomDomainModal: FunctionComponent = () => {
 		setLoading(true)
 		try {
 			const domainAddress = await deployCustomDomain(name, symbol, signer)
-			await addDomain(name, symbol, domainAddress, account)
+			await addDomain({name, symbol, address: domainAddress}, account)
 			setName("")
 			setSymbol("")
 			setSuccess(true)
+			afterCreate()
 		} catch (e) {
 			console.error(e)
 			toastError("Failed to create domain")

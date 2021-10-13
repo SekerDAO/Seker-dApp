@@ -165,10 +165,10 @@ const Profile: FunctionComponent = () => {
 						)}
 					</div>
 					<div className="profile__main">
-						{page === "nfts" && isOwner && (
+						{page === "nfts" && isOwner && userAccount && (
 							<div className="profile__edit-buttons">
-								<CreateCustomDomainModal />
-								<CreateNFTModal afterCreate={updateGallery} />
+								<CreateCustomDomainModal afterCreate={refetch} />
+								<CreateNFTModal afterCreate={updateGallery} account={userAccount} />
 							</div>
 						)}
 						{["nfts", "profile"].includes(page) && (

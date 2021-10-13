@@ -13,11 +13,14 @@ import addNFT from "../../../api/firebase/NFT/addNFT"
 import uploadMedia from "../../../api/ipfs/uploadMedia"
 import createNFT from "../../../api/ethers/functions/NFT/createNFT"
 import Textarea from "../../Controls/Textarea"
-import useMyDomains from "../../../customHooks/getters/useMyDomains"
 import "./styles.scss"
 import {toastError} from "../../Toast"
 import addDAONFT from "../../../api/firebase/NFT/addDAONFT"
 import transferNFT from "../../../api/ethers/functions/NFT/transferNFT"
+import useUser from "../../../customHooks/getters/useUser"
+import {Domain} from "../../../types/user"
+import Loader from "../../Loader"
+import ErrorPlaceholder from "../../ErrorPlaceholder"
 const {REACT_APP_DOMAIN_ADDRESS} = process.env
 
 type CreateNFTModalStage =
@@ -30,7 +33,8 @@ type CreateNFTModalStage =
 const CreateNFTModalContent: FunctionComponent<{
 	gnosisAddress?: string
 	afterCreate?: () => void
-}> = ({gnosisAddress, afterCreate}) => {
+	domains: Domain[]
+}> = ({gnosisAddress, afterCreate, domains}) => {
 	const [loading, setLoading] = useState(false)
 	const [stage, setStage] = useState<CreateNFTModalStage>("chooseOption")
 	const [loadExisting, setLoadExisting] = useState(false)
@@ -44,7 +48,6 @@ const CreateNFTModalContent: FunctionComponent<{
 	const [existingNFTId, setExistingNFTId] = useState("")
 	const {provider, signer} = useContext(EthersContext)
 	const {account} = useContext(AuthContext)
-	const {domains, loading: domainsLoading, error: domainsError} = useMyDomains()
 
 	const handleSubmit = async () => {
 		if (stage === "chooseOption") {
@@ -56,15 +59,7 @@ const CreateNFTModalContent: FunctionComponent<{
 		} else if (stage === "chooseDomain") {
 			if (customDomain && !customDomainAddress) return
 			setStage("uploadFile")
-		} else if (
-			stage === "uploadFile" &&
-			file &&
-			title &&
-			numberOfEditions &&
-			signer &&
-			provider &&
-			account
-		) {
+		} else if (stage === "uploadFile" && file && title && numberOfEditions && signer && account) {
 			setLoading(true)
 			try {
 				const [metadata, hashes] = await uploadMedia(
@@ -241,7 +236,7 @@ const CreateNFTModalContent: FunctionComponent<{
 									value: ""
 								}
 							].concat(domains.map(domain => ({name: domain.name, value: domain.address})))}
-							disabled={!customDomain || domainsLoading || domainsError}
+							disabled={!customDomain}
 							onChange={e => {
 								setCustomDomainAddress(e.target.value)
 							}}
@@ -354,8 +349,10 @@ const CreateNFTModalContent: FunctionComponent<{
 const CreateNFTModal: FunctionComponent<{
 	gnosisAddress?: string
 	afterCreate?: () => void
-}> = ({gnosisAddress, afterCreate}) => {
+	account: string
+}> = ({gnosisAddress, afterCreate, account}) => {
 	const [isOpened, setIsOpened] = useState(false)
+	const {user, loading, error} = useUser(account)
 
 	return (
 		<>
@@ -373,7 +370,17 @@ const CreateNFTModal: FunctionComponent<{
 					setIsOpened(false)
 				}}
 			>
-				<CreateNFTModalContent gnosisAddress={gnosisAddress} afterCreate={afterCreate} />
+				{loading ? (
+					<Loader />
+				) : !user || error ? (
+					<ErrorPlaceholder />
+				) : (
+					<CreateNFTModalContent
+						gnosisAddress={gnosisAddress}
+						afterCreate={afterCreate}
+						domains={user.myDomains}
+					/>
+				)}
 			</Modal>
 		</>
 	)
