@@ -20,8 +20,9 @@ import TelegramIcon from "../../icons/TelegramIcon"
 import DiscordIcon from "../../icons/DiscordIcon"
 import DashboardHeader from "../../components/DashboardHeader"
 import {formatDate} from "../../utlls"
+import DAOOwners from "../../components/DAO/DAOOwners"
 
-const menuEntries = ["Collection", "About", "Members", "Proposals", "+ Admin Proposal"]
+const menuEntries = ["Collection", "About", "Owners", "Proposals", "+ Admin Proposal"]
 
 const DAOPage: FunctionComponent = () => {
 	const {account, connected} = useContext(AuthContext)
@@ -164,6 +165,7 @@ const DAOPage: FunctionComponent = () => {
 									<DAOCollection gnosisAddress={dao.gnosisAddress} isAdmin={isAdmin} />
 								)}
 								{activeMenuIndex === 1 && <AboutDAO dao={dao} />}
+								{activeMenuIndex === 2 && <DAOOwners owners={dao.owners} />}
 								{activeMenuIndex === 3 && (
 									<DAOProposals
 										gnosisVotingThreshold={dao.gnosisVotingThreshold}
