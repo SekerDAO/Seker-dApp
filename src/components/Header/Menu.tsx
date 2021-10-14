@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useContext, useRef, useState} from "react"
+import {FunctionComponent, useContext, useRef, useState} from "react"
 import {Link} from "react-router-dom"
 import {AuthContext} from "../../context/AuthContext"
 import useClickOutside from "../../customHooks/useClickOutside"

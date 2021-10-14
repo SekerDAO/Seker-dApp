@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useContext, useState} from "react"
+import {FunctionComponent, useContext, useState} from "react"
 import {Link, useParams} from "react-router-dom"
 import useNFT from "../../customHooks/getters/useNFT"
 import Loader from "../../components/Loader"

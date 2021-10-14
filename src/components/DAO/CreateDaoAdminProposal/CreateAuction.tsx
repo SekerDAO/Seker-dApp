@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FunctionComponent, useContext, useState} from "react"
+import {ChangeEvent, FunctionComponent, useContext, useState} from "react"
 import Input from "../../Controls/Input"
 import Select from "../../Controls/Select"
 import Button from "../../Controls/Button"
@@ -17,7 +17,7 @@ const CreateAuction: FunctionComponent<{
 	title: string
 	description: string
 	afterSubmit: () => void
-}> = ({gnosisAddress, gnosisVotingThreshold, title, description, afterSubmit}) => {
+}> = ({gnosisAddress, title, afterSubmit}) => {
 	const {account} = useContext(AuthContext)
 	const {signer} = useContext(EthersContext)
 	const {NFTs, loading, error} = useNFTs({
@@ -80,7 +80,7 @@ const CreateAuction: FunctionComponent<{
 		if (!(account && nft && signer && currencySymbol)) return
 		setProcessing(true)
 		try {
-			console.log("TODO")
+			// TODO: Implement me
 			// await addProposal({
 			// 	type: "createAuction",
 			// 	module: "gnosis",

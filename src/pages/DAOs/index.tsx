@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useState} from "react"
+import {FunctionComponent, useState} from "react"
 import useDAOs from "../../customHooks/getters/useDAOs"
 import {DAOSnapshot} from "../../types/DAO"
 import Loader from "../../components/Loader"

@@ -1,4 +1,4 @@
-import React, {FunctionComponent, MouseEvent} from "react"
+import {FunctionComponent, MouseEvent} from "react"
 import {Link} from "react-router-dom"
 import "./styles.scss"
 import {NFTGalleryItemProps} from "../../types/NFT"

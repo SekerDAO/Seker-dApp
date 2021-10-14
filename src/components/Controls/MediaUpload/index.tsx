@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useRef, useState} from "react"
+import {FunctionComponent, useRef, useState} from "react"
 import Button from "../Button"
 import useFileDrop from "../../../customHooks/useFileDrop"
 import {imageTypes, videoTypes} from "../../../constants/mimeTypes"

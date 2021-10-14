@@ -1,4 +1,4 @@
-import React, {FunctionComponent, SelectHTMLAttributes} from "react"
+import {FunctionComponent, SelectHTMLAttributes} from "react"
 import "./styles.scss"
 
 const Select: FunctionComponent<

@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useContext, useState} from "react"
+import {FunctionComponent, useContext, useState} from "react"
 import {useParams} from "react-router-dom"
 import HorizontalMenu from "../../components/HorizontalMenu"
 import "./styles.scss"

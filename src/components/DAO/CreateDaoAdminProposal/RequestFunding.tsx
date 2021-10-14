@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FunctionComponent, useContext, useState} from "react"
+import {ChangeEvent, FunctionComponent, useContext, useState} from "react"
 import Input from "../../Controls/Input"
 import Button from "../../Controls/Button"
 import {AuthContext} from "../../../context/AuthContext"
@@ -29,7 +29,7 @@ const RequestFunding: FunctionComponent<{
 		if (!(provider && signer && account && amount && recipient)) return
 		setLoading(true)
 		try {
-			console.log("TODO")
+			// TODO: Implement me
 			// const proposalId = await createERC20DAOFundingProposal(
 			// 	daoAddress,
 			// 	recipient,

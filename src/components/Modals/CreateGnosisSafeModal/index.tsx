@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FunctionComponent, useContext, useEffect, useState} from "react"
+import {ChangeEvent, FunctionComponent, useContext, useEffect, useState} from "react"
 import Button from "../../Controls/Button"
 import Modal from "../Modal"
 import {AuthContext} from "../../../context/AuthContext"
@@ -58,7 +58,7 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 			if (newGnosis) {
 				setStage("create")
 			} else {
-				console.log("TODO")
+				// TODO: Implement me
 			}
 		} else if (stage === "create") {
 			if (!(account && signer && votingThreshold)) return

@@ -1,4 +1,4 @@
-import React, {Component, FunctionComponent} from "react"
+import {Component, FunctionComponent} from "react"
 import {Switch, Route, BrowserRouter} from "react-router-dom"
 import {AuthContext, useAuth} from "./context/AuthContext"
 import Homepage from "./pages/Homepage"

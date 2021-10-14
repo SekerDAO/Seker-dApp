@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useContext} from "react"
+import {FunctionComponent, useContext} from "react"
 import EthersContext from "../../context/EthersContext"
 const {REACT_APP_CHAIN_ID} = process.env
 

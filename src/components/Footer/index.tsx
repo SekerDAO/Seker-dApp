@@ -1,4 +1,4 @@
-import React, {FunctionComponent} from "react"
+import {FunctionComponent} from "react"
 import "./styles.scss"
 import Logo from "../../icons/Logo"
 import {Link} from "react-router-dom"

@@ -1,4 +1,4 @@
-import React, {FunctionComponent} from "react"
+import {FunctionComponent} from "react"
 import MembersIcon from "../../../icons/MembersIcon"
 import HouseIcon from "../../../icons/HouseIcon"
 import ShieldIcon from "../../../icons/ShieldIcon"

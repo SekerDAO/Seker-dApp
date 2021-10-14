@@ -1,4 +1,4 @@
-import React, {FunctionComponent} from "react"
+import {FunctionComponent} from "react"
 import ToastErrorIcon from "../../icons/ToastErrorIcon"
 import {toast} from "react-toastify"
 import ToastWarningIcon from "../../icons/ToastWarningIcon"

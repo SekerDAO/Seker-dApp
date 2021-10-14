@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FunctionComponent, useState} from "react"
+import {ChangeEvent, FunctionComponent, useState} from "react"
 import Input from "../Controls/Input"
 import Select from "../Controls/Select"
 import Gallery from "../Gallery"

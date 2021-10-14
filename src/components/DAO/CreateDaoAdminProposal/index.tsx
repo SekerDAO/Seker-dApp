@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useContext, useState} from "react"
+import {FunctionComponent, useContext, useState} from "react"
 import Select from "../../Controls/Select"
 import "./styles.scss"
 import ChangeRole from "./ChangeRole"

@@ -1,4 +1,4 @@
-import React from "react"
+import {StrictMode} from "react"
 import ReactDOM from "react-dom"
 import App from "./App"
 import firebase from "firebase"
@@ -16,9 +16,9 @@ declare global {
 firebase.initializeApp(firebaseConfig)
 
 ReactDOM.render(
-	<React.StrictMode>
+	<StrictMode>
 		<App />
-	</React.StrictMode>,
+	</StrictMode>,
 	document.getElementById("root")
 )
 

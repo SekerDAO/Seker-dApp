@@ -1,4 +1,4 @@
-import React, {FunctionComponent} from "react"
+import {FunctionComponent} from "react"
 
 const ShieldIcon: FunctionComponent = () => (
 	<svg version="1.1" x="0px" width={85} height={85} y="0px" viewBox="0 0 85 85">

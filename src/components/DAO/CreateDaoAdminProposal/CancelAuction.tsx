@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FunctionComponent, useContext, useState} from "react"
+import {ChangeEvent, FunctionComponent, useContext, useState} from "react"
 import {Auction} from "../../../types/auction"
 import Select from "../../Controls/Select"
 import Button from "../../Controls/Button"
@@ -12,7 +12,7 @@ const CancelAuction: FunctionComponent<{
 	title: string
 	description: string
 	afterSubmit: () => void
-}> = ({gnosisAddress, gnosisVotingThreshold, title, description, afterSubmit}) => {
+}> = ({afterSubmit}) => {
 	const {signer} = useContext(EthersContext)
 	const {account} = useContext(AuthContext)
 	// TODO
@@ -28,7 +28,7 @@ const CancelAuction: FunctionComponent<{
 		if (!(account && signer && selectedAuction)) return
 		setProcessing(true)
 		try {
-			console.log("TODO")
+			// TODO: Implement me
 			setSelectedAuction(null)
 			afterSubmit()
 			toastSuccess("Proposal successfully created")

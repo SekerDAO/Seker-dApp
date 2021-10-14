@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FunctionComponent, useContext, useState} from "react"
+import {ChangeEvent, FunctionComponent, useContext, useState} from "react"
 import Input from "../../Controls/Input"
 import Button from "../../Controls/Button"
 import {AuthContext} from "../../../context/AuthContext"
@@ -80,7 +80,7 @@ const DecentralizeDAO: FunctionComponent<{
 						[votingHookupSignature],
 						signer
 					)
-					console.log("TODO: add new function for decentralize DAO")
+					// TODO: add new function for decentralize DAO
 					// await editDAO({
 					// 	gnosisAddress,
 					// 	daoAddress,

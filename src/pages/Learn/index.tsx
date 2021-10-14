@@ -1,4 +1,4 @@
-import React, {Fragment, FunctionComponent} from "react"
+import {Fragment, FunctionComponent} from "react"
 import "./styles.scss"
 import LearnMenu from "../../components/LearnMenu"
 import LEARN_ARTICLES from "../../constants/learnArticles"

@@ -1,4 +1,4 @@
-import React, {FunctionComponent} from "react"
+import {FunctionComponent} from "react"
 import "./styles.scss"
 import HeaderMenu from "./Menu"
 import {Link} from "react-router-dom"

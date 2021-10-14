@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useContext, useState} from "react"
+import {FunctionComponent, useContext, useState} from "react"
 import "./styles.scss"
 import Input from "../../Controls/Input"
 import Button from "../../Controls/Button"

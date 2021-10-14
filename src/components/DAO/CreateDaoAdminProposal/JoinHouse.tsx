@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useContext, useState} from "react"
+import {FunctionComponent, useContext, useState} from "react"
 import Input from "../../Controls/Input"
 import Button from "../../Controls/Button"
 import EthersContext from "../../../context/EthersContext"
@@ -19,7 +19,7 @@ const JoinHouse: FunctionComponent<{
 		if (!(provider && signer && account)) return
 		setLoading(true)
 		try {
-			console.log("TODO")
+			// TODO: Implement me
 			// const proposalId = await createEnterERC20DAOProposal(daoAddress, provider, signer)
 			// await addProposal({
 			// 	id: proposalId,
