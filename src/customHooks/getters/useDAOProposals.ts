@@ -1,16 +1,16 @@
 import {useEffect, useState} from "react"
-import {Proposal} from "../../types/proposal"
-import getProposals from "../../api/firebase/proposal/getProposals"
+import {SafeProposal} from "../../types/safeProposal"
+import getSafeProposals from "../../api/firebase/safeProposal/getSafeProposals"
 
 const useDAOProposals = (
 	gnosisAddress: string
 ): {
-	proposals: (Proposal & {proposalId: string})[]
+	proposals: (SafeProposal & {proposalId: string})[]
 	loading: boolean
 	error: boolean
 	refetch: () => void
 } => {
-	const [proposals, setProposals] = useState<(Proposal & {proposalId: string})[]>([])
+	const [proposals, setProposals] = useState<(SafeProposal & {proposalId: string})[]>([])
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
 
@@ -18,7 +18,7 @@ const useDAOProposals = (
 		setLoading(true)
 		setError(false)
 		try {
-			const firebaseData = (await getProposals(gnosisAddress)).docs.map(doc => ({
+			const firebaseData = (await getSafeProposals(gnosisAddress)).docs.map(doc => ({
 				...doc.data(),
 				proposalId: doc.id
 			}))
@@ -52,7 +52,7 @@ const useDAOProposals = (
 							// ...ethersData[index],
 							id: Number(p.id),
 							state: p.state!
-						} as Proposal & {proposalId: string})
+						} as SafeProposal & {proposalId: string})
 				)
 			)
 		} catch (e) {

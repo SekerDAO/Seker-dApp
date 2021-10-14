@@ -4,7 +4,7 @@ import Button from "../../Controls/Button"
 import Select from "../../Controls/Select"
 import {AuthContext} from "../../../context/AuthContext"
 import EthersContext from "../../../context/EthersContext"
-import addProposal from "../../../api/firebase/proposal/addProposal"
+import addSafeProposal from "../../../api/firebase/safeProposal/addSafeProposal"
 import {toastError, toastSuccess} from "../../Toast"
 import {SafeSignature} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
 import {
@@ -20,16 +20,17 @@ import Loader from "../../Loader"
 const ChangeRole: FunctionComponent<{
 	gnosisAddress: string
 	gnosisVotingThreshold: number
+	ownersCount: number
 	title: string
 	description: string
 	afterSubmit: () => void
-}> = ({gnosisAddress, gnosisVotingThreshold, title, description, afterSubmit}) => {
+}> = ({gnosisAddress, gnosisVotingThreshold, ownersCount, title, description, afterSubmit}) => {
 	const {dao, loading, error} = useDAO(gnosisAddress)
 	const {account} = useContext(AuthContext)
 	const {provider, signer} = useContext(EthersContext)
 	const [processing, setProcessing] = useState(false)
 	const [address, setAddress] = useState("")
-	const [newRole, setNewRole] = useState<"admin" | "kick" | "">("")
+	const [newRole, setNewRole] = useState<"admin" | "kick">("admin")
 	const [newThreshold, setNewThreshold] = useState("")
 
 	if (error) return <ErrorPlaceholder />
@@ -38,13 +39,8 @@ const ChangeRole: FunctionComponent<{
 	const handleThresholdChange = (e: ChangeEvent<HTMLInputElement>) => {
 		if (e.target.value && Number(e.target.value) < 1) {
 			setNewThreshold("1")
-		} else if (
-			Number(e.target.value) >
-			(newRole === "kick" ? gnosisVotingThreshold - 1 : gnosisVotingThreshold + 1)
-		) {
-			setNewThreshold(
-				String(newRole === "kick" ? gnosisVotingThreshold - 1 : gnosisVotingThreshold + 1)
-			)
+		} else if (Number(e.target.value) > (newRole === "kick" ? ownersCount - 1 : ownersCount + 1)) {
+			setNewThreshold(String(newRole === "kick" ? ownersCount - 1 : ownersCount + 1))
 		} else {
 			setNewThreshold(e.target.value)
 		}
@@ -53,11 +49,11 @@ const ChangeRole: FunctionComponent<{
 	const handleRoleChange = (e: ChangeEvent<HTMLSelectElement>) => {
 		if (e.target.value === "kick") {
 			setAddress("")
+			if (Number(newThreshold) > ownersCount - 1) {
+				setNewThreshold(String(ownersCount - 1))
+			}
 		}
-		setNewRole(e.target.value as "")
-		if (Number(newThreshold) > gnosisVotingThreshold - 1) {
-			setNewThreshold(String(gnosisVotingThreshold - 1))
-		}
+		setNewRole(e.target.value as "admin")
 	}
 
 	const handleSubmit = async () => {
@@ -94,10 +90,8 @@ const ChangeRole: FunctionComponent<{
 					)
 				}
 			}
-			await addProposal({
+			await addSafeProposal({
 				type: "changeRole",
-				userAddress: account,
-				module: "gnosis",
 				gnosisAddress,
 				title,
 				...(description ? {description} : {}),
@@ -109,7 +103,7 @@ const ChangeRole: FunctionComponent<{
 			})
 			toastSuccess("Proposal successfully created")
 			setAddress("")
-			setNewRole("")
+			setNewRole("admin")
 			afterSubmit()
 		} catch (e) {
 			console.error(e)

@@ -9,7 +9,7 @@ import {
 	executeHookupProposalModule,
 	signHookupProposalModule
 } from "../../../api/ethers/functions/gnosisSafe/hookupProposalModule"
-import addProposal from "../../../api/firebase/proposal/addProposal"
+import addSafeProposal from "../../../api/firebase/safeProposal/addSafeProposal"
 import createLinearVoting from "../../../api/ethers/functions/gnosisSafe/createLinearVoting"
 import {
 	executeHookupLinearVotingModule,
@@ -90,13 +90,11 @@ const DecentralizeDAO: FunctionComponent<{
 					// 	daoVotingThreshold: Number(votingThreshold)
 					// })
 				}
-				await addProposal({
+				await addSafeProposal({
 					type: "decentralizeDAO",
-					module: "gnosis",
 					gnosisAddress,
 					title: "Decentralize DAO",
 					state: gnosisVotingThreshold === 1 ? "executed" : "active",
-					userAddress: account,
 					gracePeriod: Number(proposalTime),
 					daoVotingThreshold: Number(votingThreshold),
 					signatures: [proposalHookupSignature],

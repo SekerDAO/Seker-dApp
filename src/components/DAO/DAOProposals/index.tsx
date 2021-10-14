@@ -3,7 +3,7 @@ import useDAOProposals from "../../../customHooks/getters/useDAOProposals"
 import Loader from "../../Loader"
 import ErrorPlaceholder from "../../ErrorPlaceholder"
 import EthersContext from "../../../context/EthersContext"
-import {ProposalsTypeNames, Proposal, isGnosisProposal} from "../../../types/proposal"
+import {SafeProposalsTypeNames, SafeProposal} from "../../../types/safeProposal"
 import "./styles.scss"
 import Input from "../../Controls/Input"
 import Select from "../../Controls/Select"
@@ -11,7 +11,7 @@ import {capitalize} from "../../../utlls"
 import Button from "../../Controls/Button"
 import {toastError, toastSuccess} from "../../Toast"
 import SearchIcon from "../../../icons/SearchIcon"
-import addSafeProposalSignature from "../../../api/firebase/proposal/addSafeProposalSignature"
+import addSafeProposalSignature from "../../../api/firebase/safeProposal/addSafeProposalSignatures"
 import {SafeSignature} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
 import {
 	executeApproveNFTForAuction,
@@ -36,7 +36,7 @@ import {AuthContext} from "../../../context/AuthContext"
 const DAOProposalCard: FunctionComponent<{
 	refetch: () => void
 	gnosisVotingThreshold: number
-	proposal: Proposal & {proposalId: string}
+	proposal: SafeProposal & {proposalId: string}
 	isAdmin: boolean
 }> = ({gnosisVotingThreshold, proposal, isAdmin, refetch}) => {
 	const [processing, setProcessing] = useState(false)
@@ -98,7 +98,6 @@ const DAOProposalCard: FunctionComponent<{
 			let signatureAdded = false
 			switch (proposal.type) {
 				case "createAuction":
-					if (!isGnosisProposal(proposal)) break
 					const signingArgs = [
 						proposal.gnosisAddress,
 						Number(proposal.nftId),
@@ -136,7 +135,6 @@ const DAOProposalCard: FunctionComponent<{
 					}
 					break
 				case "cancelAuction":
-					if (!isGnosisProposal(proposal)) break
 					signature = await signCancelAuction(proposal.gnosisAddress, proposal.auctionId!, signer)
 					if (proposal.signatures?.length === gnosisVotingThreshold - 1) {
 						await executeCancelAuction(
@@ -149,7 +147,6 @@ const DAOProposalCard: FunctionComponent<{
 					}
 					break
 				case "changeRole":
-					if (!isGnosisProposal(proposal)) break
 					if (["head", "admin"].includes(proposal.newRole!)) {
 						signature = await signAddOwner(
 							proposal.gnosisAddress,
@@ -216,7 +213,7 @@ const DAOProposalCard: FunctionComponent<{
 	return (
 		<div className="dao-proposals__card">
 			<div className="dao-proposals__card-header">
-				<p>{ProposalsTypeNames[proposal.type]}</p>
+				<p>{SafeProposalsTypeNames[proposal.type]}</p>
 				<p>{capitalize(proposal.state)}</p>
 			</div>
 			<h2>{proposal.title}</h2>
@@ -227,7 +224,7 @@ const DAOProposalCard: FunctionComponent<{
 			{/*		{` ${proposal.balance}`}*/}
 			{/*	</div>*/}
 			{/*)}*/}
-			{isGnosisProposal(proposal) && proposal.type === "changeRole" && (
+			{proposal.type === "changeRole" && (
 				<>
 					<div className="dao-proposals__card-section">
 						<b>Member&apos;s Address:</b>
@@ -274,8 +271,7 @@ const DAOProposalCard: FunctionComponent<{
 				{/*	</div>*/}
 				{/*)}*/}
 				<div className="dao-proposals__voting-buttons">
-					{isGnosisProposal(proposal) &&
-						isAdmin &&
+					{isAdmin &&
 						proposal.state === "active" &&
 						!proposal.signatures?.find(s => s.signer.toLowerCase() === account) && (
 							<Button onClick={sign} disabled={processing}>

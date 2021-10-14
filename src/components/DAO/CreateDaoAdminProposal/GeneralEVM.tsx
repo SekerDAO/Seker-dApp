@@ -20,7 +20,7 @@ import {
 	executeSafeTx
 } from "../../../api/ethers/functions/gnosisSafe/safeUtils"
 import EthersContext from "../../../context/EthersContext"
-import addProposal from "../../../api/firebase/proposal/addProposal"
+import addSafeProposal from "../../../api/firebase/safeProposal/addSafeProposal"
 import {AuthContext} from "../../../context/AuthContext"
 
 const GeneralEVM: FunctionComponent<{
@@ -130,10 +130,8 @@ const GeneralEVM: FunctionComponent<{
 					[signature]
 				)
 			}
-			await addProposal({
+			await addSafeProposal({
 				type: "generalEVM",
-				module: "gnosis",
-				userAddress: account,
 				title,
 				description,
 				gnosisAddress,

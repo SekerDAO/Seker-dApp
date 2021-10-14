@@ -1,5 +1,5 @@
 import {SafeSignature} from "../../ethers/functions/gnosisSafe/safeUtils"
-import {ProposalState} from "../../../types/proposal"
+import {SafeProposalState} from "../../../types/safeProposal"
 import firebase from "firebase"
 const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
@@ -12,7 +12,7 @@ const addProposalSignatures = async ({
 	proposalId: string
 	signature: SafeSignature
 	signatureStep2?: SafeSignature
-	newState?: ProposalState
+	newState?: SafeProposalState
 }): Promise<void> => {
 	const token = await firebase.auth().currentUser?.getIdToken(true)
 	if (!token) {
@@ -32,7 +32,7 @@ const addProposalSignatures = async ({
 		})
 	})
 	if (res.status !== 200) {
-		throw new Error("Failed to add NFT")
+		throw new Error("Failed to add safe proposal signatures")
 	}
 }
 

@@ -1,15 +1,14 @@
 import {SafeSignature} from "../api/ethers/functions/gnosisSafe/safeUtils"
 import {Abi} from "./abi"
 
-// TODO: split this into DAO and Gnosis modules
-export type ProposalType =
+export type SafeProposalType =
 	| "changeRole"
 	| "createAuction"
 	| "cancelAuction"
 	| "generalEVM"
 	| "decentralizeDAO"
 
-export const ProposalsTypeNames = {
+export const SafeProposalsTypeNames = {
 	changeRole: "Admin Membership",
 	createAuction: "Create Auction",
 	endAuction: "End Auction",
@@ -18,7 +17,8 @@ export const ProposalsTypeNames = {
 	decentralizeDAO: "Decentralize DAO"
 } as const
 
-export type ProposalState =
+// TODO: this list contains DAO proposals states, remove unused
+export type SafeProposalState =
 	| "active"
 	| "canceled"
 	| "executed"
@@ -27,26 +27,13 @@ export type ProposalState =
 	| "queued"
 	| "waiting"
 
-// TODO: review
-type ProposalBase = {
+export type SafeProposal = {
 	id?: number
-	type: ProposalType
 	gnosisAddress: string
 	title: string
 	description?: string
-	state: ProposalState
-}
-
-export type DAOProposal = ProposalBase & {
-	module: "DAO"
-	// deadline: string
-	// gracePeriod: string | null
-	// noVotes: number
-	// yesVotes: number
-}
-
-export type GnosisProposal = ProposalBase & {
-	module: "gnosis"
+	state: SafeProposalState
+	type: SafeProposalType
 	userAddress: string
 	amount?: number
 	recipientAddress?: string // for change role
@@ -54,7 +41,7 @@ export type GnosisProposal = ProposalBase & {
 	balance?: number
 	// for changeRole for gnosis safe module
 	newThreshold?: number
-	signatures?: SafeSignature[]
+	signatures: SafeSignature[]
 	signaturesStep2?: SafeSignature[]
 	// for auction
 	auctionId?: number
@@ -75,8 +62,3 @@ export type GnosisProposal = ProposalBase & {
 	daoVotingThreshold?: number
 	gracePeriod?: number
 }
-
-export type Proposal = DAOProposal | GnosisProposal
-
-export const isGnosisProposal = (proposal: Proposal): proposal is GnosisProposal =>
-	proposal.module === "gnosis"

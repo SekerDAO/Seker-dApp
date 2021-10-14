@@ -177,6 +177,7 @@ const DAOPage: FunctionComponent = () => {
 									<CreateDaoAdminProposal
 										gnosisAddress={dao.gnosisAddress}
 										gnosisVotingThreshold={dao.gnosisVotingThreshold}
+										ownersCount={dao.owners.length}
 									/>
 								)}
 							</>

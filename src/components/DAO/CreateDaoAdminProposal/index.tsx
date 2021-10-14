@@ -3,7 +3,7 @@ import Select from "../../Controls/Select"
 import "./styles.scss"
 import ChangeRole from "./ChangeRole"
 import {AuthContext} from "../../../context/AuthContext"
-import {ProposalsTypeNames, ProposalType} from "../../../types/proposal"
+import {SafeProposalsTypeNames, SafeProposalType} from "../../../types/safeProposal"
 import CreateAuction from "./CreateAuction"
 import CancelAuction from "./CancelAuction"
 import useDAOProposals from "../../../customHooks/getters/useDAOProposals"
@@ -15,9 +15,10 @@ import Input from "../../Controls/Input"
 const CreateDaoAdminProposal: FunctionComponent<{
 	gnosisAddress: string
 	gnosisVotingThreshold: number
-}> = ({gnosisAddress, gnosisVotingThreshold}) => {
+	ownersCount: number
+}> = ({gnosisAddress, gnosisVotingThreshold, ownersCount}) => {
 	const {connected} = useContext(AuthContext)
-	const [type, setType] = useState<ProposalType>("changeRole")
+	const [type, setType] = useState<SafeProposalType>("changeRole")
 	const [title, setTitle] = useState("")
 	const [description, setDescription] = useState("")
 	const {proposals, loading, error} = useDAOProposals(gnosisAddress)
@@ -45,14 +46,14 @@ const CreateDaoAdminProposal: FunctionComponent<{
 			<Select
 				value={type}
 				options={[
-					{name: ProposalsTypeNames.changeRole, value: "changeRole"},
-					{name: ProposalsTypeNames.createAuction, value: "createAuction"},
-					{name: ProposalsTypeNames.cancelAuction, value: "cancelAuction"},
-					{name: ProposalsTypeNames.endAuction, value: "endAuction"},
-					{name: ProposalsTypeNames.generalEVM, value: "generalEVM"}
+					{name: SafeProposalsTypeNames.changeRole, value: "changeRole"},
+					{name: SafeProposalsTypeNames.createAuction, value: "createAuction"},
+					{name: SafeProposalsTypeNames.cancelAuction, value: "cancelAuction"},
+					{name: SafeProposalsTypeNames.endAuction, value: "endAuction"},
+					{name: SafeProposalsTypeNames.generalEVM, value: "generalEVM"}
 				]}
 				onChange={e => {
-					setType(e.target.value as ProposalType)
+					setType(e.target.value as SafeProposalType)
 				}}
 			/>
 			<label htmlFor="change-role-title">Title</label>
@@ -102,6 +103,7 @@ const CreateDaoAdminProposal: FunctionComponent<{
 					title={title}
 					description={description}
 					afterSubmit={afterSubmit}
+					ownersCount={ownersCount}
 				/>
 			)}
 			{type === "generalEVM" && (
