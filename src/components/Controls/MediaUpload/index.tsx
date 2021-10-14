@@ -1,6 +1,6 @@
 import {FunctionComponent, useRef, useState} from "react"
 import Button from "../Button"
-import useFileDrop from "../../../customHooks/useFileDrop"
+import useFileDrop from "../../../hooks/useFileDrop"
 import {imageTypes, videoTypes} from "../../../constants/mimeTypes"
 import "./styles.scss"
 import {toastError} from "../../Toast"

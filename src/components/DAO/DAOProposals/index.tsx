@@ -1,5 +1,5 @@
 import {useContext, FunctionComponent, useState} from "react"
-import useDAOProposals from "../../../customHooks/getters/useDAOProposals"
+import useDAOProposals from "../../../hooks/getters/useDAOProposals"
 import Loader from "../../Loader"
 import ErrorPlaceholder from "../../ErrorPlaceholder"
 import EthersContext from "../../../context/EthersContext"

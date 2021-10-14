@@ -6,7 +6,7 @@ import {AuthContext} from "../../../context/AuthContext"
 import editUser from "../../../api/firebase/user/editUser"
 import {toastError, toastSuccess} from "../../Toast"
 import {User} from "../../../types/user"
-import useValidation from "../../../customHooks/useValidation"
+import useValidation from "../../../hooks/useValidation"
 import checkUserUrl from "../../../api/firebase/user/checkUserUrl"
 
 const ProfileEdit: FunctionComponent<{

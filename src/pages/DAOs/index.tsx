@@ -1,5 +1,5 @@
 import {FunctionComponent, useState} from "react"
-import useDAOs from "../../customHooks/getters/useDAOs"
+import useDAOs from "../../hooks/getters/useDAOs"
 import {DAOSnapshot} from "../../types/DAO"
 import Loader from "../../components/Loader"
 import ErrorPlaceholder from "../../components/ErrorPlaceholder"

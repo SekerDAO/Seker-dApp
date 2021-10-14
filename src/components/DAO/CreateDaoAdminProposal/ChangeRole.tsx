@@ -13,7 +13,7 @@ import {
 	signAddOwner,
 	signRemoveOwner
 } from "../../../api/ethers/functions/gnosisSafe/addRemoveOwner"
-import useDAO from "../../../customHooks/getters/useDAO"
+import useDAO from "../../../hooks/getters/useDAO"
 import ErrorPlaceholder from "../../ErrorPlaceholder"
 import Loader from "../../Loader"
 
