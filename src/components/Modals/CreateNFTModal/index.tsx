@@ -9,13 +9,13 @@ import EthersContext from "../../../context/EthersContext"
 import checkNFTOwner from "../../../api/ethers/functions/NFT/checkNFTOwner"
 import {AuthContext} from "../../../context/AuthContext"
 import getNFTMetadata from "../../../api/ethers/functions/NFT/getNFTMetadata"
-import addNFT from "../../../api/firebase/NFT/addNFT"
+import addNft from "../../../api/firebase/NFT/addNft"
 import uploadMedia from "../../../api/ipfs/uploadMedia"
 import createNFT from "../../../api/ethers/functions/NFT/createNFT"
 import Textarea from "../../Controls/Textarea"
 import "./styles.scss"
 import {toastError} from "../../Toast"
-import addDAONFT from "../../../api/firebase/NFT/addDAONFT"
+import addDaoNft from "../../../api/firebase/NFT/addDaoNft"
 import transferNFT from "../../../api/ethers/functions/NFT/transferNFT"
 import useUser from "../../../customHooks/getters/useUser"
 import {Domain} from "../../../types/user"
@@ -94,7 +94,7 @@ const CreateNFTModalContent: FunctionComponent<{
 							signer,
 							customDomain ? customDomainAddress : undefined
 						)
-						await addDAONFT(
+						await addDaoNft(
 							{
 								...nft,
 								id: ids[i],
@@ -107,18 +107,15 @@ const CreateNFTModalContent: FunctionComponent<{
 							gnosisAddress
 						)
 					} else {
-						await addNFT(
-							{
-								...nft,
-								id: ids[i],
-								attributes: {
-									numberOfEditions,
-									editionNumber: i + 1,
-									original: i === 0
-								}
-							},
-							account
-						)
+						await addNft({
+							...nft,
+							id: ids[i],
+							attributes: {
+								numberOfEditions,
+								editionNumber: i + 1,
+								original: i === 0
+							}
+						})
 					}
 				}
 				setStage("success")
@@ -167,9 +164,9 @@ const CreateNFTModalContent: FunctionComponent<{
 						signer,
 						customDomain ? customDomainAddress : undefined
 					)
-					await addDAONFT(nft, gnosisAddress)
+					await addDaoNft(nft, gnosisAddress)
 				} else {
-					await addNFT(nft, account)
+					await addNft(nft)
 				}
 				if (afterCreate) {
 					afterCreate()

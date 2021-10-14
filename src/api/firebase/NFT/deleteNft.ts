@@ -1,20 +1,19 @@
 import firebase from "firebase"
 const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
-const addDAONFT = async (nftId: string, daoAddress: string): Promise<void> => {
+const deleteNft = async (id: string): Promise<void> => {
 	const token = await firebase.auth().currentUser?.getIdToken(true)
 	if (!token) {
 		throw new Error("Not authorized in firebase")
 	}
-	const res = await fetch(`${REACT_APP_CLOUD_FUNCTIONS_URL}/deleteDaoNft`, {
+	const res = await fetch(`${REACT_APP_CLOUD_FUNCTIONS_URL}/deleteNft`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
 			authorization: `Bearer ${token}`
 		},
 		body: JSON.stringify({
-			nftId,
-			address: daoAddress.toLowerCase()
+			id
 		})
 	})
 	if (res.status !== 200) {
@@ -22,4 +21,4 @@ const addDAONFT = async (nftId: string, daoAddress: string): Promise<void> => {
 	}
 }
 
-export default addDAONFT
+export default deleteNft
