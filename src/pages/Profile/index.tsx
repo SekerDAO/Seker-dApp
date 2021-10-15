@@ -33,7 +33,7 @@ const Profile: FunctionComponent = () => {
 		if (user && user.url && isAddress(userId)) {
 			replace(`/profile/${user.url}`)
 		}
-	}, [user])
+	}, [replace, user, userId])
 
 	const isOwner = connected && user?.account === userAccount
 	const page: ProfilePage = (isOwner && (parse(search).page as ProfilePage)) || "nfts"
