@@ -2,7 +2,7 @@ import {FunctionComponent, MouseEvent} from "react"
 import {Link} from "react-router-dom"
 import "./styles.scss"
 import {NFTGalleryItemProps} from "../../types/NFT"
-import CloseIcon from "../../icons/CloseIcon"
+import CloseIcon from "../../assets/icons/CloseIcon"
 
 const GalleryItem: FunctionComponent<NFTGalleryItemProps> = ({
 	id,

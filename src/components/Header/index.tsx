@@ -2,7 +2,7 @@ import {FunctionComponent} from "react"
 import "./styles.scss"
 import HeaderMenu from "./Menu"
 import {Link} from "react-router-dom"
-import LogoColored from "../../icons/LogoColored"
+import LogoColored from "../../assets/icons/LogoColored"
 
 const Header: FunctionComponent = () => {
 	return (

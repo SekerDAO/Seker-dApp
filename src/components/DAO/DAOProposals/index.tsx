@@ -10,7 +10,7 @@ import Select from "../../Controls/Select"
 import {capitalize} from "../../../utlls"
 import Button from "../../Controls/Button"
 import {toastError, toastSuccess} from "../../Toast"
-import SearchIcon from "../../../icons/SearchIcon"
+import SearchIcon from "../../../assets/icons/SearchIcon"
 import addSafeProposalSignature from "../../../api/firebase/safeProposal/addSafeProposalSignatures"
 import {SafeSignature} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
 import {

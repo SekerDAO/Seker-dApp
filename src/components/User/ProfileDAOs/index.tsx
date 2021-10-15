@@ -7,7 +7,7 @@ import Loader from "../../Loader"
 import ErrorPlaceholder from "../../ErrorPlaceholder"
 import {AuthContext} from "../../../context/AuthContext"
 import {Link} from "react-router-dom"
-import SearchIcon from "../../../icons/SearchIcon"
+import SearchIcon from "../../../assets/icons/SearchIcon"
 import CreateGnosisSafeModal from "../../Modals/CreateGnosisSafeModal"
 
 const columns = [
