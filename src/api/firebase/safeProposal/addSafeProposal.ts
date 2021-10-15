@@ -13,7 +13,7 @@ const addSafeProposal = async (proposal: Omit<SafeProposal, "userAddress">): Pro
 			"Content-Type": "application/json",
 			authorization: `Bearer ${token}`
 		},
-		body: JSON.stringify({...proposal})
+		body: JSON.stringify(proposal)
 	})
 	if (res.status !== 200) {
 		throw new Error("Failed to add safe proposal")

@@ -35,22 +35,19 @@ const ProfileEdit: FunctionComponent<{
 	const {validation: urlValidation} = useValidation(url, [validateUrl])
 
 	const handleSubmit = async () => {
-		if (!account || urlValidation) return
+		if (urlValidation) return
 		setProcessing(true)
 		try {
-			await editUser(
-				{
-					name,
-					url,
-					bio,
-					location,
-					email,
-					website,
-					twitter,
-					instagram
-				},
-				account
-			)
+			await editUser({
+				name,
+				url,
+				bio,
+				location,
+				email,
+				website,
+				twitter,
+				instagram
+			})
 			afterSubmit()
 			toastSuccess("Profile successfully edited!")
 		} catch (e) {

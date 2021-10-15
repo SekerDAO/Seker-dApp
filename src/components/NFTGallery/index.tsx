@@ -9,8 +9,8 @@ import ErrorPlaceholder from "../ErrorPlaceholder"
 import Loader from "../Loader"
 import SearchIcon from "../../icons/SearchIcon"
 import {toastError, toastSuccess} from "../Toast"
-import deleteDAONFT from "../../api/firebase/NFT/deleteDAONFT"
-import deleteNFT from "../../api/firebase/NFT/deleteNFT"
+import deleteDAONFT from "../../api/firebase/NFT/deleteDaoNft"
+import deleteNft from "../../api/firebase/NFT/deleteNft"
 import ConfirmationModal from "../Modals/ConfirmationModal"
 
 const NFTGallery: FunctionComponent<{
@@ -41,7 +41,7 @@ const NFTGallery: FunctionComponent<{
 			if (isDao) {
 				await deleteDAONFT(id, account)
 			} else {
-				await deleteNFT(id)
+				await deleteNft(id)
 			}
 			toastSuccess("NFT successfully deleted!")
 			setDeletedNfts(prevState => [...prevState, id])

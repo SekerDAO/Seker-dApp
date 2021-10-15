@@ -5,7 +5,6 @@ import Input from "../../Controls/Input"
 import "./styles.scss"
 import EthersContext from "../../../context/EthersContext"
 import deployCustomDomain from "../../../api/ethers/functions/customDomain/deployCustomDomain"
-import {AuthContext} from "../../../context/AuthContext"
 import {toastError} from "../../Toast"
 import addDomain from "../../../api/firebase/user/addDomain"
 
@@ -18,14 +17,13 @@ const CreateCustomDomainModal: FunctionComponent<{
 	const [loading, setLoading] = useState(false)
 	const [success, setSuccess] = useState(false)
 	const {signer} = useContext(EthersContext)
-	const {account} = useContext(AuthContext)
 
 	const handleSubmit = async () => {
-		if (!(name && symbol && signer && account) || loading) return
+		if (!(name && symbol && signer) || loading) return
 		setLoading(true)
 		try {
 			const domainAddress = await deployCustomDomain(name, symbol, signer)
-			await addDomain({name, symbol, address: domainAddress}, account)
+			await addDomain({name, symbol, address: domainAddress})
 			setName("")
 			setSymbol("")
 			setSuccess(true)
