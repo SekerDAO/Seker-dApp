@@ -32,7 +32,7 @@
       "arrowParens": "avoid",
       "endOfLine": "auto"
     }],
-    // Can break code with auto-fix option, we are checking it separately (see package.json lint-hooks script)
+    // Can break code with auto-fix option, we are checking it separately (see package.json lint:hooks script)
     "react-hooks/exhaustive-deps": 0,
     "no-console": [
       "warn",

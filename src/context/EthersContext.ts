@@ -36,6 +36,7 @@ export const useEthers = (): EthersContext => {
 		if (window.ethereum) {
 			initMetamask()
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [window.ethereum])
 
 	return {

@@ -64,7 +64,7 @@ const GeneralEVM: FunctionComponent<{
 			setArgs([])
 			setArgsBad([])
 		}
-	}, [selectedMethodIndex])
+	}, [selectedMethodIndex, contractMethods])
 
 	const handleAddressChange = async (e: ChangeEvent<HTMLInputElement>) => {
 		setAddress(e.target.value)

@@ -42,6 +42,7 @@ export const useAuth = (): AuthContext => {
 		if (window.ethereum) {
 			init()
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [window.ethereum])
 
 	const connectWallet = async () => {
