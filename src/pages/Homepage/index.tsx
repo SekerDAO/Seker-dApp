@@ -1,4 +1,4 @@
-import React, {FunctionComponent} from "react"
+import {FunctionComponent} from "react"
 import Button from "../../components/Controls/Button"
 import "./styles.scss"
 import {Link} from "react-router-dom"

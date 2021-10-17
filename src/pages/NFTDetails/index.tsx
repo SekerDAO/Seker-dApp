@@ -1,6 +1,6 @@
-import React, {FunctionComponent, useContext, useState} from "react"
+import {FunctionComponent, useContext, useState} from "react"
 import {Link, useParams} from "react-router-dom"
-import useNFT from "../../customHooks/getters/useNFT"
+import useNFT from "../../hooks/getters/useNFT"
 import Loader from "../../components/Loader"
 import ErrorPlaceholder from "../../components/ErrorPlaceholder"
 import "./styles.scss"

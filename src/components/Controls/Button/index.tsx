@@ -1,4 +1,4 @@
-import React, {ButtonHTMLAttributes, FunctionComponent} from "react"
+import {ButtonHTMLAttributes, FunctionComponent} from "react"
 import "./styles.scss"
 
 const Button: FunctionComponent<

@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FunctionComponent, useContext, useState} from "react"
+import {ChangeEvent, FunctionComponent, useContext, useState} from "react"
 import EthersContext from "../../../context/EthersContext"
 import {toastError, toastSuccess} from "../../Toast"
 import bidAuction from "../../../api/ethers/functions/auction/bidAuction"

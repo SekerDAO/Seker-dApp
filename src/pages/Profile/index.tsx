@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useContext, useEffect, useState} from "react"
+import {FunctionComponent, useContext, useEffect, useState} from "react"
 import {useHistory, useLocation, useParams} from "react-router-dom"
 import "./styles.scss"
 import {AuthContext} from "../../context/AuthContext"
@@ -8,13 +8,13 @@ import ProfileEdit from "../../components/User/ProfileEdit"
 import ProfileDAOs from "../../components/User/ProfileDAOs"
 import CreateCustomDomainModal from "../../components/Modals/CreateCustomDomainModal"
 import CreateNFTModal from "../../components/Modals/CreateNFTModal"
-import useUser from "../../customHooks/getters/useUser"
+import useUser from "../../hooks/getters/useUser"
 import ErrorPlaceholder from "../../components/ErrorPlaceholder"
 import Loader from "../../components/Loader"
 import updateUserImage from "../../api/firebase/user/updateUserImage"
 import UploadImageModal from "../../components/Modals/UploadImageModal"
-import TwitterIcon from "../../icons/TwitterIcon"
-import InstagramIcon from "../../icons/InstagramIcon"
+import TwitterIcon from "../../assets/icons/TwitterIcon"
+import InstagramIcon from "../../assets/icons/InstagramIcon"
 import {PURPLE_2} from "../../constants/colors"
 import DashboardHeader from "../../components/DashboardHeader"
 import {isAddress} from "@ethersproject/address"
@@ -33,7 +33,7 @@ const Profile: FunctionComponent = () => {
 		if (user && user.url && isAddress(userId)) {
 			replace(`/profile/${user.url}`)
 		}
-	}, [user])
+	}, [replace, user, userId])
 
 	const isOwner = connected && user?.account === userAccount
 	const page: ProfilePage = (isOwner && (parse(search).page as ProfilePage)) || "nfts"

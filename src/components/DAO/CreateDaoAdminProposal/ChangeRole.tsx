@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FunctionComponent, useContext, useState} from "react"
+import {ChangeEvent, FunctionComponent, useContext, useState} from "react"
 import Input from "../../Controls/Input"
 import Button from "../../Controls/Button"
 import Select from "../../Controls/Select"
@@ -13,7 +13,7 @@ import {
 	signAddOwner,
 	signRemoveOwner
 } from "../../../api/ethers/functions/gnosisSafe/addRemoveOwner"
-import useDAO from "../../../customHooks/getters/useDAO"
+import useDAO from "../../../hooks/getters/useDAO"
 import ErrorPlaceholder from "../../ErrorPlaceholder"
 import Loader from "../../Loader"
 

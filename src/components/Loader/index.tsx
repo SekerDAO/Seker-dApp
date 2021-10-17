@@ -1,4 +1,4 @@
-import React, {FunctionComponent} from "react"
+import {FunctionComponent} from "react"
 
 // TODO
 const Loader: FunctionComponent = () => <div>Loading...</div>

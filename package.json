@@ -29,7 +29,8 @@
     "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
     "eject": "react-scripts eject",
     "lint": "eslint --ext .ts --ext .tsx --fix src/ ; stylelint src/**/*.scss --fix",
-    "lint-hooks": "eslint --no-eslintrc --parser \"@typescript-eslint/parser\" --parser-options \"{\"ecmaVersion\": 2018, \"sourceType\": \"module\"}\" --plugin \"react-hooks\" --rule \"{\"react-hooks/exhaustive-deps\": 2}\" --ext .ts --ext .tsx src/"
+    "lint-hooks": "eslint -c .eslintrc.hooks.json --ext .ts --ext .tsx src/",
+    "prepare": "husky install"
   },
   "browserslist": {
     "production": [
@@ -56,9 +57,15 @@
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "husky": ">=6",
+    "lint-staged": ">=10",
     "prettier": "^2.2.1",
     "stylelint": "^13.13.1",
     "stylelint-config-standard": "^22.0.0",
     "typescript": "^4.2.4"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": "eslint --cache --fix",
+    "*.css": "stylelint --fix"
   }
 }

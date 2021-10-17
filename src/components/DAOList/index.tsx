@@ -1,4 +1,4 @@
-import React, {FunctionComponent} from "react"
+import {FunctionComponent} from "react"
 import {Link} from "react-router-dom"
 import {DAOListItemProps} from "../../types/DAO"
 import "./styles.scss"

@@ -1,13 +1,13 @@
-import React, {FunctionComponent, useContext} from "react"
+import {FunctionComponent, useContext} from "react"
 import Input from "../../Controls/Input"
 import Table from "../../Table"
 import "./styles.scss"
-import useMyDAOs from "../../../customHooks/getters/useMyDAOs"
+import useMyDAOs from "../../../hooks/getters/useMyDAOs"
 import Loader from "../../Loader"
 import ErrorPlaceholder from "../../ErrorPlaceholder"
 import {AuthContext} from "../../../context/AuthContext"
 import {Link} from "react-router-dom"
-import SearchIcon from "../../../icons/SearchIcon"
+import SearchIcon from "../../../assets/icons/SearchIcon"
 import CreateGnosisSafeModal from "../../Modals/CreateGnosisSafeModal"
 
 const columns = [
