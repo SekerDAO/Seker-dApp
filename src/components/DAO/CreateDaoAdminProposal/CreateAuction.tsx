@@ -17,7 +17,7 @@ const CreateAuction: FunctionComponent<{
 	title: string
 	description: string
 	afterSubmit: () => void
-}> = ({gnosisAddress, title, afterSubmit}) => {
+}> = ({gnosisAddress, gnosisVotingThreshold, title, description, afterSubmit}) => {
 	const {account} = useContext(AuthContext)
 	const {signer} = useContext(EthersContext)
 	const {NFTs, loading, error} = useNFTs({
@@ -80,7 +80,7 @@ const CreateAuction: FunctionComponent<{
 		if (!(account && nft && signer && currencySymbol)) return
 		setProcessing(true)
 		try {
-			// TODO: Implement me
+			console.log("TODO")
 			// await addProposal({
 			// 	type: "createAuction",
 			// 	module: "gnosis",

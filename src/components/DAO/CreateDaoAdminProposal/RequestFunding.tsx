@@ -29,7 +29,7 @@ const RequestFunding: FunctionComponent<{
 		if (!(provider && signer && account && amount && recipient)) return
 		setLoading(true)
 		try {
-			// TODO: Implement me
+			console.log("TODO")
 			// const proposalId = await createERC20DAOFundingProposal(
 			// 	daoAddress,
 			// 	recipient,

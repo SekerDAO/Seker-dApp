@@ -19,7 +19,7 @@ const JoinHouse: FunctionComponent<{
 		if (!(provider && signer && account)) return
 		setLoading(true)
 		try {
-			// TODO: Implement me
+			console.log("TODO")
 			// const proposalId = await createEnterERC20DAOProposal(daoAddress, provider, signer)
 			// await addProposal({
 			// 	id: proposalId,

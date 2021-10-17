@@ -47,7 +47,7 @@ const DAOProposalCard: FunctionComponent<{
 		if (!(provider && signer)) return
 		setProcessing(true)
 		try {
-			// TODO: Implement me
+			console.log("TODO")
 			// if (["changeRole", "joinHouse"].includes(proposal.type)) {
 			// 	await startERC20DAORoleChangeGracePeriod(daoAddress, proposal.id!, provider, signer)
 			// } else if (proposal.type === "requestFunding") {
@@ -66,7 +66,7 @@ const DAOProposalCard: FunctionComponent<{
 		if (!(provider && signer)) return
 		setProcessing(true)
 		try {
-			// TODO: Implement me
+			console.log("TODO")
 			// if (proposal.type === "changeRole") {
 			// 	await executeERC20DAORoleChange(daoAddress, proposal.id!, provider, signer)
 			// 	await updateDAOUser(proposal.gnosisAddress, proposal.recipientAddress!)

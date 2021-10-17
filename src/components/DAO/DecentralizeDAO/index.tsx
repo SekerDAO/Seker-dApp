@@ -80,7 +80,7 @@ const DecentralizeDAO: FunctionComponent<{
 						[votingHookupSignature],
 						signer
 					)
-					// TODO: add new function for decentralize DAO
+					console.log("TODO: add new function for decentralize DAO")
 					// await editDAO({
 					// 	gnosisAddress,
 					// 	daoAddress,

@@ -52,6 +52,7 @@ const useNFTs = ({
 			})
 			const nftsAreOnAuctions: boolean[] = []
 			for (let i = 0; i < nftsSnapshot.data.length; i++) {
+				const {id, address} = nftsSnapshot.data[i].data()
 				const nftAuctions: Auction[] = [] // TODO
 				const details = await Promise.all(nftAuctions.map(a => getAuctionDetails(a.id, _provider)))
 				nftsAreOnAuctions.push(

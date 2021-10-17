@@ -58,7 +58,7 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 			if (newGnosis) {
 				setStage("create")
 			} else {
-				// TODO: Implement me
+				console.log("TODO")
 			}
 		} else if (stage === "create") {
 			if (!(account && signer && votingThreshold)) return

@@ -28,10 +28,8 @@
     "start": "react-scripts start",
     "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
     "eject": "react-scripts eject",
-    "lint": "eslint --ext .ts --ext .tsx src/",
-    "lint:styles": "stylelint src/**/*.scss",
-    "lint:hooks": "eslint -c .eslintrc.hooks.json --ext .ts --ext .tsx src/",
-    "lint:fix:all": "yarn lint --fix ; yarn lint:styles --fix",
+    "lint": "eslint --ext .ts --ext .tsx --fix src/ ; stylelint src/**/*.scss --fix",
+    "lint-hooks": "eslint -c .eslintrc.hooks.json --ext .ts --ext .tsx src/",
     "prepare": "husky install"
   },
   "browserslist": {
