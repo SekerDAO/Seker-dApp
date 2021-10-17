@@ -1,4 +1,13 @@
-import {ChangeEvent, Fragment, FunctionComponent, useContext, useEffect, useState} from "react"
+import React, {
+	ChangeEvent,
+	Fragment,
+	FunctionComponent,
+	useContext,
+	useEffect,
+	useState
+} from "react"
+import CreatableSelect from "react-select/creatable"
+import {OnChangeValue} from "react-select"
 import Input from "../../Controls/Input"
 import {isAddress} from "@ethersproject/address"
 import {toastError, toastSuccess, toastWarning} from "../../Toast"
@@ -54,7 +63,7 @@ const GeneralEVM: FunctionComponent<{
 	}, [abiString])
 
 	const [selectedMethodIndex, setSelectedMethodIndex] = useState<number | null>(null)
-	const [args, setArgs] = useState<string[]>([])
+	const [args, setArgs] = useState<Array<string | readonly string[]>>([])
 	const [argsBad, setArgsBad] = useState<boolean[]>([])
 	useEffect(() => {
 		if (selectedMethodIndex != null) {
@@ -82,7 +91,7 @@ const GeneralEVM: FunctionComponent<{
 		}
 	}
 
-	const handleArgumentChange = (value: string, index: number) => {
+	const handleArgumentChange = (value: string | OnChangeValue<string, true>, index: number) => {
 		if (selectedMethodIndex == null) return
 		setArgs(prevState => prevState.map((item, idx) => (idx === index ? value : item)))
 		setArgsBad(prevState =>
@@ -203,7 +212,14 @@ const GeneralEVM: FunctionComponent<{
 							{contractMethods[selectedMethodIndex].inputs.map((input, index) => (
 								<Fragment key={index}>
 									<label>{`${input.name} (${input.type})`}</label>
-									{input.type.endsWith("[]") && <p>TODO: Use comma as separator</p>}
+									{input.type.endsWith("[]") && (
+										<CreatableSelect
+											isMulti
+											onChange={(newValue: OnChangeValue<string, true>) => {
+												handleArgumentChange(newValue, index)
+											}}
+										/>
+									)}
 									{input.type === "bool" ? (
 										<Select
 											fullWidth
