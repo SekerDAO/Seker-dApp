@@ -239,7 +239,7 @@ const GeneralEVM: FunctionComponent<{
 											}}
 										/>
 									)}
-									{input.type === "bool" ? (
+									{input.type === "bool" && (
 										<Select
 											fullWidth
 											options={[
@@ -251,7 +251,8 @@ const GeneralEVM: FunctionComponent<{
 												handleArgumentChange(e.target.value, index)
 											}}
 										/>
-									) : (
+									)}
+									{input.type !== "bool" && !input.type.endsWith("[]") && (
 										<Input
 											borders="all"
 											value={args[index] ?? ""}
