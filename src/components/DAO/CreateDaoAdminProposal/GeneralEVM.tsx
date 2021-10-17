@@ -9,6 +9,7 @@ import React, {
 import CreatableSelect from "react-select/creatable"
 import {OnChangeValue} from "react-select"
 import Input from "../../Controls/Input"
+import ArrayInput, {ArrayInputChangeValue} from "../../Controls/ArrayInput"
 import {isAddress} from "@ethersproject/address"
 import {toastError, toastSuccess, toastWarning} from "../../Toast"
 import fetchContractAbi from "../../../api/etherscan/fetchContractAbi"
@@ -63,7 +64,7 @@ const GeneralEVM: FunctionComponent<{
 	}, [abiString])
 
 	const [selectedMethodIndex, setSelectedMethodIndex] = useState<number | null>(null)
-	const [args, setArgs] = useState<Array<string | readonly string[]>>([])
+	const [args, setArgs] = useState<Array<string | string[]>>([])
 	const [argsBad, setArgsBad] = useState<boolean[]>([])
 	useEffect(() => {
 		if (selectedMethodIndex != null) {
@@ -91,7 +92,26 @@ const GeneralEVM: FunctionComponent<{
 		}
 	}
 
-	const handleArgumentChange = (value: string | OnChangeValue<string, true>, index: number) => {
+	const flattenArrayInputValue = (value: ArrayInputChangeValue): string[] => {
+		return value.map(option => option.value)
+	}
+
+	const handleArrayArgumentChange = (value: ArrayInputChangeValue, index: number) => {
+		if (selectedMethodIndex == null) return
+		const normalizedValue = flattenArrayInputValue(value)
+		setArgs(prevState => prevState.map((item, idx) => (idx === index ? normalizedValue : item)))
+		setArgsBad(prevState =>
+			prevState.map((item, idx) =>
+				idx === index
+					? !validateArgument(
+							normalizedValue,
+							contractMethods[selectedMethodIndex].inputs[index].type
+					  )
+					: false
+			)
+		)
+	}
+	const handleArgumentChange = (value: string, index: number) => {
 		if (selectedMethodIndex == null) return
 		setArgs(prevState => prevState.map((item, idx) => (idx === index ? value : item)))
 		setArgsBad(prevState =>
@@ -213,10 +233,9 @@ const GeneralEVM: FunctionComponent<{
 								<Fragment key={index}>
 									<label>{`${input.name} (${input.type})`}</label>
 									{input.type.endsWith("[]") && (
-										<CreatableSelect
-											isMulti
-											onChange={(newValue: OnChangeValue<string, true>) => {
-												handleArgumentChange(newValue, index)
+										<ArrayInput
+											onChange={(newValue: ArrayInputChangeValue) => {
+												handleArrayArgumentChange(newValue, index)
 											}}
 										/>
 									)}
