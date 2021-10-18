@@ -1,4 +1,4 @@
-import React, {FunctionComponent} from "react"
+import {FunctionComponent} from "react"
 
 const InstagramIcon: FunctionComponent<{fill: string}> = ({fill}) => (
 	<svg width={25} height={25} viewBox="0 0 25 25">

@@ -1,4 +1,4 @@
-import React, {FunctionComponent} from "react"
+import {FunctionComponent} from "react"
 
 const TelegramIcon: FunctionComponent<{fill: string}> = ({fill}) => (
 	<svg viewBox="0 0 25 25" width={25} height={25}>

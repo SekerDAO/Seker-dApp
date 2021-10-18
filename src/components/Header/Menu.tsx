@@ -1,7 +1,7 @@
-import React, {FunctionComponent, useContext, useRef, useState} from "react"
+import {FunctionComponent, useContext, useRef, useState} from "react"
 import {Link} from "react-router-dom"
 import {AuthContext} from "../../context/AuthContext"
-import useClickOutside from "../../customHooks/useClickOutside"
+import useClickOutside from "../../hooks/useClickOutside"
 
 const HeaderMenu: FunctionComponent = () => {
 	const {account, url, connected, connecting, connectWallet, disconnect} = useContext(AuthContext)

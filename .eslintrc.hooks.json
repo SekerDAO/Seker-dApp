@@ -1,0 +1,14 @@
+{
+    "parserOptions": {
+      "ecmaVersion": 2018,
+      "sourceType": "module"
+    },
+    "plugins": ["react-hooks"],
+    "extends": [
+      "./.eslintrc.json"
+    ],
+    "rules": {
+      "react-hooks/exhaustive-deps": 2
+    }
+  }
+  

@@ -1,7 +1,7 @@
-import React, {FunctionComponent} from "react"
-import MembersIcon from "../../../icons/MembersIcon"
-import HouseIcon from "../../../icons/HouseIcon"
-import ShieldIcon from "../../../icons/ShieldIcon"
+import {FunctionComponent} from "react"
+import MembersIcon from "../../../assets/icons/MembersIcon"
+import HouseIcon from "../../../assets/icons/HouseIcon"
+import ShieldIcon from "../../../assets/icons/ShieldIcon"
 import {DAO} from "../../../types/DAO"
 
 const AboutDAO: FunctionComponent<{

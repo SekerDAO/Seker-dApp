@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useState, Fragment} from "react"
+import {FunctionComponent, useState, Fragment} from "react"
 import {Learn} from "../../types/learn"
 import "./styles.scss"
 import {useHistory, useLocation} from "react-router-dom"

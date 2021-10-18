@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useState} from "react"
+import {FunctionComponent, useState} from "react"
 import Button from "../../Controls/Button"
 import "./styles.scss"
 import Modal from "../Modal"

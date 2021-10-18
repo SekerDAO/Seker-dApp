@@ -1,4 +1,4 @@
-import React, {FunctionComponent, useContext, useState} from "react"
+import {FunctionComponent, useContext, useState} from "react"
 import NFTGallery from "../../NFTGallery"
 import CreateNFTModal from "../../Modals/CreateNFTModal"
 import "./styles.scss"
