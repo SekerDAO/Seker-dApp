@@ -4,17 +4,13 @@ import Button from "../../Controls/Button"
 import {AuthContext} from "../../../context/AuthContext"
 import EthersContext from "../../../context/EthersContext"
 import {toastError, toastSuccess} from "../../Toast"
-import createProposalModule from "../../../api/ethers/functions/proposalModule/createProposalModule"
-import {
-	executeHookupProposalModule,
-	signHookupProposalModule
-} from "../../../api/ethers/functions/gnosisSafe/hookupProposalModule"
 import addSafeProposal from "../../../api/firebase/safeProposal/addSafeProposal"
-import createLinearVoting from "../../../api/ethers/functions/gnosisSafe/createLinearVoting"
+import deploySeele from "../../../api/ethers/functions/Seele/deploySeele"
 import {
-	executeHookupLinearVotingModule,
-	signHookupLinearVotingModule
-} from "../../../api/ethers/functions/proposalModule/hookupLinearVotingModule"
+	executeRegisterSeele,
+	signRegisterSeele
+} from "../../../api/ethers/functions/Seele/registerSeele"
+import editDAO from "../../../api/firebase/DAO/editDAO"
 
 const DecentralizeDAO: FunctionComponent<{
 	gnosisAddress: string
@@ -40,65 +36,21 @@ const DecentralizeDAO: FunctionComponent<{
 		) {
 			setLoading(true)
 			try {
-				const daoAddress = await createProposalModule(
-					gnosisAddress,
-					Number(proposalTime),
-					Number(votingThreshold),
-					signer
-				)
-				// TODO: handle other voting modules
-				const votingModule = await createLinearVoting(
-					totalSupply,
-					daoAddress,
-					tokenAddress,
-					Number(proposalTime),
-					gnosisAddress,
-					signer
-				)
-				const proposalHookupSignature = await signHookupProposalModule(
-					gnosisAddress,
-					daoAddress,
-					signer
-				)
-				const votingHookupSignature = await signHookupLinearVotingModule(
-					gnosisAddress,
-					votingModule,
-					daoAddress,
-					signer
-				)
+				const seeleAddress = await deploySeele(gnosisAddress, [], signer)
+				const signature = await signRegisterSeele(gnosisAddress, seeleAddress, signer)
 				if (gnosisVotingThreshold === 1) {
-					await executeHookupProposalModule(
+					await executeRegisterSeele(gnosisAddress, seeleAddress, [signature], signer)
+					await editDAO({
 						gnosisAddress,
-						daoAddress,
-						[proposalHookupSignature],
-						signer
-					)
-					await executeHookupLinearVotingModule(
-						gnosisAddress,
-						votingModule,
-						daoAddress,
-						[votingHookupSignature],
-						signer
-					)
-					console.log("TODO: add new function for decentralize DAO")
-					// await editDAO({
-					// 	gnosisAddress,
-					// 	daoAddress,
-					// 	tokenAddress,
-					// 	totalSupply,
-					// 	votingAddress: votingModule,
-					// 	daoVotingThreshold: Number(votingThreshold)
-					// })
+						seeleAddress
+					})
 				}
 				await addSafeProposal({
 					type: "decentralizeDAO",
 					gnosisAddress,
 					title: "Decentralize DAO",
 					state: gnosisVotingThreshold === 1 ? "executed" : "active",
-					gracePeriod: Number(proposalTime),
-					daoVotingThreshold: Number(votingThreshold),
-					signatures: [proposalHookupSignature],
-					signaturesStep2: [votingHookupSignature]
+					signatures: [signature]
 				})
 				afterCreate()
 				toastSuccess(

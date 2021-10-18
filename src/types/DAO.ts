@@ -13,6 +13,8 @@ export type DAOFirebaseData = {
 	discord?: string
 	profileImage?: string
 	headerImage?: string
+	// Created after deploying Seele module
+	seeleAddress?: string
 }
 
 type DAOEthersData = {

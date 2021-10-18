@@ -21,6 +21,7 @@ import DiscordIcon from "../../icons/DiscordIcon"
 import DashboardHeader from "../../components/DashboardHeader"
 import {formatDate} from "../../utlls"
 import DAOOwners from "../../components/DAO/DAOOwners"
+import DecentralizeDAOModal from "../../components/Modals/DecentralizeDAOModal"
 
 const menuEntries = ["Collection", "About", "Owners", "Proposals", "+ Admin Proposal"]
 
@@ -132,15 +133,15 @@ const DAOPage: FunctionComponent = () => {
 							{/* TODO: link */}
 							<Button>Purchase tokens</Button>
 							{/* TODO: decentralize DAO modal */}
-							{/*{dao.daoAddress ? (*/}
-							{/*	<p>TODO: Decentralized DAO</p>*/}
-							{/*) : isAdmin ? (*/}
-							{/*	<DecentralizeDAOModal*/}
-							{/*		afterSubmit={refetch}*/}
-							{/*		gnosisAddress={dao.gnosisAddress}*/}
-							{/*		gnosisVotingThreshold={dao.gnosisVotingThreshold}*/}
-							{/*	/>*/}
-							{/*) : null}*/}
+							{dao.seeleAddress ? (
+								<p>TODO: Decentralized DAO</p>
+							) : isAdmin ? (
+								<DecentralizeDAOModal
+									afterSubmit={refetch}
+									gnosisAddress={dao.gnosisAddress}
+									gnosisVotingThreshold={dao.gnosisVotingThreshold}
+								/>
+							) : null}
 						</div>
 					</div>
 					<div className="dao__main">
