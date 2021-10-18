@@ -29,12 +29,16 @@ const ArrayInput: FunctionComponent<{
 				onKeyDown={handleKeyDown}
 				placeholder="Type value and press enter or tab..."
 				borders={borders || "all"}
+				validation={validation}
 			/>
-			{validation && <span>{validation}</span>}
 			{value.map((option, index) => (
-				<section key={option.value}>
+				<section key={option.value} className="array-input-container__option">
 					<span>{option.label}</span>
-					<Button onClick={() => handleOptionRemove(index)}>
+					<Button
+						buttonType="secondary"
+						onClick={() => handleOptionRemove(index)}
+						extraClassName="array-input-container__option__remove-button"
+					>
 						<CloseIcon />
 					</Button>
 				</section>

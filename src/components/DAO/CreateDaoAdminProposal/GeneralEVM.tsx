@@ -237,6 +237,7 @@ const GeneralEVM: FunctionComponent<{
 											onChange={(newValue: ArrayInputChangeValue) => {
 												handleArrayArgumentChange(newValue, index)
 											}}
+											validation={argsBad[index] ? `Bad value for type ${input.type}` : null}
 										/>
 									)}
 									{input.type === "bool" && (

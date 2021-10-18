@@ -1,9 +1,32 @@
 @import "src/assets/styles/variables";
 
 .array-input-container {
-    font-family: Karla, 'Open Sans', sans-serif;
     font-size: 16px;
     line-height: 20px;
-    border-radius: 0;
-    border: 1px solid $black;
+    input {
+        width: 100%;
+    }
+    &__option {
+        padding: 5px;
+        margin-top: 10px;
+        margin-right: 5px;
+        border: 1px solid $black;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        & &__remove-button {
+            margin-left: 5px;
+            border: none;
+            display: flex;
+            margin-top: 0;
+            padding: 0;
+            &:hover {
+                background-color: white;
+            }
+            svg {
+                width: 20px;
+                height: 20px
+            }
+        }
+    }
 }

@@ -17,7 +17,7 @@ const useArrayInput = ({onChange}: {onChange?: ArrayInputChangeListener}): UseAr
 	const [value, setValue] = useState<readonly ArrayInputOption[]>([])
 
 	const handleOptionRemove = (removeIndex: number) => {
-		setValue(prevValue => prevValue.filter((option, index) => index === removeIndex))
+		setValue(prevValue => prevValue.filter((option, index) => index !== removeIndex))
 	}
 
 	const handleInputChange: InputChangeListener = event => {
