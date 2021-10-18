@@ -1,27 +1,27 @@
-import {useState, KeyboardEventHandler} from "react"
+import {useState, KeyboardEventHandler, ChangeEventHandler} from "react"
 import type {ArrayInputOption, ArrayInputChangeListener} from "../"
 
 type UseArrayInput = {
 	inputValue: string
 	value: readonly ArrayInputOption[]
-	handleChange: ArrayInputChangeListener
+	handleOptionRemove: OptionRemoveListener
 	handleInputChange: InputChangeListener
 	handleKeyDown: KeyboardEventHandler<HTMLDivElement>
 }
 
-type InputChangeListener = (newInputValue: string) => void
+type InputChangeListener = ChangeEventHandler<HTMLInputElement>
+type OptionRemoveListener = (removeIndex: number) => void
 
 const useArrayInput = ({onChange}: {onChange?: ArrayInputChangeListener}): UseArrayInput => {
 	const [inputValue, setInputValue] = useState<string>("")
 	const [value, setValue] = useState<readonly ArrayInputOption[]>([])
 
-	const handleChange: ArrayInputChangeListener = newValue => {
-		setValue(newValue)
-		onChange && onChange(newValue)
+	const handleOptionRemove = (removeIndex: number) => {
+		setValue(prevValue => prevValue.filter((option, index) => index === removeIndex))
 	}
 
-	const handleInputChange = (newInputValue: string) => {
-		setInputValue(newInputValue)
+	const handleInputChange: InputChangeListener = event => {
+		setInputValue(event.target.value)
 	}
 
 	const handleKeyDown: KeyboardEventHandler<HTMLDivElement> = event => {
@@ -29,22 +29,24 @@ const useArrayInput = ({onChange}: {onChange?: ArrayInputChangeListener}): UseAr
 		switch (event.key) {
 			case "Enter":
 			case "Tab":
-				setValue([
+				const newValue = [
 					...value,
 					{
 						label: inputValue,
 						value: inputValue
 					}
-				])
+				]
+				setValue(newValue)
 				setInputValue("")
+				onChange && onChange(newValue)
 				event.preventDefault()
 		}
 	}
 	return {
 		inputValue,
 		value,
-		handleChange,
 		handleInputChange,
+		handleOptionRemove,
 		handleKeyDown
 	}
 }
