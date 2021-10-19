@@ -14,7 +14,15 @@ const ArrayInput: FunctionComponent<{
 	value: string[]
 	validation?: string | null
 	borders?: "all" | "bottom"
-}> = ({onChange, onRemove, value, borders, validation}) => {
+	placeholder?: string
+}> = ({
+	onChange,
+	onRemove,
+	value,
+	borders,
+	validation,
+	placeholder = "Type value and press enter or tab..."
+}) => {
 	const {handleInputChange, handleKeyDown, inputValue} = useArrayInput({
 		onChange,
 		value
@@ -25,7 +33,7 @@ const ArrayInput: FunctionComponent<{
 				onChange={handleInputChange}
 				value={inputValue}
 				onKeyDown={handleKeyDown}
-				placeholder="Type value and press enter or tab..."
+				placeholder={placeholder}
 				borders={borders || "all"}
 				validation={validation}
 			/>

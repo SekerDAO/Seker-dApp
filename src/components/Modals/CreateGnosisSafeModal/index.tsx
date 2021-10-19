@@ -10,6 +10,7 @@ import {toastError, toastSuccess} from "../../Toast"
 import addDAO from "../../../api/firebase/DAO/addDAO"
 import "./styles.scss"
 import editDAO from "../../../api/firebase/DAO/editDAO"
+import ArrayInput from "../../Controls/ArrayInput"
 
 type CreateGnosisSafeStage = "chooseOption" | "create" | "import" | "success"
 
@@ -29,14 +30,6 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 			setMembers([account])
 		}
 	}, [account])
-
-	const handleMemberChange = (address: string, index: number) => {
-		setMembers(prevState => prevState.map((item, idx) => (idx === index ? address : item)))
-	}
-
-	const handleMemberAdd = () => {
-		setMembers(prevState => [...prevState, ""])
-	}
 
 	const handleMemberRemove = (index: number) => {
 		if (index === 0) return
@@ -122,30 +115,12 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 						}}
 					/>
 					<label>Add Admins</label>
-					{members.map((member, index) => (
-						<div className="create-gnosis-safe__row" key={index}>
-							<Input
-								borders="all"
-								value={members[index]}
-								onChange={e => {
-									handleMemberChange(e.target.value, index)
-								}}
-							/>
-							{index !== 0 && (
-								<Button
-									buttonType="secondary"
-									onClick={() => {
-										handleMemberRemove(index)
-									}}
-								>
-									-
-								</Button>
-							)}
-							<Button buttonType="primary" onClick={handleMemberAdd}>
-								+
-							</Button>
-						</div>
-					))}
+					<ArrayInput
+						value={members}
+						onChange={setMembers}
+						onRemove={handleMemberRemove}
+						placeholder="Paste address and press enter. Add more addresses if needed"
+					/>
 					<label htmlFor="create-gnosis-threshold">Admin Voting Threshold</label>
 					<Input borders="all" number value={votingThreshold} onChange={handleThresholdChange} />
 				</>
