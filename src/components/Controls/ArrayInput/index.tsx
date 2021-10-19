@@ -5,21 +5,19 @@ import Button from "../Button"
 import useArrayInput from "./hooks"
 import "./styles.scss"
 
-export type ArrayInputOption = {
-	value: string
-	label: string
-}
-
-export type ArrayInputChangeListener = (newValue: ArrayInputChangeValue) => void
-export type ArrayInputChangeValue = ArrayInputOption[]
+export type ArrayInputChangeListener = (newValue: ArrayInputValue) => void
+export type ArrayInputValue = string[]
 
 const ArrayInput: FunctionComponent<{
 	onChange: ArrayInputChangeListener
+	onRemove: (indexToRemove: number) => void
+	value: string[]
 	validation?: string | null
 	borders?: "all" | "bottom"
-}> = ({onChange, borders, validation}) => {
-	const {handleInputChange, handleKeyDown, handleOptionRemove, value, inputValue} = useArrayInput({
-		onChange
+}> = ({onChange, onRemove, value, borders, validation}) => {
+	const {handleInputChange, handleKeyDown, inputValue} = useArrayInput({
+		onChange,
+		value
 	})
 	return (
 		<section className="array-input-container">
@@ -32,11 +30,11 @@ const ArrayInput: FunctionComponent<{
 				validation={validation}
 			/>
 			{value.map((option, index) => (
-				<section key={option.value} className="array-input-container__option">
-					<span>{option.label}</span>
+				<section key={option} className="array-input-container__option">
+					<span>{option}</span>
 					<Button
 						buttonType="secondary"
-						onClick={() => handleOptionRemove(index)}
+						onClick={() => onRemove(index)}
 						extraClassName="array-input-container__option__remove-button"
 					>
 						<CloseIcon />

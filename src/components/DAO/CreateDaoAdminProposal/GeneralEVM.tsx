@@ -9,7 +9,7 @@ import React, {
 import CreatableSelect from "react-select/creatable"
 import {OnChangeValue} from "react-select"
 import Input from "../../Controls/Input"
-import ArrayInput, {ArrayInputChangeValue} from "../../Controls/ArrayInput"
+import ArrayInput, {ArrayInputValue} from "../../Controls/ArrayInput"
 import {isAddress} from "@ethersproject/address"
 import {toastError, toastSuccess, toastWarning} from "../../Toast"
 import fetchContractAbi from "../../../api/etherscan/fetchContractAbi"
@@ -92,21 +92,25 @@ const GeneralEVM: FunctionComponent<{
 		}
 	}
 
-	const flattenArrayInputValue = (value: ArrayInputChangeValue): string[] => {
-		return value.map(option => option.value)
+	const handleArrayArgumentRemove = (indexToRemove: number, argIndex: number) => {
+		if (selectedMethodIndex == null) return
+		setArgs(prevState =>
+			prevState.map((item, index) => {
+				if (argIndex === index && item instanceof Array) {
+					return item.filter((option, optionIndex) => optionIndex !== indexToRemove)
+				}
+				return item
+			})
+		)
 	}
 
-	const handleArrayArgumentChange = (value: ArrayInputChangeValue, index: number) => {
+	const handleArrayArgumentChange = (value: ArrayInputValue, index: number) => {
 		if (selectedMethodIndex == null) return
-		const normalizedValue = flattenArrayInputValue(value)
-		setArgs(prevState => prevState.map((item, idx) => (idx === index ? normalizedValue : item)))
+		setArgs(prevState => prevState.map((item, idx) => (idx === index ? value : item)))
 		setArgsBad(prevState =>
 			prevState.map((item, idx) =>
 				idx === index
-					? !validateArgument(
-							normalizedValue,
-							contractMethods[selectedMethodIndex].inputs[index].type
-					  )
+					? !validateArgument(value, contractMethods[selectedMethodIndex].inputs[index].type)
 					: false
 			)
 		)
@@ -234,9 +238,13 @@ const GeneralEVM: FunctionComponent<{
 									<label>{`${input.name} (${input.type})`}</label>
 									{input.type.endsWith("[]") && (
 										<ArrayInput
-											onChange={(newValue: ArrayInputChangeValue) => {
+											onRemove={(indexToRemove: number) => {
+												handleArrayArgumentRemove(indexToRemove, index)
+											}}
+											onChange={(newValue: ArrayInputValue) => {
 												handleArrayArgumentChange(newValue, index)
 											}}
+											value={(args.find((arg, idx) => idx === index) as ArrayInputValue) || []}
 											validation={argsBad[index] ? `Bad value for type ${input.type}` : null}
 										/>
 									)}
