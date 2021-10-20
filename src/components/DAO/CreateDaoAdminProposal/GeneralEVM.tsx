@@ -6,8 +6,6 @@ import React, {
 	useEffect,
 	useState
 } from "react"
-import CreatableSelect from "react-select/creatable"
-import {OnChangeValue} from "react-select"
 import Input from "../../Controls/Input"
 import ArrayInput, {ArrayInputValue} from "../../Controls/ArrayInput"
 import {isAddress} from "@ethersproject/address"
