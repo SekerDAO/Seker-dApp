@@ -31,8 +31,8 @@ export const formatTimeDifference = (ms: number): string => {
 	return `${hours > 0 ? `${hours} h ` : ""}${minutes} m`
 }
 
-const validateScalarArgument = (arg: string | readonly string[], argType: AbiDataType): boolean => {
-	if (argType.endsWith("[]") || arg instanceof Array) {
+const validateScalarArgument = (arg: string, argType: AbiDataType): boolean => {
+	if (argType.endsWith("[]")) {
 		throw new Error("Trying to validate array argument type as a scalar one")
 	}
 	if (argType.startsWith("bytes") || argType === "string") {
@@ -64,7 +64,7 @@ export const validateArgument = (
 	arg: string | readonly string[],
 	argType: AbiDataType
 ): boolean => {
-	if (argType.endsWith("[]") && arg instanceof Array) {
+	if (arg instanceof Array) {
 		return arg.reduce(
 			(acc: boolean, cur) =>
 				acc && validateScalarArgument(cur, argType.slice(0, -2) as AbiDataType),
@@ -91,11 +91,11 @@ const prepareScalarArgument = (arg: string, dataType: AbiScalar): string | boole
 }
 
 export const prepareArguments = (
-	args: Array<string | readonly string[]>,
+	args: Array<string | string[]>,
 	dataTypes: AbiDataType[]
 ): (string | string[] | boolean | boolean[] | BigNumber | BigNumber[])[] =>
 	args.map((arg, index) => {
-		if ((dataTypes[index].endsWith("[]") && arg instanceof Array) || arg instanceof Array) {
+		if (arg instanceof Array) {
 			return arg.map(splittedArg =>
 				prepareScalarArgument(splittedArg, dataTypes[index].slice(0, -2) as AbiScalar)
 			) as string[] | boolean[] | BigNumber[]

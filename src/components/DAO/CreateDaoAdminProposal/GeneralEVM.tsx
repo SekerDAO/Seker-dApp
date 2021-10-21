@@ -7,7 +7,7 @@ import React, {
 	useState
 } from "react"
 import Input from "../../Controls/Input"
-import ArrayInput, {ArrayInputValue} from "../../Controls/ArrayInput"
+import ArrayInput from "../../Controls/ArrayInput"
 import {isAddress} from "@ethersproject/address"
 import {toastError, toastSuccess, toastWarning} from "../../Toast"
 import fetchContractAbi from "../../../api/etherscan/fetchContractAbi"
@@ -102,13 +102,15 @@ const GeneralEVM: FunctionComponent<{
 		)
 	}
 
-	const handleArrayArgumentChange = (value: ArrayInputValue, index: number) => {
+	const handleArrayArgumentAdd = (value: string, index: number) => {
 		if (selectedMethodIndex == null) return
-		setArgs(prevState => prevState.map((item, idx) => (idx === index ? value : item)))
+		const currentArg = args.find((arg, idx) => idx === index) as string[]
+		const newValue = [...currentArg, value]
+		setArgs(prevState => prevState.map((item, idx) => (idx === index ? newValue : item)))
 		setArgsBad(prevState =>
 			prevState.map((item, idx) =>
 				idx === index
-					? !validateArgument(value, contractMethods[selectedMethodIndex].inputs[index].type)
+					? !validateArgument(newValue, contractMethods[selectedMethodIndex].inputs[index].type)
 					: false
 			)
 		)
@@ -239,10 +241,10 @@ const GeneralEVM: FunctionComponent<{
 											onRemove={(indexToRemove: number) => {
 												handleArrayArgumentRemove(indexToRemove, index)
 											}}
-											onChange={(newValue: ArrayInputValue) => {
-												handleArrayArgumentChange(newValue, index)
+											onAdd={(newValue: string) => {
+												handleArrayArgumentAdd(newValue, index)
 											}}
-											value={(args.find((arg, idx) => idx === index) as ArrayInputValue) || []}
+											items={(args.find((arg, idx) => idx === index) as string[]) || []}
 											validation={argsBad[index] ? `Bad value for type ${input.type}` : null}
 										/>
 									)}

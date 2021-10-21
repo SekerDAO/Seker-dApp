@@ -1,49 +1,58 @@
-import {FunctionComponent} from "react"
+import {FunctionComponent, useState, ChangeEventHandler, KeyboardEventHandler} from "react"
 import CloseIcon from "../../../assets/icons/CloseIcon"
 import Input from "../Input"
 import Button from "../Button"
-import useArrayInput from "./hooks"
 import "./styles.scss"
 
-export type ArrayInputChangeListener = (newValue: ArrayInputValue) => void
-export type ArrayInputValue = string[]
-
 const ArrayInput: FunctionComponent<{
-	onChange: ArrayInputChangeListener
+	onAdd: (newValue: string) => void
 	onRemove: (indexToRemove: number) => void
-	value: string[]
+	items: string[]
 	validation?: string | null
 	borders?: "all" | "bottom"
 	placeholder?: string
 }> = ({
-	onChange,
+	onAdd,
 	onRemove,
-	value,
-	borders,
+	items,
 	validation,
+	borders = "all",
 	placeholder = "Type value and press enter or tab..."
 }) => {
-	const {handleInputChange, handleKeyDown, inputValue} = useArrayInput({
-		onChange,
-		value
-	})
+	const [inputValue, setInputValue] = useState<string>("")
+
+	const handleInputChange: ChangeEventHandler<HTMLInputElement> = event => {
+		setInputValue(event.target.value)
+	}
+
+	const handleKeyDown: KeyboardEventHandler<HTMLDivElement> = event => {
+		if (!inputValue || validation) return
+		switch (event.key) {
+			case "Enter":
+			case "Tab":
+				event.preventDefault()
+				onAdd(inputValue)
+				setInputValue("")
+		}
+	}
+
 	return (
-		<section className="array-input-container">
+		<section className="array-input">
 			<Input
 				onChange={handleInputChange}
 				value={inputValue}
 				onKeyDown={handleKeyDown}
 				placeholder={placeholder}
-				borders={borders || "all"}
+				borders={borders}
 				validation={validation}
 			/>
-			{value.map((option, index) => (
-				<section key={option} className="array-input-container__option">
-					<span>{option}</span>
+			{items.map((item, index) => (
+				<section key={index} className="array-input__option">
+					<span>{item}</span>
 					<Button
 						buttonType="secondary"
 						onClick={() => onRemove(index)}
-						extraClassName="array-input-container__option__remove-button"
+						extraClassName="array-input-option__remove-button"
 					>
 						<CloseIcon />
 					</Button>
