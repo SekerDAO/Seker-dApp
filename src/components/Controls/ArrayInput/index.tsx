@@ -37,7 +37,7 @@ const ArrayInput: FunctionComponent<{
 	}
 
 	return (
-		<section className="array-input">
+		<div className="array-input">
 			<Input
 				onChange={handleInputChange}
 				value={inputValue}
@@ -47,18 +47,18 @@ const ArrayInput: FunctionComponent<{
 				validation={validation}
 			/>
 			{items.map((item, index) => (
-				<section key={index} className="array-input__option">
+				<div key={index} className="array-input__option">
 					<span>{item}</span>
 					<Button
 						buttonType="secondary"
 						onClick={() => onRemove(index)}
-						extraClassName="array-input-option__remove-button"
+						extraClassName="array-input__remove-button"
 					>
 						<CloseIcon />
 					</Button>
-				</section>
+				</div>
 			))}
-		</section>
+		</div>
 	)
 }
 
