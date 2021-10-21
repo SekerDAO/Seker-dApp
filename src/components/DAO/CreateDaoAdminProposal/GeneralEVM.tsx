@@ -236,7 +236,7 @@ const GeneralEVM: FunctionComponent<{
 							{contractMethods[selectedMethodIndex].inputs.map((input, index) => (
 								<Fragment key={index}>
 									<label>{`${input.name} (${input.type})`}</label>
-									{input.type.endsWith("[]") && (
+									{true && (
 										<ArrayInput
 											onRemove={(indexToRemove: number) => {
 												handleArrayArgumentRemove(indexToRemove, index)
@@ -273,7 +273,11 @@ const GeneralEVM: FunctionComponent<{
 									)}
 								</Fragment>
 							))}
-							<Button disabled={submitButtonDisabled || processing} onClick={handleSubmit}>
+							<Button
+								disabled={submitButtonDisabled || processing}
+								onClick={handleSubmit}
+								extraClassName="create-dao-proposal__submit-button"
+							>
 								{processing ? "Processing..." : "Create Proposal"}
 							</Button>
 						</>

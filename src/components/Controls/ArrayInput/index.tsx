@@ -46,18 +46,22 @@ const ArrayInput: FunctionComponent<{
 				borders={borders}
 				validation={validation}
 			/>
-			{items.map((item, index) => (
-				<div key={index} className="array-input__option">
-					<span>{item}</span>
-					<Button
-						buttonType="secondary"
-						onClick={() => onRemove(index)}
-						extraClassName="array-input__remove-button"
-					>
-						<CloseIcon />
-					</Button>
+			{items && (
+				<div className="array-input__options-wrapper">
+					{items.map((item, index) => (
+						<div key={index} className="array-input__option">
+							<span>{item}</span>
+							<Button
+								buttonType="secondary"
+								onClick={() => onRemove(index)}
+								extraClassName="array-input__remove-button"
+							>
+								<CloseIcon />
+							</Button>
+						</div>
+					))}
 				</div>
-			))}
+			)}
 		</div>
 	)
 }
