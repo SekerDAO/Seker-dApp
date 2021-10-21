@@ -36,6 +36,9 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 		setMembers(prevState => prevState.filter((_, idx) => idx !== index))
 	}
 
+	const handleMemberAdd = (newMember: string) => {
+		setMembers([...members, newMember])
+	}
 	const handleThresholdChange = (e: ChangeEvent<HTMLInputElement>) => {
 		if (Number(e.target.value) > members.length) {
 			setVotingThreshold(String(members.length))
@@ -116,8 +119,8 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 					/>
 					<label>Add Admins</label>
 					<ArrayInput
-						value={members}
-						onChange={setMembers}
+						items={members}
+						onAdd={handleMemberAdd}
 						onRemove={handleMemberRemove}
 						placeholder="Paste address and press enter. Add more addresses if needed"
 					/>
