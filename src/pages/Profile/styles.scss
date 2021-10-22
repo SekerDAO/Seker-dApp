@@ -17,7 +17,7 @@
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
-    background-color: $light-grey;
+    background-color: $dark-grey50;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -41,7 +41,7 @@
     }
 
     > a {
-      color: $purple2;
+      color: $purple75;
       margin: 5px 0;
     }
   }
@@ -88,16 +88,16 @@
   &__edit-menu {
     display: flex;
     flex-direction: column;
-    border-top: 1px solid $black;
+    border-top: 1px solid $dark-grey;
     padding-top: 35px;
     margin-top: 35px;
 
     a {
-      color: $purple1;
+      color: $purple;
       margin: 5px 0;
 
       &:hover {
-        color: $purple2;
+        color: $purple75;
       }
 
       &.active {

@@ -11,20 +11,20 @@
     align-items: center;
     justify-content: center;
     background-color: $white;
-    border-top: 1px solid $white2;
-    border-left: 1px solid $white2;
-    border-bottom: 1px solid $white2;
+    border-top: 1px solid $light-grey;
+    border-left: 1px solid $light-grey;
+    border-bottom: 1px solid $light-grey;
     padding: 10px;
     cursor: pointer;
     transition: color, background-color 0.3s ease-in-out;
 
     &:last-child {
-      border-right: 1px solid $white2;
+      border-right: 1px solid $light-grey;
     }
 
     &--active {
-      color: $purple2;
-      border-top: 3px solid $purple2;
+      color: $purple75;
+      border-top: 3px solid $purple75;
       background-color: transparent;
       border-bottom: none;
     }

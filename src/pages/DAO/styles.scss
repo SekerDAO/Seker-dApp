@@ -9,7 +9,7 @@
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
-    background-color: $light-grey;
+    background-color: $dark-grey50;
     z-index: 2;
     display: flex;
     align-items: center;
@@ -37,9 +37,9 @@
   }
 
   &__info {
-    border-left: 1px solid $light-grey;
-    border-right: 1px solid $light-grey;
-    border-bottom: 1px solid $light-grey;
+    border-left: 1px solid $dark-grey50;
+    border-right: 1px solid $dark-grey50;
+    border-bottom: 1px solid $dark-grey50;
     display: flex;
     flex-direction: column;
     padding: 0 20px 20px 20px;
@@ -54,7 +54,7 @@
     }
 
     > a {
-      color: $purple2;
+      color: $purple75;
     }
   }
 
@@ -100,7 +100,7 @@
       }
 
       h2 {
-        color: $purple1;
+        color: $purple;
         margin: 20px 0;
       }
     }
@@ -108,7 +108,7 @@
 
   &__separator {
     height: 1px;
-    background-color: $black;
+    background-color: $dark-grey;
     align-self: stretch;
   }
 
@@ -116,7 +116,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border: 1px solid $black;
+    border: 1px solid $dark-grey;
     padding: 20px 40px;
   }
 
