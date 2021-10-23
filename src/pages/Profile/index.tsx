@@ -129,6 +129,7 @@ const Profile: FunctionComponent = () => {
 							)}
 						</div>
 						{isOwner && (
+							// TODO: Extract to DashboardMenu component and reuse
 							<Paper className="profile__edit-menu">
 								<h3>Dashboard Menu</h3>
 								<a

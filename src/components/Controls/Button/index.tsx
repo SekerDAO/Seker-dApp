@@ -3,7 +3,7 @@ import "./styles.scss"
 
 const Button: FunctionComponent<
 	{
-		buttonType?: "primary" | "secondary" | "tertiary"
+		buttonType?: "primary" | "secondary" | "link"
 		extraClassName?: string
 	} & ButtonHTMLAttributes<HTMLButtonElement>
 > = ({buttonType = "primary", extraClassName, children, ...buttonProps}) => {
