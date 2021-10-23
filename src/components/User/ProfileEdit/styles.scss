@@ -22,8 +22,12 @@
     align-items: center;
     position: relative;
 
-    input {
-      flex: 1;
+    .input {
+      &__field {
+        flex: 1;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
     }
   }
 
@@ -31,6 +35,8 @@
     padding: 6px;
     color: white;
     background-color: $dark-grey;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
   }
 
   &__socials {
