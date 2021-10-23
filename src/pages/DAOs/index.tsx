@@ -3,11 +3,10 @@ import useDAOs from "../../hooks/getters/useDAOs"
 import {DAOSnapshot} from "../../types/DAO"
 import Loader from "../../components/Loader"
 import ErrorPlaceholder from "../../components/ErrorPlaceholder"
-import Input from "../../components/Controls/Input"
-import SearchIcon from "../../assets/icons/SearchIcon"
 import DAOList from "../../components/DAOList"
 import Button from "../../components/Controls/Button"
 import "./styles.scss"
+import SearchInput from "../../components/Controls/Input/SearchInput"
 
 const DAOsPage: FunctionComponent = () => {
 	const [cursor, setCursor] = useState<DAOSnapshot | null>(null)
@@ -27,10 +26,7 @@ const DAOsPage: FunctionComponent = () => {
 			<div className="daos">
 				<h1>DAOs</h1>
 				<div className="daos__controls">
-					<div className="daos__search">
-						<Input placeholder="Search" borders="bottom" />
-						<SearchIcon />
-					</div>
+					<SearchInput />
 				</div>
 				<DAOList
 					DAOs={DAOs.data.map(({snapshot, owners}) => {

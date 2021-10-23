@@ -17,6 +17,7 @@ import TwitterIcon from "../../assets/icons/TwitterIcon"
 import InstagramIcon from "../../assets/icons/InstagramIcon"
 import {PURPLE_2} from "../../constants/colors"
 import DashboardHeader from "../../components/DashboardHeader"
+import Paper from "../../components/Paper"
 import {isAddress} from "@ethersproject/address"
 
 type ProfilePage = "nfts" | "edit" | "daos" | "profile"
@@ -128,7 +129,9 @@ const Profile: FunctionComponent = () => {
 							)}
 						</div>
 						{isOwner && (
-							<div className="profile__edit-menu">
+							// TODO: Extract to DashboardMenu component and reuse
+							<Paper className="profile__edit-menu">
+								<h3>Dashboard Menu</h3>
 								<a
 									className={page === "nfts" ? "active" : undefined}
 									onClick={() => {
@@ -161,7 +164,7 @@ const Profile: FunctionComponent = () => {
 								>
 									View Profile
 								</a>
-							</div>
+							</Paper>
 						)}
 					</div>
 					<div className="profile__main">

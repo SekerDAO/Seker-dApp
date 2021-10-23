@@ -3,10 +3,10 @@
 .table {
   border-collapse: collapse;
   border: none;
-  color: $black;
+  color: $dark-grey;
 
   tr {
-    border-bottom: 1px solid $light-grey;
+    border-bottom: 1px solid $dark-grey50;
   }
 
   th {
@@ -20,7 +20,7 @@
   }
 
   thead > tr {
-    border-top: 2px solid $black;
-    border-bottom: 2px solid $black;
+    border-top: 2px solid $dark-grey;
+    border-bottom: 2px solid $dark-grey;
   }
 }

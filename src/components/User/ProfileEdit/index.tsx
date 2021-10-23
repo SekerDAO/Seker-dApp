@@ -157,9 +157,9 @@ const ProfileEdit: FunctionComponent<{
 					onClick={handleSubmit}
 					disabled={processing || !!urlValidation}
 				>
-					{processing ? "Saving..." : "Save"}
+					{processing ? "Saving..." : "Save Changes"}
 				</Button>
-				<Button buttonType="secondary" onClick={onCancel}>
+				<Button buttonType="link" onClick={onCancel}>
 					Cancel
 				</Button>
 			</div>

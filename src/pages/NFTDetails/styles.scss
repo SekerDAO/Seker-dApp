@@ -16,7 +16,7 @@
     }
 
     a {
-      color: $purple1;
+      color: $purple;
 
       &:first-child {
         margin-bottom: 40px;
@@ -59,7 +59,7 @@
     margin-left: 40px;
 
     &-card {
-      border: 1px solid $light-grey;
+      border: 1px solid $dark-grey50;
       padding: 20px;
       display: flex;
       flex-direction: column;

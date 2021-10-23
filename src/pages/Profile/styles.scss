@@ -17,7 +17,7 @@
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
-    background-color: $light-grey;
+    background-color: $dark-grey50;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -41,7 +41,7 @@
     }
 
     > a {
-      color: $purple2;
+      color: $purple75;
       margin: 5px 0;
     }
   }
@@ -70,38 +70,31 @@
     margin-bottom: 10px;
   }
 
-  &__search {
-    position: relative;
-    width: calc(33% - 10px);
-
-    input {
-      width: 100%;
-    }
-
-    svg {
-      position: absolute;
-      right: 5px;
-      top: 8px;
-    }
-  }
-
   &__edit-menu {
     display: flex;
     flex-direction: column;
-    border-top: 1px solid $black;
-    padding-top: 35px;
     margin-top: 35px;
+    padding: 30px 0;
+
+    h3 {
+      margin-bottom: 30px;
+      margin-left: 20px;
+    }
 
     a {
-      color: $purple1;
-      margin: 5px 0;
+      color: $purple;
+      height: 40px;
+      padding: 10px 20px;
 
       &:hover {
-        color: $purple2;
+        color: $purple;
+        background-color: $purple25;
       }
 
       &.active {
-        font-weight: bold;
+        border-left: 2px solid $purple;
+        background-color: $purple25;
+        padding-left: 18px;
       }
     }
   }

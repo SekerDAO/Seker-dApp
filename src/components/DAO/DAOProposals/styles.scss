@@ -19,26 +19,15 @@
     }
   }
 
-  &__search {
-    position: relative;
-    margin-right: auto;
-
-    svg {
-      position: absolute;
-      right: 5px;
-      top: 8px;
-    }
-  }
-
   &__card {
-    border: 1px solid $black;
+    border: 1px solid $dark-grey;
     display: flex;
     flex-direction: column;
     align-items: stretch;
     margin-bottom: 20px;
 
     > h2 {
-      color: $purple2;
+      color: $purple75;
       margin: 0 20px 20px 20px;
     }
 
@@ -55,14 +44,14 @@
 
     &-section {
       padding: 20px;
-      border-top: 1px solid $black;
+      border-top: 1px solid $dark-grey;
     }
 
     &-footer {
       display: flex;
       align-items: flex-end;
       justify-content: space-between;
-      border-top: 1px solid $black;
+      border-top: 1px solid $dark-grey;
       padding: 20px;
     }
   }
@@ -82,12 +71,12 @@
 
     &-bar {
       height: 10px;
-      background-color: $dark-grey;
+      background-color: $dark-grey75;
       display: flex;
       align-items: stretch;
 
       &-inner {
-        background-color: $purple2;
+        background-color: $purple75;
       }
     }
 

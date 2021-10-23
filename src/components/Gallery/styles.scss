@@ -10,11 +10,11 @@
     max-width: calc(33% - 20px);
     margin: 10px;
     cursor: pointer;
-    border: 1px solid $light-grey;
+    border: 1px solid $dark-grey50;
     position: relative;
 
     &:hover {
-      border-color: $purple2;
+      border-color: $purple75;
     }
 
     &-thumb {
@@ -52,7 +52,7 @@
     }
 
     a {
-      color: $black;
+      color: $dark-grey;
     }
   }
 }

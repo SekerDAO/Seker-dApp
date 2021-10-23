@@ -5,12 +5,11 @@ import ErrorPlaceholder from "../../ErrorPlaceholder"
 import EthersContext from "../../../context/EthersContext"
 import {SafeProposalsTypeNames, SafeProposal} from "../../../types/safeProposal"
 import "./styles.scss"
-import Input from "../../Controls/Input"
+import SearchInput from "../../Controls/Input/SearchInput"
 import Select from "../../Controls/Select"
 import {capitalize} from "../../../utlls"
 import Button from "../../Controls/Button"
 import {toastError, toastSuccess} from "../../Toast"
-import SearchIcon from "../../../assets/icons/SearchIcon"
 import addSafeProposalSignature from "../../../api/firebase/safeProposal/addSafeProposalSignatures"
 import {SafeSignature} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
 import {
@@ -308,10 +307,7 @@ const DAOProposals: FunctionComponent<{
 		<div className="dao-proposals">
 			<h2>Proposals</h2>
 			<div className="dao-proposals__controls">
-				<div className="dao-proposals__search">
-					<Input placeholder="Search" borders="bottom" />
-					<SearchIcon />
-				</div>
+				<SearchInput />
 				<Select options={[{name: "Filter By", value: ""}]} />
 				<Select options={[{name: "Sort By", value: ""}]} />
 			</div>

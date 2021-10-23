@@ -9,10 +9,10 @@
 }
 
 @font-face {
-  font-family: 'Spectral';
+  font-family: 'SairaSemiCondensed';
   font-style: normal;
   font-weight: 600;
-  src: url("../fonts/Spectral-SemiBold.ttf");
+  src: url("../fonts/SairaSemiCondensed-SemiBold.ttf");
   font-display: swap;
 }
 
@@ -38,40 +38,42 @@ body {
   font-family: Karla, 'Open Sans', sans-serif;
   font-size: 16px;
   line-height: 20px;
+  color: $dark-grey;
+  background-color: $light-grey;
 }
 
 h1 {
-  font-family: Spectral, 'Open Sans', sans-serif;
+  font-family: SairaSemiCondensed, 'Open Sans', sans-serif;
   display: block;
   padding: 0;
   margin-block-start: 0;
   margin-block-end: 0;
-  color: $black;
+  color: $dark-grey;
   text-align: left;
 }
 
 h2 {
-  font-family: Spectral, 'Open Sans', sans-serif;
+  font-family: SairaSemiCondensed, 'Open Sans', sans-serif;
   padding: 0;
   margin: 0;
   font-size: 24px;
-  color: $black;
+  color: $dark-grey;
   font-weight: 600;
   margin-block-start: 0;
   margin-block-end: 0;
 }
 
 h3 {
-  font-family: Spectral, 'Open Sans', sans-serif;
+  font-family: SairaSemiCondensed, 'Open Sans', sans-serif;
   margin-block-start: 0;
   margin-block-end: 0;
-  color: $black;
+  color: $dark-grey50;
 }
 
 a {
   text-decoration: none;
   cursor: pointer;
-  color: $black;
+  color: $dark-grey;
 }
 
 a,
@@ -83,7 +85,7 @@ a:hover {
 
 p {
   margin: 0;
-  color: $black;
+  color: $dark-grey;
 }
 
 .main {
