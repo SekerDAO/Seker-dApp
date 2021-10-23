@@ -93,12 +93,11 @@ const GeneralEVM: FunctionComponent<{
 	const handleArrayArgumentRemove = (indexToRemove: number, argIndex: number) => {
 		if (selectedMethodIndex == null) return
 		setArgs(prevState =>
-			prevState.map((item, index) => {
-				if (argIndex === index && item instanceof Array) {
-					return item.filter((option, optionIndex) => optionIndex !== indexToRemove)
-				}
-				return item
-			})
+			prevState.map((item, index) =>
+				argIndex === index && item instanceof Array
+					? item.filter((option, optionIndex) => optionIndex !== indexToRemove)
+					: item
+			)
 		)
 	}
 
@@ -236,7 +235,7 @@ const GeneralEVM: FunctionComponent<{
 							{contractMethods[selectedMethodIndex].inputs.map((input, index) => (
 								<Fragment key={index}>
 									<label>{`${input.name} (${input.type})`}</label>
-									{true && (
+									{input.type.endsWith("[]") ? (
 										<ArrayInput
 											onRemove={(indexToRemove: number) => {
 												handleArrayArgumentRemove(indexToRemove, index)
@@ -247,8 +246,7 @@ const GeneralEVM: FunctionComponent<{
 											items={(args.find((arg, idx) => idx === index) as string[]) || []}
 											validation={argsBad[index] ? `Bad value for type ${input.type}` : null}
 										/>
-									)}
-									{input.type === "bool" && (
+									) : input.type === "bool" ? (
 										<Select
 											fullWidth
 											options={[
@@ -260,8 +258,7 @@ const GeneralEVM: FunctionComponent<{
 												handleArgumentChange(e.target.value, index)
 											}}
 										/>
-									)}
-									{input.type !== "bool" && !input.type.endsWith("[]") && (
+									) : (
 										<Input
 											borders="all"
 											value={args[index] ?? ""}

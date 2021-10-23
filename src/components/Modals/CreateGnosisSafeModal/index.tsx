@@ -32,13 +32,13 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 	}, [account])
 
 	const handleMemberRemove = (index: number) => {
-		if (index === 0) return
 		setMembers(prevState => prevState.filter((_, idx) => idx !== index))
 	}
 
 	const handleMemberAdd = (newMember: string) => {
-		setMembers([...members, newMember])
+		setMembers(prevState => [...prevState, newMember])
 	}
+
 	const handleThresholdChange = (e: ChangeEvent<HTMLInputElement>) => {
 		if (Number(e.target.value) > members.length) {
 			setVotingThreshold(String(members.length))

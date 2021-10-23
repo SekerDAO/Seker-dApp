@@ -27,12 +27,10 @@ const ArrayInput: FunctionComponent<{
 
 	const handleKeyDown: KeyboardEventHandler<HTMLDivElement> = event => {
 		if (!inputValue || validation) return
-		switch (event.key) {
-			case "Enter":
-			case "Tab":
-				event.preventDefault()
-				onAdd(inputValue)
-				setInputValue("")
+		if (event.key === "Enter" || event.key === "Tab") {
+			event.preventDefault()
+			onAdd(inputValue)
+			setInputValue("")
 		}
 	}
 
