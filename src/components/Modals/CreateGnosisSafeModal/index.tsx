@@ -76,7 +76,12 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 	const submitButtonDisabled =
 		processing ||
 		(stage === "create" &&
-			!(daoName && votingThreshold && members.reduce((acc, cur) => acc && !!cur, true)))
+			!(
+				daoName &&
+				votingThreshold &&
+				members.length &&
+				members.reduce((acc, cur) => acc && !!cur, true)
+			))
 
 	return (
 		<div className="create-gnosis-safe">

@@ -103,15 +103,24 @@ const GeneralEVM: FunctionComponent<{
 
 	const handleArrayArgumentAdd = (value: string, index: number) => {
 		if (selectedMethodIndex == null) return
-		const currentArg = args.find((arg, idx) => idx === index) as string[]
-		const newValue = [...currentArg, value]
-		setArgs(prevState => prevState.map((item, idx) => (idx === index ? newValue : item)))
-		setArgsBad(prevState =>
-			prevState.map((item, idx) =>
-				idx === index
-					? !validateArgument(newValue, contractMethods[selectedMethodIndex].inputs[index].type)
-					: false
-			)
+		setArgs(prevState =>
+			prevState.map((item, idx) => {
+				if (idx === index && item instanceof Array) {
+					const newValue = [...item, value]
+					setArgsBad(argBadPrevState =>
+						argBadPrevState.map((argBad, argBadIdx) =>
+							argBadIdx === index
+								? !validateArgument(
+										newValue,
+										contractMethods[selectedMethodIndex].inputs[index].type
+								  )
+								: false
+						)
+					)
+					return newValue
+				}
+				return item
+			})
 		)
 	}
 	const handleArgumentChange = (value: string, index: number) => {
