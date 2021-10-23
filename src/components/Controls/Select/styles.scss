@@ -13,11 +13,11 @@
     line-height: 20px;
     font-weight: 400;
     padding: 5px 10px;
-    border: 1px solid $dark-grey50;
+    border: 1px solid $dark-grey25;
     border-radius: 5px;
     outline: none;
     cursor: pointer;
-    background-color: transparent;
+    background-color: $white;
   }
 
   &--full-width select {

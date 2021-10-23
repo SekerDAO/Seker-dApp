@@ -8,11 +8,17 @@
     padding: 5px;
     border: none;
     outline: none;
-    border-bottom: 1px solid $dark-grey;
+    border-bottom: 1px solid $dark-grey25;
+    background-color: transparent;
+
+    &::placeholder {
+      color: $dark-grey25;
+    }
 
     &--bordered {
-      border: 1px solid $dark-grey;
+      border: 1px solid $dark-grey25;
       border-radius: 5px;
+      background-color: white;
     }
 
     &--bad {
@@ -22,5 +28,19 @@
 
   &__validation {
     color: $error;
+  }
+}
+
+.search-input {
+  position: relative;
+  svg {
+    position: absolute;
+    top: 8px;
+    left: 0;
+  }
+  .input {
+    &__field {
+      padding-left: 25px;
+    }
   }
 }

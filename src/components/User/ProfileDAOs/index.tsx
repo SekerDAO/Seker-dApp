@@ -1,5 +1,5 @@
 import {FunctionComponent, useContext} from "react"
-import Input from "../../Controls/Input"
+import SearchInput from "../../Controls/Input/SearchInput"
 import Table from "../../Table"
 import "./styles.scss"
 import useMyDAOs from "../../../hooks/getters/useMyDAOs"
@@ -7,7 +7,6 @@ import Loader from "../../Loader"
 import ErrorPlaceholder from "../../ErrorPlaceholder"
 import {AuthContext} from "../../../context/AuthContext"
 import {Link} from "react-router-dom"
-import SearchIcon from "../../../assets/icons/SearchIcon"
 import CreateGnosisSafeModal from "../../Modals/CreateGnosisSafeModal"
 
 const columns = [
@@ -39,10 +38,7 @@ const ProfileDAOs: FunctionComponent = () => {
 				<CreateGnosisSafeModal afterCreate={refetch} />
 			</div>
 			<div className="profile__controls">
-				<div className="profile__search">
-					<Input placeholder="Search" borders="bottom" />
-					<SearchIcon />
-				</div>
+				<SearchInput />
 			</div>
 			<div className="profile-daos__table">
 				<Table

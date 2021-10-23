@@ -12,25 +12,26 @@
   height: 40px;
 
   &:disabled {
-    background-color: $dark-grey75;
-    border-color: $dark-grey75;
+    background-color: $dark-grey50;
+    border-color: $dark-grey50;
+    color: $dark-grey25;
     cursor: not-allowed;
   }
 
   &:not(:disabled):hover {
     background-color: $purple75;
     border-color: $purple75;
-    color: white;
+    color: $white;
   }
 
   &--primary {
-    color: white;
+    color: $white;
     background-color: $purple;
   }
 
   &--secondary {
     color: $purple;
-    background-color: white;
+    background-color: $white;
   }
   
   &--tertiary {

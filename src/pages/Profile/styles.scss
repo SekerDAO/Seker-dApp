@@ -70,21 +70,6 @@
     margin-bottom: 10px;
   }
 
-  &__search {
-    position: relative;
-    width: calc(33% - 10px);
-
-    input {
-      width: 100%;
-    }
-
-    svg {
-      position: absolute;
-      right: 5px;
-      top: 8px;
-    }
-  }
-
   &__edit-menu {
     display: flex;
     flex-direction: column;

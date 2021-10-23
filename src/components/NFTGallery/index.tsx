@@ -1,5 +1,5 @@
 import {ChangeEvent, FunctionComponent, useState} from "react"
-import Input from "../Controls/Input"
+import SearchInput from "../Controls/Input/SearchInput"
 import Select from "../Controls/Select"
 import Gallery from "../Gallery"
 import Button from "../Controls/Button"
@@ -7,7 +7,6 @@ import {NFTSnapshot, NftSort} from "../../types/NFT"
 import useNFTs from "../../hooks/getters/useNFTs"
 import ErrorPlaceholder from "../ErrorPlaceholder"
 import Loader from "../Loader"
-import SearchIcon from "../../assets/icons/SearchIcon"
 import {toastError, toastSuccess} from "../Toast"
 import deleteDAONFT from "../../api/firebase/NFT/deleteDaoNft"
 import deleteNft from "../../api/firebase/NFT/deleteNft"
@@ -66,10 +65,7 @@ const NFTGallery: FunctionComponent<{
 				/>
 			)}
 			<div className="profile__controls">
-				<div className="profile__search">
-					<Input placeholder="Search" borders="bottom" />
-					<SearchIcon />
-				</div>
+				<SearchInput />
 				<Select
 					value={sort}
 					options={[

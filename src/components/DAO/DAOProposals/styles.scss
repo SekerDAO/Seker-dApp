@@ -19,17 +19,6 @@
     }
   }
 
-  &__search {
-    position: relative;
-    margin-right: auto;
-
-    svg {
-      position: absolute;
-      right: 5px;
-      top: 8px;
-    }
-  }
-
   &__card {
     border: 1px solid $dark-grey;
     display: flex;
