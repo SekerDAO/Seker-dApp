@@ -48,6 +48,7 @@ const DecentralizeDAO: FunctionComponent<{
 				await addSafeProposal({
 					type: "decentralizeDAO",
 					gnosisAddress,
+					seeleAddress,
 					title: "Decentralize DAO",
 					state: gnosisVotingThreshold === 1 ? "executed" : "active",
 					signatures: [signature]

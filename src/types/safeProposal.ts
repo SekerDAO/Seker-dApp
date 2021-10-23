@@ -61,4 +61,5 @@ export type SafeProposal = {
 	// for decentralize DAO
 	daoVotingThreshold?: number
 	gracePeriod?: number
+	seeleAddress?: string
 }
