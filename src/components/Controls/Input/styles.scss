@@ -33,11 +33,13 @@
 
 .search-input {
   position: relative;
+
   svg {
     position: absolute;
     top: 8px;
     left: 0;
   }
+
   .input {
     &__field {
       padding-left: 25px;
