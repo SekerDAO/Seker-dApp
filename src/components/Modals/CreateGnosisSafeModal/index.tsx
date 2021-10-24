@@ -11,6 +11,7 @@ import addDAO from "../../../api/firebase/DAO/addDAO"
 import "./styles.scss"
 import editDAO from "../../../api/firebase/DAO/editDAO"
 import ArrayInput from "../../Controls/ArrayInput"
+import {isAddress} from "@ethersproject/address"
 
 type CreateGnosisSafeStage = "chooseOption" | "create" | "import" | "success"
 
@@ -79,6 +80,9 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 			!(
 				daoName &&
 				votingThreshold &&
+				!isNaN(Number(votingThreshold)) &&
+				Number(votingThreshold) > 0 &&
+				Number(votingThreshold) <= members.length &&
 				members.length &&
 				members.reduce((acc, cur) => acc && !!cur, true)
 			))
@@ -128,6 +132,7 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 						onAdd={handleMemberAdd}
 						onRemove={handleMemberRemove}
 						placeholder="Paste address and press enter. Add more addresses if needed"
+						validator={(value: string) => (isAddress(value) ? null : "Bad address format")}
 					/>
 					<label htmlFor="create-gnosis-threshold">Admin Voting Threshold</label>
 					<Input borders="all" number value={votingThreshold} onChange={handleThresholdChange} />

@@ -66,7 +66,11 @@ const GeneralEVM: FunctionComponent<{
 	const [argsBad, setArgsBad] = useState<boolean[]>([])
 	useEffect(() => {
 		if (selectedMethodIndex != null) {
-			setArgs(contractMethods[selectedMethodIndex].inputs.map(() => ""))
+			setArgs(
+				contractMethods[selectedMethodIndex].inputs.map(input =>
+					input.type.endsWith("[]") ? [] : ""
+				)
+			)
 			setArgsBad(contractMethods[selectedMethodIndex].inputs.map(() => false))
 		} else {
 			setArgs([])
@@ -104,25 +108,12 @@ const GeneralEVM: FunctionComponent<{
 	const handleArrayArgumentAdd = (value: string, index: number) => {
 		if (selectedMethodIndex == null) return
 		setArgs(prevState =>
-			prevState.map((item, idx) => {
-				if (idx === index && item instanceof Array) {
-					const newValue = [...item, value]
-					setArgsBad(argBadPrevState =>
-						argBadPrevState.map((argBad, argBadIdx) =>
-							argBadIdx === index
-								? !validateArgument(
-										newValue,
-										contractMethods[selectedMethodIndex].inputs[index].type
-								  )
-								: false
-						)
-					)
-					return newValue
-				}
-				return item
-			})
+			prevState.map((item, idx) =>
+				idx === index && item instanceof Array ? [...item, value] : item
+			)
 		)
 	}
+
 	const handleArgumentChange = (value: string, index: number) => {
 		if (selectedMethodIndex == null) return
 		setArgs(prevState => prevState.map((item, idx) => (idx === index ? value : item)))
@@ -130,7 +121,7 @@ const GeneralEVM: FunctionComponent<{
 			prevState.map((item, idx) =>
 				idx === index
 					? !validateArgument(value, contractMethods[selectedMethodIndex].inputs[index].type)
-					: false
+					: item
 			)
 		)
 	}
@@ -230,7 +221,7 @@ const GeneralEVM: FunctionComponent<{
 				<>
 					<label>Select Method</label>
 					<Select
-						value={selectedMethodIndex != null ? String(selectedMethodIndex) : ""}
+						value={selectedMethodIndex == null ? "" : String(selectedMethodIndex)}
 						options={[{name: "Choose One", value: ""}].concat(
 							contractMethods.map((method, index) => ({name: method.name, value: String(index)}))
 						)}
@@ -253,7 +244,11 @@ const GeneralEVM: FunctionComponent<{
 												handleArrayArgumentAdd(newValue, index)
 											}}
 											items={(args.find((arg, idx) => idx === index) as string[]) || []}
-											validation={argsBad[index] ? `Bad value for type ${input.type}` : null}
+											validator={(value: string) =>
+												validateArgument([value], input.type)
+													? null
+													: `Bad value for type ${input.type}`
+											}
 										/>
 									) : input.type === "bool" ? (
 										<Select

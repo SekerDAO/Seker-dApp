@@ -8,27 +8,36 @@ const ArrayInput: FunctionComponent<{
 	onAdd: (newValue: string) => void
 	onRemove: (indexToRemove: number) => void
 	items: string[]
-	validation?: string | null
+	validator?: (value: string) => string | null
 	borders?: "all" | "bottom"
 	placeholder?: string
 }> = ({
 	onAdd,
 	onRemove,
 	items,
-	validation,
+	validator,
 	borders = "all",
 	placeholder = "Type value and press enter or tab..."
 }) => {
 	const [inputValue, setInputValue] = useState<string>("")
+	const [validation, setValidation] = useState<string | null>(null)
 
 	const handleInputChange: ChangeEventHandler<HTMLInputElement> = event => {
 		setInputValue(event.target.value)
+		setValidation(null)
 	}
 
 	const handleKeyDown: KeyboardEventHandler<HTMLDivElement> = event => {
-		if (!inputValue || validation) return
+		if (!inputValue) return
 		if (event.key === "Enter" || event.key === "Tab") {
 			event.preventDefault()
+			if (validator) {
+				const newValidation = validator(inputValue)
+				if (newValidation) {
+					setValidation(newValidation)
+					return
+				}
+			}
 			onAdd(inputValue)
 			setInputValue("")
 		}
