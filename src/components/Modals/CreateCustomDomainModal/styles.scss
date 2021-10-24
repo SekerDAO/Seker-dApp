@@ -1,3 +1,5 @@
+@import "src/assets/styles/variables";
+
 .create-custom-domain {
   display: flex;
   flex: 1;
@@ -20,7 +22,27 @@
     margin-bottom: 0;
   }
 
-  input {
-    margin-top: 10px;
+  .divider {
+    background-color: $dark-grey25;
+    height: 1px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  .input {
+    &__field {
+      margin-top: 10px;
+      width: 100%;
+    }
+  }
+
+  &__warning {
+    display: flex;
+    align-items: center;
+
+    p {
+      margin-top: 0;
+      margin-left: 10px;
+    }
   }
 }
