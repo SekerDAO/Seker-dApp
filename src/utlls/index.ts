@@ -60,10 +60,12 @@ const validateScalarArgument = (arg: string, argType: AbiDataType): boolean => {
 	return true
 }
 
-export const validateArgument = (arg: string, argType: AbiDataType): boolean => {
-	if (argType.endsWith("[]")) {
-		const args = arg.split(",")
-		return args.reduce(
+export const validateArgument = (
+	arg: string | readonly string[],
+	argType: AbiDataType
+): boolean => {
+	if (arg instanceof Array) {
+		return arg.reduce(
 			(acc: boolean, cur) =>
 				acc && validateScalarArgument(cur, argType.slice(0, -2) as AbiDataType),
 			true
@@ -89,16 +91,14 @@ const prepareScalarArgument = (arg: string, dataType: AbiScalar): string | boole
 }
 
 export const prepareArguments = (
-	args: string[],
+	args: Array<string | string[]>,
 	dataTypes: AbiDataType[]
 ): (string | string[] | boolean | boolean[] | BigNumber | BigNumber[])[] =>
 	args.map((arg, index) => {
-		if (dataTypes[index].endsWith("[]")) {
-			return arg
-				.split(",")
-				.map(splittedArg =>
-					prepareScalarArgument(splittedArg, dataTypes[index].slice(0, -2) as AbiScalar)
-				) as string[] | boolean[] | BigNumber[]
+		if (arg instanceof Array) {
+			return arg.map(splittedArg =>
+				prepareScalarArgument(splittedArg, dataTypes[index].slice(0, -2) as AbiScalar)
+			) as string[] | boolean[] | BigNumber[]
 		}
 		return prepareScalarArgument(arg, dataTypes[index] as AbiScalar)
 	})

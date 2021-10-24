@@ -10,6 +10,8 @@ import {toastError, toastSuccess} from "../../Toast"
 import addDAO from "../../../api/firebase/DAO/addDAO"
 import "./styles.scss"
 import editDAO from "../../../api/firebase/DAO/editDAO"
+import ArrayInput from "../../Controls/ArrayInput"
+import {isAddress} from "@ethersproject/address"
 
 type CreateGnosisSafeStage = "chooseOption" | "create" | "import" | "success"
 
@@ -30,17 +32,12 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 		}
 	}, [account])
 
-	const handleMemberChange = (address: string, index: number) => {
-		setMembers(prevState => prevState.map((item, idx) => (idx === index ? address : item)))
-	}
-
-	const handleMemberAdd = () => {
-		setMembers(prevState => [...prevState, ""])
-	}
-
 	const handleMemberRemove = (index: number) => {
-		if (index === 0) return
 		setMembers(prevState => prevState.filter((_, idx) => idx !== index))
+	}
+
+	const handleMemberAdd = (newMember: string) => {
+		setMembers(prevState => [...prevState, newMember])
 	}
 
 	const handleThresholdChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -80,7 +77,15 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 	const submitButtonDisabled =
 		processing ||
 		(stage === "create" &&
-			!(daoName && votingThreshold && members.reduce((acc, cur) => acc && !!cur, true)))
+			!(
+				daoName &&
+				votingThreshold &&
+				!isNaN(Number(votingThreshold)) &&
+				Number(votingThreshold) > 0 &&
+				Number(votingThreshold) <= members.length &&
+				members.length &&
+				members.reduce((acc, cur) => acc && !!cur, true)
+			))
 
 	return (
 		<div className="create-gnosis-safe">
@@ -122,30 +127,13 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 						}}
 					/>
 					<label>Add Admins</label>
-					{members.map((member, index) => (
-						<div className="create-gnosis-safe__row" key={index}>
-							<Input
-								borders="all"
-								value={members[index]}
-								onChange={e => {
-									handleMemberChange(e.target.value, index)
-								}}
-							/>
-							{index !== 0 && (
-								<Button
-									buttonType="secondary"
-									onClick={() => {
-										handleMemberRemove(index)
-									}}
-								>
-									-
-								</Button>
-							)}
-							<Button buttonType="primary" onClick={handleMemberAdd}>
-								+
-							</Button>
-						</div>
-					))}
+					<ArrayInput
+						items={members}
+						onAdd={handleMemberAdd}
+						onRemove={handleMemberRemove}
+						placeholder="Paste address and press enter. Add more addresses if needed"
+						validator={(value: string) => (isAddress(value) ? null : "Bad address format")}
+					/>
 					<label htmlFor="create-gnosis-threshold">Admin Voting Threshold</label>
 					<Input borders="all" number value={votingThreshold} onChange={handleThresholdChange} />
 				</>

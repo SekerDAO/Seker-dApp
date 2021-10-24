@@ -1,5 +1,13 @@
-import {ChangeEvent, Fragment, FunctionComponent, useContext, useEffect, useState} from "react"
+import React, {
+	ChangeEvent,
+	Fragment,
+	FunctionComponent,
+	useContext,
+	useEffect,
+	useState
+} from "react"
 import Input from "../../Controls/Input"
+import ArrayInput from "../../Controls/ArrayInput"
 import {isAddress} from "@ethersproject/address"
 import {toastError, toastSuccess, toastWarning} from "../../Toast"
 import fetchContractAbi from "../../../api/etherscan/fetchContractAbi"
@@ -54,11 +62,15 @@ const GeneralEVM: FunctionComponent<{
 	}, [abiString])
 
 	const [selectedMethodIndex, setSelectedMethodIndex] = useState<number | null>(null)
-	const [args, setArgs] = useState<string[]>([])
+	const [args, setArgs] = useState<Array<string | string[]>>([])
 	const [argsBad, setArgsBad] = useState<boolean[]>([])
 	useEffect(() => {
 		if (selectedMethodIndex != null) {
-			setArgs(contractMethods[selectedMethodIndex].inputs.map(() => ""))
+			setArgs(
+				contractMethods[selectedMethodIndex].inputs.map(input =>
+					input.type.endsWith("[]") ? [] : ""
+				)
+			)
 			setArgsBad(contractMethods[selectedMethodIndex].inputs.map(() => false))
 		} else {
 			setArgs([])
@@ -82,6 +94,26 @@ const GeneralEVM: FunctionComponent<{
 		}
 	}
 
+	const handleArrayArgumentRemove = (indexToRemove: number, argIndex: number) => {
+		if (selectedMethodIndex == null) return
+		setArgs(prevState =>
+			prevState.map((item, index) =>
+				argIndex === index && item instanceof Array
+					? item.filter((option, optionIndex) => optionIndex !== indexToRemove)
+					: item
+			)
+		)
+	}
+
+	const handleArrayArgumentAdd = (value: string, index: number) => {
+		if (selectedMethodIndex == null) return
+		setArgs(prevState =>
+			prevState.map((item, idx) =>
+				idx === index && item instanceof Array ? [...item, value] : item
+			)
+		)
+	}
+
 	const handleArgumentChange = (value: string, index: number) => {
 		if (selectedMethodIndex == null) return
 		setArgs(prevState => prevState.map((item, idx) => (idx === index ? value : item)))
@@ -89,7 +121,7 @@ const GeneralEVM: FunctionComponent<{
 			prevState.map((item, idx) =>
 				idx === index
 					? !validateArgument(value, contractMethods[selectedMethodIndex].inputs[index].type)
-					: false
+					: item
 			)
 		)
 	}
@@ -189,7 +221,7 @@ const GeneralEVM: FunctionComponent<{
 				<>
 					<label>Select Method</label>
 					<Select
-						value={selectedMethodIndex != null ? String(selectedMethodIndex) : ""}
+						value={selectedMethodIndex == null ? "" : String(selectedMethodIndex)}
 						options={[{name: "Choose One", value: ""}].concat(
 							contractMethods.map((method, index) => ({name: method.name, value: String(index)}))
 						)}
@@ -203,8 +235,22 @@ const GeneralEVM: FunctionComponent<{
 							{contractMethods[selectedMethodIndex].inputs.map((input, index) => (
 								<Fragment key={index}>
 									<label>{`${input.name} (${input.type})`}</label>
-									{input.type.endsWith("[]") && <p>TODO: Use comma as separator</p>}
-									{input.type === "bool" ? (
+									{input.type.endsWith("[]") ? (
+										<ArrayInput
+											onRemove={(indexToRemove: number) => {
+												handleArrayArgumentRemove(indexToRemove, index)
+											}}
+											onAdd={(newValue: string) => {
+												handleArrayArgumentAdd(newValue, index)
+											}}
+											items={(args.find((arg, idx) => idx === index) as string[]) || []}
+											validator={(value: string) =>
+												validateArgument([value], input.type)
+													? null
+													: `Bad value for type ${input.type}`
+											}
+										/>
+									) : input.type === "bool" ? (
 										<Select
 											fullWidth
 											options={[
@@ -228,7 +274,11 @@ const GeneralEVM: FunctionComponent<{
 									)}
 								</Fragment>
 							))}
-							<Button disabled={submitButtonDisabled || processing} onClick={handleSubmit}>
+							<Button
+								disabled={submitButtonDisabled || processing}
+								onClick={handleSubmit}
+								extraClassName="create-dao-proposal__submit-button"
+							>
 								{processing ? "Processing..." : "Create Proposal"}
 							</Button>
 						</>
