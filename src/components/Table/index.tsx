@@ -1,3 +1,4 @@
+import Paper from "../Paper"
 import "./styles.scss"
 
 type TableProps<T extends Record<string, string | number>> = {
@@ -17,28 +18,30 @@ const Table: <T extends {[key: string]: string | number}>(props: TableProps<T>) 
 	columns,
 	idCol
 }) => (
-	<table className="table">
-		<thead>
-			<tr>
-				{columns.map(col => (
-					<th key={col.id as string} className={col.headClassName}>
-						{col.name}
-					</th>
-				))}
-			</tr>
-		</thead>
-		<tbody>
-			{data.map((row, rowIndex) => (
-				<tr key={data[rowIndex][idCol]}>
-					{columns.map((col, colIndex) => (
-						<td key={colIndex} className={col.rowClassName}>
-							{col.render ? col.render(data[rowIndex]) : data[rowIndex][col.id]}
-						</td>
+	<Paper>
+		<table className="table">
+			<thead>
+				<tr>
+					{columns.map(col => (
+						<th key={col.id as string} className={col.headClassName}>
+							{col.name}
+						</th>
 					))}
 				</tr>
-			))}
-		</tbody>
-	</table>
+			</thead>
+			<tbody>
+				{data.map((row, rowIndex) => (
+					<tr key={data[rowIndex][idCol]}>
+						{columns.map((col, colIndex) => (
+							<td key={colIndex} className={col.rowClassName}>
+								{col.render ? col.render(data[rowIndex]) : data[rowIndex][col.id]}
+							</td>
+						))}
+					</tr>
+				))}
+			</tbody>
+		</table>
+	</Paper>
 )
 
 export default Table
