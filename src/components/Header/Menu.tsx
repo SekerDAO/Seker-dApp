@@ -1,58 +1,74 @@
-import {FunctionComponent, useContext, useRef, useState} from "react"
+import {FunctionComponent, useContext, useState} from "react"
 import {Link} from "react-router-dom"
 import {AuthContext} from "../../context/AuthContext"
-import useClickOutside from "../../hooks/useClickOutside"
+import Dropdown from "../Dropdown"
+import Button from "../Controls/Button"
+import Divider from "../Divider"
 
 const HeaderMenu: FunctionComponent = () => {
 	const {account, url, connected, connecting, connectWallet, disconnect} = useContext(AuthContext)
-	const [isOpened, setIsOpened] = useState(false)
-	const ref = useRef<HTMLDivElement | null>(null)
+	const [open, setOpen] = useState(false)
 
-	const openMenu = () => {
-		setIsOpened(true)
+	const handleDropdownTriggerClick = () => {
+		setOpen(prevState => !prevState)
 	}
 
 	const closeMenu = () => {
-		setIsOpened(false)
+		setOpen(false)
 	}
-	useClickOutside(ref, closeMenu)
+
+	const handleItemClick = (itemId: string) => {
+		if (itemId === "disconnect") {
+			disconnect()
+		}
+	}
 
 	return (
-		<div className="header__menu" ref={ref}>
-			<div className="header__menu-button" onClick={openMenu}>
-				<div />
-				<div />
-				<div />
-			</div>
-			{isOpened && (
-				<div className="header__menu-dropdown">
-					<ul>
-						{account && connected && (
-							<li>
-								<Link to={`/profile/${url ?? account}`}>{`${account.slice(0, 3)}...${account.slice(
+		<div className="header__main-nav">
+			<ul>
+				<li>
+					<Link to="/daos">DAOs</Link>
+				</li>
+				<li>
+					<Link to="/events">Events</Link>
+				</li>
+				<li>
+					<Link to="/learn">Learn</Link>
+				</li>
+			</ul>
+			<Divider type="vertical" />
+			{account && connected ? (
+				<Dropdown
+					open={open}
+					triggerText="Profile"
+					onClose={closeMenu}
+					onItemClick={handleItemClick}
+					onTriggerClick={handleDropdownTriggerClick}
+					items={[
+						{
+							id: "profile",
+							content: (
+								<Link to={`/profile/${url ?? account}`}>{`${account.slice(0, 6)}...${account.slice(
 									-4
 								)}`}</Link>
-							</li>
-						)}
-						<li>
-							<Link to="/learn">Learn</Link>
-						</li>
-						<li>
-							<Link to="/daos">DAOs</Link>
-						</li>
-						<li>
-							{account && connected ? (
-								<span>
-									<span onClick={disconnect}>Disconnect</span>
-								</span>
-							) : connecting ? (
-								<span>Connecting...</span>
-							) : (
-								<span onClick={connectWallet}>Connect Wallet</span>
-							)}
-						</li>
-					</ul>
-				</div>
+							)
+						},
+						{
+							id: "disconnect",
+							content: "Disconnect"
+						}
+					]}
+					borders="none"
+				/>
+			) : (
+				<Button
+					onClick={connectWallet}
+					buttonType="link"
+					disabled={connecting}
+					extraClassName="header__connect-button"
+				>
+					{connecting ? "Connecting" : "Connect Wallet"}
+				</Button>
 			)}
 		</div>
 	)

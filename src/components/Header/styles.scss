@@ -18,56 +18,41 @@
     align-items: center;
   }
 
-  &__menu {
-    position: relative;
+  &__connect-button {
+    width: 140px;
+  }
 
-    &-button {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      background-color: $purple75;
-      border: 1px solid $purple;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-
-      div {
-        background-color: white;
-        width: 15px;
-        height: 2px;
-        margin: 2px 0;
-      }
-    }
-
-    &-dropdown {
-      position: absolute;
-      background-color: white;
-      top: 45px;
-      right: 0;
-      border: 1px solid $purple;
-      z-index: 2;
-    }
+  &__main-nav {
+    display: flex;
 
     ul {
+      padding: 0;
       margin: 0;
-      padding: 20px;
+      display: flex;
+      align-items: center;
+      height: 40px;
+
+      li {
+        display: inline;
+        list-style: none;
+        color: $dark-grey;
+        margin: 0 20px;
+
+        &:hover {
+          a {
+            color: $purple;
+            border-bottom: 1px solid $purple;
+          }
+        }
+
+        &.active {
+          color: $purple;
+        }
+      }
     }
 
-    li {
-      list-style-type: none;
-      margin: 2px 0;
-      white-space: pre;
-
-      a,
-      span {
-        font-size: 16px;
-        line-height: 20px;
-        color: $dark-grey;
-        text-decoration: none;
-        cursor: pointer;
-      }
+    .divider {
+      margin-right: 20px;
     }
   }
 }
