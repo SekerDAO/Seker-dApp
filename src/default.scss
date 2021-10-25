@@ -1,4 +1,5 @@
 @import "src/variables";
+@import url('https://fonts.googleapis.com/css2?family=Saira+Semi+Condensed:wght@500;600;700&display=swap');
 
 @font-face {
   font-family: 'Karla';
@@ -41,7 +42,7 @@ body {
 }
 
 h1 {
-  font-family: Spectral, 'Open Sans', sans-serif;
+  font-family: Saira, Spectral, 'Open Sans', sans-serif;
   display: block;
   padding: 0;
   margin-block-start: 0;
@@ -51,7 +52,7 @@ h1 {
 }
 
 h2 {
-  font-family: Spectral, 'Open Sans', sans-serif;
+  font-family: Saira, Spectral, 'Open Sans', sans-serif;
   padding: 0;
   margin: 0;
   font-size: 24px;
@@ -62,7 +63,7 @@ h2 {
 }
 
 h3 {
-  font-family: Spectral, 'Open Sans', sans-serif;
+  font-family: Saira, Spectral, 'Open Sans', sans-serif;
   margin-block-start: 0;
   margin-block-end: 0;
   color: $black;

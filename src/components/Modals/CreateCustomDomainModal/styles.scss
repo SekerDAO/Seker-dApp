@@ -23,4 +23,21 @@
   input {
     margin-top: 10px;
   }
+
+  .modal-footer {
+    border-top: 1px solid #cbcbcc;
+    margin-top: 1em;
+    padding: 1em 0;
+
+    .note-p {
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      gap: 15px;
+
+      p {
+        margin: 0;
+      }
+    }
+  }
 }

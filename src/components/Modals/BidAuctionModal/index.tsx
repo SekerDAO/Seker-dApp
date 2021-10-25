@@ -1,12 +1,11 @@
 import React, {ChangeEvent, FunctionComponent, useContext, useState} from "react"
-import EthersContext from "../../../context/EthersContext"
-import {toastError, toastSuccess} from "../../Toast"
-import bidZoraAuction from "../../../api/ethers/functions/zoraAuction/bidZoraAuction"
-import Button from "../../Controls/Button"
-import Modal from "../Modal"
-import Input from "../../Controls/Input"
-import "./styles.scss"
 import approveERC20 from "../../../api/ethers/functions/ERC20Token/approveERC20"
+import bidZoraAuction from "../../../api/ethers/functions/zoraAuction/bidZoraAuction"
+import EthersContext from "../../../context/EthersContext"
+import Button from "../../Controls/Button"
+import Input from "../../Controls/Input"
+import {toastError, toastSuccess} from "../../Toast"
+import "./styles.scss"
 const {REACT_APP_ZORA_ADDRESS} = process.env
 
 const BidAuctionModal: FunctionComponent<{
@@ -63,26 +62,14 @@ const BidAuctionModal: FunctionComponent<{
 			>
 				Place Bid
 			</Button>
-			<Modal
-				show={isOpened}
-				onClose={() => {
-					setIsOpened(false)
-				}}
-			>
-				<div className="create-bid">
-					<label htmlFor="create-bid-amount">Amount</label>
-					<Input
-						number
-						borders="all"
-						id="create-bid-amount"
-						value={bid}
-						onChange={handleBidChange}
-					/>
-					<Button onClick={handleSubmit} disabled={submitButtonDisabled || processing}>
-						{processing ? "Processing..." : "Place Bid"}
-					</Button>
-				</div>
-			</Modal>
+
+			<div className="create-bid">
+				<label htmlFor="create-bid-amount">Amount</label>
+				<Input number borders="all" id="create-bid-amount" value={bid} onChange={handleBidChange} />
+				<Button onClick={handleSubmit} disabled={submitButtonDisabled || processing}>
+					{processing ? "Processing..." : "Place Bid"}
+				</Button>
+			</div>
 		</>
 	)
 }

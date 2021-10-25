@@ -1,0 +1,11 @@
+{
+  "editor.rulers": [100],
+  "editor.autoIndent": "full",
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true,
+    "source.organizeImports": true
+  },
+  "editor.formatOnSave": true,
+  "editor.trimAutoWhitespace": true,
+  "debug.openExplorerOnEnd": true
+}

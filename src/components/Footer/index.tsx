@@ -1,9 +1,9 @@
 import React, {FunctionComponent} from "react"
-import "./styles.scss"
-import Logo from "../../icons/Logo"
 import {Link} from "react-router-dom"
-import TwitterIcon from "../../icons/TwitterIcon"
 import DiscordIcon from "../../icons/DiscordIcon"
+import Logo from "../../icons/Logo"
+import TwitterIcon from "../../icons/TwitterIcon"
+import "./styles.scss"
 
 const Footer: FunctionComponent = () => {
 	return (

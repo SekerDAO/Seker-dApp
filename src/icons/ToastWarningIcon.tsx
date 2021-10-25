@@ -10,7 +10,7 @@ const ToastWarningIcon: FunctionComponent = () => (
 		height={40}
 	>
 		<path
-			fill="white"
+			fill="#fcbb43"
 			d="M72.09,65.51,52.6,31.56a3,3,0,0,0-5.2,0l-19.49,34a3,3,0,0,0,2.6,4.54h39a3,3,0,0,0,2.6-4.54ZM47.51,39.93h5V56.29h-5ZM50,65a3,3,0,1,1,3-3A3,3,0,0,1,50,65Z"
 			transform="translate(-25 -30)"
 		/>

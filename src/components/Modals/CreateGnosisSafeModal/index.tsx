@@ -1,13 +1,14 @@
 import React, {ChangeEvent, FunctionComponent, useContext, useEffect, useState} from "react"
-import Button from "../../Controls/Button"
-import Modal from "../Modal"
-import {AuthContext} from "../../../context/AuthContext"
-import RadioButton from "../../Controls/RadioButton"
-import Input from "../../Controls/Input"
 import createGnosisSafe from "../../../api/ethers/functions/gnosisSafe/createGnosisSafe"
-import EthersContext from "../../../context/EthersContext"
-import {toastError, toastSuccess} from "../../Toast"
 import addDAO from "../../../api/firebase/DAO/addDAO"
+import {AuthContext} from "../../../context/AuthContext"
+import EthersContext from "../../../context/EthersContext"
+import {ModalContext} from "../../../context/ModalContext"
+import ToastWarningIcon from "../../../icons/ToastWarningIcon"
+import Button from "../../Controls/Button"
+import Input from "../../Controls/Input"
+import RadioButton from "../../Controls/RadioButton"
+import {toastError, toastSuccess} from "../../Toast"
 import "./styles.scss"
 
 type CreateGnosisSafeStage = "chooseOption" | "create" | "import" | "success"
@@ -104,7 +105,7 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 					</div>
 					<div className="create-gnosis-safe__row">
 						<RadioButton
-							label="TODO: Load Existing Gnosis Safe"
+							label="Load Existing Gnosis Safe"
 							id="create-gnosis-safe-existing"
 							checked={!newGnosis}
 							onChange={() => {
@@ -155,9 +156,20 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 					<Input borders="all" number value={votingThreshold} onChange={handleThresholdChange} />
 				</>
 			)}
-			<Button buttonType="primary" onClick={handleSubmit} disabled={submitButtonDisabled}>
-				{processing ? "Processing..." : stage === "chooseOption" ? "Continue" : "Submit"}
-			</Button>
+			<div className="modal-footer">
+				{stage === "chooseOption" ? null : (
+					<div className="note-p">
+						<ToastWarningIcon />
+						<p>
+							This request will incur a gas fee. If you would like to proceed, please click
+							&ldquo;Submit&rdquo; below.
+						</p>
+					</div>
+				)}
+				<Button buttonType="primary" onClick={handleSubmit} disabled={submitButtonDisabled}>
+					{processing ? "Processing..." : stage === "chooseOption" ? "Continue" : "Submit"}
+				</Button>
+			</div>
 		</div>
 	)
 }
@@ -165,31 +177,16 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 const CreateGnosisSafeModal: FunctionComponent<{
 	afterCreate: () => void
 }> = ({afterCreate}) => {
-	const [isOpened, setIsOpened] = useState(false)
+	const {setOverlay} = useContext(ModalContext)
 
 	return (
 		<>
-			<Button
-				buttonType="primary"
-				onClick={() => {
-					setIsOpened(true)
+			<CreateGnosisSafeModalContent
+				afterCreate={() => {
+					setOverlay()
+					afterCreate()
 				}}
-			>
-				Start a DAO
-			</Button>
-			<Modal
-				show={isOpened}
-				onClose={() => {
-					setIsOpened(false)
-				}}
-			>
-				<CreateGnosisSafeModalContent
-					afterCreate={() => {
-						setIsOpened(false)
-						afterCreate()
-					}}
-				/>
-			</Modal>
+			/>
 		</>
 	)
 }
