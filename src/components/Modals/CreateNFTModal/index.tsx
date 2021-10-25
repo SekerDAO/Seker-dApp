@@ -241,7 +241,7 @@ const CreateNFTModalContent: FunctionComponent<{
 					</div>
 					<div className="create-nft__row">
 						<RadioButton
-							label="TokenWalk Domain"
+							label="Hyphal Domain"
 							id="create-nft-radio-tw-domain"
 							checked={!customDomain}
 							onChange={() => {

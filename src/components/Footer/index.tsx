@@ -13,9 +13,9 @@ const Footer: FunctionComponent = () => {
 					<Link to="/">
 						<Logo />
 					</Link>
-					© TokenWalk 2021
+					© Hyphal 2021
 					<div className="footer__socials">
-						<a target="_blank" rel="noopener noreferrer" href="https://twitter.com/tokenwalk">
+						<a target="_blank" rel="noopener noreferrer" href="https://twitter.com/hyphaldao">
 							<TwitterIcon fill="white" />
 						</a>
 						<a target="_blank" rel="noopener noreferrer" href="https://discord.gg/zC5CuFJwqu">

@@ -75,7 +75,7 @@ export const useAuth = (): AuthContext => {
 				})
 			})
 			const json = await res.json()
-			localStorage.setItem("tokenwalk_at", json.token)
+			localStorage.setItem("hyphal_at", json.token)
 			await firebase.auth().signInWithCustomToken(json.token)
 			setConnected(true)
 		} catch (e) {
@@ -85,7 +85,7 @@ export const useAuth = (): AuthContext => {
 	}
 
 	const checkToken = async () => {
-		const token = localStorage.getItem("tokenwalk_at")
+		const token = localStorage.getItem("hyphal_at")
 		if (token) {
 			try {
 				const {exp} = decode<{exp: number}>(token)
@@ -103,7 +103,7 @@ export const useAuth = (): AuthContext => {
 	}, [])
 
 	const disconnect = () => {
-		localStorage.removeItem("tokenwalk_at")
+		localStorage.removeItem("hyphal_at")
 		setConnected(false)
 	}
 

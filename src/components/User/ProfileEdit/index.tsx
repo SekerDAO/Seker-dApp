@@ -71,7 +71,7 @@ const ProfileEdit: FunctionComponent<{
 			<label htmlFor="profile-edit-url">Custom URL</label>
 			<Input
 				validation={urlValidation}
-				staticPlaceholder="tokenwalk.com/"
+				staticPlaceholder="hyphal.hyz/"
 				id="profile-edit-url"
 				borders="all"
 				value={url}
