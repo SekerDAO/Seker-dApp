@@ -20,8 +20,12 @@ const columns = [
 		)
 	},
 	{
-		id: "isAdmin",
-		name: "DAO Role"
+		id: "votingThreshold",
+		name: "Voting Weight"
+	},
+	{
+		id: "membershipInfo",
+		name: "Membership Info"
 	}
 ] as const
 
@@ -47,7 +51,8 @@ const ProfileDAOs: FunctionComponent = () => {
 						const isAdmin = account && owners.indexOf(account) !== -1 ? "Admin" : ""
 						return {
 							name,
-							isAdmin,
+							membershipInfo: isAdmin,
+							votingThreshold: `${dao.gnosisVotingThreshold * 100}%`,
 							gnosisAddress: dao.gnosisAddress
 						}
 					})}

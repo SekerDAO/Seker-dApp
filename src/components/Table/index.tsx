@@ -18,7 +18,7 @@ const Table: <T extends {[key: string]: string | number}>(props: TableProps<T>) 
 	columns,
 	idCol
 }) => (
-	<Paper>
+	<Paper className="table-wrapper">
 		<table className="table">
 			<thead>
 				<tr>
