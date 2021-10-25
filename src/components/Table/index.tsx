@@ -1,3 +1,4 @@
+import CloseIcon from "../../assets/icons/CloseIcon"
 import Paper from "../Paper"
 import "./styles.scss"
 
@@ -11,12 +12,14 @@ type TableProps<T extends Record<string, string | number>> = {
 		rowClassName?: string
 	}[]
 	idCol: keyof T
+	onItemDelete?: (itemId: string | number) => void
 }
 
 const Table: <T extends {[key: string]: string | number}>(props: TableProps<T>) => JSX.Element = ({
 	data,
 	columns,
-	idCol
+	idCol,
+	onItemDelete
 }) => (
 	<Paper className="table-wrapper">
 		<table className="table">
@@ -37,6 +40,14 @@ const Table: <T extends {[key: string]: string | number}>(props: TableProps<T>) 
 								{col.render ? col.render(data[rowIndex]) : data[rowIndex][col.id]}
 							</td>
 						))}
+						{onItemDelete && (
+							<td
+								onClick={() => onItemDelete(data[rowIndex][idCol])}
+								className="table__remove-icon"
+							>
+								<CloseIcon />
+							</td>
+						)}
 					</tr>
 				))}
 			</tbody>

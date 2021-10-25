@@ -16,10 +16,11 @@
       text-align: left;
       padding: 5px 0;
       color: $dark-grey50;
+      font-weight: normal;
     }
 
     td {
-      padding: 5px 0;
+      padding: 10px 0;
     }
 
     thead > tr {
@@ -32,6 +33,21 @@
       display: block;
       line-height: 30px;
       text-indent: -99999px;
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    &__remove-icon {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
     }
   }
 }

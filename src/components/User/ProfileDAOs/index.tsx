@@ -32,6 +32,9 @@ const columns = [
 const ProfileDAOs: FunctionComponent = () => {
 	const {DAOs, loading, error, refetch} = useMyDAOs()
 	const {account} = useContext(AuthContext)
+	const handleDAODelete = (gnosisAddress: string | number) => {
+		// TODO: Implement me!
+	}
 
 	if (error) return <ErrorPlaceholder />
 	if (!DAOs || loading) return <Loader />
@@ -58,6 +61,7 @@ const ProfileDAOs: FunctionComponent = () => {
 					})}
 					columns={columns}
 					idCol="gnosisAddress"
+					onItemDelete={gnosisAddress => handleDAODelete(gnosisAddress)}
 				/>
 			</div>
 		</>
