@@ -1,8 +1,8 @@
 import React, {Fragment, FunctionComponent} from "react"
-import "./styles.scss"
+import {useLocation} from "react-router-dom"
 import LearnMenu from "../../components/LearnMenu"
 import LEARN_ARTICLES from "../../constants/learnArticles"
-import {useLocation} from "react-router-dom"
+import "./styles.scss"
 
 const Learn: FunctionComponent = () => {
 	const {hash} = useLocation()

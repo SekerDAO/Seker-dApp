@@ -1,14 +1,14 @@
 import React, {ChangeEvent, FunctionComponent, useState} from "react"
+import useDAO from "../../../customHooks/getters/useDAO"
+import useMyERC20Tokens from "../../../customHooks/getters/useMyERC20Tokens"
 import Button from "../../Controls/Button"
-import Modal from "../Modal"
 import RadioButton from "../../Controls/RadioButton"
 import Select from "../../Controls/Select"
 import CreateERC20Token from "../../DAO/CreateERC20Token"
 import DecentralizeDAO from "../../DAO/DecentralizeDAO"
-import useMyERC20Tokens from "../../../customHooks/getters/useMyERC20Tokens"
-import useDAO from "../../../customHooks/getters/useDAO"
-import Loader from "../../Loader"
 import ErrorPlaceholder from "../../ErrorPlaceholder"
+import Loader from "../../Loader"
+import Modal from "../Modal"
 import "./styles.scss"
 
 type DecentralizeDAOStage = "chooseToken" | "createToken" | "enterInfo" | "success"
@@ -160,12 +160,7 @@ const DecentralizeDAOModal: FunctionComponent<{
 			>
 				Decentralize DAO
 			</Button>
-			<Modal
-				show={isOpened}
-				onClose={() => {
-					setIsOpened(false)
-				}}
-			>
+			<Modal>
 				<DecentralizeDAOModalContent
 					afterSubmit={afterSubmit}
 					gnosisAddress={gnosisAddress}

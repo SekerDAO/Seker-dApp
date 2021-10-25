@@ -1,23 +1,22 @@
-import React, {FunctionComponent, useState, useContext} from "react"
-import Button from "../../Controls/Button"
-import Modal from "../Modal"
-import RadioButton from "../../Controls/RadioButton"
-import Select from "../../Controls/Select"
-import MediaUpload from "../../Controls/MediaUpload"
-import Input from "../../Controls/Input"
-import EthersContext from "../../../context/EthersContext"
+import React, {FunctionComponent, useContext, useState} from "react"
 import checkNFTOwner from "../../../api/ethers/functions/NFT/checkNFTOwner"
-import {AuthContext} from "../../../context/AuthContext"
+import createNFT from "../../../api/ethers/functions/NFT/createNFT"
 import getNFTMetadata from "../../../api/ethers/functions/NFT/getNFTMetadata"
+import transferNFT from "../../../api/ethers/functions/NFT/transferNFT"
+import addDAONFT from "../../../api/firebase/NFT/addDAONFT"
 import addNFT from "../../../api/firebase/NFT/addNFT"
 import uploadMedia from "../../../api/ipfs/uploadMedia"
-import createNFT from "../../../api/ethers/functions/NFT/createNFT"
-import Textarea from "../../Controls/Textarea"
+import {AuthContext} from "../../../context/AuthContext"
+import EthersContext from "../../../context/EthersContext"
 import useMyDomains from "../../../customHooks/getters/useMyDomains"
-import "./styles.scss"
+import Button from "../../Controls/Button"
+import Input from "../../Controls/Input"
+import MediaUpload from "../../Controls/MediaUpload"
+import RadioButton from "../../Controls/RadioButton"
+import Select from "../../Controls/Select"
+import Textarea from "../../Controls/Textarea"
 import {toastError} from "../../Toast"
-import addDAONFT from "../../../api/firebase/NFT/addDAONFT"
-import transferNFT from "../../../api/ethers/functions/NFT/transferNFT"
+import "./styles.scss"
 const {REACT_APP_DOMAIN_ADDRESS} = process.env
 
 type CreateNFTModalStage =
@@ -196,7 +195,7 @@ const CreateNFTModalContent: FunctionComponent<{
 		<div className="create-nft">
 			{stage === "chooseOption" && (
 				<>
-					<h2>Enter NFT</h2>
+					<h2>Create/Load NFT</h2>
 					<p>Step 1: Choose one.</p>
 					<div className="create-nft__row">
 						<RadioButton
@@ -249,7 +248,7 @@ const CreateNFTModalContent: FunctionComponent<{
 					</div>
 					<div className="create-nft__row">
 						<RadioButton
-							label="TokenWalk Domain"
+							label="Hyphal Domain"
 							id="create-nft-radio-tw-domain"
 							checked={!customDomain}
 							onChange={() => {
@@ -355,26 +354,9 @@ const CreateNFTModal: FunctionComponent<{
 	gnosisAddress?: string
 	afterCreate?: () => void
 }> = ({gnosisAddress, afterCreate}) => {
-	const [isOpened, setIsOpened] = useState(false)
-
 	return (
 		<>
-			<Button
-				buttonType={gnosisAddress ? "primary" : "secondary"}
-				onClick={() => {
-					setIsOpened(true)
-				}}
-			>
-				{gnosisAddress ? "Enter NFT" : "Create / Load NFT"}
-			</Button>
-			<Modal
-				show={isOpened}
-				onClose={() => {
-					setIsOpened(false)
-				}}
-			>
-				<CreateNFTModalContent gnosisAddress={gnosisAddress} afterCreate={afterCreate} />
-			</Modal>
+			<CreateNFTModalContent gnosisAddress={gnosisAddress} afterCreate={afterCreate} />
 		</>
 	)
 }

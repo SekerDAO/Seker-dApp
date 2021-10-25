@@ -1,9 +1,9 @@
 import React, {FunctionComponent, useState} from "react"
 import Button from "../../Controls/Button"
-import "./styles.scss"
-import Modal from "../Modal"
 import MediaUpload from "../../Controls/MediaUpload"
 import {toastError, toastSuccess} from "../../Toast"
+import Modal from "../Modal"
+import "./styles.scss"
 
 const UploadImageModal: FunctionComponent<{
 	initialUrl?: string
@@ -41,12 +41,7 @@ const UploadImageModal: FunctionComponent<{
 			>
 				{buttonName}
 			</Button>
-			<Modal
-				show={isOpened}
-				onClose={() => {
-					setIsOpened(false)
-				}}
-			>
+			<Modal>
 				<div className="upload-image-modal">
 					<h2>{titleText}</h2>
 					<MediaUpload
