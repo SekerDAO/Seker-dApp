@@ -25,33 +25,15 @@
     margin: -232px 40px 0 40px;
     align-items: stretch;
 
-    p,
-    a {
-      margin: 5px 0;
-    }
-
     h2 {
-      margin: 20px 0;
-      line-height: 28px;
+      margin-bottom: 20px;
     }
   }
 
   &__info {
-    border-left: 1px solid $dark-grey50;
-    border-right: 1px solid $dark-grey50;
-    border-bottom: 1px solid $dark-grey50;
     display: flex;
     flex-direction: column;
-    padding: 0 20px 20px 20px;
-
-    .btn {
-      align-self: stretch;
-      margin: 15px 0 5px 0;
-
-      &:last-child {
-        margin: 5px 0 0 0;
-      }
-    }
+    padding: 20px;
 
     > a {
       color: $purple75;

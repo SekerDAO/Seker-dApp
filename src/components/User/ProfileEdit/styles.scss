@@ -13,30 +13,16 @@
     }
   }
 
-  button {
-    align-self: flex-start;
-  }
-
-  &__url-container {
+  .input {
     display: flex;
-    align-items: center;
-    position: relative;
 
-    .input {
-      &__field {
-        flex: 1;
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-      }
+    &__field {
+      flex: 1;
     }
   }
 
-  &__url-placeholder {
-    padding: 6px;
-    color: white;
-    background-color: $dark-grey;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
+  button {
+    align-self: flex-start;
   }
 
   &__socials {

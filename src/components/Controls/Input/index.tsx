@@ -6,10 +6,12 @@ const Input: FunctionComponent<
 		borders: "bottom" | "all"
 		number?: boolean
 		validation?: string | null
+		staticPlaceholder?: string
 	} & Omit<InputHTMLAttributes<HTMLInputElement>, "type">
-> = ({borders, number = false, validation, ...inputProps}) => {
+> = ({borders, number = false, validation, staticPlaceholder, ...inputProps}) => {
 	return (
-		<>
+		<div className={`input${staticPlaceholder ? " input--with-static-placeholder" : ""}`}>
+			{staticPlaceholder && <div className="input__static-placeholder">{staticPlaceholder}</div>}
 			<input
 				className={`input__field${borders === "all" ? " input__field--bordered" : ""}${
 					validation ? " input__field--bad" : ""
@@ -18,7 +20,7 @@ const Input: FunctionComponent<
 				{...inputProps}
 			/>
 			{validation && <span className="input__validation">{validation}</span>}
-		</>
+		</div>
 	)
 }
 

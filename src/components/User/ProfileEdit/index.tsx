@@ -69,18 +69,16 @@ const ProfileEdit: FunctionComponent<{
 				}}
 			/>
 			<label htmlFor="profile-edit-url">Custom URL</label>
-			<div className="profile-edit__url-container">
-				<div className="profile-edit__url-placeholder">tokenwalk.com/</div>
-				<Input
-					validation={urlValidation}
-					id="profile-edit-url"
-					borders="all"
-					value={url}
-					onChange={e => {
-						setUrl(e.target.value)
-					}}
-				/>
-			</div>
+			<Input
+				validation={urlValidation}
+				staticPlaceholder="hyphal.hyz/"
+				id="profile-edit-url"
+				borders="all"
+				value={url}
+				onChange={e => {
+					setUrl(e.target.value)
+				}}
+			/>
 			<label htmlFor="profile-edit-bio">Biography</label>
 			<Input
 				id="profile-edit-bio"
@@ -110,45 +108,39 @@ const ProfileEdit: FunctionComponent<{
 				}}
 			/>
 			<label htmlFor="profile-edit-site">Website</label>
-			<div className="profile-edit__url-container">
-				<div className="profile-edit__url-placeholder">https://</div>
-				<Input
-					id="profile-edit-site"
-					borders="all"
-					value={website}
-					onChange={e => {
-						setWebsite(e.target.value)
-					}}
-				/>
-			</div>
+			<Input
+				staticPlaceholder="https://"
+				id="profile-edit-site"
+				borders="all"
+				value={website}
+				onChange={e => {
+					setWebsite(e.target.value)
+				}}
+			/>
 			<div className="profile-edit__socials">
 				<div className="profile-edit__social">
 					<label htmlFor="profile-edit-tw">Twitter URL</label>
-					<div className="profile-edit__url-container">
-						<div className="profile-edit__url-placeholder">twitter.com/</div>
-						<Input
-							id="profile-edit-tw"
-							borders="all"
-							value={twitter}
-							onChange={e => {
-								setTwitter(e.target.value)
-							}}
-						/>
-					</div>
+					<Input
+						staticPlaceholder="twitter.com/"
+						id="profile-edit-tw"
+						borders="all"
+						value={twitter}
+						onChange={e => {
+							setTwitter(e.target.value)
+						}}
+					/>
 				</div>
 				<div className="profile-edit__social">
 					<label htmlFor="profile-edit-inst">Instagram URL</label>
-					<div className="profile-edit__url-container">
-						<div className="profile-edit__url-placeholder">instagram.com/</div>
-						<Input
-							id="profile-edit-inst"
-							borders="all"
-							value={instagram}
-							onChange={e => {
-								setInstagram(e.target.value)
-							}}
-						/>
-					</div>
+					<Input
+						staticPlaceholder="instagram.com/"
+						id="profile-edit-inst"
+						borders="all"
+						value={instagram}
+						onChange={e => {
+							setInstagram(e.target.value)
+						}}
+					/>
 				</div>
 			</div>
 			<div className="profile-edit__buttons">

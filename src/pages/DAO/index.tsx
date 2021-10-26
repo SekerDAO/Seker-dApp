@@ -1,12 +1,12 @@
 import {FunctionComponent, useContext, useState} from "react"
-import {useParams} from "react-router-dom"
+import {useHistory, useLocation, useParams} from "react-router-dom"
+import {parse} from "query-string"
 import HorizontalMenu from "../../components/HorizontalMenu"
 import "./styles.scss"
 import useDAO from "../../hooks/getters/useDAO"
 import ErrorPlaceholder from "../../components/ErrorPlaceholder"
 import Loader from "../../components/Loader"
 import {AuthContext} from "../../context/AuthContext"
-import Button from "../../components/Controls/Button"
 import AboutDAO from "../../components/DAO/AboutDAO"
 import CreateDaoAdminProposal from "../../components/DAO/CreateDaoAdminProposal"
 import DAOProposals from "../../components/DAO/DAOProposals"
@@ -22,25 +22,34 @@ import DashboardHeader from "../../components/DashboardHeader"
 import {formatDate} from "../../utlls"
 import DAOOwners from "../../components/DAO/DAOOwners"
 import DecentralizeDAOModal from "../../components/Modals/DecentralizeDAOModal"
+import Paper from "../../components/Paper"
+import DashboardMenu from "../../components/DashboardMenu"
+
+type DAOAdminPage = "nfts" | "edit" | "createProposal" | "expand"
+type DAOContentPage = "collection" | "about" | "members" | "proposals"
 
 const menuEntries = ["Collection", "About", "Owners", "Proposals", "+ Admin Proposal"]
 
+// Make sense to rebuild all this internal "page" handling to plain react-router routes
 const DAOPage: FunctionComponent = () => {
 	const {account, connected} = useContext(AuthContext)
 	const {address} = useParams<{address: string}>()
 	const {dao, loading, error, refetch} = useDAO(address)
-	const [editOpened, setEditOpened] = useState(false)
 	const [activeMenuIndex, setActiveMenuIndex] = useState(0)
+	const {pathname, search} = useLocation()
+	const {push} = useHistory()
 
 	if (error) return <ErrorPlaceholder />
 	if (!dao || loading) return <Loader />
 
 	const isAdmin = connected && !!dao.owners.find(addr => addr === account)
+	const page: DAOAdminPage | DAOContentPage =
+		(isAdmin && (parse(search).page as DAOAdminPage | DAOContentPage)) || "collection"
 
 	return (
 		<>
 			<DashboardHeader background={dao.headerImage}>
-				{isAdmin && editOpened && (
+				{isAdmin && page === "edit" && (
 					<UploadImageModal
 						initialUrl={dao.headerImage}
 						buttonName="Edit Header"
@@ -67,7 +76,7 @@ const DAOPage: FunctionComponent = () => {
 									: {}
 							}
 						>
-							{isAdmin && editOpened && (
+							{isAdmin && page === "edit" && (
 								<UploadImageModal
 									initialUrl={dao.profileImage}
 									buttonName="Edit Image"
@@ -81,7 +90,7 @@ const DAOPage: FunctionComponent = () => {
 								/>
 							)}
 						</div>
-						<div className="dao__info">
+						<Paper className="dao__info">
 							<h2>{dao.name}</h2>
 							<p>Est. {formatDate(dao.estimated)}</p>
 							{dao.website && (
@@ -120,20 +129,8 @@ const DAOPage: FunctionComponent = () => {
 									)}
 								</div>
 							)}
-							{isAdmin && (
-								<Button
-									buttonType="primary"
-									onClick={() => {
-										setEditOpened(true)
-									}}
-								>
-									Edit DAO Profile
-								</Button>
-							)}
-							{/* TODO: link */}
-							<Button>Purchase tokens</Button>
 							{/* TODO: decentralize DAO modal */}
-							{dao.seeleAddress ? (
+							{/* {dao.seeleAddress ? (
 								<p>TODO: Decentralized DAO</p>
 							) : isAdmin ? (
 								<DecentralizeDAOModal
@@ -141,16 +138,43 @@ const DAOPage: FunctionComponent = () => {
 									gnosisAddress={dao.gnosisAddress}
 									gnosisVotingThreshold={dao.gnosisVotingThreshold}
 								/>
-							) : null}
-						</div>
+							) : null} */}
+						</Paper>
+						{isAdmin && (
+							<DashboardMenu
+								items={[
+									{
+										title: "Create / Load NFTs",
+										to: `${pathname}?page=nfts`,
+										page: "nfts"
+									},
+									{
+										title: "Edit DAO Profile",
+										to: `${pathname}?page=edit`,
+										page: "edit"
+									},
+									{
+										title: "Create Proposal",
+										to: `${pathname}?page=createProposal`,
+										page: "createProposal"
+									},
+									{
+										title: "Expand Dao",
+										to: `${pathname}?page=expand`,
+										page: "expand"
+									}
+								]}
+								currentPage={page}
+							/>
+						)}
 					</div>
 					<div className="dao__main">
-						{editOpened ? (
+						{page === "edit" ? (
 							<EditDAO
 								dao={dao}
 								afterEdit={refetch}
 								onClose={() => {
-									setEditOpened(false)
+									push(pathname)
 								}}
 							/>
 						) : (

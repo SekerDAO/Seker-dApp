@@ -20,14 +20,21 @@ const columns = [
 		)
 	},
 	{
-		id: "isAdmin",
-		name: "DAO Role"
+		id: "votingThreshold",
+		name: "Voting Weight"
+	},
+	{
+		id: "membershipInfo",
+		name: "Membership Info"
 	}
 ] as const
 
 const ProfileDAOs: FunctionComponent = () => {
 	const {DAOs, loading, error, refetch} = useMyDAOs()
 	const {account} = useContext(AuthContext)
+	const handleDAODelete = (gnosisAddress: string | number) => {
+		// TODO: Implement me!
+	}
 
 	if (error) return <ErrorPlaceholder />
 	if (!DAOs || loading) return <Loader />
@@ -47,12 +54,14 @@ const ProfileDAOs: FunctionComponent = () => {
 						const isAdmin = account && owners.indexOf(account) !== -1 ? "Admin" : ""
 						return {
 							name,
-							isAdmin,
+							membershipInfo: isAdmin,
+							votingThreshold: `${dao.gnosisVotingThreshold * 100}%`,
 							gnosisAddress: dao.gnosisAddress
 						}
 					})}
 					columns={columns}
 					idCol="gnosisAddress"
+					onItemDelete={gnosisAddress => handleDAODelete(gnosisAddress)}
 				/>
 			</div>
 		</>
