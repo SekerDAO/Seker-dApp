@@ -1,5 +1,6 @@
 import {FunctionComponent, ReactElement, useRef} from "react"
 import useClickOutside from "../../hooks/useClickOutside"
+import {ReactComponent as ArrowDown} from "../../assets/icons/arrow-down.svg"
 import "./styles.scss"
 
 const Dropdown: FunctionComponent<{
@@ -23,7 +24,11 @@ const Dropdown: FunctionComponent<{
 			<ul className={`dropdown__content dropdown__content--borders-${borders}`}>
 				<li className="dropdown__trigger" onClick={onTriggerClick}>
 					{triggerText}
-					{/* TODO: Add Caret icon once provided by designer */}
+					<ArrowDown
+						className={`dropdown__arrow ${open ? "dropdown__arrow--open" : ""}`}
+						width="20px"
+						height="20px"
+					/>
 				</li>
 				{open &&
 					items.map(({id, content}) => (
