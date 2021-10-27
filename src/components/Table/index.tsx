@@ -1,4 +1,4 @@
-import CloseIcon from "../../assets/icons/CloseIcon"
+import {ReactComponent as DeleteIcon} from "../../assets/icons/delete.svg"
 import Paper from "../Paper"
 import "./styles.scss"
 
@@ -45,7 +45,7 @@ const Table: <T extends {[key: string]: string | number}>(props: TableProps<T>) 
 								onClick={() => onItemDelete(data[rowIndex][idCol])}
 								className="table__remove-icon"
 							>
-								<CloseIcon />
+								<DeleteIcon />
 							</td>
 						)}
 					</tr>

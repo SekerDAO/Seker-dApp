@@ -14,10 +14,9 @@ import EditDAO from "../../components/DAO/EditDAO"
 import DAOCollection from "../../components/DAO/DAOCollection"
 import UploadImageModal from "../../components/Modals/UploadImageModal"
 import updateDAOImage from "../../api/firebase/DAO/updateDAOImage"
-import TwitterIcon from "../../assets/icons/TwitterIcon"
-import {PURPLE_2} from "../../constants/colors"
-import TelegramIcon from "../../assets/icons/TelegramIcon"
-import DiscordIcon from "../../assets/icons/DiscordIcon"
+import {ReactComponent as TwitterIcon} from "../../assets/icons/twitter.svg"
+import {ReactComponent as TelegramIcon} from "../../assets/icons/telegram.svg"
+import {ReactComponent as DiscordIcon} from "../../assets/icons/discord.svg"
 import DashboardHeader from "../../components/DashboardHeader"
 import {formatDate} from "../../utlls"
 import DAOOwners from "../../components/DAO/DAOOwners"
@@ -106,7 +105,7 @@ const DAOPage: FunctionComponent = () => {
 											rel="noopener noreferrer"
 											href={`https://twitter.com/${dao.twitter}`}
 										>
-											<TwitterIcon fill={PURPLE_2} />
+											<TwitterIcon width="24px" height="20px" />
 										</a>
 									)}
 									{dao.telegram && (
@@ -115,7 +114,7 @@ const DAOPage: FunctionComponent = () => {
 											rel="noopener noreferrer"
 											href={`https://t.me/${dao.telegram}`}
 										>
-											<TelegramIcon fill={PURPLE_2} />
+											<TelegramIcon width="24px" height="20px" />
 										</a>
 									)}
 									{dao.discord && (
@@ -124,7 +123,7 @@ const DAOPage: FunctionComponent = () => {
 											rel="noopener noreferrer"
 											href={`https://discord.gg/${dao.discord}`}
 										>
-											<DiscordIcon fill={PURPLE_2} />
+											<DiscordIcon width="24px" height="20px" />
 										</a>
 									)}
 								</div>

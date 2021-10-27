@@ -1,5 +1,5 @@
 import {FunctionComponent, useState, ChangeEventHandler, KeyboardEventHandler} from "react"
-import CloseIcon from "../../../assets/icons/CloseIcon"
+import {ReactComponent as CloseIcon} from "../../../assets/icons/delete.svg"
 import Input from "../Input"
 import Button from "../Button"
 import "./styles.scss"

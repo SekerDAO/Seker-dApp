@@ -1,8 +1,8 @@
 import {FunctionComponent} from "react"
 import {Link} from "react-router-dom"
-import Logo from "../../assets/icons/Logo"
-import TwitterIcon from "../../assets/icons/TwitterIcon"
-import DiscordIcon from "../../assets/icons/DiscordIcon"
+import {ReactComponent as Logo} from "../../assets/icons/logo-white.svg"
+import {ReactComponent as DiscordGrayscale} from "../../assets/icons/discord-grayscale.svg"
+import {ReactComponent as TwitterGrayscale} from "../../assets/icons/twitter-grayscale.svg"
 import "./styles.scss"
 
 const Footer: FunctionComponent = () => {
@@ -11,15 +11,15 @@ const Footer: FunctionComponent = () => {
 			<div className="footer__wrap">
 				<div className="footer__col">
 					<Link to="/">
-						<Logo />
+						<Logo width="80px" height="80px" />
 					</Link>
 					© Hyphal 2021
 					<div className="footer__socials">
 						<a target="_blank" rel="noopener noreferrer" href="https://twitter.com/hyphaldao">
-							<TwitterIcon fill="white" />
+							<TwitterGrayscale width="24px" height="20px" />
 						</a>
 						<a target="_blank" rel="noopener noreferrer" href="https://discord.gg/zC5CuFJwqu">
-							<DiscordIcon fill="white" />
+							<DiscordGrayscale width="24px" height="20px" />
 						</a>
 					</div>
 				</div>
