@@ -5,22 +5,36 @@ import "./styles.scss"
 
 const Dropdown: FunctionComponent<{
 	open: boolean
-	items: {id: string; content: ReactElement | string}[]
-	triggerText: string
+	items: {id: string | number; content: ReactElement | string}[]
+	selected?: string | number | null
+	highlightSelected?: boolean
+	triggerText: string | number
 	onClose: () => void
 	onTriggerClick: () => void
-	onItemClick?: (itemId: string) => void
+	onItemClick?: (itemId: string | number) => void
 	borders?: "all" | "none"
-}> = ({open, onClose, items, onTriggerClick, onItemClick, triggerText, borders = "all"}) => {
+	className?: string
+}> = ({
+	open,
+	onClose,
+	items,
+	onTriggerClick,
+	onItemClick,
+	triggerText,
+	className,
+	borders = "all",
+	selected,
+	highlightSelected
+}) => {
 	const ref = useRef<HTMLDivElement | null>(null)
 	useClickOutside(ref, onClose)
-	const handleItemClick = (id: string) => {
+	const handleItemClick = (id: string | number) => {
 		onItemClick && onItemClick(id)
 		onClose()
 	}
 
 	return (
-		<div className="dropdown" ref={ref}>
+		<div className={`dropdown ${className ?? ""}`} ref={ref}>
 			<ul className={`dropdown__content dropdown__content--borders-${borders}`}>
 				<li className="dropdown__trigger" onClick={onTriggerClick}>
 					{triggerText}
@@ -32,7 +46,13 @@ const Dropdown: FunctionComponent<{
 				</li>
 				{open &&
 					items.map(({id, content}) => (
-						<li key={id} onClick={() => handleItemClick(id)} className="dropdown__item">
+						<li
+							key={id}
+							onClick={() => handleItemClick(id)}
+							className={`dropdown__item${
+								highlightSelected && id === selected ? " dropdown__item--selected" : ""
+							}`}
+						>
 							{content}
 						</li>
 					))}

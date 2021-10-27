@@ -1,4 +1,4 @@
-import {ChangeEvent, FunctionComponent, useContext, useState} from "react"
+import {FunctionComponent, useContext, useState} from "react"
 import {Auction} from "../../../types/auction"
 import Select from "../../Controls/Select"
 import Button from "../../Controls/Button"
@@ -20,8 +20,8 @@ const CancelAuction: FunctionComponent<{
 	const [selectedAuction, setSelectedAuction] = useState<Auction | null>(null)
 	const [processing, setProcessing] = useState(false)
 
-	const handleAuctionChange = (e: ChangeEvent<HTMLSelectElement>) => {
-		setSelectedAuction(auctions.find(a => String(a.id) === e.target.value) ?? null)
+	const handleAuctionChange = (auctionId: string | number) => {
+		setSelectedAuction(auctions.find(a => String(a.id) === auctionId) ?? null)
 	}
 
 	const handleSubmit = async () => {
@@ -43,11 +43,11 @@ const CancelAuction: FunctionComponent<{
 		<>
 			<label htmlFor="cancel-auction-id">Auction ID</label>
 			<Select
-				options={[{name: "Choose One", value: ""}].concat(
-					auctions
-						.filter(a => a.state === "approved")
-						.map(a => ({name: String(a.nftName), value: String(a.id)}))
-				)}
+				placeholder="Choose one"
+				value={selectedAuction?.id}
+				options={auctions
+					.filter(a => a.state === "approved")
+					.map(a => ({name: String(a.nftName), value: String(a.id)}))}
 				onChange={handleAuctionChange}
 				id="cancel-auction-id"
 				fullWidth

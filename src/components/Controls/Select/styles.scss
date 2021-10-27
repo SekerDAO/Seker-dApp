@@ -1,26 +1,15 @@
 @import "src/assets/styles/variables";
 
 .select {
-  label {
-    display: block;
-    width: 100%;
-    text-align: left;
-  }
-
   &__field {
     font-family: Karla, 'Open Sans', sans-serif;
     font-size: 16px;
     line-height: 20px;
     font-weight: 400;
-    padding: 5px 10px;
-    border: 1px solid $dark-grey25;
-    border-radius: 5px;
-    outline: none;
-    cursor: pointer;
-    background-color: $white;
+    height: 42px;
   }
 
-  &--full-width select {
+  &--full-width {
     width: 100%;
   }
 }

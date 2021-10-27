@@ -62,8 +62,8 @@ const CreateAuction: FunctionComponent<{
 		}
 	}
 
-	const handleNFTChange = (e: ChangeEvent<HTMLSelectElement>) => {
-		const snapshot = NFTs.data.find(s => s.data().id === Number(e.target.value))
+	const handleNFTChange = (nftId: string | number) => {
+		const snapshot = NFTs.data.find(s => s.data().id === Number(nftId))
 		if (snapshot) {
 			setNft(snapshot.data())
 		} else {
@@ -71,9 +71,9 @@ const CreateAuction: FunctionComponent<{
 		}
 	}
 
-	const handleCurrencyChange = (e: ChangeEvent<HTMLSelectElement>) => {
-		setCurrencySymbol(e.target.value)
-		setCurrencyAddress(currencies.find(c => c.symbol === e.target.value)?.address ?? "")
+	const handleCurrencyChange = (newCurrencySymbol: string | number) => {
+		setCurrencySymbol(String(newCurrencySymbol))
+		setCurrencyAddress(currencies.find(c => c.symbol === String(newCurrencySymbol))?.address ?? "")
 	}
 
 	const handleSubmit = async () => {
@@ -135,8 +135,8 @@ const CreateAuction: FunctionComponent<{
 			<Select
 				fullWidth
 				id="create-auction-custom-currency"
+				placeholder="Choose One"
 				options={[
-					{name: "Choose One", value: ""},
 					...NFTs.data
 						.filter((d, index) => !NFTs.nftsAreOnAuctions[index])
 						.map(s => {
@@ -160,8 +160,8 @@ const CreateAuction: FunctionComponent<{
 			<Select
 				fullWidth
 				id="create-auction-custom-currency"
+				placeholder="Choose One"
 				options={[
-					{name: "Choose One", value: ""},
 					...currencies.map(cur => ({name: cur.symbol, value: cur.symbol})),
 					{name: "Custom Currency", value: "custom"}
 				]}

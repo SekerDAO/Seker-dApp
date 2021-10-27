@@ -1,4 +1,4 @@
-import {ChangeEvent, FunctionComponent, useState} from "react"
+import {FunctionComponent, useState} from "react"
 import SearchInput from "../Controls/Input/SearchInput"
 import Select from "../Controls/Select"
 import Gallery from "../Gallery"
@@ -30,8 +30,8 @@ const NFTGallery: FunctionComponent<{
 		setCursor(NFTs.data[NFTs.data.length - 1])
 	}
 
-	const handleSortChange = (e: ChangeEvent<HTMLSelectElement>) => {
-		setSort(e.target.value as NftSort)
+	const handleSortChange = (newSortValue: string | number) => {
+		setSort(newSortValue as NftSort)
 		setCursor(null)
 	}
 
@@ -68,6 +68,7 @@ const NFTGallery: FunctionComponent<{
 				<SearchInput />
 				<Select
 					value={sort}
+					placeholder="Sort By"
 					options={[
 						{name: "Name (A-Z)", value: "nameAsc"},
 						{name: "Name (Z-A)", value: "nameDesc"},

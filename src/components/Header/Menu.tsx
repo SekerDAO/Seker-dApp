@@ -17,7 +17,7 @@ const HeaderMenu: FunctionComponent = () => {
 		setOpen(false)
 	}
 
-	const handleItemClick = (itemId: string) => {
+	const handleItemClick = (itemId: string | number) => {
 		if (itemId === "disconnect") {
 			disconnect()
 		}

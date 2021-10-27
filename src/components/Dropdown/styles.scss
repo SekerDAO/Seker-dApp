@@ -40,7 +40,8 @@
       align-items: center;
       justify-content: space-between;
 
-      &:hover {
+      &:hover,
+      &--selected {
         background-color: $purple25;
         color: $purple;
         cursor: pointer;
@@ -49,6 +50,11 @@
           color: $purple;
           transition: none;
         }
+      }
+
+      &--selected {
+        border-left: 2px solid $purple;
+        padding-left: 8px;
       }
     }
   }

@@ -44,6 +44,7 @@ const CreateDaoAdminProposal: FunctionComponent<{
 		<div className="create-dao-proposal">
 			<h2>Create a New Proposal</h2>
 			<Select
+				placeholder="Select safe proposal type"
 				value={type}
 				options={[
 					{name: SafeProposalsTypeNames.changeRole, value: "changeRole"},
@@ -52,8 +53,8 @@ const CreateDaoAdminProposal: FunctionComponent<{
 					{name: SafeProposalsTypeNames.endAuction, value: "endAuction"},
 					{name: SafeProposalsTypeNames.generalEVM, value: "generalEVM"}
 				]}
-				onChange={e => {
-					setType(e.target.value as SafeProposalType)
+				onChange={newSafeProposalType => {
+					setType(newSafeProposalType as SafeProposalType)
 				}}
 			/>
 			<label htmlFor="change-role-title">Title</label>

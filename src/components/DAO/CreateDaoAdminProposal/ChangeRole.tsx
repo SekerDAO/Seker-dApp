@@ -46,14 +46,14 @@ const ChangeRole: FunctionComponent<{
 		}
 	}
 
-	const handleRoleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-		if (e.target.value === "kick") {
+	const handleRoleChange = (role: string | number) => {
+		if (role === "kick") {
 			setAddress("")
 			if (Number(newThreshold) > ownersCount - 1) {
 				setNewThreshold(String(ownersCount - 1))
 			}
 		}
-		setNewRole(e.target.value as "admin")
+		setNewRole(role as "admin")
 	}
 
 	const handleSubmit = async () => {
@@ -122,12 +122,11 @@ const ChangeRole: FunctionComponent<{
 					<label htmlFor="change-role-address">Member&apos;s Address</label>
 					{newRole === "kick" ? (
 						<Select
-							options={[{name: "Choose one", value: ""}].concat(
-								dao.owners.map(addr => ({name: addr, value: addr}))
-							)}
+							placeholder="Choose one"
+							options={dao.owners.map(addr => ({name: addr, value: addr}))}
 							value={address}
-							onChange={e => {
-								setAddress(e.target.value)
+							onChange={newAddress => {
+								setAddress(String(newAddress))
 							}}
 						/>
 					) : (
@@ -142,8 +141,8 @@ const ChangeRole: FunctionComponent<{
 					)}
 				</div>
 				<div className="create-dao-proposal__col">
-					<label htmlFor="change-role-role">Proposed New Role</label>
 					<Select
+						placeholder="Proposed New Role"
 						options={[
 							{name: "Admin", value: "admin"},
 							{name: "Kick", value: "kick"}
