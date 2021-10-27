@@ -93,7 +93,9 @@ const CreateCustomDomainModal: FunctionComponent<{
 							/>
 							<Divider />
 							<div className="create-custom-domain__warning">
-								<WarningIcon />
+								<div>
+									<WarningIcon width="20px" height="20px" />
+								</div>
 								<p>
 									{`This request will incur a gas fee. If you would like to proceed, please click "Submit" below.`}
 								</p>
