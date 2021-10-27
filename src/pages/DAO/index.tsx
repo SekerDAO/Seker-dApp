@@ -1,4 +1,4 @@
-import {FunctionComponent, useContext, useState} from "react"
+import {FunctionComponent, useContext} from "react"
 import {useHistory, useLocation, useParams} from "react-router-dom"
 import {parse} from "query-string"
 import HorizontalMenu from "../../components/HorizontalMenu"
@@ -27,14 +27,18 @@ import DashboardMenu from "../../components/DashboardMenu"
 type DAOAdminPage = "nfts" | "edit" | "createProposal" | "expand"
 type DAOContentPage = "collection" | "about" | "members" | "proposals"
 
-const menuEntries = ["Collection", "About", "Owners", "Proposals", "+ Admin Proposal"]
+const menuEntries = [
+	{id: "collection", name: "Collection"},
+	{id: "about", name: "About"},
+	{id: "members", name: "Members"},
+	{id: "proposals", name: "Proposals"}
+]
 
 // Make sense to rebuild all this internal "page" handling to plain react-router routes
 const DAOPage: FunctionComponent = () => {
 	const {account, connected} = useContext(AuthContext)
 	const {address} = useParams<{address: string}>()
 	const {dao, loading, error, refetch} = useDAO(address)
-	const [activeMenuIndex, setActiveMenuIndex] = useState(0)
 	const {pathname, search} = useLocation()
 	const {push} = useHistory()
 
@@ -179,25 +183,25 @@ const DAOPage: FunctionComponent = () => {
 						) : (
 							<>
 								<HorizontalMenu
-									entries={isAdmin ? menuEntries : menuEntries.slice(0, -1)}
-									activeIndex={activeMenuIndex}
-									onChange={index => {
-										setActiveMenuIndex(index)
+									pages={menuEntries}
+									currentPage={page}
+									onChange={nextPage => {
+										push(`${pathname}?page=${nextPage}`)
 									}}
 								/>
-								{activeMenuIndex === 0 && (
+								{page === "collection" && (
 									<DAOCollection gnosisAddress={dao.gnosisAddress} isAdmin={isAdmin} />
 								)}
-								{activeMenuIndex === 1 && <AboutDAO dao={dao} />}
-								{activeMenuIndex === 2 && <DAOOwners owners={dao.owners} />}
-								{activeMenuIndex === 3 && (
+								{page === "about" && <AboutDAO dao={dao} />}
+								{page === "members" && <DAOOwners owners={dao.owners} />}
+								{page === "proposals" && (
 									<DAOProposals
 										gnosisVotingThreshold={dao.gnosisVotingThreshold}
 										gnosisAddress={dao.gnosisAddress}
 										isAdmin={isAdmin}
 									/>
 								)}
-								{activeMenuIndex === 4 && isAdmin && (
+								{page === "createProposal" && isAdmin && (
 									<CreateDaoAdminProposal
 										gnosisAddress={dao.gnosisAddress}
 										gnosisVotingThreshold={dao.gnosisVotingThreshold}

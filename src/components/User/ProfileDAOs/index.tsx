@@ -35,7 +35,7 @@ const ProfileDAOs: FunctionComponent = () => {
 	const {DAOs, loading, error, refetch} = useMyDAOs()
 	const {account} = useContext(AuthContext)
 	const handleDAODelete = (gnosisAddress: string | number) => {
-		// TODO: Implement me!
+		console.log("TODO: Implement me!")
 	}
 
 	if (error) return <ErrorPlaceholder />
