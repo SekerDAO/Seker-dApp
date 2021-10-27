@@ -1,21 +1,16 @@
 @import "src/assets/styles/variables";
 
 .footer {
-  height: 240px;
+  height: 265px;
   background-color: $dark-grey;
   align-self: stretch;
-  color: white;
   width: 100%;
-
-  a,
-  p,
-  h3 {
-    color: white;
-  }
+  padding-top: 40px;
+  padding-bottom: 30px;
+  padding-left: 20%;
+  padding-right: 20%;
 
   &__wrap {
-    width: 1250px;
-    padding: 60px 0 20px 0;
     display: flex;
     margin: 0 auto;
   }
@@ -23,25 +18,25 @@
   &__socials {
     display: flex;
     align-items: center;
-    margin-top: 5px;
+    justify-content: flex-end;
 
     svg {
       margin-right: 10px;
     }
   }
 
+  &__text--dark {
+    color: $dark-grey50;
+  }
+
   &__col {
     display: flex;
     flex-direction: column;
-    width: 150px;
-    margin: 0 40px;
+    min-width: 25%;
 
     &:first-child {
       margin-right: auto;
-
-      svg {
-        margin-bottom: 20px;
-      }
+      margin-left: 0;
     }
 
     h3 {
@@ -53,6 +48,12 @@
     a {
       font-size: 16px;
       line-height: 20px;
+      color: $dark-grey25;
     }
+  }
+
+  .divider {
+    margin-top: 40px;
+    margin-bottom: 30px;
   }
 }
