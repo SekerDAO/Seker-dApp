@@ -8,6 +8,8 @@ import ErrorPlaceholder from "../../ErrorPlaceholder"
 import {AuthContext} from "../../../context/AuthContext"
 import {Link} from "react-router-dom"
 import CreateGnosisSafeModal from "../../Modals/CreateGnosisSafeModal"
+import Button from "../../Controls/Button"
+import {ReactComponent as BookmarkIcon} from "../../../assets/icons/bookmark.svg"
 
 const columns = [
 	{
@@ -45,7 +47,16 @@ const ProfileDAOs: FunctionComponent = () => {
 				<CreateGnosisSafeModal afterCreate={refetch} />
 			</div>
 			<div className="profile__controls">
-				<SearchInput />
+				<div>
+					<SearchInput />
+				</div>
+				<div>
+					{/* TODO: Implement Add a DAO */}
+					<Button buttonType="link" extraClassName="profile__add-dao">
+						<BookmarkIcon width="15px" height="20px" />
+						Add a DAO
+					</Button>
+				</div>
 			</div>
 			<div className="profile-daos__table">
 				<Table

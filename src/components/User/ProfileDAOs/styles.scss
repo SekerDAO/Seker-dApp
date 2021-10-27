@@ -1,5 +1,16 @@
 @import "src/assets/styles/variables";
 
+.profile {
+  &__add-dao {
+    display: flex;
+    align-items: center;
+
+    svg {
+      margin-right: 10px;
+    }
+  }
+}
+
 .profile-daos {
   &__table {
     margin-top: 10px;
