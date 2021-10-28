@@ -10,7 +10,7 @@ const Input: FunctionComponent<
 	} & Omit<InputHTMLAttributes<HTMLInputElement>, "type">
 > = ({borders, number = false, validation, staticPlaceholder, ...inputProps}) => {
 	return (
-		<div className={`input${staticPlaceholder ? " input--with-static-placeholder" : ""}`}>
+		<div className="input">
 			{staticPlaceholder && <div className="input__static-placeholder">{staticPlaceholder}</div>}
 			<input
 				className={`input__field${borders === "all" ? " input__field--bordered" : ""}${
