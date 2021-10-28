@@ -3,6 +3,7 @@ import {_TypedDataEncoder} from "@ethersproject/hash"
 import {BigNumber, BigNumberish} from "@ethersproject/bignumber"
 import {arrayify} from "@ethersproject/bytes"
 import {AddressZero} from "@ethersproject/constants"
+import {defaultAbiCoder} from "@ethersproject/abi"
 import {JsonRpcSigner, TransactionResponse} from "@ethersproject/providers"
 import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
 
@@ -117,6 +118,29 @@ export const buildContractCall = (
 	)
 }
 
+export const buildContractCallVariable = (
+	contract: Contract,
+	address: string,
+	method: string,
+	params: unknown[],
+	nonce: number,
+	delegateCall?: boolean,
+	overrides?: Partial<SafeTransaction>
+): SafeTransaction => {
+	const data = contract.interface.encodeFunctionData(method, params)
+	return buildSafeTransaction(
+		Object.assign(
+			{
+				to: address,
+				data,
+				operation: delegateCall ? 1 : 0,
+				nonce
+			},
+			overrides
+		)
+	)
+}
+
 export const executeTx = async (
 	safe: Contract,
 	safeTx: SafeTransaction,
@@ -179,4 +203,50 @@ export const executeSafeTx = async (
 	const call = buildContractCall(targetContract, method, args, nonce)
 	const tx = await executeTx(safeContract, call, signatures)
 	await tx.wait()
+}
+
+const encodeMetaTransaction = (tx: MetaTransaction): string => {
+	const data = arrayify(tx.data)
+	const encoded = defaultAbiCoder.encode(
+		["uint8", "address", "uint256", "uint256", "bytes"],
+		[tx.operation, tx.to, tx.value, data.length, data]
+	)
+	return encoded.slice(2)
+}
+
+export const encodeMultiSend = (txs: MetaTransaction[]): string => {
+	return "0x" + txs.map(tx => encodeMetaTransaction(tx)).join("")
+}
+
+export const buildMultiSendSafeTx = (
+	multiSend: Contract,
+	txs: MetaTransaction[],
+	nonce: number,
+	overrides?: Partial<SafeTransaction>
+): SafeTransaction => {
+	return buildContractCall(multiSend, "multiSend", [encodeMultiSend(txs)], nonce, true, overrides)
+}
+
+export const safeApproveHash = async (
+	signer: JsonRpcSigner,
+	safe: Contract,
+	safeTx: SafeTransaction,
+	skipOnChainApproval?: boolean
+): Promise<SafeSignature> => {
+	if (!skipOnChainApproval) {
+		if (!signer.provider) throw Error("Provider required for on-chain approval")
+		const chainId = (await signer.provider.getNetwork()).chainId
+		const typedDataHash = arrayify(calculateSafeTransactionHash(safe, safeTx, chainId))
+		const signerSafe = safe.connect(signer)
+		await signerSafe.approveHash(typedDataHash)
+	}
+	const signerAddress = await signer.getAddress()
+	return {
+		signer: signerAddress,
+		data:
+			"0x000000000000000000000000" +
+			signerAddress.slice(2) +
+			"0000000000000000000000000000000000000000000000000000000000000000" +
+			"01"
+	}
 }
