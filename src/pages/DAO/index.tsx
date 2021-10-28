@@ -47,7 +47,7 @@ const DAOPage: FunctionComponent = () => {
 
 	const isAdmin = connected && !!dao.owners.find(addr => addr === account)
 	const page: DAOAdminPage | DAOContentPage =
-		(isAdmin && (parse(search).page as DAOAdminPage | DAOContentPage)) || "collection"
+		(parse(search).page as DAOAdminPage | DAOContentPage) || "collection"
 
 	return (
 		<>
@@ -172,7 +172,7 @@ const DAOPage: FunctionComponent = () => {
 						)}
 					</div>
 					<div className="dao__main">
-						{page === "edit" ? (
+						{isAdmin && page === "edit" ? (
 							<EditDAO
 								dao={dao}
 								afterEdit={refetch}
@@ -189,8 +189,15 @@ const DAOPage: FunctionComponent = () => {
 										push(`${pathname}?page=${nextPage}`)
 									}}
 								/>
-								{page === "collection" && (
+								{isAdmin && page === "nfts" && (
 									<DAOCollection gnosisAddress={dao.gnosisAddress} isAdmin={isAdmin} />
+								)}
+								{page === "collection" && (
+									<DAOCollection
+										gnosisAddress={dao.gnosisAddress}
+										viewOnly={true}
+										isAdmin={isAdmin}
+									/>
 								)}
 								{page === "about" && <AboutDAO dao={dao} />}
 								{page === "members" && <DAOOwners owners={dao.owners} />}

@@ -7,7 +7,8 @@ import {AuthContext} from "../../../context/AuthContext"
 const DAOCollection: FunctionComponent<{
 	gnosisAddress: string
 	isAdmin: boolean
-}> = ({gnosisAddress, isAdmin}) => {
+	viewOnly?: boolean
+}> = ({gnosisAddress, isAdmin, viewOnly}) => {
 	const [galleryKey, setGalleryKey] = useState(Math.random())
 	const {account} = useContext(AuthContext)
 
@@ -18,7 +19,7 @@ const DAOCollection: FunctionComponent<{
 	return (
 		<div className="dao-collection">
 			<div className="dao-collection__edit-buttons">
-				{isAdmin && account && (
+				{!viewOnly && isAdmin && account && (
 					<CreateNFTModal
 						gnosisAddress={gnosisAddress}
 						afterCreate={updateGallery}
@@ -26,7 +27,7 @@ const DAOCollection: FunctionComponent<{
 					/>
 				)}
 			</div>
-			<NFTGallery key={galleryKey} account={gnosisAddress} isDao canDelete={isAdmin} />
+			<NFTGallery key={galleryKey} account={gnosisAddress} isDao canDelete={!viewOnly && isAdmin} />
 		</div>
 	)
 }

@@ -4,29 +4,25 @@
   display: flex;
   align-items: center;
   align-self: stretch;
+  border: 1px solid $purple50;
+  background-color: $white;
+  border-radius: 5px;
+  padding: 5px;
+  height: 40px;
 
   &__item {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: $white;
-    border-top: 1px solid $light-grey;
-    border-left: 1px solid $light-grey;
-    border-bottom: 1px solid $light-grey;
-    padding: 10px;
+    padding: 5px;
+    border-radius: 5px;
     cursor: pointer;
     transition: color, background-color 0.3s ease-in-out;
 
-    &:last-child {
-      border-right: 1px solid $light-grey;
-    }
-
     &--active {
-      color: $purple75;
-      border-top: 3px solid $purple75;
-      background-color: transparent;
-      border-bottom: none;
+      color: $white;
+      background-color: $purple;
     }
   }
 }
