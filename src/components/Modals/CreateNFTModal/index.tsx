@@ -32,7 +32,7 @@ const CreateNFTModalContent: FunctionComponent<{
 }> = ({gnosisAddress, afterCreate}) => {
 	const [loading, setLoading] = useState(false)
 	const [stage, setStage] = useState<CreateNFTModalStage>("chooseOption")
-	const [loadExisting, setLoadExisting] = useState(false)
+	const [loadExisting, setLoadExisting] = useState<boolean | undefined>()
 	const [customDomain, setCustomDomain] = useState(false)
 	const [customDomainAddress, setCustomDomainAddress] = useState("")
 	const [file, setFile] = useState<File | null>(null)
@@ -187,6 +187,7 @@ const CreateNFTModalContent: FunctionComponent<{
 	}
 
 	const submitButtonDisabled =
+		typeof loadExisting === "undefined" ||
 		(stage === "chooseDomain" && customDomain && !customDomainAddress) ||
 		(stage === "uploadFile" && !(file && title && numberOfEditions)) ||
 		(stage === "loadExisting" && !(existingNFTId && existingNFTId))
@@ -201,7 +202,7 @@ const CreateNFTModalContent: FunctionComponent<{
 						<RadioButton
 							id="create-new-nft-radio"
 							label="Create New NFT"
-							checked={!loadExisting}
+							checked={loadExisting === false}
 							onChange={() => {
 								setLoadExisting(false)
 							}}
@@ -232,6 +233,8 @@ const CreateNFTModalContent: FunctionComponent<{
 								setCustomDomain(true)
 							}}
 						/>
+					</div>
+					<div className="create-nft__row">
 						<Select
 							value={customDomainAddress}
 							options={[
@@ -244,6 +247,7 @@ const CreateNFTModalContent: FunctionComponent<{
 							onChange={e => {
 								setCustomDomainAddress(e.target.value)
 							}}
+							fullWidth
 						/>
 					</div>
 					<div className="create-nft__row">
