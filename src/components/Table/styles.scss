@@ -1,26 +1,53 @@
 @import "src/assets/styles/variables";
 
-.table {
-  border-collapse: collapse;
-  border: none;
-  color: $dark-grey;
+.table-wrapper {
+  padding: 20px;
 
-  tr {
-    border-bottom: 1px solid $dark-grey50;
-  }
+  .table {
+    border-collapse: collapse;
+    border: none;
+    color: $dark-grey;
 
-  th {
-    font-weight: bold;
-    text-align: left;
-    padding: 5px 0;
-  }
+    tr {
+      border-bottom: 1px solid $dark-grey25;
+    }
 
-  td {
-    padding: 5px 0;
-  }
+    th {
+      text-align: left;
+      padding: 5px 0;
+      color: $dark-grey50;
+      font-weight: normal;
+    }
 
-  thead > tr {
-    border-top: 2px solid $dark-grey;
-    border-bottom: 2px solid $dark-grey;
+    td {
+      padding: 10px 0;
+    }
+
+    thead > tr {
+      border: none;
+    }
+
+    // Add spacing between table's heading and body
+    tbody::before {
+      content: "@";
+      display: block;
+      line-height: 30px;
+      text-indent: -99999px;
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    &__remove-icon {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
   }
 }

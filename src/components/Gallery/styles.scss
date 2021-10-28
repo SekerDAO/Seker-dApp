@@ -7,30 +7,25 @@
   margin: 0 -20px 0 -10px;
 
   &__item {
-    max-width: calc(33% - 20px);
+    width: 280px;
+    height: 260px;
     margin: 10px;
     cursor: pointer;
-    border: 1px solid $dark-grey50;
+    border-radius: 5px;
     position: relative;
-
-    &:hover {
-      border-color: $purple75;
-    }
+    box-shadow: 0 3px 5px rgba($dark-grey50, 0.2);
 
     &-thumb {
       display: block;
       width: 100%;
 
-      img {
-        display: block;
-        width: 100%;
-        margin: 0;
-      }
-
+      img,
       video {
         display: block;
         width: 100%;
         margin: 0;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
       }
     }
 
@@ -44,11 +39,16 @@
   }
 
   &__details {
-    padding: 5px;
+    padding: 10px;
 
-    div,
-    b {
-      margin: 5px;
+    &-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+
+      &:last-of-type {
+        margin-bottom: 0;
+      }
     }
 
     a {

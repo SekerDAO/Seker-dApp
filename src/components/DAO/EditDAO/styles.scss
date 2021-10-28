@@ -8,8 +8,13 @@
     margin-bottom: 10px;
   }
 
-  > input {
+  .input {
     margin-bottom: 20px;
+    display: flex;
+
+    &__field {
+      flex: 1;
+    }
   }
 
   &__buttons {
@@ -19,21 +24,5 @@
     .btn:first-child {
       margin-right: 20px;
     }
-  }
-
-  &__url-container {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-
-    input {
-      flex: 1;
-    }
-  }
-
-  &__url-placeholder {
-    padding: 6px;
-    color: white;
-    background-color: $dark-grey;
   }
 }

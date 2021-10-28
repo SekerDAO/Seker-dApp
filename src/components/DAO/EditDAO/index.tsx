@@ -63,58 +63,50 @@ const EditDAO: FunctionComponent<{
 				id="edit-dao-desc"
 			/>
 			<label htmlFor="edit-dao-website">Website</label>
-			<div className="edit-dao__url-container">
-				<div className="edit-dao__url-placeholder">https://</div>
-				<Input
-					borders="all"
-					value={website}
-					onChange={e => {
-						setWebsite(e.target.value)
-					}}
-					id="edit-dao-website"
-				/>
-			</div>
+			<Input
+				staticPlaceholder="https://"
+				borders="all"
+				value={website}
+				onChange={e => {
+					setWebsite(e.target.value)
+				}}
+				id="edit-dao-website"
+			/>
 			<label htmlFor="edit-dao-tw">Twitter URL</label>
-			<div className="edit-dao__url-container">
-				<div className="edit-dao__url-placeholder">twitter.com/</div>
-				<Input
-					borders="all"
-					value={twitter}
-					onChange={e => {
-						setTwitter(e.target.value)
-					}}
-					id="edit-dao-tw"
-				/>
-			</div>
+			<Input
+				staticPlaceholder="twitter.com/"
+				borders="all"
+				value={twitter}
+				onChange={e => {
+					setTwitter(e.target.value)
+				}}
+				id="edit-dao-tw"
+			/>
 			<label htmlFor="edit-dao-tg">Telegram URL</label>
-			<div className="edit-dao__url-container">
-				<div className="edit-dao__url-placeholder">t.me/</div>
-				<Input
-					borders="all"
-					value={telegram}
-					onChange={e => {
-						setTelegram(e.target.value)
-					}}
-					id="edit-dao-tg"
-				/>
-			</div>
+			<Input
+				staticPlaceholder="t.me/"
+				borders="all"
+				value={telegram}
+				onChange={e => {
+					setTelegram(e.target.value)
+				}}
+				id="edit-dao-tg"
+			/>
 			<label htmlFor="edit-dao-discord">Discord URL</label>
-			<div className="edit-dao__url-container">
-				<div className="edit-dao__url-placeholder">discord.gg/</div>
-				<Input
-					borders="all"
-					value={discord}
-					onChange={e => {
-						setDiscord(e.target.value)
-					}}
-					id="edit-dao-discord"
-				/>
-			</div>
+			<Input
+				staticPlaceholder="discord.gg/"
+				borders="all"
+				value={discord}
+				onChange={e => {
+					setDiscord(e.target.value)
+				}}
+				id="edit-dao-discord"
+			/>
 			<div className="edit-dao__buttons">
 				<Button disabled={!name || processing} onClick={handleSave}>
 					{processing ? "Saving..." : "Save"}
 				</Button>
-				<Button buttonType="secondary" onClick={onClose}>
+				<Button buttonType="link" onClick={onClose}>
 					Cancel
 				</Button>
 			</div>

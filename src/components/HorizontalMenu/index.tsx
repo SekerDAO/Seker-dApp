@@ -1,23 +1,24 @@
 import {FunctionComponent} from "react"
 import "./styles.scss"
 
+// TODO: From new UI it pretty much looks like Tabs and not really Menu, makes sense to refactor that
 const HorizontalMenu: FunctionComponent<{
-	entries: string[]
-	activeIndex: number
-	onChange: (index: number) => void
-}> = ({entries, activeIndex, onChange}) => (
+	pages: {id: string; name: string}[]
+	currentPage: string
+	onChange: (page: string) => void
+}> = ({pages, currentPage, onChange}) => (
 	<div className="horizontal-menu">
-		{entries.map((entry, index) => (
+		{pages.map(({id, name}, index) => (
 			<div
 				key={index}
 				onClick={() => {
-					onChange(index)
+					onChange(id)
 				}}
 				className={`horizontal-menu__item${
-					index === activeIndex ? " horizontal-menu__item--active" : ""
+					currentPage === id ? " horizontal-menu__item--active" : ""
 				}`}
 			>
-				{entry}
+				{name}
 			</div>
 		))}
 	</div>

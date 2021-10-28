@@ -1,4 +1,4 @@
-# TokenWalk
+# Hyphal
 
 ## Setup
 
@@ -37,4 +37,4 @@ yarn start
 
 ## Contributing 
 
-This dApp is free and open software. Contributions are welcome and appreciated! Please follow the [community guide](https://github.com/TokenWalk/community) when creating pull requests. 
+This dApp is free and open software. Contributions are welcome and appreciated! Please follow the [community guide](https://github.com/HyphalDAO/community) when creating pull requests. 
