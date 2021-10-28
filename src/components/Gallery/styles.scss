@@ -14,10 +14,18 @@
     border-radius: 5px;
     position: relative;
     box-shadow: 0 3px 5px rgba($dark-grey50, 0.2);
-    $self: &;
+
+    &-delete {
+      width: 30px;
+      height: 30px;
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      display: none;
+    }
 
     &:hover {
-      #{$self}-delete {
+      .gallery__item-delete {
         display: block;
       }
     }
@@ -34,15 +42,6 @@
         border-top-left-radius: 5px;
         border-top-right-radius: 5px;
       }
-    }
-
-    &-delete {
-      width: 30px;
-      height: 30px;
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      display: none;
     }
   }
 

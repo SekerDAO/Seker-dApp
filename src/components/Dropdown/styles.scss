@@ -3,7 +3,6 @@
 .dropdown {
   position: relative;
   width: 140px;
-  $self: &;
 
   & &__content {
     position: absolute;
@@ -27,10 +26,12 @@
       }
     }
 
-    #{$self}__trigger {
+    .dropdown__trigger {
       border-radius: 5px;
     }
-    #{$self}__item, #{$self}__trigger {
+
+    .dropdown__item,
+    .dropdown__trigger {
       width: 100%;
       height: 40px;
       padding: 10px;
