@@ -18,7 +18,7 @@ const NFTGallery: FunctionComponent<{
 	canDelete: boolean
 }> = ({account, canDelete, isDao = false}) => {
 	const [cursor, setCursor] = useState<NFTSnapshot | null>(null)
-	const [sort, setSort] = useState<NftSort>("nameAsc")
+	const [sort, setSort] = useState<NftSort>("dateDesc")
 	const [deleteOpened, setDeleteOpened] = useState<string | null>(null)
 	const [deletedNfts, setDeletedNfts] = useState<string[]>([])
 	const {NFTs, loading, error} = useNFTs({user: account, after: cursor, sort})
@@ -70,10 +70,10 @@ const NFTGallery: FunctionComponent<{
 					value={sort}
 					placeholder="Sort By"
 					options={[
-						{name: "Name (A-Z)", value: "nameAsc"},
-						{name: "Name (Z-A)", value: "nameDesc"},
 						{name: "Newest", value: "dateDesc"},
-						{name: "Oldest", value: "dateAsc"}
+						{name: "Oldest", value: "dateAsc"},
+						{name: "Name (A-Z)", value: "nameAsc"},
+						{name: "Name (Z-A)", value: "nameDesc"}
 					]}
 					onChange={handleSortChange}
 				/>
