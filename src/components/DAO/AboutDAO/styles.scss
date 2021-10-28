@@ -1,0 +1,47 @@
+.about-dao {
+  margin-top: 45px;
+
+  &__balance {
+    min-height: 260px;
+    display: flex;
+    justify-content: space-between;
+
+    &-summary {
+      width: 70%;
+    }
+
+    p {
+      font-size: 24px;
+      font-weight: 600;
+      font-family: SairaSemiCondensed, 'Open Sans', sans-serif;
+    }
+  }
+
+  &__info {
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__description {
+    width: 70%;
+
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    .paper {
+      padding: 20px;
+    }
+  }
+
+  &__parameters {
+    width: 280px;
+    margin-left: 20px;
+
+    .paper {
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+  }
+}
