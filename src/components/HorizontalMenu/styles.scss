@@ -7,7 +7,7 @@
   border: 1px solid $purple50;
   background-color: $white;
   border-radius: 5px;
-  padding: 5px;
+  padding: 5px 0;
   height: 40px;
 
   &__item {
@@ -19,10 +19,19 @@
     border-radius: 5px;
     cursor: pointer;
     transition: color, background-color 0.3s ease-in-out;
+    margin: 0 5px;
+
+    &:hover {
+      background-color: $purple25;
+    }
 
     &--active {
       color: $white;
       background-color: $purple;
+
+      &:hover {
+        background-color: $purple;
+      }
     }
   }
 }

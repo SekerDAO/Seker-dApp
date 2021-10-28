@@ -60,7 +60,11 @@ const JoinHouse: FunctionComponent<{
 				}}
 				value={description}
 			/>
-			<Button onClick={handleSubmit} disabled={loading || !title}>
+			<Button
+				onClick={handleSubmit}
+				disabled={loading || !title}
+				extraClassName="create-dao-proposal__submit-button"
+			>
 				{loading ? "Processing..." : "Create Proposal"}
 			</Button>
 		</>

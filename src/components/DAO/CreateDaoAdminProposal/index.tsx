@@ -11,6 +11,7 @@ import ErrorPlaceholder from "../../ErrorPlaceholder"
 import Loader from "../../Loader"
 import GeneralEVM from "./GeneralEVM"
 import Input from "../../Controls/Input"
+import Divider from "../../Divider"
 
 const CreateDaoAdminProposal: FunctionComponent<{
 	gnosisAddress: string
@@ -43,8 +44,9 @@ const CreateDaoAdminProposal: FunctionComponent<{
 	return (
 		<div className="create-dao-proposal">
 			<h2>Create a New Proposal</h2>
+			<label>Safe proposal type</label>
 			<Select
-				placeholder="Select safe proposal type"
+				placeholder="Choose safe proposal type"
 				value={type}
 				options={[
 					{name: SafeProposalsTypeNames.changeRole, value: "changeRole"},
@@ -75,7 +77,7 @@ const CreateDaoAdminProposal: FunctionComponent<{
 				}}
 				value={description}
 			/>
-			<div className="create-dao-proposal__separator" />
+			<Divider />
 			{/*{type === "joinHouse" && daoAddress && (*/}
 			{/*	<JoinHouse gnosisAddress={gnosisAddress} daoAddress={daoAddress} />*/}
 			{/*)}*/}

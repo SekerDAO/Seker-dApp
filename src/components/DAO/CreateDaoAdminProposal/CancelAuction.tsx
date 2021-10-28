@@ -52,7 +52,11 @@ const CancelAuction: FunctionComponent<{
 				id="cancel-auction-id"
 				fullWidth
 			/>
-			<Button disabled={processing || !selectedAuction} onClick={handleSubmit}>
+			<Button
+				disabled={processing || !selectedAuction}
+				onClick={handleSubmit}
+				extraClassName="create-dao-proposal__submit-button"
+			>
 				{processing ? "Processing..." : "Create Proposal"}
 			</Button>
 		</>

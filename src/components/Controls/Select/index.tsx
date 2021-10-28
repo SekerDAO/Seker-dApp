@@ -14,7 +14,7 @@ const Select: FunctionComponent<
 	const [open, setOpen] = useState(false)
 	const mappedOptions = useMemo(
 		() => options.map(option => ({id: option.value, content: option.name})),
-		options
+		[options]
 	)
 
 	const closeMenu = () => {
@@ -29,15 +29,13 @@ const Select: FunctionComponent<
 		onChange(newValue)
 	}
 
-	if (!Array.isArray(options) || options.length < 1) return null
-
 	const triggerText = open
 		? placeholder
 		: value && options.find(option => option.value === value)?.name
 
 	return (
 		<Dropdown
-			className={`select__field${fullWidth ? "select__field--full-width" : ""}`}
+			className={`select__field${fullWidth ? " select__field--full-width" : ""}`}
 			open={open}
 			triggerText={triggerText || placeholder}
 			selected={value}

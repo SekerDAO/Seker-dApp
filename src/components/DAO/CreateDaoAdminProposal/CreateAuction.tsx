@@ -214,7 +214,11 @@ const CreateAuction: FunctionComponent<{
 				value={duration}
 				onChange={handleDurationChange}
 			/>
-			<Button disabled={submitButtonDisabled || processing} onClick={handleSubmit}>
+			<Button
+				disabled={submitButtonDisabled || processing}
+				onClick={handleSubmit}
+				extraClassName="create-dao-proposal__submit-button"
+			>
 				{processing ? "Processing..." : "Create Proposal"}
 			</Button>
 		</>
