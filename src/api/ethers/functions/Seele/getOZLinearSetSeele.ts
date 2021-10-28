@@ -9,14 +9,15 @@ const OZ_LINEAR_MASTER = "0xA1D0AAFd677676F7eDfFdc48EF21b6fE7e8e05Cf"
 const getOZLinearDeploy = async (
 	OZLinearAddress: string,
 	expectedSeeleAddress: string,
+	expectedStrategyAddress: string,
 	signer: JsonRpcSigner
 ): Promise<SafeTransaction> => {
 	const linearVotingMaster = new Contract(OZ_LINEAR_MASTER, OZLinearVoting.bytecode, signer)
 	const setSeeleTx = buildContractCallVariable(
 		linearVotingMaster,
-		expectedSeeleAddress,
+		expectedStrategyAddress,
 		"setSeele",
-		[],
+		[expectedSeeleAddress],
 		0
 	)
 	return setSeeleTx
