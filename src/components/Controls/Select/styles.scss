@@ -7,9 +7,13 @@
     line-height: 20px;
     font-weight: 400;
     height: 42px;
-  }
 
-  &--full-width {
-    width: 100%;
+    &--full-width {
+      width: 100%;
+
+      .dropdown__content {
+        width: 100%;
+      }
+    }
   }
 }

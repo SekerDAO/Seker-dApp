@@ -9,19 +9,16 @@
     display: flex;
     align-items: center;
     margin: 5px 0;
+    flex-wrap: wrap;
 
     &--no-mg {
       margin: 0;
     }
 
-    .select {
-      margin-left: 5px;
-      flex: 1;
-      display: flex;
-
-      select {
-        flex: 1;
-      }
+    .select__field {
+      margin-top: 20px;
+      margin-bottom: 20px;
+      margin-left: 20px;
     }
   }
 

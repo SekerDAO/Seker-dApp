@@ -233,6 +233,7 @@ const CreateNFTModalContent: FunctionComponent<{
 							onChange={newCustomDomain => {
 								setCustomDomainAddress(newCustomDomain)
 							}}
+							fullWidth
 						/>
 					</div>
 					<div className="create-nft__row">
