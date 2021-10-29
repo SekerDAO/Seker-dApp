@@ -12,7 +12,7 @@ const getSeeleDeploy = async (
 	safeAddress: string,
 	strategyAddresses: string[],
 	signer: JsonRpcSigner
-): Promise<SafeTransaction> => {
+): Promise<[SafeTransaction, string]> => {
 	const seeleMaster = new Contract(REACT_APP_SEELE_MASTERCOPY_ADDRESS!, Seele.abi, signer)
 	const factory = new Contract(REACT_APP_MODULE_FACTORY_ADDRESS!, ModuleFactory.abi, signer)
 	const encodedInitParams = defaultAbiCoder.encode(
@@ -33,6 +33,6 @@ const getSeeleDeploy = async (
 		[seeleMaster.address, initData, "0x01"],
 		0
 	)
-	return deploySeele
+	return [deploySeele, expectedAddress]
 }
 export default getSeeleDeploy

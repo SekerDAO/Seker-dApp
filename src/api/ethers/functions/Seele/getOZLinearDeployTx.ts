@@ -19,7 +19,7 @@ const getOZLinearDeployTx = async (
 	votingPeriod: number,
 	name: string,
 	signer: JsonRpcSigner
-): Promise<SafeTransaction> => {
+): Promise<[SafeTransaction, string]> => {
 	const linearVotingMaster = new Contract(OZ_LINEAR_MASTER, OZLinearVoting.bytecode, signer)
 	const factory = new Contract(REACT_APP_MODULE_FACTORY_ADDRESS!, ModuleFactory.abi, signer)
 	const encodedLinearInitParams = defaultAbiCoder.encode(
@@ -57,7 +57,7 @@ const getOZLinearDeployTx = async (
 		[linearVotingMaster.address, initLinearData, "0x01"],
 		0
 	)
-	return deployLinear
+	return [deployLinear, expectedLinearAddress]
 }
 
 export default getOZLinearDeployTx
