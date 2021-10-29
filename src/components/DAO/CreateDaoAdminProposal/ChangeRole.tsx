@@ -46,7 +46,7 @@ const ChangeRole: FunctionComponent<{
 		}
 	}
 
-	const handleRoleChange = (role: string | number) => {
+	const handleRoleChange = (role: string) => {
 		if (role === "kick") {
 			setAddress("")
 			if (Number(newThreshold) > ownersCount - 1) {
@@ -119,12 +119,12 @@ const ChangeRole: FunctionComponent<{
 		<>
 			<label htmlFor="change-role-address">Member&apos;s Address</label>
 			{newRole === "kick" ? (
-				<Select
+				<Select<string>
 					placeholder="Choose one"
 					options={dao.owners.map(addr => ({name: addr, value: addr}))}
 					value={address}
 					onChange={newAddress => {
-						setAddress(String(newAddress))
+						setAddress(newAddress)
 					}}
 				/>
 			) : (
@@ -138,7 +138,7 @@ const ChangeRole: FunctionComponent<{
 				/>
 			)}
 			<label>Proposed new role</label>
-			<Select
+			<Select<string>
 				placeholder="Choose one"
 				options={[
 					{name: "Admin", value: "admin"},

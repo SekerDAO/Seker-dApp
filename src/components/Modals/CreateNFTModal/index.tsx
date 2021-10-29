@@ -225,13 +225,13 @@ const CreateNFTModalContent: FunctionComponent<{
 								setCustomDomain(true)
 							}}
 						/>
-						<Select
+						<Select<string>
 							placeholder="Select Domain"
 							value={customDomainAddress}
 							options={domains.map(domain => ({name: domain.name, value: domain.address}))}
 							disabled={!customDomain}
 							onChange={newCustomDomain => {
-								setCustomDomainAddress(newCustomDomain as string)
+								setCustomDomainAddress(newCustomDomain)
 							}}
 						/>
 					</div>

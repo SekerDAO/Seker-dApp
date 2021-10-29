@@ -1,16 +1,23 @@
-import {FunctionComponent, SelectHTMLAttributes, useState} from "react"
+import {ReactElement, SelectHTMLAttributes, useState} from "react"
 import Dropdown from "../../Dropdown"
 import "./styles.scss"
 
-const Select: FunctionComponent<
-	{
-		options: {name: string; value: string | number}[]
-		fullWidth?: boolean
-		placeholder: string
-		onChange: (newValue: string | number) => void
-		value?: string | number | null
-	} & Omit<SelectHTMLAttributes<HTMLSelectElement>, "options" | "onChange" | "value">
-> = ({options, fullWidth, placeholder, value, onChange}) => {
+const Select = <ValueType extends string | number>({
+	options,
+	fullWidth,
+	placeholder,
+	value,
+	onChange
+}: {
+	options: {name: string; value: ValueType}[]
+	fullWidth?: boolean
+	placeholder: string
+	onChange: (newValue: ValueType) => void
+	value?: ValueType | null
+} & Omit<
+	SelectHTMLAttributes<HTMLSelectElement>,
+	"options" | "onChange" | "value"
+>): ReactElement => {
 	const [isOpened, setIsOpened] = useState(false)
 
 	const closeMenu = () => {
@@ -21,7 +28,7 @@ const Select: FunctionComponent<
 		setIsOpened(prevState => !prevState)
 	}
 
-	const handleItemClick = (newValue: string | number) => {
+	const handleItemClick = (newValue: ValueType) => {
 		onChange(newValue)
 	}
 
@@ -30,7 +37,7 @@ const Select: FunctionComponent<
 		: value && options.find(option => option.value === value)?.name
 
 	return (
-		<Dropdown
+		<Dropdown<ValueType>
 			className={`select__field${fullWidth ? " select__field--full-width" : ""}`}
 			isOpened={isOpened}
 			triggerText={triggerText || placeholder}

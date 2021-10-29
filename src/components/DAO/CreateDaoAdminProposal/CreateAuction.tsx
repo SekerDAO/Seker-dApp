@@ -62,8 +62,8 @@ const CreateAuction: FunctionComponent<{
 		}
 	}
 
-	const handleNFTChange = (nftId: string | number) => {
-		const snapshot = NFTs.data.find(s => s.data().id === Number(nftId))
+	const handleNFTChange = (nftId: number) => {
+		const snapshot = NFTs.data.find(s => s.data().id === nftId)
 		if (snapshot) {
 			setNft(snapshot.data())
 		} else {
@@ -71,9 +71,9 @@ const CreateAuction: FunctionComponent<{
 		}
 	}
 
-	const handleCurrencyChange = (newCurrencySymbol: string | number) => {
-		setCurrencySymbol(String(newCurrencySymbol))
-		setCurrencyAddress(currencies.find(c => c.symbol === String(newCurrencySymbol))?.address ?? "")
+	const handleCurrencyChange = (newCurrencySymbol: string) => {
+		setCurrencySymbol(newCurrencySymbol)
+		setCurrencyAddress(currencies.find(c => c.symbol === newCurrencySymbol)?.address ?? "")
 	}
 
 	const handleSubmit = async () => {
@@ -132,7 +132,7 @@ const CreateAuction: FunctionComponent<{
 	return (
 		<>
 			<label htmlFor="create-auction-nft-token">Select NFT</label>
-			<Select
+			<Select<number>
 				fullWidth
 				id="create-auction-custom-currency"
 				placeholder="Choose One"
@@ -145,7 +145,7 @@ const CreateAuction: FunctionComponent<{
 						})
 				]}
 				onChange={handleNFTChange}
-				value={nft?.id ?? ""}
+				value={nft?.id}
 			/>
 			<label htmlFor="create-auction-price">Reserve Price</label>
 			<Input
@@ -157,7 +157,7 @@ const CreateAuction: FunctionComponent<{
 				onChange={handlePriceChange}
 			/>
 			<label htmlFor="create-auction-custom-currency">Auction Currency</label>
-			<Select
+			<Select<string>
 				fullWidth
 				id="create-auction-custom-currency"
 				placeholder="Choose One"

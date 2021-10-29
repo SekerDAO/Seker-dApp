@@ -30,7 +30,7 @@ const NFTGallery: FunctionComponent<{
 		setCursor(NFTs.data[NFTs.data.length - 1])
 	}
 
-	const handleSortChange = (newSortValue: string | number) => {
+	const handleSortChange = (newSortValue: string) => {
 		setSort(newSortValue as NftSort)
 		setCursor(null)
 	}
@@ -66,7 +66,7 @@ const NFTGallery: FunctionComponent<{
 			)}
 			<div className="profile__controls">
 				<SearchInput />
-				<Select
+				<Select<string>
 					value={sort}
 					placeholder="Sort By"
 					options={[

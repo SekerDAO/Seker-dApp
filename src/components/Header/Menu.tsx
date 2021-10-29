@@ -17,7 +17,7 @@ const HeaderMenu: FunctionComponent = () => {
 		setIsOpened(false)
 	}
 
-	const handleItemClick = (itemId: string | number) => {
+	const handleItemClick = (itemId: string) => {
 		if (itemId === "disconnect") {
 			disconnect()
 		}
@@ -38,7 +38,7 @@ const HeaderMenu: FunctionComponent = () => {
 			</ul>
 			<Divider type="vertical" />
 			{account && connected ? (
-				<Dropdown
+				<Dropdown<string>
 					isOpened={isOpened}
 					triggerText="Profile"
 					onClose={closeMenu}

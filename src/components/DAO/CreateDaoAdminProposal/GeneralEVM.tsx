@@ -213,17 +213,15 @@ const GeneralEVM: FunctionComponent<{
 			{abiString && !abiBad && (
 				<>
 					<label>Select Method</label>
-					<Select
+					<Select<number>
 						placeholder="Choose One"
-						value={selectedMethodIndex == null ? "" : String(selectedMethodIndex)}
+						value={selectedMethodIndex ?? null}
 						options={contractMethods.map((method, index) => ({
 							name: method.name,
-							value: String(index)
+							value: index
 						}))}
 						onChange={newSelectedMethodIndex => {
-							setSelectedMethodIndex(
-								newSelectedMethodIndex === "" ? null : Number(newSelectedMethodIndex)
-							)
+							setSelectedMethodIndex(newSelectedMethodIndex ?? null)
 						}}
 						fullWidth
 					/>
@@ -248,7 +246,7 @@ const GeneralEVM: FunctionComponent<{
 											}
 										/>
 									) : input.type === "bool" ? (
-										<Select
+										<Select<string>
 											placeholder="Select value"
 											fullWidth
 											options={[
@@ -257,7 +255,7 @@ const GeneralEVM: FunctionComponent<{
 											]}
 											value={(args[index] as string) ?? ""}
 											onChange={newValue => {
-												handleArgumentChange(newValue as string, index)
+												handleArgumentChange(newValue, index)
 											}}
 										/>
 									) : (

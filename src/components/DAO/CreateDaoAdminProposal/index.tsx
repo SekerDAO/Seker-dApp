@@ -45,7 +45,7 @@ const CreateDaoAdminProposal: FunctionComponent<{
 		<div className="create-dao-proposal">
 			<h2>Create a New Proposal</h2>
 			<label>Safe proposal type</label>
-			<Select
+			<Select<string>
 				placeholder="Choose safe proposal type"
 				value={type}
 				options={[

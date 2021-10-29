@@ -1,20 +1,9 @@
-import {FunctionComponent, ReactElement, useRef} from "react"
+import {ReactElement, useRef} from "react"
 import useClickOutside from "../../hooks/useClickOutside"
 import {ReactComponent as ArrowDown} from "../../assets/icons/arrow-down.svg"
 import "./styles.scss"
 
-const Dropdown: FunctionComponent<{
-	isOpened: boolean
-	items: {value: string | number; name: ReactElement | string}[]
-	selected?: string | number | null
-	highlightSelected?: boolean
-	triggerText: string | number
-	onClose: () => void
-	onTriggerClick: () => void
-	onItemClick?: (itemId: string | number) => void
-	borders?: "all" | "none"
-	className?: string
-}> = ({
+const Dropdown = <ItemValueType extends string | number>({
 	isOpened,
 	onClose,
 	items,
@@ -25,11 +14,22 @@ const Dropdown: FunctionComponent<{
 	borders = "all",
 	selected,
 	highlightSelected
-}) => {
+}: {
+	isOpened: boolean
+	items: {value: ItemValueType; name: ReactElement | string}[]
+	selected?: ItemValueType | null
+	highlightSelected?: boolean
+	triggerText: string | number
+	onClose: () => void
+	onTriggerClick: () => void
+	onItemClick?: (itemId: ItemValueType) => void
+	borders?: "all" | "none"
+	className?: string
+}): ReactElement => {
 	const ref = useRef<HTMLDivElement | null>(null)
 	useClickOutside(ref, onClose)
 
-	const handleItemClick = (id: string | number) => {
+	const handleItemClick = (id: ItemValueType) => {
 		if (onItemClick) {
 			onItemClick(id)
 		}
