@@ -199,7 +199,7 @@ const DAOPage: FunctionComponent = () => {
 								/>
 							)}
 							{page === "collection" && (
-								<DAOCollection gnosisAddress={dao.gnosisAddress} canEdit={isAdmin} />
+								<DAOCollection gnosisAddress={dao.gnosisAddress} canEdit={false} />
 							)}
 							{page === "about" && <AboutDAO dao={dao} />}
 							{page === "members" && <DAOOwners owners={dao.owners} />}
