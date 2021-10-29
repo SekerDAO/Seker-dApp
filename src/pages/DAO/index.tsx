@@ -20,7 +20,6 @@ import {ReactComponent as DiscordIcon} from "../../assets/icons/discord.svg"
 import DashboardHeader from "../../components/DashboardHeader"
 import {formatDate} from "../../utlls"
 import DAOOwners from "../../components/DAO/DAOOwners"
-import DecentralizeDAOModal from "../../components/Modals/DecentralizeDAOModal"
 import Paper from "../../components/Paper"
 import DashboardMenu from "../../components/DashboardMenu"
 

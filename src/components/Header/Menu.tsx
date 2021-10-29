@@ -7,14 +7,14 @@ import Divider from "../Divider"
 
 const HeaderMenu: FunctionComponent = () => {
 	const {account, url, connected, connecting, connectWallet, disconnect} = useContext(AuthContext)
-	const [open, setOpen] = useState(false)
+	const [isOpened, setIsOpened] = useState(false)
 
 	const handleDropdownTriggerClick = () => {
-		setOpen(prevState => !prevState)
+		setIsOpened(prevState => !prevState)
 	}
 
 	const closeMenu = () => {
-		setOpen(false)
+		setIsOpened(false)
 	}
 
 	const handleItemClick = (itemId: string) => {
@@ -25,7 +25,7 @@ const HeaderMenu: FunctionComponent = () => {
 
 	return (
 		<div className="header__main-nav">
-			<ul>
+			<ul className="header__menu">
 				<li>
 					<Link to="/daos">DAOs</Link>
 				</li>
@@ -39,7 +39,7 @@ const HeaderMenu: FunctionComponent = () => {
 			<Divider type="vertical" />
 			{account && connected ? (
 				<Dropdown
-					open={open}
+					isOpened={isOpened}
 					triggerText="Profile"
 					onClose={closeMenu}
 					onItemClick={handleItemClick}

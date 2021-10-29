@@ -4,18 +4,21 @@ import {ReactComponent as ArrowDown} from "../../assets/icons/arrow-down.svg"
 import "./styles.scss"
 
 const Dropdown: FunctionComponent<{
-	open: boolean
+	isOpened: boolean
 	items: {id: string; content: ReactElement | string}[]
 	triggerText: string
 	onClose: () => void
 	onTriggerClick: () => void
 	onItemClick?: (itemId: string) => void
 	borders?: "all" | "none"
-}> = ({open, onClose, items, onTriggerClick, onItemClick, triggerText, borders = "all"}) => {
+}> = ({isOpened, onClose, items, onTriggerClick, onItemClick, triggerText, borders = "all"}) => {
 	const ref = useRef<HTMLDivElement | null>(null)
 	useClickOutside(ref, onClose)
+
 	const handleItemClick = (id: string) => {
-		onItemClick && onItemClick(id)
+		if (onItemClick) {
+			onItemClick(id)
+		}
 		onClose()
 	}
 
@@ -25,17 +28,20 @@ const Dropdown: FunctionComponent<{
 				<li className="dropdown__trigger" onClick={onTriggerClick}>
 					{triggerText}
 					<ArrowDown
-						className={`dropdown__arrow ${open ? "dropdown__arrow--open" : ""}`}
+						className={`dropdown__arrow${isOpened ? " dropdown__arrow--open" : ""}`}
 						width="20px"
 						height="20px"
 					/>
 				</li>
-				{open &&
-					items.map(({id, content}) => (
-						<li key={id} onClick={() => handleItemClick(id)} className="dropdown__item">
-							{content}
-						</li>
-					))}
+				{isOpened && (
+					<>
+						{items.map(({id, content}) => (
+							<li key={id} onClick={() => handleItemClick(id)} className="dropdown__item">
+								{content}
+							</li>
+						))}
+					</>
+				)}
 			</ul>
 		</div>
 	)
