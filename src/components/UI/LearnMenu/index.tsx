@@ -1,5 +1,5 @@
 import {FunctionComponent, useState, Fragment} from "react"
-import {Learn} from "../../types/learn"
+import {Learn} from "../../../types/learn"
 import "./styles.scss"
 import {useHistory, useLocation} from "react-router-dom"
 

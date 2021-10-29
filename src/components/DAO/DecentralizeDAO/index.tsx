@@ -3,7 +3,7 @@ import Input from "../../Controls/Input"
 import Button from "../../Controls/Button"
 import {AuthContext} from "../../../context/AuthContext"
 import EthersContext from "../../../context/EthersContext"
-import {toastError, toastSuccess} from "../../Toast"
+import {toastError, toastSuccess} from "../../UI/Toast"
 import addSafeProposal from "../../../api/firebase/safeProposal/addSafeProposal"
 import deploySeele from "../../../api/ethers/functions/Seele/deploySeele"
 import {

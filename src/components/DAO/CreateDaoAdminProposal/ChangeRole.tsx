@@ -5,7 +5,7 @@ import Select from "../../Controls/Select"
 import {AuthContext} from "../../../context/AuthContext"
 import EthersContext from "../../../context/EthersContext"
 import addSafeProposal from "../../../api/firebase/safeProposal/addSafeProposal"
-import {toastError, toastSuccess} from "../../Toast"
+import {toastError, toastSuccess} from "../../UI/Toast"
 import {SafeSignature} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
 import {
 	executeAddOwner,
@@ -14,8 +14,8 @@ import {
 	signRemoveOwner
 } from "../../../api/ethers/functions/gnosisSafe/addRemoveOwner"
 import useDAO from "../../../hooks/getters/useDAO"
-import ErrorPlaceholder from "../../ErrorPlaceholder"
-import Loader from "../../Loader"
+import ErrorPlaceholder from "../../UI/ErrorPlaceholder"
+import Loader from "../../UI/Loader"
 
 const ChangeRole: FunctionComponent<{
 	gnosisAddress: string

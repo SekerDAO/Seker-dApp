@@ -1,7 +1,7 @@
 import {FunctionComponent} from "react"
 import {DAO} from "../../../types/DAO"
 import Button from "../../Controls/Button"
-import Paper from "../../Paper"
+import Paper from "../../UI/Paper"
 import "./styles.scss"
 
 const AboutDAO: FunctionComponent<{

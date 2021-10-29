@@ -5,7 +5,7 @@ import "./styles.scss"
 import deployERC20Token from "../../../api/ethers/functions/ERC20Token/deployERC20Token"
 import EthersContext from "../../../context/EthersContext"
 import {AuthContext} from "../../../context/AuthContext"
-import {toastError} from "../../Toast"
+import {toastError} from "../../UI/Toast"
 import {ERC20Token} from "../../../types/ERC20Token"
 
 const CreateERC20Token: FunctionComponent<{

@@ -5,10 +5,10 @@ import Input from "../../Controls/Input"
 import "./styles.scss"
 import EthersContext from "../../../context/EthersContext"
 import deployCustomDomain from "../../../api/ethers/functions/customDomain/deployCustomDomain"
-import {toastError} from "../../Toast"
+import {toastError} from "../../UI/Toast"
 import addDomain from "../../../api/firebase/user/addDomain"
 import {ReactComponent as WarningIcon} from "../../../assets/icons/warning.svg"
-import Divider from "../../Divider"
+import Divider from "../../UI/Divider"
 
 const CreateCustomDomainModal: FunctionComponent<{
 	afterCreate: () => void

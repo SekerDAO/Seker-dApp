@@ -1,5 +1,5 @@
 import {ReactElement, SelectHTMLAttributes, useState} from "react"
-import Dropdown from "../../Dropdown"
+import Dropdown from "../Dropdown"
 import "./styles.scss"
 
 const Select = <ValueType extends string | number>({

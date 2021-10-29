@@ -7,11 +7,11 @@ import {SafeProposalsTypeNames, SafeProposalType} from "../../../types/safePropo
 import CreateAuction from "./CreateAuction"
 import CancelAuction from "./CancelAuction"
 import useDAOProposals from "../../../hooks/getters/useDAOProposals"
-import ErrorPlaceholder from "../../ErrorPlaceholder"
-import Loader from "../../Loader"
+import ErrorPlaceholder from "../../UI/ErrorPlaceholder"
+import Loader from "../../UI/Loader"
 import GeneralEVM from "./GeneralEVM"
 import Input from "../../Controls/Input"
-import Divider from "../../Divider"
+import Divider from "../../UI/Divider"
 
 const CreateDaoAdminProposal: FunctionComponent<{
 	gnosisAddress: string

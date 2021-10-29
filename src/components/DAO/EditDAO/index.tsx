@@ -3,7 +3,7 @@ import {DAOFirebaseData} from "../../../types/DAO"
 import "./styles.scss"
 import Input from "../../Controls/Input"
 import Button from "../../Controls/Button"
-import {toastError, toastSuccess} from "../../Toast"
+import {toastError, toastSuccess} from "../../UI/Toast"
 import editDAO from "../../../api/firebase/DAO/editDAO"
 
 const EditDAO: FunctionComponent<{

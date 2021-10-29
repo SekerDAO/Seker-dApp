@@ -14,13 +14,13 @@ import uploadMedia from "../../../api/ipfs/uploadMedia"
 import createNFT from "../../../api/ethers/functions/NFT/createNFT"
 import Textarea from "../../Controls/Textarea"
 import "./styles.scss"
-import {toastError} from "../../Toast"
+import {toastError} from "../../UI/Toast"
 import addDaoNft from "../../../api/firebase/NFT/addDaoNft"
 import transferNFT from "../../../api/ethers/functions/NFT/transferNFT"
 import useUser from "../../../hooks/getters/useUser"
 import {Domain} from "../../../types/user"
-import Loader from "../../Loader"
-import ErrorPlaceholder from "../../ErrorPlaceholder"
+import Loader from "../../UI/Loader"
+import ErrorPlaceholder from "../../UI/ErrorPlaceholder"
 const {REACT_APP_DOMAIN_ADDRESS} = process.env
 
 type CreateNFTModalStage =

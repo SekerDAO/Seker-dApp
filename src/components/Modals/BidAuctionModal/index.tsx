@@ -1,6 +1,6 @@
 import {ChangeEvent, FunctionComponent, useContext, useState} from "react"
 import EthersContext from "../../../context/EthersContext"
-import {toastError, toastSuccess} from "../../Toast"
+import {toastError, toastSuccess} from "../../UI/Toast"
 import bidAuction from "../../../api/ethers/functions/auction/bidAuction"
 import Button from "../../Controls/Button"
 import Modal from "../Modal"

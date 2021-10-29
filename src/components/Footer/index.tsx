@@ -7,7 +7,7 @@ import {ReactComponent as TelegramGrayscale} from "../../assets/icons/telegram-g
 import {ReactComponent as GitHubGrayscale} from "../../assets/icons/github-grayscale.svg"
 import {ReactComponent as MediumGrayscale} from "../../assets/icons/medium-grayscale.svg"
 import "./styles.scss"
-import Divider from "../Divider"
+import Divider from "../UI/Divider"
 
 const Footer: FunctionComponent = () => {
 	return (

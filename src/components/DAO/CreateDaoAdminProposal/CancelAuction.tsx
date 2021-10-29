@@ -2,7 +2,7 @@ import {FunctionComponent, useContext, useState} from "react"
 import {Auction} from "../../../types/auction"
 import Select from "../../Controls/Select"
 import Button from "../../Controls/Button"
-import {toastError, toastSuccess} from "../../Toast"
+import {toastError, toastSuccess} from "../../UI/Toast"
 import EthersContext from "../../../context/EthersContext"
 import {AuthContext} from "../../../context/AuthContext"
 

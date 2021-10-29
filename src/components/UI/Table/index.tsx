@@ -1,4 +1,4 @@
-import {ReactComponent as DeleteIcon} from "../../assets/icons/delete.svg"
+import {ReactComponent as DeleteIcon} from "../../../assets/icons/delete.svg"
 import Paper from "../Paper"
 import "./styles.scss"
 

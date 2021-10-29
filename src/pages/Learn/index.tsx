@@ -1,6 +1,6 @@
 import {Fragment, FunctionComponent} from "react"
 import "./styles.scss"
-import LearnMenu from "../../components/LearnMenu"
+import LearnMenu from "../../components/UI/LearnMenu"
 import LEARN_ARTICLES from "../../constants/learnArticles"
 import {useLocation} from "react-router-dom"
 

@@ -10,12 +10,12 @@ import NetworkChecker from "./components/NetworkChecker"
 import {ToastContainer} from "react-toastify"
 import "./assets/styles/default.scss"
 import "react-toastify/dist/ReactToastify.min.css"
-import "./components/Toast/styles.scss"
+import "./components/UI/Toast/styles.scss"
 import DAOPage from "./pages/DAO"
 import DAOsPage from "./pages/DAOs"
 import Header from "./components/Header"
 import Footer from "./components/Footer"
-import ErrorPlaceholder from "./components/ErrorPlaceholder"
+import ErrorPlaceholder from "./components/UI/ErrorPlaceholder"
 
 const AppWithEthers: FunctionComponent = () => {
 	const auth = useAuth()

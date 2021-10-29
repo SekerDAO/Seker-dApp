@@ -3,7 +3,7 @@ import Button from "../../Controls/Button"
 import "./styles.scss"
 import Modal from "../Modal"
 import MediaUpload from "../../Controls/MediaUpload"
-import {toastError, toastSuccess} from "../../Toast"
+import {toastError, toastSuccess} from "../../UI/Toast"
 
 const UploadImageModal: FunctionComponent<{
 	initialUrl?: string

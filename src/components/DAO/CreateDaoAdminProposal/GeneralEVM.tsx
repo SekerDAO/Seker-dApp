@@ -2,7 +2,7 @@ import {ChangeEvent, Fragment, FunctionComponent, useContext, useEffect, useStat
 import Input from "../../Controls/Input"
 import ArrayInput from "../../Controls/ArrayInput"
 import {isAddress} from "@ethersproject/address"
-import {toastError, toastSuccess, toastWarning} from "../../Toast"
+import {toastError, toastSuccess, toastWarning} from "../../UI/Toast"
 import fetchContractAbi from "../../../api/etherscan/fetchContractAbi"
 import Textarea from "../../Controls/Textarea"
 import {Abi, AbiFunction} from "../../../types/abi"
