@@ -8,9 +8,23 @@
     margin-top: 20px;
   }
 
-  input,
-  select {
+  .input {
     margin-top: 10px;
+
+    input {
+      width: 100%;
+    }
+  }
+
+  .select {
+    &__field {
+      width: 100%;
+      margin-top: 10px;
+
+      .dropdown__content {
+        width: 100%;
+      }
+    }
   }
 
   &__row {
@@ -25,29 +39,19 @@
     &:first-child {
       margin-right: 20px;
     }
-
-    .select {
-      flex: 1;
-
-      select {
-        width: 100%;
-      }
-    }
   }
 
   h2 {
     margin: 40px 0 20px 0;
   }
 
+  .divider {
+    margin: 40px 0;
+  }
+
   &__submit-button {
     align-self: flex-start;
     margin-top: 20px;
-  }
-
-  &__separator {
-    height: 1px;
-    background-color: $dark-grey;
-    margin: 50px 0 30px 0;
   }
 
   &__note {

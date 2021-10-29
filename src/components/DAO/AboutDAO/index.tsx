@@ -1,58 +1,48 @@
 import {FunctionComponent} from "react"
-import MembersIcon from "../../../assets/icons/MembersIcon"
-import HouseIcon from "../../../assets/icons/HouseIcon"
-import ShieldIcon from "../../../assets/icons/ShieldIcon"
 import {DAO} from "../../../types/DAO"
+import Button from "../../Controls/Button"
+import Paper from "../../Paper"
+import "./styles.scss"
 
 const AboutDAO: FunctionComponent<{
 	dao: DAO
 }> = ({dao}) => (
-	<>
-		<div className="dao__summary">
-			<div className="dao__summary-item">
-				<p>Active Members</p>
-				<MembersIcon />
-				<h2>{dao.owners.length}</h2>
+	<section className="about-dao">
+		<div className="about-dao__balance">
+			<div className="about-dao__balance-summary">
+				<h3>DAO Treasury</h3>
+				<p>$ {dao.balance}</p>
 			</div>
-			<div className="dao__summary-item">
-				<p>DAO Bank</p>
-				<HouseIcon />
-				<h2>{dao.balance}</h2>
-			</div>
-			<div className="dao__summary-item">
-				<p>Funded Projects</p>
-				<ShieldIcon />
-				<h2>{dao.fundedProjects}</h2>
-			</div>
+			<Button buttonType="primary" onClick={() => console.log("TODO: Implement me")}>
+				View Assets
+			</Button>
 		</div>
-		{dao.description && (
-			<>
-				<h2>About {dao.name}</h2>
-				<div className="dao__separator" />
-				<p>{dao.description}</p>
-			</>
-		)}
-		{/* TODO: params for Q2/Q3 states */}
-		{/*<h2>DAO Parameters</h2>*/}
-		{/*<div className="dao__params">*/}
-		{/*	<div className="dao__param">*/}
-		{/*		<h2>{dao.tokenSymbol}</h2>*/}
-		{/*		<p>*/}
-		{/*			ERC-20*/}
-		{/*			<br />*/}
-		{/*			Token*/}
-		{/*		</p>*/}
-		{/*	</div>*/}
-		{/*	<div className="dao__param">*/}
-		{/*		<h2>{dao.daoVotingThreshold}</h2>*/}
-		{/*		<p>*/}
-		{/*			Voting*/}
-		{/*			<br />*/}
-		{/*			Threshold*/}
-		{/*		</p>*/}
-		{/*	</div>*/}
-		{/*</div>*/}
-	</>
+		<div className="about-dao__info">
+			{dao.description && (
+				<div className="about-dao__description">
+					<h2>About</h2>
+					<Paper>
+						<p>{dao.description}</p>
+					</Paper>
+				</div>
+			)}
+			<div className="about-dao__parameters">
+				<Paper>
+					<h3>DAO Contract</h3>
+					<span>
+						{dao.gnosisAddress.slice(0, 6)}...${dao.gnosisAddress.slice(-4)}
+					</span>
+				</Paper>
+				{dao.tokenSymbol && (
+					<Paper>
+						<h3>ERC-20 Token</h3>
+						<span>{dao.tokenSymbol}</span>
+					</Paper>
+				)}
+			</div>
+			{/* TODO: Add Enabled Modules */}
+		</div>
+	</section>
 )
 
 export default AboutDAO

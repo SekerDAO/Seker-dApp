@@ -1,21 +1,35 @@
-import {FunctionComponent, ReactElement, useRef} from "react"
+import {ReactElement, useRef} from "react"
 import useClickOutside from "../../hooks/useClickOutside"
 import {ReactComponent as ArrowDown} from "../../assets/icons/arrow-down.svg"
 import "./styles.scss"
 
-const Dropdown: FunctionComponent<{
+const Dropdown = <ItemValueType extends string | number>({
+	isOpened,
+	onClose,
+	items,
+	onTriggerClick,
+	onItemClick,
+	triggerText,
+	className,
+	borders = "all",
+	selected,
+	highlightSelected
+}: {
 	isOpened: boolean
-	items: {id: string; content: ReactElement | string}[]
-	triggerText: string
+	items: {value: ItemValueType; name: ReactElement | string}[]
+	selected?: ItemValueType | null
+	highlightSelected?: boolean
+	triggerText: string | number
 	onClose: () => void
 	onTriggerClick: () => void
-	onItemClick?: (itemId: string) => void
+	onItemClick?: (itemId: ItemValueType) => void
 	borders?: "all" | "none"
-}> = ({isOpened, onClose, items, onTriggerClick, onItemClick, triggerText, borders = "all"}) => {
+	className?: string
+}): ReactElement => {
 	const ref = useRef<HTMLDivElement | null>(null)
 	useClickOutside(ref, onClose)
 
-	const handleItemClick = (id: string) => {
+	const handleItemClick = (id: ItemValueType) => {
 		if (onItemClick) {
 			onItemClick(id)
 		}
@@ -23,7 +37,7 @@ const Dropdown: FunctionComponent<{
 	}
 
 	return (
-		<div className="dropdown" ref={ref}>
+		<div className={`dropdown ${className ?? ""}`} ref={ref}>
 			<ul className={`dropdown__content dropdown__content--borders-${borders}`}>
 				<li className="dropdown__trigger" onClick={onTriggerClick}>
 					{triggerText}
@@ -35,9 +49,15 @@ const Dropdown: FunctionComponent<{
 				</li>
 				{isOpened && (
 					<>
-						{items.map(({id, content}) => (
-							<li key={id} onClick={() => handleItemClick(id)} className="dropdown__item">
-								{content}
+						{items.map(({value, name}) => (
+							<li
+								key={value}
+								onClick={() => handleItemClick(value)}
+								className={`dropdown__item${
+									highlightSelected && value === selected ? " dropdown__item--selected" : ""
+								}`}
+							>
+								{name}
 							</li>
 						))}
 					</>

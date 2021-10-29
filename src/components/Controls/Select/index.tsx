@@ -1,31 +1,54 @@
-import {FunctionComponent, SelectHTMLAttributes} from "react"
+import {ReactElement, SelectHTMLAttributes, useState} from "react"
+import Dropdown from "../../Dropdown"
 import "./styles.scss"
 
-const Select: FunctionComponent<
-	{
-		options: {name: string; value: string | number}[]
-		label?: string
-		fullWidth?: boolean
-	} & SelectHTMLAttributes<HTMLSelectElement>
-> = ({options, label, fullWidth, ...selectProps}) => {
-	if (!Array.isArray(options) || options.length < 1) return null
+const Select = <ValueType extends string | number>({
+	options,
+	fullWidth,
+	placeholder,
+	value,
+	onChange
+}: {
+	options: {name: string; value: ValueType}[]
+	fullWidth?: boolean
+	placeholder: string
+	onChange: (newValue: ValueType) => void
+	value?: ValueType | null
+} & Omit<
+	SelectHTMLAttributes<HTMLSelectElement>,
+	"options" | "onChange" | "value"
+>): ReactElement => {
+	const [isOpened, setIsOpened] = useState(false)
+
+	const closeMenu = () => {
+		setIsOpened(false)
+	}
+
+	const handleDropdownTriggerClick = () => {
+		setIsOpened(prevState => !prevState)
+	}
+
+	const handleItemClick = (newValue: ValueType) => {
+		onChange(newValue)
+	}
+
+	const triggerText = isOpened
+		? placeholder
+		: value && options.find(option => option.value === value)?.name
 
 	return (
-		<div className={`select${fullWidth ? " select--full-width" : ""}`}>
-			{label && <label>{label}</label>}
-
-			<select className="select__field" {...selectProps}>
-				{options.map((option, index) => {
-					const {value, name} = option
-
-					return (
-						<option key={index} value={value}>
-							{name}
-						</option>
-					)
-				})}
-			</select>
-		</div>
+		<Dropdown<ValueType>
+			className={`select__field${fullWidth ? " select__field--full-width" : ""}`}
+			isOpened={isOpened}
+			triggerText={triggerText || placeholder}
+			selected={value}
+			highlightSelected={true}
+			onClose={closeMenu}
+			onItemClick={handleItemClick}
+			onTriggerClick={handleDropdownTriggerClick}
+			items={options}
+			borders="all"
+		/>
 	)
 }
 

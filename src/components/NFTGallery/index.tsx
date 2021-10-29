@@ -1,4 +1,4 @@
-import {ChangeEvent, FunctionComponent, useState} from "react"
+import {FunctionComponent, useState} from "react"
 import SearchInput from "../Controls/Input/SearchInput"
 import Select from "../Controls/Select"
 import Gallery from "../Gallery"
@@ -18,7 +18,7 @@ const NFTGallery: FunctionComponent<{
 	canDelete: boolean
 }> = ({account, canDelete, isDao = false}) => {
 	const [cursor, setCursor] = useState<NFTSnapshot | null>(null)
-	const [sort, setSort] = useState<NftSort>("nameAsc")
+	const [sort, setSort] = useState<NftSort>("dateDesc")
 	const [deleteOpened, setDeleteOpened] = useState<string | null>(null)
 	const [deletedNfts, setDeletedNfts] = useState<string[]>([])
 	const {NFTs, loading, error} = useNFTs({user: account, after: cursor, sort})
@@ -30,8 +30,8 @@ const NFTGallery: FunctionComponent<{
 		setCursor(NFTs.data[NFTs.data.length - 1])
 	}
 
-	const handleSortChange = (e: ChangeEvent<HTMLSelectElement>) => {
-		setSort(e.target.value as NftSort)
+	const handleSortChange = (newSortValue: string) => {
+		setSort(newSortValue as NftSort)
 		setCursor(null)
 	}
 
@@ -66,13 +66,14 @@ const NFTGallery: FunctionComponent<{
 			)}
 			<div className="profile__controls">
 				<SearchInput />
-				<Select
+				<Select<string>
 					value={sort}
+					placeholder="Sort By"
 					options={[
-						{name: "Name (A-Z)", value: "nameAsc"},
-						{name: "Name (Z-A)", value: "nameDesc"},
 						{name: "Newest", value: "dateDesc"},
-						{name: "Oldest", value: "dateAsc"}
+						{name: "Oldest", value: "dateAsc"},
+						{name: "Name (A-Z)", value: "nameAsc"},
+						{name: "Name (Z-A)", value: "nameDesc"}
 					]}
 					onChange={handleSortChange}
 				/>

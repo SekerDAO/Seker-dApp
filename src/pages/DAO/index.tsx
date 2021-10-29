@@ -46,7 +46,7 @@ const DAOPage: FunctionComponent = () => {
 
 	const isAdmin = connected && !!dao.owners.find(addr => addr === account)
 	const page: DAOAdminPage | DAOContentPage =
-		(isAdmin && (parse(search).page as DAOAdminPage | DAOContentPage)) || "collection"
+		(parse(search).page as DAOAdminPage | DAOContentPage) || "collection"
 
 	return (
 		<>
@@ -171,44 +171,46 @@ const DAOPage: FunctionComponent = () => {
 						)}
 					</div>
 					<div className="dao__main">
-						{page === "edit" ? (
-							<EditDAO
-								dao={dao}
-								afterEdit={refetch}
-								onClose={() => {
-									push(pathname)
+						<>
+							<HorizontalMenu
+								pages={menuEntries}
+								currentPage={page}
+								onChange={nextPage => {
+									push(`${pathname}?page=${nextPage}`)
 								}}
 							/>
-						) : (
-							<>
-								<HorizontalMenu
-									pages={menuEntries}
-									currentPage={page}
-									onChange={nextPage => {
-										push(`${pathname}?page=${nextPage}`)
+							{isAdmin && page === "nfts" && (
+								<DAOCollection gnosisAddress={dao.gnosisAddress} canEdit={isAdmin} />
+							)}
+							{isAdmin && page === "edit" && (
+								<EditDAO
+									dao={dao}
+									afterEdit={refetch}
+									onClose={() => {
+										push(pathname)
 									}}
 								/>
-								{page === "collection" && (
-									<DAOCollection gnosisAddress={dao.gnosisAddress} isAdmin={isAdmin} />
-								)}
-								{page === "about" && <AboutDAO dao={dao} />}
-								{page === "members" && <DAOOwners owners={dao.owners} />}
-								{page === "proposals" && (
-									<DAOProposals
-										gnosisVotingThreshold={dao.gnosisVotingThreshold}
-										gnosisAddress={dao.gnosisAddress}
-										isAdmin={isAdmin}
-									/>
-								)}
-								{page === "createProposal" && isAdmin && (
-									<CreateDaoAdminProposal
-										gnosisAddress={dao.gnosisAddress}
-										gnosisVotingThreshold={dao.gnosisVotingThreshold}
-										ownersCount={dao.owners.length}
-									/>
-								)}
-							</>
-						)}
+							)}
+							{page === "createProposal" && isAdmin && (
+								<CreateDaoAdminProposal
+									gnosisAddress={dao.gnosisAddress}
+									gnosisVotingThreshold={dao.gnosisVotingThreshold}
+									ownersCount={dao.owners.length}
+								/>
+							)}
+							{page === "collection" && (
+								<DAOCollection gnosisAddress={dao.gnosisAddress} canEdit={false} />
+							)}
+							{page === "about" && <AboutDAO dao={dao} />}
+							{page === "members" && <DAOOwners owners={dao.owners} />}
+							{page === "proposals" && (
+								<DAOProposals
+									gnosisVotingThreshold={dao.gnosisVotingThreshold}
+									gnosisAddress={dao.gnosisAddress}
+									isAdmin={isAdmin}
+								/>
+							)}
+						</>
 					</div>
 				</div>
 			</div>

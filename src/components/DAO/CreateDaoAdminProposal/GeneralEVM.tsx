@@ -1,11 +1,4 @@
-import React, {
-	ChangeEvent,
-	Fragment,
-	FunctionComponent,
-	useContext,
-	useEffect,
-	useState
-} from "react"
+import {ChangeEvent, Fragment, FunctionComponent, useContext, useEffect, useState} from "react"
 import Input from "../../Controls/Input"
 import ArrayInput from "../../Controls/ArrayInput"
 import {isAddress} from "@ethersproject/address"
@@ -220,13 +213,15 @@ const GeneralEVM: FunctionComponent<{
 			{abiString && !abiBad && (
 				<>
 					<label>Select Method</label>
-					<Select
-						value={selectedMethodIndex == null ? "" : String(selectedMethodIndex)}
-						options={[{name: "Choose One", value: ""}].concat(
-							contractMethods.map((method, index) => ({name: method.name, value: String(index)}))
-						)}
-						onChange={e => {
-							setSelectedMethodIndex(e.target.value === "" ? null : Number(e.target.value))
+					<Select<number>
+						placeholder="Choose One"
+						value={selectedMethodIndex ?? null}
+						options={contractMethods.map((method, index) => ({
+							name: method.name,
+							value: index
+						}))}
+						onChange={newSelectedMethodIndex => {
+							setSelectedMethodIndex(newSelectedMethodIndex ?? null)
 						}}
 						fullWidth
 					/>
@@ -251,15 +246,16 @@ const GeneralEVM: FunctionComponent<{
 											}
 										/>
 									) : input.type === "bool" ? (
-										<Select
+										<Select<string>
+											placeholder="Select value"
 											fullWidth
 											options={[
 												{name: "true", value: "true"},
 												{name: "false", value: "false"}
 											]}
-											value={args[index] ?? ""}
-											onChange={e => {
-												handleArgumentChange(e.target.value, index)
+											value={(args[index] as string) ?? ""}
+											onChange={newValue => {
+												handleArgumentChange(newValue, index)
 											}}
 										/>
 									) : (

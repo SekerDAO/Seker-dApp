@@ -8,6 +8,14 @@
     svg {
       margin-right: 10px;
     }
+
+    &:hover {
+      svg {
+        path {
+          fill: $white;
+        }
+      }
+    }
   }
 }
 

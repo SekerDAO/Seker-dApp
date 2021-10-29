@@ -46,14 +46,14 @@ const ChangeRole: FunctionComponent<{
 		}
 	}
 
-	const handleRoleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-		if (e.target.value === "kick") {
+	const handleRoleChange = (role: string) => {
+		if (role === "kick") {
 			setAddress("")
 			if (Number(newThreshold) > ownersCount - 1) {
 				setNewThreshold(String(ownersCount - 1))
 			}
 		}
-		setNewRole(e.target.value as "admin")
+		setNewRole(role as "admin")
 	}
 
 	const handleSubmit = async () => {
@@ -117,42 +117,36 @@ const ChangeRole: FunctionComponent<{
 
 	return (
 		<>
-			<div className="create-dao-proposal__row">
-				<div className="create-dao-proposal__col">
-					<label htmlFor="change-role-address">Member&apos;s Address</label>
-					{newRole === "kick" ? (
-						<Select
-							options={[{name: "Choose one", value: ""}].concat(
-								dao.owners.map(addr => ({name: addr, value: addr}))
-							)}
-							value={address}
-							onChange={e => {
-								setAddress(e.target.value)
-							}}
-						/>
-					) : (
-						<Input
-							borders="all"
-							id="change-role-address"
-							value={address}
-							onChange={e => {
-								setAddress(e.target.value)
-							}}
-						/>
-					)}
-				</div>
-				<div className="create-dao-proposal__col">
-					<label htmlFor="change-role-role">Proposed New Role</label>
-					<Select
-						options={[
-							{name: "Admin", value: "admin"},
-							{name: "Kick", value: "kick"}
-						]}
-						onChange={handleRoleChange}
-						value={newRole}
-					/>
-				</div>
-			</div>
+			<label htmlFor="change-role-address">Member&apos;s Address</label>
+			{newRole === "kick" ? (
+				<Select<string>
+					placeholder="Choose one"
+					options={dao.owners.map(addr => ({name: addr, value: addr}))}
+					value={address}
+					onChange={newAddress => {
+						setAddress(newAddress)
+					}}
+				/>
+			) : (
+				<Input
+					borders="all"
+					id="change-role-address"
+					value={address}
+					onChange={e => {
+						setAddress(e.target.value)
+					}}
+				/>
+			)}
+			<label>Proposed new role</label>
+			<Select<string>
+				placeholder="Choose one"
+				options={[
+					{name: "Admin", value: "admin"},
+					{name: "Kick", value: "kick"}
+				]}
+				onChange={handleRoleChange}
+				value={newRole}
+			/>
 			<label htmlFor="change-role-threshold">New Threshold</label>
 			<Input
 				id="change-role-threshold"
@@ -161,7 +155,11 @@ const ChangeRole: FunctionComponent<{
 				value={newThreshold}
 				onChange={handleThresholdChange}
 			/>
-			<Button onClick={handleSubmit} disabled={processing || submitButtonDisabled}>
+			<Button
+				onClick={handleSubmit}
+				disabled={processing || submitButtonDisabled}
+				extraClassName="create-dao-proposal__submit-button"
+			>
 				{processing ? "Processing..." : "Create Proposal"}
 			</Button>
 		</>

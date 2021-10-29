@@ -62,8 +62,8 @@ const CreateAuction: FunctionComponent<{
 		}
 	}
 
-	const handleNFTChange = (e: ChangeEvent<HTMLSelectElement>) => {
-		const snapshot = NFTs.data.find(s => s.data().id === Number(e.target.value))
+	const handleNFTChange = (nftId: number) => {
+		const snapshot = NFTs.data.find(s => s.data().id === nftId)
 		if (snapshot) {
 			setNft(snapshot.data())
 		} else {
@@ -71,9 +71,9 @@ const CreateAuction: FunctionComponent<{
 		}
 	}
 
-	const handleCurrencyChange = (e: ChangeEvent<HTMLSelectElement>) => {
-		setCurrencySymbol(e.target.value)
-		setCurrencyAddress(currencies.find(c => c.symbol === e.target.value)?.address ?? "")
+	const handleCurrencyChange = (newCurrencySymbol: string) => {
+		setCurrencySymbol(newCurrencySymbol)
+		setCurrencyAddress(currencies.find(c => c.symbol === newCurrencySymbol)?.address ?? "")
 	}
 
 	const handleSubmit = async () => {
@@ -132,11 +132,11 @@ const CreateAuction: FunctionComponent<{
 	return (
 		<>
 			<label htmlFor="create-auction-nft-token">Select NFT</label>
-			<Select
+			<Select<number>
 				fullWidth
 				id="create-auction-custom-currency"
+				placeholder="Choose One"
 				options={[
-					{name: "Choose One", value: ""},
 					...NFTs.data
 						.filter((d, index) => !NFTs.nftsAreOnAuctions[index])
 						.map(s => {
@@ -145,7 +145,7 @@ const CreateAuction: FunctionComponent<{
 						})
 				]}
 				onChange={handleNFTChange}
-				value={nft?.id ?? ""}
+				value={nft?.id}
 			/>
 			<label htmlFor="create-auction-price">Reserve Price</label>
 			<Input
@@ -157,11 +157,11 @@ const CreateAuction: FunctionComponent<{
 				onChange={handlePriceChange}
 			/>
 			<label htmlFor="create-auction-custom-currency">Auction Currency</label>
-			<Select
+			<Select<string>
 				fullWidth
 				id="create-auction-custom-currency"
+				placeholder="Choose One"
 				options={[
-					{name: "Choose One", value: ""},
 					...currencies.map(cur => ({name: cur.symbol, value: cur.symbol})),
 					{name: "Custom Currency", value: "custom"}
 				]}
@@ -214,7 +214,11 @@ const CreateAuction: FunctionComponent<{
 				value={duration}
 				onChange={handleDurationChange}
 			/>
-			<Button disabled={submitButtonDisabled || processing} onClick={handleSubmit}>
+			<Button
+				disabled={submitButtonDisabled || processing}
+				onClick={handleSubmit}
+				extraClassName="create-dao-proposal__submit-button"
+			>
 				{processing ? "Processing..." : "Create Proposal"}
 			</Button>
 		</>
