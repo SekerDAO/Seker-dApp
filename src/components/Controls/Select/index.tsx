@@ -11,32 +11,32 @@ const Select: FunctionComponent<
 		value?: string | number | null
 	} & Omit<SelectHTMLAttributes<HTMLSelectElement>, "options" | "onChange" | "value">
 > = ({options, fullWidth, placeholder, value, onChange}) => {
-	const [open, setOpen] = useState(false)
+	const [isOpened, setIsOpened] = useState(false)
 	const mappedOptions = useMemo(
 		() => options.map(option => ({id: option.value, content: option.name})),
 		[options]
 	)
 
 	const closeMenu = () => {
-		setOpen(false)
+		setIsOpened(false)
 	}
 
 	const handleDropdownTriggerClick = () => {
-		setOpen(prevState => !prevState)
+		setIsOpened(prevState => !prevState)
 	}
 
 	const handleItemClick = (newValue: string | number) => {
 		onChange(newValue)
 	}
 
-	const triggerText = open
+	const triggerText = isOpened
 		? placeholder
 		: value && options.find(option => option.value === value)?.name
 
 	return (
 		<Dropdown
 			className={`select__field${fullWidth ? " select__field--full-width" : ""}`}
-			open={open}
+			isOpened={isOpened}
 			triggerText={triggerText || placeholder}
 			selected={value}
 			highlightSelected={true}

@@ -25,34 +25,34 @@
   &__main-nav {
     display: flex;
 
-    ul {
-      padding: 0;
-      margin: 0;
-      display: flex;
-      align-items: center;
-      height: 40px;
-
-      li {
-        display: inline;
-        list-style: none;
-        color: $dark-grey;
-        margin: 0 20px;
-
-        &:hover {
-          a {
-            color: $purple;
-            border-bottom: 1px solid $purple;
-          }
-        }
-
-        &.active {
-          color: $purple;
-        }
-      }
-    }
-
     .divider {
       margin-right: 20px;
+    }
+  }
+
+  &__menu {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    height: 40px;
+
+    > li {
+      display: inline;
+      list-style: none;
+      color: $dark-grey;
+      margin: 0 20px;
+
+      &:hover {
+        a {
+          color: $purple;
+          border-bottom: 1px solid $purple;
+        }
+      }
+
+      &.active {
+        color: $purple;
+      }
     }
   }
 }
