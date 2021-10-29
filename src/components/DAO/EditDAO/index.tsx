@@ -44,77 +44,86 @@ const EditDAO: FunctionComponent<{
 
 	return (
 		<div className="edit-dao">
-			<label htmlFor="edit-dao-name">Display Name</label>
-			<Input
-				borders="all"
-				value={name}
-				onChange={e => {
-					setName(e.target.value)
-				}}
-				id="edit-dao-name"
-			/>
-			<label htmlFor="edit-dao-desc">About</label>
-			<Input
-				borders="all"
-				value={description}
-				onChange={e => {
-					setDescription(e.target.value)
-				}}
-				id="edit-dao-desc"
-			/>
-			<label htmlFor="edit-dao-website">Website</label>
-			<div className="edit-dao__url-container">
-				<div className="edit-dao__url-placeholder">https://</div>
+			<div className="edit-dao__row">
+				<label htmlFor="edit-dao-name">Display Name</label>
 				<Input
 					borders="all"
-					value={website}
+					value={name}
 					onChange={e => {
-						setWebsite(e.target.value)
+						setName(e.target.value)
 					}}
-					id="edit-dao-website"
+					id="edit-dao-name"
 				/>
 			</div>
-			<label htmlFor="edit-dao-tw">Twitter URL</label>
-			<div className="edit-dao__url-container">
-				<div className="edit-dao__url-placeholder">twitter.com/</div>
+			<div className="edit-dao__row">
+				<label htmlFor="edit-dao-desc">About</label>
 				<Input
 					borders="all"
-					value={twitter}
+					value={description}
 					onChange={e => {
-						setTwitter(e.target.value)
+						setDescription(e.target.value)
 					}}
-					id="edit-dao-tw"
+					id="edit-dao-desc"
 				/>
 			</div>
-			<label htmlFor="edit-dao-tg">Telegram URL</label>
-			<div className="edit-dao__url-container">
-				<div className="edit-dao__url-placeholder">t.me/</div>
-				<Input
-					borders="all"
-					value={telegram}
-					onChange={e => {
-						setTelegram(e.target.value)
-					}}
-					id="edit-dao-tg"
-				/>
+			<div className="edit-dao__row">
+				<div className="edit-dao__half-row">
+					<label htmlFor="edit-dao-website">Website</label>
+					<Input
+						staticPlaceholder="https://"
+						borders="all"
+						value={website}
+						onChange={e => {
+							setWebsite(e.target.value)
+						}}
+						id="edit-dao-website"
+					/>
+				</div>
+				<div className="edit-dao__half-row">
+					<label htmlFor="edit-dao-tw">Twitter URL</label>
+					<Input
+						staticPlaceholder="twitter.com/"
+						borders="all"
+						value={twitter}
+						onChange={e => {
+							setTwitter(e.target.value)
+						}}
+						id="edit-dao-tw"
+					/>
+				</div>
 			</div>
-			<label htmlFor="edit-dao-discord">Discord URL</label>
-			<div className="edit-dao__url-container">
-				<div className="edit-dao__url-placeholder">discord.gg/</div>
-				<Input
-					borders="all"
-					value={discord}
-					onChange={e => {
-						setDiscord(e.target.value)
-					}}
-					id="edit-dao-discord"
-				/>
+			<div className="edit-dao__row">
+				<div className="edit-dao__half-row">
+					<label htmlFor="edit-dao-tg">Telegram URL</label>
+					<Input
+						staticPlaceholder="t.me/"
+						borders="all"
+						value={telegram}
+						onChange={e => {
+							setTelegram(e.target.value)
+						}}
+						id="edit-dao-tg"
+					/>
+				</div>
+				<div className="edit-dao__half-row">
+					<label htmlFor="edit-dao-discord">Discord URL</label>
+					<Input
+						staticPlaceholder="discord.gg/"
+						borders="all"
+						value={discord}
+						onChange={e => {
+							setDiscord(e.target.value)
+						}}
+						id="edit-dao-discord"
+					/>
+				</div>
 			</div>
+
 			<div className="edit-dao__buttons">
 				<Button disabled={!name || processing} onClick={handleSave}>
-					{processing ? "Saving..." : "Save"}
+					{processing ? "Saving..." : "Save Changes"}
 				</Button>
-				<Button buttonType="secondary" onClick={onClose}>
+				<Button buttonType="link" onClick={onClose}>
 					Cancel
 				</Button>
 			</div>

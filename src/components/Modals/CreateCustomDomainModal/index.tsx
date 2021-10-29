@@ -7,6 +7,8 @@ import EthersContext from "../../../context/EthersContext"
 import deployCustomDomain from "../../../api/ethers/functions/customDomain/deployCustomDomain"
 import {toastError} from "../../Toast"
 import addDomain from "../../../api/firebase/user/addDomain"
+import {ReactComponent as WarningIcon} from "../../../assets/icons/warning.svg"
+import Divider from "../../Divider"
 
 const CreateCustomDomainModal: FunctionComponent<{
 	afterCreate: () => void
@@ -89,6 +91,15 @@ const CreateCustomDomainModal: FunctionComponent<{
 									setSymbol(e.target.value)
 								}}
 							/>
+							<Divider />
+							<div className="create-custom-domain__warning">
+								<div>
+									<WarningIcon width="20px" height="20px" />
+								</div>
+								<p>
+									{`This request will incur a gas fee. If you would like to proceed, please click "Submit" below.`}
+								</p>
+							</div>
 							<Button
 								disabled={!(name && symbol) || loading}
 								buttonType="primary"

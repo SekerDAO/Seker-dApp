@@ -2,7 +2,7 @@ import {FunctionComponent, MouseEvent} from "react"
 import {Link} from "react-router-dom"
 import "./styles.scss"
 import {NFTGalleryItemProps} from "../../types/NFT"
-import CloseIcon from "../../assets/icons/CloseIcon"
+import {ReactComponent as CloseIcon} from "../../assets/icons/delete.svg"
 
 const GalleryItem: FunctionComponent<NFTGalleryItemProps> = ({
 	id,
@@ -33,15 +33,19 @@ const GalleryItem: FunctionComponent<NFTGalleryItemProps> = ({
 			</div>
 
 			<div className="gallery__details">
-				<b>
-					<Link to={`/nft/${id}`}>{name}</Link>
-				</b>
-				<div>{`${creator.slice(0, 3)}...${creator.slice(-4)}`}</div>
-				{attributes?.editionNumber && attributes.numberOfEditions && (
-					<div>
-						Edition {attributes.editionNumber} of {attributes.numberOfEditions}
-					</div>
-				)}
+				<div className="gallery__details-row">
+					<b>
+						<Link to={`/nft/${id}`}>{name}</Link>
+					</b>
+					{attributes?.editionNumber && attributes.numberOfEditions && (
+						<div>
+							Edition {attributes.editionNumber} of {attributes.numberOfEditions}
+						</div>
+					)}
+				</div>
+				<div className="gallery__details-row">
+					<div>{`${creator.slice(0, 3)}...${creator.slice(-4)}`}</div>
+				</div>
 			</div>
 		</div>
 	)

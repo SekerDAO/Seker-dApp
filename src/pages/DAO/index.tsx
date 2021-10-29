@@ -1,12 +1,12 @@
-import {FunctionComponent, useContext, useState} from "react"
-import {useParams} from "react-router-dom"
+import {FunctionComponent, useContext} from "react"
+import {useHistory, useLocation, useParams} from "react-router-dom"
+import {parse} from "query-string"
 import HorizontalMenu from "../../components/HorizontalMenu"
 import "./styles.scss"
 import useDAO from "../../hooks/getters/useDAO"
 import ErrorPlaceholder from "../../components/ErrorPlaceholder"
 import Loader from "../../components/Loader"
 import {AuthContext} from "../../context/AuthContext"
-import Button from "../../components/Controls/Button"
 import AboutDAO from "../../components/DAO/AboutDAO"
 import CreateDaoAdminProposal from "../../components/DAO/CreateDaoAdminProposal"
 import DAOProposals from "../../components/DAO/DAOProposals"
@@ -14,33 +14,44 @@ import EditDAO from "../../components/DAO/EditDAO"
 import DAOCollection from "../../components/DAO/DAOCollection"
 import UploadImageModal from "../../components/Modals/UploadImageModal"
 import updateDAOImage from "../../api/firebase/DAO/updateDAOImage"
-import TwitterIcon from "../../assets/icons/TwitterIcon"
-import {PURPLE_2} from "../../constants/colors"
-import TelegramIcon from "../../assets/icons/TelegramIcon"
-import DiscordIcon from "../../assets/icons/DiscordIcon"
+import {ReactComponent as TwitterIcon} from "../../assets/icons/twitter.svg"
+import {ReactComponent as TelegramIcon} from "../../assets/icons/telegram.svg"
+import {ReactComponent as DiscordIcon} from "../../assets/icons/discord.svg"
 import DashboardHeader from "../../components/DashboardHeader"
 import {formatDate} from "../../utlls"
 import DAOOwners from "../../components/DAO/DAOOwners"
-import DecentralizeDAOModal from "../../components/Modals/DecentralizeDAOModal"
+import Paper from "../../components/Paper"
+import DashboardMenu from "../../components/DashboardMenu"
 
-const menuEntries = ["Collection", "About", "Owners", "Proposals", "+ Admin Proposal"]
+type DAOAdminPage = "nfts" | "edit" | "createProposal" | "expand"
+type DAOContentPage = "collection" | "about" | "members" | "proposals"
 
+const menuEntries = [
+	{id: "collection", name: "Collection"},
+	{id: "about", name: "About"},
+	{id: "members", name: "Members"},
+	{id: "proposals", name: "Proposals"}
+]
+
+// Make sense to rebuild all this internal "page" handling to plain react-router routes
 const DAOPage: FunctionComponent = () => {
 	const {account, connected} = useContext(AuthContext)
 	const {address} = useParams<{address: string}>()
 	const {dao, loading, error, refetch} = useDAO(address)
-	const [editOpened, setEditOpened] = useState(false)
-	const [activeMenuIndex, setActiveMenuIndex] = useState(0)
+	const {pathname, search} = useLocation()
+	const {push} = useHistory()
 
 	if (error) return <ErrorPlaceholder />
 	if (!dao || loading) return <Loader />
 
 	const isAdmin = connected && !!dao.owners.find(addr => addr === account)
+	const page: DAOAdminPage | DAOContentPage =
+		(parse(search).page as DAOAdminPage | DAOContentPage) || "collection"
 
 	return (
 		<>
 			<DashboardHeader background={dao.headerImage}>
-				{isAdmin && editOpened && (
+				{isAdmin && page === "edit" && (
 					<UploadImageModal
 						initialUrl={dao.headerImage}
 						buttonName="Edit Header"
@@ -67,7 +78,7 @@ const DAOPage: FunctionComponent = () => {
 									: {}
 							}
 						>
-							{isAdmin && editOpened && (
+							{isAdmin && page === "edit" && (
 								<UploadImageModal
 									initialUrl={dao.profileImage}
 									buttonName="Edit Image"
@@ -81,7 +92,7 @@ const DAOPage: FunctionComponent = () => {
 								/>
 							)}
 						</div>
-						<div className="dao__info">
+						<Paper className="dao__info">
 							<h2>{dao.name}</h2>
 							<p>Est. {formatDate(dao.estimated)}</p>
 							{dao.website && (
@@ -97,7 +108,7 @@ const DAOPage: FunctionComponent = () => {
 											rel="noopener noreferrer"
 											href={`https://twitter.com/${dao.twitter}`}
 										>
-											<TwitterIcon fill={PURPLE_2} />
+											<TwitterIcon width="24px" height="20px" />
 										</a>
 									)}
 									{dao.telegram && (
@@ -106,7 +117,7 @@ const DAOPage: FunctionComponent = () => {
 											rel="noopener noreferrer"
 											href={`https://t.me/${dao.telegram}`}
 										>
-											<TelegramIcon fill={PURPLE_2} />
+											<TelegramIcon width="24px" height="20px" />
 										</a>
 									)}
 									{dao.discord && (
@@ -115,25 +126,13 @@ const DAOPage: FunctionComponent = () => {
 											rel="noopener noreferrer"
 											href={`https://discord.gg/${dao.discord}`}
 										>
-											<DiscordIcon fill={PURPLE_2} />
+											<DiscordIcon width="24px" height="20px" />
 										</a>
 									)}
 								</div>
 							)}
-							{isAdmin && (
-								<Button
-									buttonType="primary"
-									onClick={() => {
-										setEditOpened(true)
-									}}
-								>
-									Edit DAO Profile
-								</Button>
-							)}
-							{/* TODO: link */}
-							<Button>Purchase tokens</Button>
 							{/* TODO: decentralize DAO modal */}
-							{dao.seeleAddress ? (
+							{/* {dao.seeleAddress ? (
 								<p>TODO: Decentralized DAO</p>
 							) : isAdmin ? (
 								<DecentralizeDAOModal
@@ -141,48 +140,77 @@ const DAOPage: FunctionComponent = () => {
 									gnosisAddress={dao.gnosisAddress}
 									gnosisVotingThreshold={dao.gnosisVotingThreshold}
 								/>
-							) : null}
-						</div>
+							) : null} */}
+						</Paper>
+						{isAdmin && (
+							<DashboardMenu
+								items={[
+									{
+										title: "Create / Load NFTs",
+										to: `${pathname}?page=nfts`,
+										page: "nfts"
+									},
+									{
+										title: "Edit DAO Profile",
+										to: `${pathname}?page=edit`,
+										page: "edit"
+									},
+									{
+										title: "Create Proposal",
+										to: `${pathname}?page=createProposal`,
+										page: "createProposal"
+									},
+									{
+										title: "Expand Dao",
+										to: `${pathname}?page=expand`,
+										page: "expand"
+									}
+								]}
+								currentPage={page}
+							/>
+						)}
 					</div>
 					<div className="dao__main">
-						{editOpened ? (
-							<EditDAO
-								dao={dao}
-								afterEdit={refetch}
-								onClose={() => {
-									setEditOpened(false)
+						<>
+							<HorizontalMenu
+								pages={menuEntries}
+								currentPage={page}
+								onChange={nextPage => {
+									push(`${pathname}?page=${nextPage}`)
 								}}
 							/>
-						) : (
-							<>
-								<HorizontalMenu
-									entries={isAdmin ? menuEntries : menuEntries.slice(0, -1)}
-									activeIndex={activeMenuIndex}
-									onChange={index => {
-										setActiveMenuIndex(index)
+							{isAdmin && page === "nfts" && (
+								<DAOCollection gnosisAddress={dao.gnosisAddress} canEdit={isAdmin} />
+							)}
+							{isAdmin && page === "edit" && (
+								<EditDAO
+									dao={dao}
+									afterEdit={refetch}
+									onClose={() => {
+										push(pathname)
 									}}
 								/>
-								{activeMenuIndex === 0 && (
-									<DAOCollection gnosisAddress={dao.gnosisAddress} isAdmin={isAdmin} />
-								)}
-								{activeMenuIndex === 1 && <AboutDAO dao={dao} />}
-								{activeMenuIndex === 2 && <DAOOwners owners={dao.owners} />}
-								{activeMenuIndex === 3 && (
-									<DAOProposals
-										gnosisVotingThreshold={dao.gnosisVotingThreshold}
-										gnosisAddress={dao.gnosisAddress}
-										isAdmin={isAdmin}
-									/>
-								)}
-								{activeMenuIndex === 4 && isAdmin && (
-									<CreateDaoAdminProposal
-										gnosisAddress={dao.gnosisAddress}
-										gnosisVotingThreshold={dao.gnosisVotingThreshold}
-										ownersCount={dao.owners.length}
-									/>
-								)}
-							</>
-						)}
+							)}
+							{page === "createProposal" && isAdmin && (
+								<CreateDaoAdminProposal
+									gnosisAddress={dao.gnosisAddress}
+									gnosisVotingThreshold={dao.gnosisVotingThreshold}
+									ownersCount={dao.owners.length}
+								/>
+							)}
+							{page === "collection" && (
+								<DAOCollection gnosisAddress={dao.gnosisAddress} canEdit={false} />
+							)}
+							{page === "about" && <AboutDAO dao={dao} />}
+							{page === "members" && <DAOOwners owners={dao.owners} />}
+							{page === "proposals" && (
+								<DAOProposals
+									gnosisVotingThreshold={dao.gnosisVotingThreshold}
+									gnosisAddress={dao.gnosisAddress}
+									isAdmin={isAdmin}
+								/>
+							)}
+						</>
 					</div>
 				</div>
 			</div>

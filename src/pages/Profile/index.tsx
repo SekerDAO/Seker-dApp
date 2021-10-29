@@ -13,12 +13,11 @@ import ErrorPlaceholder from "../../components/ErrorPlaceholder"
 import Loader from "../../components/Loader"
 import updateUserImage from "../../api/firebase/user/updateUserImage"
 import UploadImageModal from "../../components/Modals/UploadImageModal"
-import TwitterIcon from "../../assets/icons/TwitterIcon"
-import InstagramIcon from "../../assets/icons/InstagramIcon"
-import {PURPLE_2} from "../../constants/colors"
+import {ReactComponent as TwitterIcon} from "../../assets/icons/twitter.svg"
+import {ReactComponent as InstagramIcon} from "../../assets/icons/instagram.svg"
 import DashboardHeader from "../../components/DashboardHeader"
-import Paper from "../../components/Paper"
 import {isAddress} from "@ethersproject/address"
+import DashboardMenu from "../../components/DashboardMenu"
 
 type ProfilePage = "nfts" | "edit" | "daos" | "profile"
 
@@ -115,7 +114,7 @@ const Profile: FunctionComponent = () => {
 									rel="noopener noreferrer"
 									href={`https://twitter.com/${user.twitter}`}
 								>
-									<TwitterIcon fill={PURPLE_2} />
+									<TwitterIcon width="24px" height="20px" />
 								</a>
 							)}
 							{user.instagram && (
@@ -124,47 +123,36 @@ const Profile: FunctionComponent = () => {
 									rel="noopener noreferrer"
 									href={`https://instagram.com/${user.twitter}`}
 								>
-									<InstagramIcon fill={PURPLE_2} />
+									<InstagramIcon width="24px" height="20px" />
 								</a>
 							)}
 						</div>
 						{isOwner && (
-							// TODO: Extract to DashboardMenu component and reuse
-							<Paper className="profile__edit-menu">
-								<h3>Dashboard Menu</h3>
-								<a
-									className={page === "nfts" ? "active" : undefined}
-									onClick={() => {
-										push(pathname)
-									}}
-								>
-									Create / Edit NFTs
-								</a>
-								<a
-									className={page === "edit" ? "active" : undefined}
-									onClick={() => {
-										push(`${pathname}?page=edit`)
-									}}
-								>
-									Edit Profile
-								</a>
-								<a
-									className={page === "daos" ? "active" : undefined}
-									onClick={() => {
-										push(`${pathname}?page=daos`)
-									}}
-								>
-									View Your DAOs
-								</a>
-								<a
-									className={page === "profile" ? "active" : undefined}
-									onClick={() => {
-										push(`${pathname}?page=profile`)
-									}}
-								>
-									View Profile
-								</a>
-							</Paper>
+							<DashboardMenu
+								currentPage={page}
+								items={[
+									{
+										title: "Create / Edit NFTs",
+										to: pathname,
+										page: "nfts"
+									},
+									{
+										title: "Edit Profile",
+										to: `${pathname}?page=edit`,
+										page: "edit"
+									},
+									{
+										title: "View Your DAOs",
+										to: `${pathname}?page=daos`,
+										page: "daos"
+									},
+									{
+										title: "View Profile",
+										to: `${pathname}?page=profile`,
+										page: "profile"
+									}
+								]}
+							/>
 						)}
 					</div>
 					<div className="profile__main">

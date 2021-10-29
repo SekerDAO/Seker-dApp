@@ -300,6 +300,13 @@ const DAOProposals: FunctionComponent<{
 }> = ({gnosisVotingThreshold, gnosisAddress, isAdmin}) => {
 	const {proposals, loading, error, refetch} = useDAOProposals(gnosisAddress)
 
+	const handleFilterChange = () => {
+		console.log("TODO: Implement filtering")
+	}
+	const handleSortChange = () => {
+		console.log("TODO: Implement sorting")
+	}
+
 	if (error) return <ErrorPlaceholder />
 	if (loading) return <Loader />
 
@@ -308,8 +315,8 @@ const DAOProposals: FunctionComponent<{
 			<h2>Proposals</h2>
 			<div className="dao-proposals__controls">
 				<SearchInput />
-				<Select options={[{name: "Filter By", value: ""}]} />
-				<Select options={[{name: "Sort By", value: ""}]} />
+				<Select options={[]} placeholder="Filter By" value="" onChange={handleFilterChange} />
+				<Select options={[]} placeholder="Sort By" value="" onChange={handleSortChange} />
 			</div>
 			{proposals.map((proposal, index) => (
 				<DAOProposalCard

@@ -225,23 +225,20 @@ const CreateNFTModalContent: FunctionComponent<{
 								setCustomDomain(true)
 							}}
 						/>
-						<Select
+						<Select<string>
+							placeholder="Select Domain"
 							value={customDomainAddress}
-							options={[
-								{
-									name: "Select Domain",
-									value: ""
-								}
-							].concat(domains.map(domain => ({name: domain.name, value: domain.address})))}
+							options={domains.map(domain => ({name: domain.name, value: domain.address}))}
 							disabled={!customDomain}
-							onChange={e => {
-								setCustomDomainAddress(e.target.value)
+							onChange={newCustomDomain => {
+								setCustomDomainAddress(newCustomDomain)
 							}}
+							fullWidth
 						/>
 					</div>
 					<div className="create-nft__row">
 						<RadioButton
-							label="TokenWalk Domain"
+							label="Hyphal Domain"
 							id="create-nft-radio-tw-domain"
 							checked={!customDomain}
 							onChange={() => {

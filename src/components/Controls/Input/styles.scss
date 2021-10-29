@@ -1,6 +1,9 @@
 @import "src/assets/styles/variables";
 
 .input {
+  display: flex;
+  align-items: center;
+
   &__field {
     font-family: Karla, 'Open Sans', sans-serif;
     font-size: 16px;
@@ -26,6 +29,20 @@
     }
   }
 
+  &__static-placeholder {
+    padding: 6px;
+    color: white;
+    background-color: $dark-grey;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+
+    & + .input__field {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      flex: 1;
+    }
+  }
+
   &__validation {
     color: $error;
   }
@@ -36,12 +53,13 @@
 
   svg {
     position: absolute;
-    top: 8px;
+    top: 5px;
     left: 0;
   }
 
   .input {
     &__field {
+      width: 280px;
       padding-left: 25px;
     }
   }

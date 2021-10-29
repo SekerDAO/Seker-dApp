@@ -18,55 +18,40 @@
     align-items: center;
   }
 
+  &__connect-button {
+    width: 140px;
+  }
+
+  &__main-nav {
+    display: flex;
+
+    .divider {
+      margin-right: 20px;
+    }
+  }
+
   &__menu {
-    position: relative;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    height: 40px;
 
-    &-button {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      background-color: $purple75;
-      border: 1px solid $purple;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
+    > li {
+      display: inline;
+      list-style: none;
+      color: $dark-grey;
+      margin: 0 20px;
 
-      div {
-        background-color: white;
-        width: 15px;
-        height: 2px;
-        margin: 2px 0;
+      &:hover {
+        a {
+          color: $purple;
+          border-bottom: 1px solid $purple;
+        }
       }
-    }
 
-    &-dropdown {
-      position: absolute;
-      background-color: white;
-      top: 45px;
-      right: 0;
-      border: 1px solid $purple;
-      z-index: 2;
-    }
-
-    ul {
-      margin: 0;
-      padding: 20px;
-    }
-
-    li {
-      list-style-type: none;
-      margin: 2px 0;
-      white-space: pre;
-
-      a,
-      span {
-        font-size: 16px;
-        line-height: 20px;
-        color: $dark-grey;
-        text-decoration: none;
-        cursor: pointer;
+      &.active {
+        color: $purple;
       }
     }
   }

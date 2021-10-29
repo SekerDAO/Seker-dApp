@@ -97,7 +97,11 @@ const RequestFunding: FunctionComponent<{
 				}}
 				value={recipient}
 			/>
-			<Button onClick={handleSubmit} disabled={loading || !(title && amount && recipient)}>
+			<Button
+				onClick={handleSubmit}
+				disabled={loading || !(title && amount && recipient)}
+				extraClassName="create-dao-proposal__submit-button"
+			>
 				{loading ? "Processing..." : "Create Proposal"}
 			</Button>
 		</>

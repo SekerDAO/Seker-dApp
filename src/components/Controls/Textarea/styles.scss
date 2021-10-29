@@ -7,10 +7,11 @@
     padding: 5px;
     border: none;
     outline: none;
-    border-bottom: 1px solid $dark-grey;
+    border-bottom: 1px solid $dark-grey25;
+    border-radius: 5px;
 
     &--bordered {
-      border: 1px solid $dark-grey;
+      border: 1px solid $dark-grey25;
     }
 
     &--bad {
