@@ -180,7 +180,7 @@ const DAOPage: FunctionComponent = () => {
 								}}
 							/>
 							{isAdmin && page === "nfts" && (
-								<DAOCollection gnosisAddress={dao.gnosisAddress} isAdmin={isAdmin} />
+								<DAOCollection gnosisAddress={dao.gnosisAddress} canEdit={isAdmin} />
 							)}
 							{isAdmin && page === "edit" && (
 								<EditDAO
@@ -199,11 +199,7 @@ const DAOPage: FunctionComponent = () => {
 								/>
 							)}
 							{page === "collection" && (
-								<DAOCollection
-									gnosisAddress={dao.gnosisAddress}
-									viewOnly={true}
-									isAdmin={isAdmin}
-								/>
+								<DAOCollection gnosisAddress={dao.gnosisAddress} canEdit={isAdmin} />
 							)}
 							{page === "about" && <AboutDAO dao={dao} />}
 							{page === "members" && <DAOOwners owners={dao.owners} />}

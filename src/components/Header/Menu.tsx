@@ -46,16 +46,16 @@ const HeaderMenu: FunctionComponent = () => {
 					onTriggerClick={handleDropdownTriggerClick}
 					items={[
 						{
-							id: "profile",
-							content: (
+							value: "profile",
+							name: (
 								<Link to={`/profile/${url ?? account}`}>{`${account.slice(0, 6)}...${account.slice(
 									-4
 								)}`}</Link>
 							)
 						},
 						{
-							id: "disconnect",
-							content: "Disconnect"
+							value: "disconnect",
+							name: "Disconnect"
 						}
 					]}
 					borders="none"

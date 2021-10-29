@@ -1,4 +1,4 @@
-import {FunctionComponent, SelectHTMLAttributes, useState, useMemo} from "react"
+import {FunctionComponent, SelectHTMLAttributes, useState} from "react"
 import Dropdown from "../../Dropdown"
 import "./styles.scss"
 
@@ -12,10 +12,6 @@ const Select: FunctionComponent<
 	} & Omit<SelectHTMLAttributes<HTMLSelectElement>, "options" | "onChange" | "value">
 > = ({options, fullWidth, placeholder, value, onChange}) => {
 	const [isOpened, setIsOpened] = useState(false)
-	const mappedOptions = useMemo(
-		() => options.map(option => ({id: option.value, content: option.name})),
-		[options]
-	)
 
 	const closeMenu = () => {
 		setIsOpened(false)
@@ -43,7 +39,7 @@ const Select: FunctionComponent<
 			onClose={closeMenu}
 			onItemClick={handleItemClick}
 			onTriggerClick={handleDropdownTriggerClick}
-			items={mappedOptions}
+			items={options}
 			borders="all"
 		/>
 	)

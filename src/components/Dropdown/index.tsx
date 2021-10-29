@@ -5,7 +5,7 @@ import "./styles.scss"
 
 const Dropdown: FunctionComponent<{
 	isOpened: boolean
-	items: {id: string | number; content: ReactElement | string}[]
+	items: {value: string | number; name: ReactElement | string}[]
 	selected?: string | number | null
 	highlightSelected?: boolean
 	triggerText: string | number
@@ -49,15 +49,15 @@ const Dropdown: FunctionComponent<{
 				</li>
 				{isOpened && (
 					<>
-						{items.map(({id, content}) => (
+						{items.map(({value, name}) => (
 							<li
-								key={id}
-								onClick={() => handleItemClick(id)}
+								key={value}
+								onClick={() => handleItemClick(value)}
 								className={`dropdown__item${
-									highlightSelected && id === selected ? " dropdown__item--selected" : ""
+									highlightSelected && value === selected ? " dropdown__item--selected" : ""
 								}`}
 							>
-								{content}
+								{name}
 							</li>
 						))}
 					</>
