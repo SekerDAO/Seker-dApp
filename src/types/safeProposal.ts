@@ -5,6 +5,7 @@ export type SafeProposalType =
 	| "changeRole"
 	| "createAuction"
 	| "cancelAuction"
+	| "endAuction"
 	| "generalEVM"
 	| "decentralizeDAO"
 
