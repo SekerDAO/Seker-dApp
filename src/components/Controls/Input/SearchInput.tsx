@@ -1,13 +1,13 @@
 import {FunctionComponent, InputHTMLAttributes} from "react"
 import Input from "./index"
-import SearchIcon from "../../../assets/icons/SearchIcon"
+import {ReactComponent as SearchIcon} from "../../../assets/icons/search.svg"
 
 const SearchInput: FunctionComponent<
 	Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "placeholder">
 > = inputProps => {
 	return (
 		<div className="search-input">
-			<SearchIcon />
+			<SearchIcon width="17px" height="17px" />
 			<Input borders="bottom" placeholder="Search" {...inputProps} />
 		</div>
 	)

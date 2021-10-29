@@ -1,0 +1,13 @@
+@import "src/assets/styles/variables";
+
+.divider {
+  background-color: $dark-grey25;
+
+  &--vertical {
+    width: 1px;
+  }
+
+  &--horizontal {
+    height: 1px;
+  }
+}

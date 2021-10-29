@@ -13,9 +13,8 @@ import ErrorPlaceholder from "../../components/ErrorPlaceholder"
 import Loader from "../../components/Loader"
 import updateUserImage from "../../api/firebase/user/updateUserImage"
 import UploadImageModal from "../../components/Modals/UploadImageModal"
-import TwitterIcon from "../../assets/icons/TwitterIcon"
-import InstagramIcon from "../../assets/icons/InstagramIcon"
-import {PURPLE_2} from "../../constants/colors"
+import {ReactComponent as TwitterIcon} from "../../assets/icons/twitter.svg"
+import {ReactComponent as InstagramIcon} from "../../assets/icons/instagram.svg"
 import DashboardHeader from "../../components/DashboardHeader"
 import {isAddress} from "@ethersproject/address"
 import DashboardMenu from "../../components/DashboardMenu"
@@ -115,7 +114,7 @@ const Profile: FunctionComponent = () => {
 									rel="noopener noreferrer"
 									href={`https://twitter.com/${user.twitter}`}
 								>
-									<TwitterIcon fill={PURPLE_2} />
+									<TwitterIcon width="24px" height="20px" />
 								</a>
 							)}
 							{user.instagram && (
@@ -124,7 +123,7 @@ const Profile: FunctionComponent = () => {
 									rel="noopener noreferrer"
 									href={`https://instagram.com/${user.twitter}`}
 								>
-									<InstagramIcon fill={PURPLE_2} />
+									<InstagramIcon width="24px" height="20px" />
 								</a>
 							)}
 						</div>

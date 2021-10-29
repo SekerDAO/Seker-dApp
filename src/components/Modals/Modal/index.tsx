@@ -1,6 +1,6 @@
 import {FunctionComponent} from "react"
 import "./styles.scss"
-import CloseIcon from "../../../assets/icons/CloseIcon"
+import {ReactComponent as CloseIcon} from "../../../assets/icons/delete.svg"
 
 const Modal: FunctionComponent<{
 	show: boolean
