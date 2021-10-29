@@ -6,8 +6,7 @@ const {REACT_APP_MODULE_FACTORY_ADDRESS} = process.env
 
 const OZ_LINEAR_MASTER = "0xA1D0AAFd677676F7eDfFdc48EF21b6fE7e8e05Cf"
 
-const getOZLinearDeploy = async (
-	OZLinearAddress: string,
+const getOZLinearSetSeele = async (
 	expectedSeeleAddress: string,
 	expectedStrategyAddress: string,
 	signer: JsonRpcSigner
@@ -23,4 +22,4 @@ const getOZLinearDeploy = async (
 	return setSeeleTx
 }
 
-export default getOZLinearDeploy
+export default getOZLinearSetSeele
