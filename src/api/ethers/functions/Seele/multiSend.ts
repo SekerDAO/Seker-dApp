@@ -8,23 +8,20 @@ import {
 	safeApproveHash,
 	SafeTransaction
 } from "../gnosisSafe/safeUtils"
-const MultiSendAddress = "0x2890dd2Cf1E4881b630bd680E50439b9DE00AC02"
+const {REACT_APP_MULTI_SEND_ADDRESS} = process.env
 
 const multiSend = async (
 	multiSendTxs: SafeTransaction[], // deployStrat1, deployStrat2... deploySeele, setSeeleStrat1, setSeeleStrat2...
 	safeAddress: string,
 	signer: JsonRpcSigner
-): Promise<string> =>
-	new Promise(async (resolve, reject) => {
-		try {
-			const safeContract = new Contract(safeAddress, GnosisSafeL2.abi, signer)
-			const nonce = await safeContract.nonce()
-			const multiSendContract = new Contract(MultiSendAddress, MultiSend.abi, signer)
-			const multiTx = buildMultiSendSafeTx(multiSendContract, multiSendTxs, nonce)
-			executeTx(safeContract, multiTx, [await safeApproveHash(signer, safeContract, multiTx, true)])
-		} catch (e) {
-			reject(e)
-		}
-	})
+): Promise<void> => {
+	const safeContract = new Contract(safeAddress, GnosisSafeL2.abi, signer)
+	const nonce = await safeContract.nonce()
+	const multiSendContract = new Contract(REACT_APP_MULTI_SEND_ADDRESS!, MultiSend.abi, signer)
+	const multiTx = buildMultiSendSafeTx(multiSendContract, multiSendTxs, nonce)
+	const hash = await safeApproveHash(signer, safeContract, multiTx, true)
+	const tx = await executeTx(safeContract, multiTx, [hash])
+	await tx.wait()
+}
 
 export default multiSend

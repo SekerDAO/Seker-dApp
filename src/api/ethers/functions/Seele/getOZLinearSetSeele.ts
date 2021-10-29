@@ -2,24 +2,25 @@ import {JsonRpcSigner} from "@ethersproject/providers"
 import OZLinearVoting from "../../abis/OZLinearVoting.json"
 import {Contract} from "@ethersproject/contracts"
 import {buildContractCallVariable, SafeTransaction} from "../gnosisSafe/safeUtils"
-const {REACT_APP_MODULE_FACTORY_ADDRESS} = process.env
-
-const OZ_LINEAR_MASTER = "0xA1D0AAFd677676F7eDfFdc48EF21b6fE7e8e05Cf"
+const {REACT_APP_OZ_LINEAR_MASTER_ADDRESS} = process.env
 
 const getOZLinearSetSeele = async (
 	expectedSeeleAddress: string,
 	expectedStrategyAddress: string,
 	signer: JsonRpcSigner
 ): Promise<SafeTransaction> => {
-	const linearVotingMaster = new Contract(OZ_LINEAR_MASTER, OZLinearVoting.bytecode, signer)
-	const setSeeleTx = buildContractCallVariable(
+	const linearVotingMaster = new Contract(
+		REACT_APP_OZ_LINEAR_MASTER_ADDRESS!,
+		OZLinearVoting.bytecode,
+		signer
+	)
+	return buildContractCallVariable(
 		linearVotingMaster,
 		expectedStrategyAddress,
 		"setSeele",
 		[expectedSeeleAddress],
 		0
 	)
-	return setSeeleTx
 }
 
 export default getOZLinearSetSeele

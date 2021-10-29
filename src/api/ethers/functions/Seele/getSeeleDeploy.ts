@@ -35,4 +35,5 @@ const getSeeleDeploy = async (
 	)
 	return [deploySeele, expectedAddress]
 }
+
 export default getSeeleDeploy
