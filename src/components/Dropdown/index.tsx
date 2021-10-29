@@ -5,31 +5,17 @@ import "./styles.scss"
 
 const Dropdown: FunctionComponent<{
 	isOpened: boolean
-	items: {id: string | number; content: ReactElement | string}[]
-	selected?: string | number | null
-	highlightSelected?: boolean
-	triggerText: string | number
+	items: {id: string; content: ReactElement | string}[]
+	triggerText: string
 	onClose: () => void
 	onTriggerClick: () => void
 	onItemClick?: (itemId: string | number) => void
 	borders?: "all" | "none"
-	className?: string
-}> = ({
-	isOpened,
-	onClose,
-	items,
-	onTriggerClick,
-	onItemClick,
-	triggerText,
-	className,
-	borders = "all",
-	selected,
-	highlightSelected
-}) => {
+}> = ({isOpened, onClose, items, onTriggerClick, onItemClick, triggerText, borders = "all"}) => {
 	const ref = useRef<HTMLDivElement | null>(null)
 	useClickOutside(ref, onClose)
 
-	const handleItemClick = (id: string | number) => {
+	const handleItemClick = (id: string) => {
 		if (onItemClick) {
 			onItemClick(id)
 		}
@@ -50,13 +36,7 @@ const Dropdown: FunctionComponent<{
 				{isOpened && (
 					<>
 						{items.map(({id, content}) => (
-							<li
-								key={id}
-								onClick={() => handleItemClick(id)}
-								className={`dropdown__item${
-									highlightSelected && id === selected ? " dropdown__item--selected" : ""
-								}`}
-							>
+							<li key={id} onClick={() => handleItemClick(id)} className="dropdown__item">
 								{content}
 							</li>
 						))}
