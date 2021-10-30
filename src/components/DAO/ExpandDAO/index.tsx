@@ -1,8 +1,6 @@
 import {FunctionComponent, useState} from "react"
 import {ReactComponent as GnosisSafeIcon} from "../../../assets/icons/gnosis-safe.svg"
-import {ReactComponent as SeeleDefaultIcon} from "../../../assets/icons/seele-default.svg"
-import {ReactComponent as SeeleHoveredIcon} from "../../../assets/icons/seele-hovered.svg"
-import {ReactComponent as BridgeDefaultIcon} from "../../../assets/icons/bridge-small.svg"
+import DeploySeele from "./DeploySeele"
 import "./styles.scss"
 
 type ExpandDAOModules = "seele" | "bridge"
@@ -43,14 +41,20 @@ const ExpandDAO: FunctionComponent = () => {
 				<p>{selectedModuleContent.description}</p>
 			</div>
 			<div className="expand-dao__content">
-				<div className="expand-dao__modules">
-					<div className="expand-dao__modules-gnosis-safe">
-						<GnosisSafeIcon width="225px" height="225px" />
+				{!selectedModule && (
+					<div className="expand-dao__modules">
+						<div className="expand-dao__modules-gnosis-safe">
+							<GnosisSafeIcon width="225px" height="225px" />
+						</div>
+						<div className="expand-dao__modules-connectable">
+							<div
+								className="expand-dao__modules-seele"
+								onClick={() => setSelectedModule("seele")}
+							/>
+						</div>
 					</div>
-					<div className="expand-dao__modules-connectable">
-						<SeeleDefaultIcon width="200px" height="200px" />
-					</div>
-				</div>
+				)}
+				{selectedModule === "seele" && <DeploySeele />}
 			</div>
 		</section>
 	)

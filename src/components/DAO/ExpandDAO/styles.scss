@@ -24,5 +24,17 @@
       justify-content: center;
       margin-top: -60px;
     }
+
+    &-seele {
+      width: 200px;
+      height: 200px;
+      margin-right: 200px; // TODO: remove this margin once Bridge module is added
+      background-image: url("../../../assets//icons/seele-default.svg");
+
+      &:hover {
+        background-image: url("../../../assets//icons/seele-hover.svg");
+        cursor: pointer;
+      }
+    }
   }
 }
