@@ -4,7 +4,6 @@ import {ModalContext} from "../../context/ModalContext"
 import DiscordIcon from "../../icons/DiscordIcon"
 import Logo from "../../icons/Logo"
 import TwitterIcon from "../../icons/TwitterIcon"
-import CreateNFTModal from "../Modals/CreateNFTModal"
 import "./styles.scss"
 
 const Footer: FunctionComponent = () => {
@@ -30,9 +29,6 @@ const Footer: FunctionComponent = () => {
 				<div className="footer__col">
 					<h3>Resources</h3>
 					<a>Learn</a>
-					<button onClick={() => setOverlay({key: "Open Modal", component: <CreateNFTModal />})}>
-						learn
-					</button>
 					<a>FAQ</a>
 					<a>Guidelines</a>
 					<a>Report Content</a>
