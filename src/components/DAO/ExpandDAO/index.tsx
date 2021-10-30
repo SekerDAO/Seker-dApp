@@ -49,7 +49,6 @@ const ExpandDAO: FunctionComponent = () => {
 					</div>
 					<div className="expand-dao__modules-connectable">
 						<SeeleDefaultIcon width="200px" height="200px" />
-						<BridgeDefaultIcon width="200px" height="200px" />
 					</div>
 				</div>
 			</div>
