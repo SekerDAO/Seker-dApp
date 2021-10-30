@@ -22,8 +22,11 @@ import {formatDate} from "../../utlls"
 import DAOOwners from "../../components/DAO/DAOOwners"
 import Paper from "../../components/UI/Paper"
 import DashboardMenu from "../../components/UI/DashboardMenu"
+import CreateNFTForm from "../../components/CreateNFTForm"
+import useUser from "../../hooks/getters/useUser"
+import {Domain} from "../../types/user"
 
-type DAOAdminPage = "nfts" | "edit" | "createProposal" | "expand"
+type DAOAdminPage = "createNFT" | "edit" | "createProposal" | "expand"
 type DAOContentPage = "collection" | "about" | "members" | "proposals"
 
 const menuEntries = [
@@ -36,6 +39,7 @@ const menuEntries = [
 // Make sense to rebuild all this internal "page" handling to plain react-router routes
 const DAOPage: FunctionComponent = () => {
 	const {account, connected} = useContext(AuthContext)
+	const {user} = useUser(account as string)
 	const {address} = useParams<{address: string}>()
 	const {dao, loading, error, refetch} = useDAO(address)
 	const {pathname, search} = useLocation()
@@ -147,8 +151,8 @@ const DAOPage: FunctionComponent = () => {
 								items={[
 									{
 										title: "Create / Load NFTs",
-										to: `${pathname}?page=nfts`,
-										page: "nfts"
+										to: `${pathname}?page=createNFT`,
+										page: "createNFT"
 									},
 									{
 										title: "Edit DAO Profile",
@@ -179,8 +183,11 @@ const DAOPage: FunctionComponent = () => {
 									push(`${pathname}?page=${nextPage}`)
 								}}
 							/>
-							{isAdmin && page === "nfts" && (
-								<DAOCollection gnosisAddress={dao.gnosisAddress} canEdit={isAdmin} />
+							{isAdmin && page === "createNFT" && (
+								<CreateNFTForm
+									gnosisAddress={dao.gnosisAddress}
+									domains={user?.myDomains as Domain[]}
+								/>
 							)}
 							{isAdmin && page === "edit" && (
 								<EditDAO
@@ -199,7 +206,7 @@ const DAOPage: FunctionComponent = () => {
 								/>
 							)}
 							{page === "collection" && (
-								<DAOCollection gnosisAddress={dao.gnosisAddress} canEdit={false} />
+								<DAOCollection gnosisAddress={dao.gnosisAddress} canEdit={isAdmin} />
 							)}
 							{page === "about" && <AboutDAO dao={dao} />}
 							{page === "members" && <DAOOwners owners={dao.owners} />}
