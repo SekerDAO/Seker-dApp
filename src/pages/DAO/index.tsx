@@ -18,6 +18,7 @@ import {ReactComponent as TwitterIcon} from "../../assets/icons/twitter.svg"
 import {ReactComponent as TelegramIcon} from "../../assets/icons/telegram.svg"
 import {ReactComponent as DiscordIcon} from "../../assets/icons/discord.svg"
 import DashboardHeader from "../../components/UI/DashboardHeader"
+import ExpandDAO from "../../components/DAO/ExpandDAO"
 import {formatDate} from "../../utlls"
 import DAOOwners from "../../components/DAO/DAOOwners"
 import Paper from "../../components/UI/Paper"
@@ -131,16 +132,6 @@ const DAOPage: FunctionComponent = () => {
 									)}
 								</div>
 							)}
-							{/* TODO: decentralize DAO modal */}
-							{/* {dao.seeleAddress ? (
-								<p>TODO: Decentralized DAO</p>
-							) : isAdmin ? (
-								<DecentralizeDAOModal
-									afterSubmit={refetch}
-									gnosisAddress={dao.gnosisAddress}
-									gnosisVotingThreshold={dao.gnosisVotingThreshold}
-								/>
-							) : null} */}
 						</Paper>
 						{isAdmin && (
 							<DashboardMenu
@@ -198,6 +189,7 @@ const DAOPage: FunctionComponent = () => {
 									ownersCount={dao.owners.length}
 								/>
 							)}
+							{page === "expand" && isAdmin && <ExpandDAO />}
 							{page === "collection" && (
 								<DAOCollection gnosisAddress={dao.gnosisAddress} canEdit={false} />
 							)}

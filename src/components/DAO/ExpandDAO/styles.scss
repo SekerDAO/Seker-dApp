@@ -1,0 +1,28 @@
+.expand-dao {
+  &__header {
+    h2 {
+      margin-top: 45px;
+      margin-bottom: 20px;
+    }
+  }
+
+  &__content {
+    margin-top: 40px;
+  }
+
+  &__modules {
+    position: relative;
+
+    &-gnosis-safe {
+      display: flex;
+      justify-content: center;
+    }
+
+    &-connectable {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-top: -60px;
+    }
+  }
+}
