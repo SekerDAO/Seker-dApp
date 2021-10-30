@@ -1,6 +1,5 @@
 import {ChangeEvent, FunctionComponent, useContext, useEffect, useState} from "react"
 import Button from "../../Controls/Button"
-import Modal from "../Modal"
 import {AuthContext} from "../../../context/AuthContext"
 import RadioButton from "../../Controls/RadioButton"
 import Input from "../../Controls/Input"
@@ -12,6 +11,7 @@ import "./styles.scss"
 import editDAO from "../../../api/firebase/DAO/editDAO"
 import ArrayInput from "../../Controls/ArrayInput"
 import {isAddress} from "@ethersproject/address"
+import {ModalContext} from "../../../context/ModalContext"
 
 type CreateGnosisSafeStage = "chooseOption" | "create" | "import" | "success"
 
@@ -55,7 +55,7 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 			if (newGnosis) {
 				setStage("create")
 			} else {
-				console.log("TODO")
+				console.log("TODO", stage)
 			}
 		} else if (stage === "create") {
 			if (!(account && signer && votingThreshold)) return
@@ -148,32 +148,15 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 const CreateGnosisSafeModal: FunctionComponent<{
 	afterCreate: () => void
 }> = ({afterCreate}) => {
-	const [isOpened, setIsOpened] = useState(false)
+	const {setOverlay} = useContext(ModalContext)
 
 	return (
-		<>
-			<Button
-				buttonType="primary"
-				onClick={() => {
-					setIsOpened(true)
-				}}
-			>
-				Start a DAO
-			</Button>
-			<Modal
-				show={isOpened}
-				onClose={() => {
-					setIsOpened(false)
-				}}
-			>
-				<CreateGnosisSafeModalContent
-					afterCreate={() => {
-						setIsOpened(false)
-						afterCreate()
-					}}
-				/>
-			</Modal>
-		</>
+		<CreateGnosisSafeModalContent
+			afterCreate={() => {
+				setOverlay()
+				afterCreate()
+			}}
+		/>
 	)
 }
 

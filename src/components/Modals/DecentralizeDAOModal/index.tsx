@@ -1,6 +1,5 @@
 import {FunctionComponent, useState} from "react"
 import Button from "../../Controls/Button"
-import Modal from "../Modal"
 import RadioButton from "../../Controls/RadioButton"
 import CreateERC20Token from "../../DAO/CreateERC20Token"
 import DecentralizeDAO from "../../DAO/DecentralizeDAO"
@@ -128,30 +127,21 @@ const DecentralizeDAOModal: FunctionComponent<{
 	gnosisVotingThreshold: number
 	afterSubmit: () => void
 }> = ({gnosisAddress, afterSubmit, gnosisVotingThreshold}) => {
-	const [isOpened, setIsOpened] = useState(false)
-
 	return (
 		<>
-			<Button
+			{/* <Button
 				buttonType="primary"
 				onClick={() => {
 					setIsOpened(true)
 				}}
 			>
 				Decentralize DAO
-			</Button>
-			<Modal
-				show={isOpened}
-				onClose={() => {
-					setIsOpened(false)
-				}}
-			>
-				<DecentralizeDAOModalContent
-					afterSubmit={afterSubmit}
-					gnosisAddress={gnosisAddress}
-					gnosisVotingThreshold={gnosisVotingThreshold}
-				/>
-			</Modal>
+			</Button> */}
+			<DecentralizeDAOModalContent
+				afterSubmit={afterSubmit}
+				gnosisAddress={gnosisAddress}
+				gnosisVotingThreshold={gnosisVotingThreshold}
+			/>
 		</>
 	)
 }

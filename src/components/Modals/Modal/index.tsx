@@ -1,21 +1,29 @@
-import {FunctionComponent} from "react"
+import React, {FunctionComponent, useContext, useMemo} from "react"
+import {ModalContext} from "../../../context/ModalContext"
+import CloseIcon from "../../../assets/icons/toasts-close.svg"
 import "./styles.scss"
-import {ReactComponent as CloseIcon} from "../../../assets/icons/delete.svg"
 
-const Modal: FunctionComponent<{
-	show: boolean
-	onClose: () => void
-}> = ({show, onClose, children}) => {
-	if (!show) return null
+const Modal: FunctionComponent = () => {
+	const {overlay, setOverlay} = useContext(ModalContext)
+	const toRender = useMemo(() => {
+		if (overlay) {
+			const lays = Object.values(overlay)
+			return lays[0]
+		}
+
+		return null
+	}, [overlay])
+
+	if (!toRender) return null
 
 	return (
 		<>
-			<div className="modal__overlay" onClick={onClose} />
+			<div className="modal__overlay" onClick={() => setOverlay()} />
 			<div className="modal__body">
-				<div className="modal__close" onClick={onClose}>
-					<CloseIcon />
+				<div className="modal__close" onClick={() => setOverlay()}>
+					<img src={CloseIcon} alt="close" />
 				</div>
-				{children}
+				{toRender}
 			</div>
 		</>
 	)

@@ -10,6 +10,7 @@ import {Link} from "react-router-dom"
 import CreateGnosisSafeModal from "../../Modals/CreateGnosisSafeModal"
 import Button from "../../Controls/Button"
 import {ReactComponent as BookmarkIcon} from "../../../assets/icons/bookmark.svg"
+import {ModalContext} from "../../../context/ModalContext"
 
 const columns = [
 	{
@@ -32,10 +33,11 @@ const columns = [
 ] as const
 
 const ProfileDAOs: FunctionComponent = () => {
+	const {setOverlay} = useContext(ModalContext)
 	const {DAOs, loading, error, refetch} = useMyDAOs()
 	const {account} = useContext(AuthContext)
 	const handleDAODelete = (gnosisAddress: string | number) => {
-		console.log("TODO: Implement me!")
+		console.log("TODO: Implement me!", gnosisAddress)
 	}
 
 	if (error) return <ErrorPlaceholder />
@@ -44,7 +46,17 @@ const ProfileDAOs: FunctionComponent = () => {
 	return (
 		<>
 			<div className="profile__edit-buttons">
-				<CreateGnosisSafeModal afterCreate={refetch} />
+				<Button
+					buttonType="primary"
+					onClick={() => {
+						setOverlay({
+							key: "Create Gnosis Safe",
+							component: <CreateGnosisSafeModal afterCreate={refetch} />
+						})
+					}}
+				>
+					Start a DAO
+				</Button>
 			</div>
 			<div className="profile__controls">
 				<div>

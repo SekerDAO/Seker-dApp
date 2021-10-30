@@ -18,6 +18,8 @@ import {ReactComponent as InstagramIcon} from "../../assets/icons/instagram.svg"
 import DashboardHeader from "../../components/UI/DashboardHeader"
 import {isAddress} from "@ethersproject/address"
 import DashboardMenu from "../../components/UI/DashboardMenu"
+import Button from "../../components/Controls/Button"
+import {ModalContext} from "../../context/ModalContext"
 
 type ProfilePage = "nfts" | "edit" | "daos" | "profile"
 
@@ -26,6 +28,7 @@ const Profile: FunctionComponent = () => {
 	const {push, replace} = useHistory()
 	const {pathname, search} = useLocation()
 	const [galleryKey, setGalleryKey] = useState(Math.random())
+	const {setOverlay} = useContext(ModalContext)
 
 	const {userId} = useParams<{userId: string}>()
 	const {user, loading, error, refetch} = useUser(userId)
@@ -61,14 +64,25 @@ const Profile: FunctionComponent = () => {
 		<>
 			<DashboardHeader background={user.headerImage}>
 				{isOwner && page === "edit" && (
-					<UploadImageModal
-						titleText="Edit Header Image"
-						buttonName="Edit Header"
-						onUpload={handleUploadHeaderImage}
-						initialUrl={user.headerImage}
-						successToastText="Header image successfully updated!"
-						errorToastText="Failed to update header image"
-					/>
+					<Button
+						buttonType="secondary"
+						onClick={() => {
+							setOverlay({
+								key: "Upload Image",
+								component: (
+									<UploadImageModal
+										titleText="Edit Header Image"
+										onUpload={handleUploadHeaderImage}
+										initialUrl={user.headerImage}
+										successToastText="Header image successfully updated!"
+										errorToastText="Failed to update header image"
+									/>
+								)
+							})
+						}}
+					>
+						Edit Header
+					</Button>
 				)}
 			</DashboardHeader>
 			<div className="main__container">
@@ -84,14 +98,25 @@ const Profile: FunctionComponent = () => {
 						}
 					>
 						{isOwner && page === "edit" && (
-							<UploadImageModal
-								titleText="Edit Profile Image"
-								buttonName="Edit Image"
-								onUpload={handleUploadProfileImage}
-								initialUrl={user.profileImage}
-								successToastText="Image successfully updated!"
-								errorToastText="Failed to update image"
-							/>
+							<Button
+								buttonType="secondary"
+								onClick={() => {
+									setOverlay({
+										key: "Upload Image",
+										component: (
+											<UploadImageModal
+												titleText="Edit Profile Image"
+												onUpload={handleUploadProfileImage}
+												initialUrl={user.profileImage}
+												successToastText="Image successfully updated!"
+												errorToastText="Failed to update image"
+											/>
+										)
+									})
+								}}
+							>
+								Edit Image
+							</Button>
 						)}
 					</div>
 					<div className="profile__info">
@@ -158,8 +183,29 @@ const Profile: FunctionComponent = () => {
 					<div className="profile__main">
 						{page === "nfts" && isOwner && userAccount && (
 							<div className="profile__edit-buttons">
-								<CreateCustomDomainModal afterCreate={refetch} />
-								<CreateNFTModal afterCreate={updateGallery} account={userAccount} />
+								<Button
+									buttonType="primary"
+									onClick={() => {
+										setOverlay({
+											key: "Create Custom Domain",
+											component: <CreateCustomDomainModal afterCreate={refetch} />
+										})
+									}}
+								>
+									Create a Custom Domain
+								</Button>
+								<Button
+									onClick={() => {
+										setOverlay({
+											key: "Create NFT",
+											component: (
+												<CreateNFTModal afterCreate={updateGallery} account={userAccount} />
+											)
+										})
+									}}
+								>
+									Create / Load NFT
+								</Button>
 							</div>
 						)}
 						{["nfts", "profile"].includes(page) && (

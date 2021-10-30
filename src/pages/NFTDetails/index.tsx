@@ -12,6 +12,7 @@ import BidAuctionModal from "../../components/Modals/BidAuctionModal"
 import {toastError, toastSuccess} from "../../components/UI/Toast"
 import endAuction from "../../api/ethers/functions/auction/endAuction"
 import EthersContext from "../../context/EthersContext"
+import {ModalContext} from "../../context/ModalContext"
 const {REACT_APP_CHAIN_ID} = process.env
 
 const columns = [
@@ -46,6 +47,7 @@ const mockBids = [
 
 const NFTCard: FunctionComponent = () => {
 	const {id} = useParams<{id: string}>()
+	const {setOverlay} = useContext(ModalContext)
 	const {nft, auctions, loading, error} = useNFT(id)
 	const [processing, setProcessing] = useState(false)
 	const {signer} = useContext(EthersContext)
@@ -140,14 +142,25 @@ const NFTCard: FunctionComponent = () => {
 											{processing ? "Processing..." : "End Auction"}
 										</Button>
 									) : (
-										<BidAuctionModal
+										<Button
 											disabled={auction.state !== "approved" && auction.state !== "live"}
-											auctionId={auction.id}
-											minBid={auction.price}
-											auctionTokenAddress={
-												auction.tokenSymbol === "ETH" ? undefined : auction.tokenAddress
-											}
-										/>
+											onClick={() => {
+												setOverlay({
+													key: "Open Bid Auction",
+													component: (
+														<BidAuctionModal
+															auctionId={auction.id}
+															minBid={auction.price}
+															auctionTokenAddress={
+																auction.tokenSymbol === "ETH" ? undefined : auction.tokenAddress
+															}
+														/>
+													)
+												})
+											}}
+										>
+											Place Bid
+										</Button>
 									)}
 									<p>
 										<b>Auction ID:</b>

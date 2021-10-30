@@ -16,26 +16,33 @@ import DAOsPage from "./pages/DAOs"
 import Header from "./components/Header"
 import Footer from "./components/Footer"
 import ErrorPlaceholder from "./components/UI/ErrorPlaceholder"
+import {ModalContext, useModal} from "./context/ModalContext"
+import Modal from "./components/Modals/Modal"
 
 const AppWithEthers: FunctionComponent = () => {
 	const auth = useAuth()
+	const modal = useModal()
 
 	return (
 		<BrowserRouter>
 			<AuthContext.Provider value={auth}>
-				<div className="main">
-					<Header />
-					<ToastContainer />
-					<Switch>
-						<Route exact path="/" component={Homepage} />
-						<Route exact path="/learn" component={Learn} />
-						<Route exact path="/nft/:id" component={NFTDetails} />
-						<Route exact path="/profile/:userId" component={Profile} />
-						<Route exact path="/dao/:address" component={DAOPage} />
-						<Route exact path="/daos" component={DAOsPage} />
-					</Switch>
-					<Footer />
-				</div>
+				<ModalContext.Provider value={modal}>
+					<div className="main">
+						<Header />
+						<ToastContainer />
+						<Switch>
+							<Route exact path="/" component={Homepage} />
+							<Route exact path="/learn" component={Learn} />
+							<Route exact path="/nft/:id" component={NFTDetails} />
+							<Route exact path="/profile/:userId" component={Profile} />
+							<Route exact path="/dao/:address" component={DAOPage} />
+							<Route exact path="/daos" component={DAOsPage} />
+						</Switch>
+						<Footer />
+					</div>
+
+					<Modal />
+				</ModalContext.Provider>
 			</AuthContext.Provider>
 		</BrowserRouter>
 	)

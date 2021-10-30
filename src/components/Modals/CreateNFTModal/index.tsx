@@ -1,6 +1,5 @@
 import {FunctionComponent, useState, useContext} from "react"
 import Button from "../../Controls/Button"
-import Modal from "../Modal"
 import RadioButton from "../../Controls/RadioButton"
 import Select from "../../Controls/Select"
 import MediaUpload from "../../Controls/MediaUpload"
@@ -21,6 +20,7 @@ import useUser from "../../../hooks/getters/useUser"
 import {Domain} from "../../../types/user"
 import Loader from "../../UI/Loader"
 import ErrorPlaceholder from "../../UI/ErrorPlaceholder"
+
 const {REACT_APP_DOMAIN_ADDRESS} = process.env
 
 type CreateNFTModalStage =
@@ -345,38 +345,18 @@ const CreateNFTModal: FunctionComponent<{
 	afterCreate?: () => void
 	account: string
 }> = ({gnosisAddress, afterCreate, account}) => {
-	const [isOpened, setIsOpened] = useState(false)
 	const {user, loading, error} = useUser(account)
 
-	return (
-		<>
-			<Button
-				buttonType={gnosisAddress ? "primary" : "secondary"}
-				onClick={() => {
-					setIsOpened(true)
-				}}
-			>
-				{gnosisAddress ? "Enter NFT" : "Create / Load NFT"}
-			</Button>
-			<Modal
-				show={isOpened}
-				onClose={() => {
-					setIsOpened(false)
-				}}
-			>
-				{!user || loading ? (
-					<Loader />
-				) : error ? (
-					<ErrorPlaceholder />
-				) : (
-					<CreateNFTModalContent
-						gnosisAddress={gnosisAddress}
-						afterCreate={afterCreate}
-						domains={user.myDomains}
-					/>
-				)}
-			</Modal>
-		</>
+	return !user || loading ? (
+		<Loader />
+	) : error ? (
+		<ErrorPlaceholder />
+	) : (
+		<CreateNFTModalContent
+			gnosisAddress={gnosisAddress}
+			afterCreate={afterCreate}
+			domains={user.myDomains}
+		/>
 	)
 }
 
