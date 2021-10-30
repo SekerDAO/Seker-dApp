@@ -37,7 +37,7 @@ const CreateNFTModalContent: FunctionComponent<{
 }> = ({gnosisAddress, afterCreate, domains}) => {
 	const [loading, setLoading] = useState(false)
 	const [stage, setStage] = useState<CreateNFTModalStage>("chooseOption")
-	const [loadExisting, setLoadExisting] = useState(false)
+	const [loadExisting, setLoadExisting] = useState<boolean | undefined>()
 	const [customDomain, setCustomDomain] = useState(false)
 	const [customDomainAddress, setCustomDomainAddress] = useState("")
 	const [file, setFile] = useState<File | null>(null)
@@ -327,7 +327,7 @@ const CreateNFTModalContent: FunctionComponent<{
 					extraClassName={["uploadFile", "loadExisting"].includes(stage) ? "no-margin-top" : ""}
 					buttonType="primary"
 					onClick={handleSubmit}
-					disabled={submitButtonDisabled || loading}
+					disabled={typeof loadExisting === "undefined" || submitButtonDisabled || loading}
 				>
 					{stage === "uploadFile" || stage === "loadExisting"
 						? loading
