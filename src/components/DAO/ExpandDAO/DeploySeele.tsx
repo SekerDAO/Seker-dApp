@@ -8,7 +8,9 @@ import {toastWarning} from "../../UI/Toast"
 import Button from "../../Controls/Button"
 import {ReactComponent as WarningIcon} from "../../../assets/icons/warning.svg"
 
-const DeploySeele: FunctionComponent = () => {
+const DeploySeele: FunctionComponent<{onReturnToExpandDAO: () => void}> = ({
+	onReturnToExpandDAO
+}) => {
 	const [currentStep, setCurrentStep] = useState<number>(0)
 	const [votingStrategy, setVotingStrategy] = useState<SeeleVotingStrategy>()
 
@@ -24,6 +26,15 @@ const DeploySeele: FunctionComponent = () => {
 			return
 		}
 		setVotingStrategy(newVotingStrategy)
+	}
+
+	const handleConfirmDeployment = () => {
+		// TODO: Implement me!
+		setCurrentStep(2)
+	}
+
+	const handleDeploy = () => {
+		// TODO: Implement me!
 	}
 
 	const StepContentWrapper: FunctionComponent = ({children}) => (
@@ -80,7 +91,7 @@ const DeploySeele: FunctionComponent = () => {
 							onSelect={handleSelectVotingStrategy}
 						/>
 					</div>
-					<div className="deploy-seele__next-step-btn">
+					<div className="deploy-seele__next-step-button">
 						<Button buttonType="link" onClick={() => setCurrentStep(1)}>
 							Continue to Next Step
 						</Button>
@@ -90,10 +101,76 @@ const DeploySeele: FunctionComponent = () => {
 		},
 		{
 			title: "Confirm Deployment",
-			content: <Paper>Hello there</Paper>
+			content: (
+				<>
+					<p className="deploy-seele__step-description">Confirm the bundled transactions below.</p>
+					<Divider />
+					<div className="deploy-seele__warning-message-container">
+						<div>
+							<WarningIcon width="20px" height="20px" />
+						</div>
+						<p className="deploy-seele__warning-message-text">
+							{`This request will incur a gas fee. If you would like to proceed, please click "Confirm
+							and Create Proposal" below.`}
+						</p>
+					</div>
+					<Button
+						buttonType="secondary"
+						onClick={() => setCurrentStep(0)}
+						extraClassName="deploy-seele__back-button"
+					>
+						Back
+					</Button>
+					<Button
+						buttonType="primary"
+						onClick={handleConfirmDeployment}
+						extraClassName="deploy-seele__submit-button"
+					>
+						Confirm and Create Proposal
+					</Button>
+				</>
+			)
 		},
-		{title: "Pass Proposal", content: <Paper>Hello there</Paper>},
-		{title: "Finalize Deployment", content: <Paper>Hello there</Paper>}
+		{
+			title: "Pass Proposal",
+			content: (
+				<>
+					<p className="deploy-seele__step-description">
+						The Seele module and voting strateg(ies) deployment proposal is awaiting admin voting
+						threshold to be reached.
+					</p>
+					<Button
+						buttonType="primary"
+						onClick={onReturnToExpandDAO}
+						extraClassName="deploy-seele__submit-button"
+					>
+						Return to DAO Expansion Page
+					</Button>
+					<div className="deploy-seele__next-step-button">
+						<Button buttonType="link" onClick={() => setCurrentStep(3)}>
+							Continue to Next Step
+						</Button>
+					</div>
+				</>
+			)
+		},
+		{
+			title: "Finalize Deployment",
+			content: (
+				<>
+					<p className="deploy-seele__step-description">
+						Complete final deployment of the Seele module and your voting strategies.
+					</p>
+					<Button
+						buttonType="primary"
+						onClick={handleDeploy}
+						extraClassName="deploy-seele__submit-button"
+					>
+						Deploy
+					</Button>
+				</>
+			)
+		}
 	]
 
 	return (

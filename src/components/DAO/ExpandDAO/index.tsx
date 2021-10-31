@@ -34,6 +34,11 @@ const ExpandDAO: FunctionComponent = () => {
 	const [selectedModule, setSelectedModule] = useState<ExpandDAOModules>()
 	const selectedModuleContent = EXPAND_DAO_HEADER[selectedModule || "default"]
 
+	const handleReturnToExpandDao = () => {
+		// We might want to do some clean up here, but for now - it's enough to just reset the state to show initial
+		// Expand DAO page with modules selection
+		setSelectedModule(undefined)
+	}
 	return (
 		<section className="expand-dao">
 			<div className="expand-dao__header">
@@ -54,7 +59,9 @@ const ExpandDAO: FunctionComponent = () => {
 						</div>
 					</div>
 				)}
-				{selectedModule === "seele" && <DeploySeele />}
+				{selectedModule === "seele" && (
+					<DeploySeele onReturnToExpandDAO={handleReturnToExpandDao} />
+				)}
 			</div>
 		</section>
 	)

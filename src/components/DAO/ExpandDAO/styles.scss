@@ -101,9 +101,17 @@
       }
     }
 
-    &__next-step-btn {
+    &__back-button {
+      margin-right: 20px;
+    }
+
+    &__next-step-button {
       display: flex;
       justify-content: flex-end;
+    }
+
+    &__submit-button {
+      margin-top: 20px;
     }
   }
 }
