@@ -1,3 +1,5 @@
+@import "../../../assets/styles/variables.scss";
+
 .expand-dao {
   &__header {
     h2 {
@@ -35,6 +37,73 @@
         background-image: url("../../../assets//icons/seele-hover.svg");
         cursor: pointer;
       }
+    }
+  }
+
+  .deploy-seele {
+    .divider {
+      margin: 20px 0;
+    }
+
+    &__step-description {
+      color: $dark-grey50;
+    }
+
+    &__step-content {
+      padding: 40px;
+      max-width: 880px;
+      margin-top: 20px;
+    }
+
+    &__voting-strategy-row {
+      display: flex;
+
+      .voting-strategy-card {
+        border: 1px solid $dark-grey25;
+        width: 250px;
+        margin: 20px 10px;
+        display: flex;
+        flex-wrap: wrap;
+
+        &:first-of-type {
+          margin-left: 0;
+        }
+
+        h3 {
+          margin: 10px;
+        }
+
+        p {
+          margin: 10px;
+        }
+
+        .btn {
+          border-top-left-radius: 0;
+          border-top-right-radius: 0;
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-self: flex-end;
+        }
+      }
+    }
+
+    &__warning-message {
+      &-container {
+        display: flex;
+        align-items: center;
+        margin-top: 20px;
+      }
+
+      &-text {
+        color: $dark-grey;
+        margin-left: 10px;
+      }
+    }
+
+    &__next-step-btn {
+      display: flex;
+      justify-content: flex-end;
     }
   }
 }
