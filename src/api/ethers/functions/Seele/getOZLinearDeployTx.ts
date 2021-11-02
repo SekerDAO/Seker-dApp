@@ -11,7 +11,6 @@ const {REACT_APP_MODULE_FACTORY_ADDRESS, REACT_APP_OZ_LINEAR_MASTER_ADDRESS} = p
 const getOZLinearDeployTx = async (
 	safeAddress: string,
 	governanceToken: string,
-	seeleModule: string,
 	quorumThreshold: number,
 	delay: number,
 	votingPeriod: number,
@@ -20,7 +19,7 @@ const getOZLinearDeployTx = async (
 ): Promise<[SafeTransaction, string]> => {
 	const linearVotingMaster = new Contract(
 		REACT_APP_OZ_LINEAR_MASTER_ADDRESS!,
-		OZLinearVoting.bytecode,
+		OZLinearVoting.abi,
 		signer
 	)
 	const factory = new Contract(REACT_APP_MODULE_FACTORY_ADDRESS!, ModuleFactory.abi, signer)

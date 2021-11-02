@@ -5,53 +5,95 @@ import {AuthContext} from "../../../context/AuthContext"
 import EthersContext from "../../../context/EthersContext"
 import {toastError, toastSuccess} from "../../UI/Toast"
 import addSafeProposal from "../../../api/firebase/safeProposal/addSafeProposal"
-import deploySeele from "../../../api/ethers/functions/Seele/deploySeele"
 import {
 	executeRegisterSeele,
 	signRegisterSeele
 } from "../../../api/ethers/functions/Seele/registerSeele"
 import editDAO from "../../../api/firebase/DAO/editDAO"
+import getOZLinearDeployTx from "../../../api/ethers/functions/Seele/getOZLinearDeployTx"
+import getSeeleDeploy from "../../../api/ethers/functions/Seele/getSeeleDeploy"
+import getOZLinearSetSeele from "../../../api/ethers/functions/Seele/getOZLinearSetSeele"
+import getRegisterSeeleTx from "../../../api/ethers/functions/Seele/getRegisterSeeleTx"
+import {
+	buildMultiSendTx,
+	executeMultiSend,
+	signMultiSend
+} from "../../../api/ethers/functions/Seele/multiSend"
 
 const DecentralizeDAO: FunctionComponent<{
 	gnosisAddress: string
 	afterCreate: () => void
 	tokenAddress: string
-	totalSupply: number
 	gnosisVotingThreshold: number
-}> = ({gnosisAddress, afterCreate, gnosisVotingThreshold, tokenAddress, totalSupply}) => {
+}> = ({gnosisAddress, afterCreate, gnosisVotingThreshold, tokenAddress}) => {
 	const {account} = useContext(AuthContext)
 	const {signer} = useContext(EthersContext)
 	const [loading, setLoading] = useState(false)
-	const [proposalTime, setProposalTime] = useState("")
-	const [votingThreshold, setVotingThreshold] = useState("")
+	const [delay, setDelay] = useState("")
+	const [quorumThreshold, setQuorumThreshold] = useState("")
+	const [votingPeriod, setVotingPeriod] = useState("")
 
 	const handleSubmit = async () => {
 		if (
-			proposalTime &&
-			!isNaN(Number(proposalTime)) &&
-			votingThreshold &&
-			!isNaN(Number(votingThreshold)) &&
+			delay &&
+			!isNaN(Number(delay)) &&
+			quorumThreshold &&
+			!isNaN(Number(quorumThreshold)) &&
+			votingPeriod &&
+			!isNaN(Number(votingPeriod)) &&
 			signer &&
 			account
 		) {
 			setLoading(true)
 			try {
-				const seeleAddress = await deploySeele(gnosisAddress, [], signer)
-				const signature = await signRegisterSeele(gnosisAddress, seeleAddress, signer)
+				const [deployLinearTx, expectedLinearAddress] = await getOZLinearDeployTx(
+					gnosisAddress,
+					tokenAddress,
+					Number(quorumThreshold),
+					Number(delay),
+					Number(votingPeriod),
+					"DeployLinear",
+					signer
+				)
+				const [deploySeeleTx, expectedSeeleAddress] = await getSeeleDeploy(
+					gnosisAddress,
+					[expectedLinearAddress],
+					signer
+				)
+				const ozLinearSetSeeleTx = await getOZLinearSetSeele(
+					expectedSeeleAddress,
+					expectedLinearAddress,
+					signer
+				)
+				const registerSeeleTx = await getRegisterSeeleTx(
+					gnosisAddress,
+					expectedSeeleAddress,
+					signer
+				)
+				const multiTx = await buildMultiSendTx(
+					[deployLinearTx, deploySeeleTx, ozLinearSetSeeleTx, registerSeeleTx],
+					gnosisAddress,
+					signer
+				)
+				console.log("multiTx: ", multiTx)
+				const signature = await signMultiSend(multiTx, gnosisAddress, signer)
+				console.log("signature: ", signature)
 				if (gnosisVotingThreshold === 1) {
-					await executeRegisterSeele(gnosisAddress, seeleAddress, [signature], signer)
+					await executeMultiSend(multiTx, gnosisAddress, [signature], signer)
+					console.log("HURRAY")
 					await editDAO({
 						gnosisAddress,
-						seeleAddress
+						seeleAddress: expectedSeeleAddress
 					})
 				}
 				await addSafeProposal({
 					type: "decentralizeDAO",
 					gnosisAddress,
-					seeleAddress,
+					seeleAddress: expectedSeeleAddress,
 					title: "Decentralize DAO",
 					state: gnosisVotingThreshold === 1 ? "executed" : "active",
-					signatures: [signature]
+					signatures: [signature],
+					multiTx
 				})
 				afterCreate()
 				toastSuccess(
@@ -67,27 +109,35 @@ const DecentralizeDAO: FunctionComponent<{
 		}
 	}
 
-	const handleVotingThresholdChange = (e: ChangeEvent<HTMLInputElement>) => {
+	const handleQuorumThresholdChange = (e: ChangeEvent<HTMLInputElement>) => {
 		if (Number(e.target.value) < 0) {
-			setVotingThreshold("0")
+			setQuorumThreshold("0")
 		} else {
-			setVotingThreshold(e.target.value)
+			setQuorumThreshold(e.target.value)
 		}
 	}
 
-	const handleGracePeriodChange = (e: ChangeEvent<HTMLInputElement>) => {
+	const handleDelayChange = (e: ChangeEvent<HTMLInputElement>) => {
 		if (Number(e.target.value) < 0) {
-			setProposalTime("0")
+			setDelay("0")
 		} else {
-			setProposalTime(e.target.value)
+			setDelay(e.target.value)
+		}
+	}
+
+	const handleVotingPeriodChange = (e: ChangeEvent<HTMLInputElement>) => {
+		if (Number(e.target.value) < 0) {
+			setVotingPeriod("0")
+		} else {
+			setVotingPeriod(e.target.value)
 		}
 	}
 
 	const submitButtonDisabled = !(
-		proposalTime &&
-		!isNaN(Number(proposalTime)) &&
-		!isNaN(Number(votingThreshold)) &&
-		votingThreshold
+		delay &&
+		!isNaN(Number(delay)) &&
+		!isNaN(Number(quorumThreshold)) &&
+		quorumThreshold
 	)
 
 	return (
@@ -96,13 +146,21 @@ const DecentralizeDAO: FunctionComponent<{
 			<p>{`Step 2. Add general DAO parameters.`}</p>
 			<div className="decentralize-dao__row">
 				<div className="decentralize-dao__col">
-					<label className="no-margin">Proposal Time</label>
+					<label className="no-margin">Delay</label>
+				</div>
+				<div className="decentralize-dao__col">
+					<Input borders="all" value={delay} onChange={handleDelayChange} number min={1} />
+				</div>
+			</div>
+			<div className="decentralize-dao__row">
+				<div className="decentralize-dao__col">
+					<label className="no-margin">Quorum Threshold</label>
 				</div>
 				<div className="decentralize-dao__col">
 					<Input
 						borders="all"
-						value={proposalTime}
-						onChange={handleGracePeriodChange}
+						value={quorumThreshold}
+						onChange={handleQuorumThresholdChange}
 						number
 						min={1}
 					/>
@@ -110,13 +168,13 @@ const DecentralizeDAO: FunctionComponent<{
 			</div>
 			<div className="decentralize-dao__row">
 				<div className="decentralize-dao__col">
-					<label className="no-margin">Voting Threshold</label>
+					<label className="no-margin">Voting Period</label>
 				</div>
 				<div className="decentralize-dao__col">
 					<Input
 						borders="all"
-						value={votingThreshold}
-						onChange={handleVotingThresholdChange}
+						value={votingPeriod}
+						onChange={handleVotingPeriodChange}
 						number
 						min={1}
 					/>

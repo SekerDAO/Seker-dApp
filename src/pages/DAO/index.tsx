@@ -22,6 +22,7 @@ import {formatDate} from "../../utlls"
 import DAOOwners from "../../components/DAO/DAOOwners"
 import Paper from "../../components/UI/Paper"
 import DashboardMenu from "../../components/UI/DashboardMenu"
+import DecentralizeDAOPage from "../../components/Modals/DecentralizeDAOModal"
 
 type DAOAdminPage = "nfts" | "edit" | "createProposal" | "expand"
 type DAOContentPage = "collection" | "about" | "members" | "proposals"
@@ -131,16 +132,6 @@ const DAOPage: FunctionComponent = () => {
 									)}
 								</div>
 							)}
-							{/* TODO: decentralize DAO modal */}
-							{/* {dao.seeleAddress ? (
-								<p>TODO: Decentralized DAO</p>
-							) : isAdmin ? (
-								<DecentralizeDAOModal
-									afterSubmit={refetch}
-									gnosisAddress={dao.gnosisAddress}
-									gnosisVotingThreshold={dao.gnosisVotingThreshold}
-								/>
-							) : null} */}
 						</Paper>
 						{isAdmin && (
 							<DashboardMenu
@@ -160,11 +151,15 @@ const DAOPage: FunctionComponent = () => {
 										to: `${pathname}?page=createProposal`,
 										page: "createProposal"
 									},
-									{
-										title: "Expand Dao",
-										to: `${pathname}?page=expand`,
-										page: "expand"
-									}
+									...(dao.seeleAddress
+										? []
+										: [
+												{
+													title: "Expand Dao",
+													to: `${pathname}?page=expand`,
+													page: "expand"
+												}
+										  ])
 								]}
 								currentPage={page}
 							/>
@@ -180,7 +175,7 @@ const DAOPage: FunctionComponent = () => {
 								}}
 							/>
 							{isAdmin && page === "nfts" && (
-								<DAOCollection gnosisAddress={dao.gnosisAddress} canEdit={isAdmin} />
+								<DAOCollection gnosisAddress={dao.gnosisAddress} canEdit />
 							)}
 							{isAdmin && page === "edit" && (
 								<EditDAO
@@ -208,6 +203,15 @@ const DAOPage: FunctionComponent = () => {
 									gnosisVotingThreshold={dao.gnosisVotingThreshold}
 									gnosisAddress={dao.gnosisAddress}
 									isAdmin={isAdmin}
+								/>
+							)}
+							{page === "expand" && (
+								<DecentralizeDAOPage
+									gnosisAddress={dao.gnosisAddress}
+									gnosisVotingThreshold={dao.gnosisVotingThreshold}
+									afterSubmit={() => {
+										console.log("TODO?")
+									}}
 								/>
 							)}
 						</>

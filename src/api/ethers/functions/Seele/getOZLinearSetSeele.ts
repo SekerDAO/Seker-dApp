@@ -11,7 +11,7 @@ const getOZLinearSetSeele = async (
 ): Promise<SafeTransaction> => {
 	const linearVotingMaster = new Contract(
 		REACT_APP_OZ_LINEAR_MASTER_ADDRESS!,
-		OZLinearVoting.bytecode,
+		OZLinearVoting.abi,
 		signer
 	)
 	return buildContractCallVariable(
