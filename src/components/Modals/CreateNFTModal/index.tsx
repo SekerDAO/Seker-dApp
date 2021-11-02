@@ -16,6 +16,7 @@ import "./styles.scss"
 import {toastError} from "../../UI/Toast"
 import addDaoNft from "../../../api/firebase/NFT/addDaoNft"
 import transferNFT from "../../../api/ethers/functions/NFT/transferNFT"
+import {ReactComponent as WarningIcon} from "../../../assets/icons/warning.svg"
 import useUser from "../../../hooks/getters/useUser"
 import {Domain} from "../../../types/user"
 import Loader from "../../UI/Loader"
@@ -39,7 +40,7 @@ const CreateNFTModalContent: FunctionComponent<{
 	const [loading, setLoading] = useState(false)
 	const [stage, setStage] = useState<CreateNFTModalStage>("chooseOption")
 	const [loadExisting, setLoadExisting] = useState<boolean | undefined>()
-	const [customDomain, setCustomDomain] = useState(false)
+	const [customDomain, setCustomDomain] = useState<boolean | undefined>()
 	const [customDomainAddress, setCustomDomainAddress] = useState("")
 	const [file, setFile] = useState<File | null>(null)
 	const [title, setTitle] = useState("")
@@ -181,9 +182,23 @@ const CreateNFTModalContent: FunctionComponent<{
 	}
 
 	const submitButtonDisabled =
+		typeof loadExisting === "undefined" ||
 		(stage === "chooseDomain" && customDomain && !customDomainAddress) ||
 		(stage === "uploadFile" && !(file && title && numberOfEditions)) ||
 		(stage === "loadExisting" && !(existingNFTId && existingNFTId))
+
+	if (stage === "success") {
+		return (
+			<>
+				<h2>Success!</h2>
+				<p>
+					You now have the ability to view and / or delete <br />
+					your NFT on the &quot;{gnosisAddress ? "Collection" : "Create / Edit NFTs"}&quot; page
+					<br /> of your {gnosisAddress ? "DAO" : "profile"} dashboard.
+				</p>
+			</>
+		)
+	}
 
 	return (
 		<div className="create-nft">
@@ -195,7 +210,7 @@ const CreateNFTModalContent: FunctionComponent<{
 						<RadioButton
 							id="create-new-nft-radio"
 							label="Create New NFT"
-							checked={!loadExisting}
+							checked={loadExisting === false}
 							onChange={() => {
 								setLoadExisting(false)
 							}}
@@ -217,7 +232,7 @@ const CreateNFTModalContent: FunctionComponent<{
 				<>
 					<h2>Create NFT</h2>
 					<p>Step 2. Choose domain option.</p>
-					<div className="create-nft__row">
+					<div className="create-nft__row column">
 						<RadioButton
 							label="Your Custom Domain(s)"
 							id="create-nft-radio-pers-domain"
@@ -241,7 +256,7 @@ const CreateNFTModalContent: FunctionComponent<{
 						<RadioButton
 							label="Hyphal Domain"
 							id="create-nft-radio-tw-domain"
-							checked={!customDomain}
+							checked={customDomain === false}
 							onChange={() => {
 								setCustomDomain(false)
 							}}
@@ -290,6 +305,13 @@ const CreateNFTModalContent: FunctionComponent<{
 							setDescription(e.target.value)
 						}}
 					/>
+					<div className="modal-footer">
+						<p className="footer-note">
+							<WarningIcon width={30} height={30} />
+							This request will incur a gas fee. If you would like to proceed, please click
+							&ldquo;Submit&rsquo; below.
+						</p>
+					</div>
 				</>
 			)}
 			{stage === "loadExisting" && (
@@ -314,29 +336,18 @@ const CreateNFTModalContent: FunctionComponent<{
 					/>
 				</>
 			)}
-			{stage === "success" ? (
-				<>
-					<h2>Success!</h2>
-					<p>
-						You now have the ability to view and / or delete <br />
-						your NFT on the &quot;{gnosisAddress ? "Collection" : "Create / Edit NFTs"}&quot; page
-						<br /> of your {gnosisAddress ? "DAO" : "profile"} dashboard.
-					</p>
-				</>
-			) : (
-				<Button
-					extraClassName={["uploadFile", "loadExisting"].includes(stage) ? "no-margin-top" : ""}
-					buttonType="primary"
-					onClick={handleSubmit}
-					disabled={typeof loadExisting === "undefined" || submitButtonDisabled || loading}
-				>
-					{stage === "uploadFile" || stage === "loadExisting"
-						? loading
-							? "Processing..."
-							: "Submit"
-						: "Continue"}
-				</Button>
-			)}
+			<Button
+				extraClassName={["uploadFile", "loadExisting"].includes(stage) ? "no-margin-top" : ""}
+				buttonType="primary"
+				onClick={handleSubmit}
+				disabled={typeof loadExisting === "undefined" || submitButtonDisabled || loading}
+			>
+				{stage === "uploadFile" || stage === "loadExisting"
+					? loading
+						? "Processing..."
+						: "Submit"
+					: "Continue"}
+			</Button>
 		</div>
 	)
 }

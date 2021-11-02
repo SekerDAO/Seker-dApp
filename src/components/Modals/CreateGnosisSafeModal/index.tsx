@@ -10,11 +10,12 @@ import addDAO from "../../../api/firebase/DAO/addDAO"
 import PlusIcon from "../../../assets/icons/add.svg"
 import "./styles.scss"
 import editDAO from "../../../api/firebase/DAO/editDAO"
+import {ReactComponent as WarningIcon} from "../../../assets/icons/warning.svg"
 import ArrayInput from "../../Controls/ArrayInput"
 import {isAddress} from "@ethersproject/address"
 import Modal from "../Modal"
 
-type CreateGnosisSafeStage = "chooseOption" | "create" | "import" | "success" | "load-existing"
+type CreateGnosisSafeStage = "chooseOption" | "create" | "success" | "load-existing"
 
 const CreateGnosisSafeModalContent: FunctionComponent<{
 	afterCreate: () => void
@@ -181,9 +182,22 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 					/>
 				</>
 			)}
-			<Button buttonType="primary" onClick={handleSubmit} disabled={submitButtonDisabled}>
-				{processing ? "Processing..." : stage === "chooseOption" ? "Continue" : "Submit"}
-			</Button>
+			{stage === "create" ? (
+				<div className="modal-footer">
+					<p className="footer-note">
+						<WarningIcon width="40px" height="30px" />
+						This request will incur a gas fee. If you would like to proceed, please click
+						&ldquo;Submit&rsquo; below.
+					</p>
+					<Button buttonType="primary" onClick={handleSubmit} disabled={submitButtonDisabled}>
+						Submit
+					</Button>
+				</div>
+			) : (
+				<Button buttonType="primary" onClick={handleSubmit} disabled={submitButtonDisabled}>
+					{processing ? "Processing..." : stage === "chooseOption" ? "Continue" : "Submit"}
+				</Button>
+			)}
 		</div>
 	)
 }

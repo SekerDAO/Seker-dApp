@@ -10,6 +10,11 @@
     align-items: center;
     margin: 5px 0;
     flex-wrap: wrap;
+    gap: 20px;
+
+    &.column {
+      flex-direction: column;
+    }
 
     &--no-mg {
       margin: 0;
@@ -27,10 +32,6 @@
     flex: 1;
     align-items: stretch;
     flex-direction: column;
-
-    &:first-child {
-      margin-right: 20px;
-    }
   }
 
   button {
@@ -60,5 +61,22 @@
 
   .image-upload {
     margin-bottom: 20px;
+  }
+
+  .modal-footer {
+    margin-top: 15px;
+    border-top: 1px solid #CBCBCC;
+    padding: 10px 0;
+
+    & > * + * {
+      margin-top: 10px;
+    }
+
+    .footer-note {
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      gap: 5px;
+    }
   }
 }

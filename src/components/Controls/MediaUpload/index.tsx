@@ -46,6 +46,10 @@ const MediaUpload: FunctionComponent<{
 				accept={imageTypes.concat(videoTypes).join(",")}
 				onChange={handleFileUpload}
 			/>
+			<div className={`image-upload__preview${imageUrl ? "" : " image-upload__preview--empty"}`}>
+				{imageUrl ? <img src={imageUrl} /> : null}
+				{isVideo && <div className="image-upload__icon">TODO: video icon</div>}
+			</div>
 			<Button
 				buttonType="secondary"
 				onClick={() => {
@@ -54,10 +58,6 @@ const MediaUpload: FunctionComponent<{
 			>
 				<label>Upload File</label>
 			</Button>
-			<div className={`image-upload__preview${imageUrl ? "" : " image-upload__preview--empty"}`}>
-				{imageUrl ? <img src={imageUrl} /> : "Drop File Here"}
-				{isVideo && <div className="image-upload__icon">TODO: video icon</div>}
-			</div>
 		</label>
 	)
 }
