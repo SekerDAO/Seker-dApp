@@ -7,6 +7,7 @@ import createGnosisSafe from "../../../api/ethers/functions/gnosisSafe/createGno
 import EthersContext from "../../../context/EthersContext"
 import {toastError, toastSuccess} from "../../UI/Toast"
 import addDAO from "../../../api/firebase/DAO/addDAO"
+import PlusIcon from "../../../assets/icons/add.svg"
 import "./styles.scss"
 import editDAO from "../../../api/firebase/DAO/editDAO"
 import ArrayInput from "../../Controls/ArrayInput"
@@ -22,7 +23,7 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 	const {signer} = useContext(EthersContext)
 	const [processing, setProcessing] = useState(false)
 	const [stage, setStage] = useState<CreateGnosisSafeStage>("chooseOption")
-	const [newGnosis, setNewGnosis] = useState(true)
+	const [newGnosis, setNewGnosis] = useState<boolean | undefined>()
 	const [daoName, setDaoName] = useState("")
 	const [votingThreshold, setVotingThreshold] = useState("")
 	const [members, setMembers] = useState<string[]>([])
@@ -75,6 +76,7 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 	}
 
 	const submitButtonDisabled =
+		typeof newGnosis === "undefined" ||
 		processing ||
 		(stage === "create" &&
 			!(
@@ -106,7 +108,7 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 						<RadioButton
 							label="TODO: Load Existing Gnosis Safe"
 							id="create-gnosis-safe-existing"
-							checked={!newGnosis}
+							checked={newGnosis === false}
 							onChange={() => {
 								setNewGnosis(false)
 							}}
@@ -127,13 +129,20 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 						}}
 					/>
 					<label>Add Admins</label>
-					<ArrayInput
-						items={members}
-						onAdd={handleMemberAdd}
-						onRemove={handleMemberRemove}
-						placeholder="Paste address and press enter. Add more addresses if needed"
-						validator={(value: string) => (isAddress(value) ? null : "Bad address format")}
-					/>
+					<div className="create-gnosis-safe__row">
+						<div className="flexed">
+							<ArrayInput
+								items={members}
+								onAdd={handleMemberAdd}
+								onRemove={handleMemberRemove}
+								placeholder="Paste address and press enter. Add more addresses if needed"
+								validator={(value: string) => (isAddress(value) ? null : "Bad address format")}
+							/>
+						</div>
+						<Button type="button">
+							<img src={PlusIcon} alt="Add Admin" />
+						</Button>
+					</div>
 					<label htmlFor="create-gnosis-threshold">Admin Voting Threshold</label>
 					<Input borders="all" number value={votingThreshold} onChange={handleThresholdChange} />
 				</>

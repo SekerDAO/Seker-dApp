@@ -4,10 +4,13 @@ import {AuthContext} from "../../context/AuthContext"
 import Dropdown from "../Controls/Dropdown"
 import Button from "../Controls/Button"
 import Divider from "../UI/Divider"
+import {ModalContext} from "../../context/ModalContext"
+import CreateGnosisSafeModal from "../Modals/CreateGnosisSafeModal"
 
 const HeaderMenu: FunctionComponent = () => {
 	const {account, url, connected, connecting, connectWallet, disconnect} = useContext(AuthContext)
 	const [isOpened, setIsOpened] = useState(false)
+	const {setOverlay} = useContext(ModalContext)
 
 	const handleDropdownTriggerClick = () => {
 		setIsOpened(prevState => !prevState)
@@ -27,7 +30,17 @@ const HeaderMenu: FunctionComponent = () => {
 		<div className="header__main-nav">
 			<ul className="header__menu">
 				<li>
-					<Link to="/daos">DAOs</Link>
+					<Button
+						onClick={() => {
+							setOverlay({
+								key: "Create NFT",
+								component: <CreateGnosisSafeModal afterCreate={() => undefined} />
+							})
+						}}
+					>
+						DAOs
+					</Button>
+					{/* <Link to="/daos">DAOs</Link> */}
 				</li>
 				<li>
 					<Link to="/events">Events</Link>
