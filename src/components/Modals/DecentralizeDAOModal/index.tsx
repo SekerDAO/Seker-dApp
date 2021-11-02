@@ -10,9 +10,9 @@ import "./styles.scss"
 import {ERC20Token} from "../../../types/ERC20Token"
 import Input from "../../Controls/Input"
 
-type DecentralizeDAOStage = "chooseToken" | "createToken" | "enterInfo" | "success"
+type DecentralizeDAOStage = "chooseToken" | "createToken" | "enterInfo" | "pending" | "success"
 
-const DecentralizeDAOModalContent: FunctionComponent<{
+const DecentralizeDAOPage: FunctionComponent<{
 	gnosisAddress: string
 	gnosisVotingThreshold: number
 	afterSubmit: () => void
@@ -20,7 +20,6 @@ const DecentralizeDAOModalContent: FunctionComponent<{
 	const [stage, setStage] = useState<DecentralizeDAOStage>("chooseToken")
 	const [tokenSource, setTokenSource] = useState<"new" | "existing" | "import">("existing")
 	const [token, setToken] = useState("")
-	const [totalSupply, setTotalSupply] = useState("")
 	const {dao, loading, error} = useDAO(gnosisAddress)
 
 	const handleSubmit = () => {
@@ -38,7 +37,6 @@ const DecentralizeDAOModalContent: FunctionComponent<{
 
 	const handleERC20Create = (_token: ERC20Token) => {
 		setToken(_token.address)
-		setTotalSupply(String(_token.totalSupply))
 		setStage("enterInfo")
 	}
 
@@ -103,7 +101,7 @@ const DecentralizeDAOModalContent: FunctionComponent<{
 					gnosisVotingThreshold={gnosisVotingThreshold}
 					afterCreate={handleSubmit}
 					tokenAddress={token}
-					totalSupply={Number(totalSupply)}
+					totalSupply={0}
 				/>
 			)}
 			{stage === "success" && (
@@ -122,28 +120,4 @@ const DecentralizeDAOModalContent: FunctionComponent<{
 	)
 }
 
-const DecentralizeDAOModal: FunctionComponent<{
-	gnosisAddress: string
-	gnosisVotingThreshold: number
-	afterSubmit: () => void
-}> = ({gnosisAddress, afterSubmit, gnosisVotingThreshold}) => {
-	return (
-		<>
-			{/* <Button
-				buttonType="primary"
-				onClick={() => {
-					setIsOpened(true)
-				}}
-			>
-				Decentralize DAO
-			</Button> */}
-			<DecentralizeDAOModalContent
-				afterSubmit={afterSubmit}
-				gnosisAddress={gnosisAddress}
-				gnosisVotingThreshold={gnosisVotingThreshold}
-			/>
-		</>
-	)
-}
-
-export default DecentralizeDAOModal
+export default DecentralizeDAOPage

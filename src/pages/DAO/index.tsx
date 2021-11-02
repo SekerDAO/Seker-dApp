@@ -22,8 +22,6 @@ import {formatDate} from "../../utlls"
 import DAOOwners from "../../components/DAO/DAOOwners"
 import Paper from "../../components/UI/Paper"
 import DashboardMenu from "../../components/UI/DashboardMenu"
-import {ModalContext} from "../../context/ModalContext"
-import Button from "../../components/Controls/Button"
 
 type DAOAdminPage = "nfts" | "edit" | "createProposal" | "expand"
 type DAOContentPage = "collection" | "about" | "members" | "proposals"
@@ -37,7 +35,6 @@ const menuEntries = [
 
 // Make sense to rebuild all this internal "page" handling to plain react-router routes
 const DAOPage: FunctionComponent = () => {
-	const {setOverlay} = useContext(ModalContext)
 	const {account, connected} = useContext(AuthContext)
 	const {address} = useParams<{address: string}>()
 	const {dao, loading, error, refetch} = useDAO(address)
@@ -55,28 +52,17 @@ const DAOPage: FunctionComponent = () => {
 		<>
 			<DashboardHeader background={dao.headerImage}>
 				{isAdmin && page === "edit" && (
-					<Button
-						buttonType="secondary"
-						onClick={() => {
-							setOverlay({
-								key: "Upload Image",
-								component: (
-									<UploadImageModal
-										initialUrl={dao.headerImage}
-										titleText="Edit DAO Header"
-										onUpload={async file => {
-											await updateDAOImage(file, dao!.gnosisAddress, "header")
-											refetch()
-										}}
-										successToastText="DAO header successfully updated"
-										errorToastText="Failed to update DAO header"
-									/>
-								)
-							})
+					<UploadImageModal
+						initialUrl={dao.headerImage}
+						titleText="Edit DAO Header"
+						onUpload={async file => {
+							await updateDAOImage(file, dao!.gnosisAddress, "header")
+							refetch()
 						}}
-					>
-						Edit Header
-					</Button>
+						buttonName="Edit Header"
+						successToastText="DAO header successfully updated"
+						errorToastText="Failed to update DAO header"
+					/>
 				)}
 			</DashboardHeader>
 			<div className="main__container">
@@ -93,28 +79,17 @@ const DAOPage: FunctionComponent = () => {
 							}
 						>
 							{isAdmin && page === "edit" && (
-								<Button
-									buttonType="secondary"
-									onClick={() => {
-										setOverlay({
-											key: "Upload Image",
-											component: (
-												<UploadImageModal
-													initialUrl={dao.profileImage}
-													titleText="Edit DAO Image"
-													onUpload={async file => {
-														await updateDAOImage(file, dao!.gnosisAddress, "profile")
-														refetch()
-													}}
-													successToastText="DAO image successfully updated"
-													errorToastText="Failed to update DAO image"
-												/>
-											)
-										})
+								<UploadImageModal
+									initialUrl={dao.profileImage}
+									titleText="Edit DAO Image"
+									onUpload={async file => {
+										await updateDAOImage(file, dao!.gnosisAddress, "profile")
+										refetch()
 									}}
-								>
-									Edit Image
-								</Button>
+									successToastText="DAO image successfully updated"
+									errorToastText="Failed to update DAO image"
+									buttonName="Edit Image"
+								/>
 							)}
 						</div>
 						<Paper className="dao__info">

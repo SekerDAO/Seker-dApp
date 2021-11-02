@@ -12,9 +12,9 @@ import "./styles.scss"
 import editDAO from "../../../api/firebase/DAO/editDAO"
 import ArrayInput from "../../Controls/ArrayInput"
 import {isAddress} from "@ethersproject/address"
-import {ModalContext} from "../../../context/ModalContext"
+import Modal from "../Modal"
 
-type CreateGnosisSafeStage = "chooseOption" | "create" | "import" | "success"
+type CreateGnosisSafeStage = "chooseOption" | "create" | "import" | "success" | "load-existing"
 
 const CreateGnosisSafeModalContent: FunctionComponent<{
 	afterCreate: () => void
@@ -25,8 +25,11 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 	const [stage, setStage] = useState<CreateGnosisSafeStage>("chooseOption")
 	const [newGnosis, setNewGnosis] = useState<boolean | undefined>()
 	const [daoName, setDaoName] = useState("")
+	const [gnosisSafeAddress, setGnosisSafeAddress] = useState("")
+	const [created, setCreated] = useState<"create-success" | "load-success" | "error" | undefined>()
 	const [votingThreshold, setVotingThreshold] = useState("")
 	const [members, setMembers] = useState<string[]>([])
+
 	useEffect(() => {
 		if (account) {
 			setMembers([account])
@@ -56,7 +59,7 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 			if (newGnosis) {
 				setStage("create")
 			} else {
-				console.log("TODO", stage)
+				setStage("load-existing")
 			}
 		} else if (stage === "create") {
 			if (!(account && signer && votingThreshold)) return
@@ -66,12 +69,16 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 				await addDAO(gnosisAddress)
 				await editDAO({gnosisAddress, name: daoName})
 				toastSuccess("DAO successfully created!")
+				setCreated("create-success")
 				afterCreate()
 			} catch (e) {
 				console.error(e)
+				setCreated("error")
 				toastError("Failed to create DAO")
 			}
 			setProcessing(false)
+		} else if (stage === "load-existing") {
+			console.log("TODO")
 		}
 	}
 
@@ -88,6 +95,19 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 				members.length &&
 				members.reduce((acc, cur) => acc && !!cur, true)
 			))
+
+	if (created) {
+		return (
+			<div className="create-gnosis-safe">
+				<h2>{created.includes("success") ? "Success!" : "Failed!"}</h2>
+
+				<div className="create-gnosis-safe__row">
+					You can now access your DAO dashboard / information on the &ldquo;View Your DAOs &rdquo;
+					page of your profile dashboard.
+				</div>
+			</div>
+		)
+	}
 
 	return (
 		<div className="create-gnosis-safe">
@@ -147,6 +167,20 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 					<Input borders="all" number value={votingThreshold} onChange={handleThresholdChange} />
 				</>
 			)}
+			{stage === "load-existing" && (
+				<>
+					<h2>Load Existing Gnosis Safe</h2>
+					<label htmlFor="create-gnosis-name">Gnosis Safe Address</label>
+					<Input
+						id="create-gnosis-name"
+						borders="all"
+						value={gnosisSafeAddress}
+						onChange={e => {
+							setGnosisSafeAddress(e.target.value)
+						}}
+					/>
+				</>
+			)}
 			<Button buttonType="primary" onClick={handleSubmit} disabled={submitButtonDisabled}>
 				{processing ? "Processing..." : stage === "chooseOption" ? "Continue" : "Submit"}
 			</Button>
@@ -157,15 +191,32 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 const CreateGnosisSafeModal: FunctionComponent<{
 	afterCreate: () => void
 }> = ({afterCreate}) => {
-	const {setOverlay} = useContext(ModalContext)
+	const [isOpened, setIsOpened] = useState(false)
 
 	return (
-		<CreateGnosisSafeModalContent
-			afterCreate={() => {
-				setOverlay()
-				afterCreate()
-			}}
-		/>
+		<>
+			<Button
+				buttonType="primary"
+				onClick={() => {
+					setIsOpened(true)
+				}}
+			>
+				Start a DAO
+			</Button>
+			<Modal
+				show={isOpened}
+				onClose={() => {
+					setIsOpened(false)
+				}}
+			>
+				<CreateGnosisSafeModalContent
+					afterCreate={() => {
+						setIsOpened(false)
+						afterCreate()
+					}}
+				/>
+			</Modal>
+		</>
 	)
 }
 

@@ -1,4 +1,5 @@
 import {FunctionComponent, useState} from "react"
+import Modal from "../Modal"
 import Button from "../../Controls/Button"
 import "./styles.scss"
 
@@ -10,7 +11,7 @@ const ConfirmationModal: FunctionComponent<{
 	cancelText?: string
 	isOpened: boolean
 	handleClose: () => void
-}> = ({title, text, onSubmit, submitText, cancelText, handleClose}) => {
+}> = ({title, text, onSubmit, submitText, cancelText, isOpened, handleClose}) => {
 	const [processing, setProcessing] = useState(false)
 
 	const handleSubmit = async () => {
@@ -21,7 +22,7 @@ const ConfirmationModal: FunctionComponent<{
 	}
 
 	return (
-		<>
+		<Modal show={isOpened} onClose={handleClose}>
 			<h2 className="confirmation-modal__title">{title}</h2>
 			<p className="confirmation-modal__text">{text}</p>
 			<div className="confirmation-modal__buttons">
@@ -32,7 +33,7 @@ const ConfirmationModal: FunctionComponent<{
 					{processing ? "Processing..." : submitText}
 				</Button>
 			</div>
-		</>
+		</Modal>
 	)
 }
 
