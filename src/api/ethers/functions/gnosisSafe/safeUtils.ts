@@ -3,7 +3,7 @@ import {_TypedDataEncoder} from "@ethersproject/hash"
 import {BigNumber, BigNumberish} from "@ethersproject/bignumber"
 import {arrayify} from "@ethersproject/bytes"
 import {AddressZero} from "@ethersproject/constants"
-import {defaultAbiCoder} from "@ethersproject/abi"
+import {pack} from "@ethersproject/solidity"
 import {JsonRpcSigner, TransactionResponse} from "@ethersproject/providers"
 import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
 
@@ -207,7 +207,7 @@ export const executeSafeTx = async (
 
 const encodeMetaTransaction = (tx: MetaTransaction): string => {
 	const data = arrayify(tx.data)
-	const encoded = defaultAbiCoder.encode(
+	const encoded = pack(
 		["uint8", "address", "uint256", "uint256", "bytes"],
 		[tx.operation, tx.to, tx.value, data.length, data]
 	)
