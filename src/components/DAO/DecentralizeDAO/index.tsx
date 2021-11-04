@@ -5,10 +5,6 @@ import {AuthContext} from "../../../context/AuthContext"
 import EthersContext from "../../../context/EthersContext"
 import {toastError, toastSuccess} from "../../UI/Toast"
 import addSafeProposal from "../../../api/firebase/safeProposal/addSafeProposal"
-import {
-	executeRegisterSeele,
-	signRegisterSeele
-} from "../../../api/ethers/functions/Seele/registerSeele"
 import editDAO from "../../../api/firebase/DAO/editDAO"
 import getOZLinearDeployTx from "../../../api/ethers/functions/Seele/getOZLinearDeployTx"
 import getSeeleDeploy from "../../../api/ethers/functions/Seele/getSeeleDeploy"
@@ -39,6 +35,7 @@ const DecentralizeDAO: FunctionComponent<{
 			!isNaN(Number(delay)) &&
 			quorumThreshold &&
 			!isNaN(Number(quorumThreshold)) &&
+			Number(quorumThreshold) > 1 && // TODO: validation
 			votingPeriod &&
 			!isNaN(Number(votingPeriod)) &&
 			signer &&
@@ -75,12 +72,9 @@ const DecentralizeDAO: FunctionComponent<{
 					gnosisAddress,
 					signer
 				)
-				console.log("multiTx: ", multiTx)
 				const signature = await signMultiSend(multiTx, gnosisAddress, signer)
-				console.log("signature: ", signature)
 				if (gnosisVotingThreshold === 1) {
 					await executeMultiSend(multiTx, gnosisAddress, [signature], signer)
-					console.log("HURRAY")
 					await editDAO({
 						gnosisAddress,
 						seeleAddress: expectedSeeleAddress
