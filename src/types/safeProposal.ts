@@ -1,4 +1,4 @@
-import {SafeSignature} from "../api/ethers/functions/gnosisSafe/safeUtils"
+import {SafeSignature, SafeTransaction} from "../api/ethers/functions/gnosisSafe/safeUtils"
 import {Abi} from "./abi"
 
 export type SafeProposalType =
@@ -63,4 +63,5 @@ export type SafeProposal = {
 	daoVotingThreshold?: number
 	gracePeriod?: number
 	seeleAddress?: string
+	multiTx?: SafeTransaction
 }
