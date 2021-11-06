@@ -1,6 +1,6 @@
 import {FunctionComponent, useState} from "react"
 import {ReactComponent as GnosisSafeIcon} from "../../../assets/icons/gnosis-safe.svg"
-import DeploySeele from "./DeploySeele"
+import DeploySeele from "./Seele/DeploySeele"
 import "./styles.scss"
 
 type ExpandDAOModules = "seele" | "bridge"
@@ -22,6 +22,13 @@ const EXPAND_DAO_HEADER = {
         This module allows avatars to operate with trustless tokenized DeGov, similar to Compound
         or Gitcoin, with a proposal core that can register swappable voting contracts. This
         enables DAOs to choose from various on-chain voting methods that best suit their needs.
+
+		\n
+		
+		Determine which voting strateg(ies) best fit your DAO’s decision-making process, set up
+		the required parameters to each, and add the strateg(ies) to the deployment queue. You
+		can add as many as you would like. Once you have finished, proceed to the next step to
+		confirm your transactions and deploy.
         `
 	},
 	bridge: {

@@ -1,5 +1,7 @@
 export type SeeleVotingStrategy =
 	| "singleVoting"
-	| "linearVotingWithDelegation"
-	| "quadraticVoting"
-	| "convictionVoting"
+	| "singleVotingSimpleMembership"
+	| "linearVotingCompoundBravo"
+	| "linearVotingSimpleMembership"
+	| "molochLinearVoting"
+	| "quadraticVotingSimpleMembership"

@@ -207,15 +207,6 @@ const DAOPage: FunctionComponent = () => {
 									isAdmin={isAdmin}
 								/>
 							)}
-							{page === "expand" && (
-								<DecentralizeDAOPage
-									gnosisAddress={dao.gnosisAddress}
-									gnosisVotingThreshold={dao.gnosisVotingThreshold}
-									afterSubmit={() => {
-										console.log("TODO?")
-									}}
-								/>
-							)}
 						</>
 					</div>
 				</div>
