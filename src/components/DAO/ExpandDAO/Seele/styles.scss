@@ -175,5 +175,18 @@
     .btn {
       margin-top: 20px;
     }
+
+    .divider {
+      margin-top: 20px;
+    }
+
+    &__warning-message {
+      margin-top: 20px;
+      flex-wrap: nowrap;
+    }
+
+    &__warning-icon {
+      margin-right: 10px;
+    }
   }
 }

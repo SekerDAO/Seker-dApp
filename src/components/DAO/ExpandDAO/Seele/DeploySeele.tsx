@@ -26,16 +26,7 @@ const DeploySeele: FunctionComponent<{onReturnToExpandDAO: () => void}> = ({
 		votingStrategy: SeeleVotingStrategy,
 		formValues: VotingStrategyFormValues
 	) => {
-		const addedVotingStrategy = votingStrategies.find(strategy => strategy.name === votingStrategy)
-		if (addedVotingStrategy) {
-			setVotingStrategies(prevState =>
-				prevState.map(strategy =>
-					strategy.name === votingStrategy ? {name: votingStrategy, values: formValues} : strategy
-				)
-			)
-		} else {
-			setVotingStrategies(prevState => [...prevState, {name: votingStrategy, values: formValues}])
-		}
+		setVotingStrategies(prevState => [...prevState, {name: votingStrategy, values: formValues}])
 		handleModalClose()
 	}
 
@@ -90,7 +81,6 @@ const DeploySeele: FunctionComponent<{onReturnToExpandDAO: () => void}> = ({
 							<VotingStrategyCard
 								onClick={handleVotingStrategyCardClick}
 								votingStrategy="quadraticVotingSimpleMembership"
-								isActive
 							/>
 						</div>
 					</div>
@@ -120,6 +110,28 @@ const DeploySeele: FunctionComponent<{onReturnToExpandDAO: () => void}> = ({
 							onSubmit={handleSubmitVotingStrategy}
 						/>
 					)}
+				</>
+			)}
+			{currentStep === "confirm" && (
+				<>
+					<div className="deploy-seele__confirm">
+						<h2>Confirm Bundle Transactions</h2>
+						<div>
+							<p>From</p>
+							<div>0xd5b2...f777</div>
+							<p>Balance: 100 ETH</p>
+						</div>
+						<div>
+							<div>
+								<p>Send 10 ETH to</p>
+								<div>0xd5b2...f777</div>
+							</div>
+							<div>
+								<p>Data (Hex Encoded)</p>
+								<div>100 bytes</div>
+							</div>
+						</div>
+					</div>
 				</>
 			)}
 		</Paper>
