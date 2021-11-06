@@ -1,6 +1,5 @@
 import {FunctionComponent, useState} from "react"
 import Button from "../../Controls/Button"
-import Modal from "../Modal"
 import RadioButton from "../../Controls/RadioButton"
 import CreateERC20Token from "../../DAO/CreateERC20Token"
 import DecentralizeDAO from "../../DAO/DecentralizeDAO"
@@ -11,9 +10,9 @@ import "./styles.scss"
 import {ERC20Token} from "../../../types/ERC20Token"
 import Input from "../../Controls/Input"
 
-type DecentralizeDAOStage = "chooseToken" | "createToken" | "enterInfo" | "success"
+type DecentralizeDAOStage = "chooseToken" | "createToken" | "enterInfo" | "pending" | "success"
 
-const DecentralizeDAOModalContent: FunctionComponent<{
+const DecentralizeDAOPage: FunctionComponent<{
 	gnosisAddress: string
 	gnosisVotingThreshold: number
 	afterSubmit: () => void
@@ -21,7 +20,6 @@ const DecentralizeDAOModalContent: FunctionComponent<{
 	const [stage, setStage] = useState<DecentralizeDAOStage>("chooseToken")
 	const [tokenSource, setTokenSource] = useState<"new" | "existing" | "import">("existing")
 	const [token, setToken] = useState("")
-	const [totalSupply, setTotalSupply] = useState("")
 	const {dao, loading, error} = useDAO(gnosisAddress)
 
 	const handleSubmit = () => {
@@ -39,7 +37,6 @@ const DecentralizeDAOModalContent: FunctionComponent<{
 
 	const handleERC20Create = (_token: ERC20Token) => {
 		setToken(_token.address)
-		setTotalSupply(String(_token.totalSupply))
 		setStage("enterInfo")
 	}
 
@@ -104,7 +101,6 @@ const DecentralizeDAOModalContent: FunctionComponent<{
 					gnosisVotingThreshold={gnosisVotingThreshold}
 					afterCreate={handleSubmit}
 					tokenAddress={token}
-					totalSupply={Number(totalSupply)}
 				/>
 			)}
 			{stage === "success" && (
@@ -123,37 +119,4 @@ const DecentralizeDAOModalContent: FunctionComponent<{
 	)
 }
 
-const DecentralizeDAOModal: FunctionComponent<{
-	gnosisAddress: string
-	gnosisVotingThreshold: number
-	afterSubmit: () => void
-}> = ({gnosisAddress, afterSubmit, gnosisVotingThreshold}) => {
-	const [isOpened, setIsOpened] = useState(false)
-
-	return (
-		<>
-			<Button
-				buttonType="primary"
-				onClick={() => {
-					setIsOpened(true)
-				}}
-			>
-				Decentralize DAO
-			</Button>
-			<Modal
-				show={isOpened}
-				onClose={() => {
-					setIsOpened(false)
-				}}
-			>
-				<DecentralizeDAOModalContent
-					afterSubmit={afterSubmit}
-					gnosisAddress={gnosisAddress}
-					gnosisVotingThreshold={gnosisVotingThreshold}
-				/>
-			</Modal>
-		</>
-	)
-}
-
-export default DecentralizeDAOModal
+export default DecentralizeDAOPage
