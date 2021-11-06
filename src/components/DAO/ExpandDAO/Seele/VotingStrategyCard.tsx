@@ -27,7 +27,7 @@ export const VOTING_STRATEGIES_CONTENT: {
 	}
 } = {
 	singleVoting: {
-		title: "Single Voting",
+		title: "ERC-20 Single Voting",
 		description: VOTING_STRATEGY_DESCRIPTION_PLACEHOLDER,
 		cardImage: singleVotingCard
 	},
@@ -37,22 +37,22 @@ export const VOTING_STRATEGIES_CONTENT: {
 		cardImage: singleVotingSimpleMembershipCard
 	},
 	linearVotingCompoundBravo: {
-		title: "Linear Voting Compound Bravo with OZ Voting Tokens",
+		title: "ERC-20 Linear Voting Compound Bravo with OZ Voting Tokens",
 		description: VOTING_STRATEGY_DESCRIPTION_PLACEHOLDER,
 		cardImage: linearVotingCompoundBravoCard
 	},
 	linearVotingSimpleMembership: {
-		title: "Linear Voting Simple Membership",
+		title: "ERC-20 Linear Voting + Simple Membership",
 		description: VOTING_STRATEGY_DESCRIPTION_PLACEHOLDER,
 		cardImage: linearVotingSimpleMembershipCard
 	},
 	molochLinearVoting: {
-		title: "Moloch Linear Voting Simple Membership + Zodiac Exit Module",
+		title: "ERC-20 Linear Voting (Moloch) Simple Membership + Zodiac Exit Module",
 		description: VOTING_STRATEGY_DESCRIPTION_PLACEHOLDER,
 		cardImage: linearVotingMolochSimpleMembershipCard
 	},
 	quadraticVotingSimpleMembership: {
-		title: "Quadratic Voting Simple Membership",
+		title: "ERC-20 Quadratic Voting + Simple Membership",
 		description: VOTING_STRATEGY_DESCRIPTION_PLACEHOLDER,
 		cardImage: quadraticVotingSimpleMembershipCard
 	}

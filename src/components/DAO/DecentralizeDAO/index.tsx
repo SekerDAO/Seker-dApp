@@ -143,7 +143,7 @@ const DecentralizeDAO: FunctionComponent<{
 					<label className="no-margin">Delay</label>
 				</div>
 				<div className="decentralize-dao__col">
-					<Input borders="all" value={delay} onChange={handleDelayChange} number min={1} />
+					<Input value={delay} onChange={handleDelayChange} number min={1} />
 				</div>
 			</div>
 			<div className="decentralize-dao__row">
@@ -151,13 +151,7 @@ const DecentralizeDAO: FunctionComponent<{
 					<label className="no-margin">Quorum Threshold</label>
 				</div>
 				<div className="decentralize-dao__col">
-					<Input
-						borders="all"
-						value={quorumThreshold}
-						onChange={handleQuorumThresholdChange}
-						number
-						min={1}
-					/>
+					<Input value={quorumThreshold} onChange={handleQuorumThresholdChange} number min={1} />
 				</div>
 			</div>
 			<div className="decentralize-dao__row">
@@ -165,13 +159,7 @@ const DecentralizeDAO: FunctionComponent<{
 					<label className="no-margin">Voting Period</label>
 				</div>
 				<div className="decentralize-dao__col">
-					<Input
-						borders="all"
-						value={votingPeriod}
-						onChange={handleVotingPeriodChange}
-						number
-						min={1}
-					/>
+					<Input value={votingPeriod} onChange={handleVotingPeriodChange} number min={1} />
 				</div>
 			</div>
 			<Button

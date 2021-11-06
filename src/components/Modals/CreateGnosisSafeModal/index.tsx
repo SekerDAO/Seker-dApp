@@ -120,7 +120,6 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 					<label htmlFor="create-gnosis-name">DAO Name</label>
 					<Input
 						id="create-gnosis-name"
-						borders="all"
 						value={daoName}
 						onChange={e => {
 							setDaoName(e.target.value)
@@ -135,7 +134,7 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 						validator={(value: string) => (isAddress(value) ? null : "Bad address format")}
 					/>
 					<label htmlFor="create-gnosis-threshold">Admin Voting Threshold</label>
-					<Input borders="all" number value={votingThreshold} onChange={handleThresholdChange} />
+					<Input number value={votingThreshold} onChange={handleThresholdChange} />
 				</>
 			)}
 			<Button buttonType="primary" onClick={handleSubmit} disabled={submitButtonDisabled}>

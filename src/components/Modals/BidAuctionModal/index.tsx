@@ -71,13 +71,7 @@ const BidAuctionModal: FunctionComponent<{
 			>
 				<div className="create-bid">
 					<label htmlFor="create-bid-amount">Amount</label>
-					<Input
-						number
-						borders="all"
-						id="create-bid-amount"
-						value={bid}
-						onChange={handleBidChange}
-					/>
+					<Input number id="create-bid-amount" value={bid} onChange={handleBidChange} />
 					<Button onClick={handleSubmit} disabled={submitButtonDisabled || processing}>
 						{processing ? "Processing..." : "Place Bid"}
 					</Button>

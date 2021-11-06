@@ -46,7 +46,6 @@ const CreateERC20Token: FunctionComponent<{
 			<label htmlFor="create-erc20-name">Token Name</label>
 			<Input
 				id="create-erc20-name"
-				borders="all"
 				value={name}
 				onChange={e => {
 					setName(e.target.value)
@@ -55,7 +54,6 @@ const CreateERC20Token: FunctionComponent<{
 			<label htmlFor="create-erc20-symbol">Symbol</label>
 			<Input
 				id="create-erc20-symbol"
-				borders="all"
 				value={symbol}
 				onChange={e => {
 					setSymbol(e.target.value)
@@ -67,7 +65,6 @@ const CreateERC20Token: FunctionComponent<{
 				max={100}
 				number
 				id="create-erc20-ts"
-				borders="all"
 				value={totalSupply}
 				onChange={handleTotalSupplyChange}
 			/>

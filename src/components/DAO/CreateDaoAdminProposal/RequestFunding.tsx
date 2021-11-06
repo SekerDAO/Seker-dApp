@@ -64,7 +64,6 @@ const RequestFunding: FunctionComponent<{
 		<>
 			<label htmlFor="request-funding-title">Title</label>
 			<Input
-				borders="all"
 				id="request-funding-title"
 				onChange={e => {
 					setTitle(e.target.value)
@@ -73,7 +72,6 @@ const RequestFunding: FunctionComponent<{
 			/>
 			<label htmlFor="request-funding-desc">Description</label>
 			<Input
-				borders="all"
 				id="request-funding-desc"
 				onChange={e => {
 					setDescription(e.target.value)
@@ -81,16 +79,9 @@ const RequestFunding: FunctionComponent<{
 				value={description}
 			/>
 			<label htmlFor="request-funding-amount">Requested Amount</label>
-			<Input
-				borders="all"
-				id="request-funding-amount"
-				onChange={handleAmountChange}
-				value={amount}
-				number
-			/>
+			<Input id="request-funding-amount" onChange={handleAmountChange} value={amount} number />
 			<label htmlFor="request-funding-recipient">Recipient</label>
 			<Input
-				borders="all"
 				id="request-funding-recipient"
 				onChange={e => {
 					setRecipient(e.target.value)

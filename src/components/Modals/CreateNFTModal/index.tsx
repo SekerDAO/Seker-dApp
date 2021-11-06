@@ -261,7 +261,6 @@ const CreateNFTModalContent: FunctionComponent<{
 						<div className="create-nft__col">
 							<label>Title of Piece</label>
 							<Input
-								borders="all"
 								value={title}
 								onChange={e => {
 									setTitle(e.target.value)
@@ -273,7 +272,6 @@ const CreateNFTModalContent: FunctionComponent<{
 							<Input
 								number
 								max={50}
-								borders="all"
 								value={numberOfEditions}
 								onChange={e => {
 									setNumberOfEditions(e.target.value)
@@ -283,7 +281,6 @@ const CreateNFTModalContent: FunctionComponent<{
 					</div>
 					<label>Description</label>
 					<Textarea
-						borders="all"
 						value={description}
 						onChange={e => {
 							setDescription(e.target.value)
@@ -296,7 +293,6 @@ const CreateNFTModalContent: FunctionComponent<{
 					<h2>Load NFT</h2>
 					<label>NFT Address</label>
 					<Input
-						borders="all"
 						value={tokenAddress}
 						onChange={e => {
 							setTokenAddress(e.target.value)
@@ -304,7 +300,6 @@ const CreateNFTModalContent: FunctionComponent<{
 					/>
 					<label>NFT ID</label>
 					<Input
-						borders="all"
 						value={existingNFTId}
 						onChange={e => {
 							setExistingNFTId(e.target.value)

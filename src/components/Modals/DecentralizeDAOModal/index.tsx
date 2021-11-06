@@ -61,7 +61,6 @@ const DecentralizeDAOPage: FunctionComponent<{
 							}}
 						/>
 						<Input
-							borders="all"
 							onChange={e => {
 								setToken(e.target.value)
 							}}

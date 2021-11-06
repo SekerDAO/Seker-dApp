@@ -9,11 +9,7 @@ const EXPAND_DAO_HEADER = {
 	default: {
 		heading: "Expand DAO",
 		description: `
-        Modules are your way of customizing, upgrading, and expanding your DAO. Here you can
-        choose to swap voting strategies, add multiple strategies, or remove a strategy at any
-        time. You can also introduce the Zodiac modules Bridge (for a constellation of voting
-        strategies across chains), Exit (for a Moloch-style rage quit assigned to different asset
-        holders), or Photon (a way to enact governance at the speed of light — coming soon).
+        Modules are your way of customizing, upgrading, and expanding your DAO. Here you can choose to swap voting strategies, add multiple strategies, or remove a strategy at any time. You can also introduce the Zodiac modules Bridge (for a constellation of voting strategies across chains), Exit (for a Moloch-style rage quit assigned to different asset holders), or Photon (a way to enact governance at the speed of light — coming soon).
         `
 	},
 	seele: {
@@ -22,8 +18,6 @@ const EXPAND_DAO_HEADER = {
         This module allows avatars to operate with trustless tokenized DeGov, similar to Compound
         or Gitcoin, with a proposal core that can register swappable voting contracts. This
         enables DAOs to choose from various on-chain voting methods that best suit their needs.
-
-		\n
 		
 		Determine which voting strateg(ies) best fit your DAO’s decision-making process, set up
 		the required parameters to each, and add the strateg(ies) to the deployment queue. You

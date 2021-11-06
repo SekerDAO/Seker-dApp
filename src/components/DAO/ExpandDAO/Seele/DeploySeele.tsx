@@ -39,7 +39,7 @@ const DeploySeele: FunctionComponent<{onReturnToExpandDAO: () => void}> = ({
 	useClickOutside(ref, handleModalClose)
 
 	return (
-		<Paper className="deploy-seele">
+		<Paper className="deploy-seele" ref={ref}>
 			{currentStep === "selectVotingStrategies" && (
 				<>
 					<div className="deploy-seele__voting-strategies">
@@ -59,24 +59,29 @@ const DeploySeele: FunctionComponent<{onReturnToExpandDAO: () => void}> = ({
 							<VotingStrategyCard
 								onClick={handleVotingStrategyCardClick}
 								votingStrategy="singleVoting"
+								isActive
 							/>
 							<VotingStrategyCard
 								onClick={handleVotingStrategyCardClick}
 								votingStrategy="linearVotingCompoundBravo"
+								isActive
 							/>
 							<VotingStrategyCard
 								onClick={handleVotingStrategyCardClick}
 								votingStrategy="linearVotingSimpleMembership"
+								isActive
 							/>
 						</div>
 						<div className="deploy-seele__voting-strategy-row">
 							<VotingStrategyCard
 								onClick={handleVotingStrategyCardClick}
 								votingStrategy="molochLinearVoting"
+								isActive
 							/>
 							<VotingStrategyCard
 								onClick={handleVotingStrategyCardClick}
 								votingStrategy="quadraticVotingSimpleMembership"
+								isActive
 							/>
 						</div>
 					</div>
