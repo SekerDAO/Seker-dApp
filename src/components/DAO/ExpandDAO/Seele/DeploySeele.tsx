@@ -2,12 +2,14 @@ import {FunctionComponent, useState, useRef} from "react"
 import Paper from "../../../UI/Paper"
 import Divider from "../../../UI/Divider"
 import VotingStrategyCard, {VOTING_STRATEGIES_CONTENT} from "./VotingStrategyCard"
+import VotingStrategyModal from "./VotingStrategyModal"
 import {SeeleVotingStrategy} from "../../../../types/seele"
 import {toastWarning} from "../../../UI/Toast"
 import Button from "../../../Controls/Button"
 import useClickOutside from "../../../../hooks/useClickOutside"
 import {ReactComponent as WarningIcon} from "../../../../assets/icons/warning.svg"
 import {ReactComponent as StepDotDoneIcon} from "../../../../assets/icons/step-dot-done.svg"
+import "./styles.scss"
 
 const DeploySeele: FunctionComponent<{onReturnToExpandDAO: () => void}> = ({
 	onReturnToExpandDAO
@@ -87,8 +89,15 @@ const DeploySeele: FunctionComponent<{onReturnToExpandDAO: () => void}> = ({
 								<span>{VOTING_STRATEGIES_CONTENT[votingStrategy].title}</span>
 							</div>
 						))}
-						<Button>Continue</Button>
+						<Button disabled={!votingStrategies.length} onClick={() => setCurrentStep("confirm")}>
+							Continue
+						</Button>
 					</div>
+					<VotingStrategyModal
+						show={!!activeVotingStrategyModal}
+						votingStrategy={activeVotingStrategyModal}
+						onClose={handleModalClose}
+					/>
 				</>
 			)}
 		</Paper>
