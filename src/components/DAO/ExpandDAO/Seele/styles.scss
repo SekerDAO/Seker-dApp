@@ -30,6 +30,19 @@
     }
   }
 
+  &__selected-voting-strategy {
+    &-row {
+      display: flex;
+      width: 180px;
+      margin-top: 20px;
+    }
+
+    &-icon {
+      width: 20px;
+      margin-right: 10px;
+    }
+  }
+
   &__warning-message {
     margin-top: 40px;
     margin-bottom: 20px;
@@ -120,18 +133,47 @@
       }
     }
   }
-}
 
-.voting-strategy-form {
-  h2 {
-    margin-top: 50px;
-    font-size: 24px;
-  }
+  .voting-strategy-form {
+    h2 {
+      margin-top: 50px;
+      font-size: 24px;
+    }
 
-  h3 {
-    margin-top: 10px;
-    margin-bottom: 20px;
-    font-size: 20px;
-    color: $dark-grey;
+    h3 {
+      margin-top: 10px;
+      font-size: 20px;
+      color: $dark-grey;
+    }
+
+    &__row {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+
+      label {
+        margin-top: 20px;
+        margin-bottom: 10px;
+      }
+    }
+
+    &__col {
+      display: flex;
+      flex-wrap: wrap;
+      width: calc(50% - 10px);
+    }
+
+    .input {
+      width: 100%;
+
+      input {
+        width: 100%;
+      }
+    }
+
+    .btn {
+      margin-top: 20px;
+    }
   }
 }

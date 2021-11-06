@@ -2,9 +2,8 @@ import {FunctionComponent, useState, useRef} from "react"
 import Paper from "../../../UI/Paper"
 import Divider from "../../../UI/Divider"
 import VotingStrategyCard, {VOTING_STRATEGIES_CONTENT} from "./VotingStrategyCard"
-import VotingStrategyModal from "./VotingStrategyModal"
+import VotingStrategyModal, {VotingStrategyFormValues} from "./VotingStrategyModal"
 import {SeeleVotingStrategy} from "../../../../types/seele"
-import {toastWarning} from "../../../UI/Toast"
 import Button from "../../../Controls/Button"
 import useClickOutside from "../../../../hooks/useClickOutside"
 import {ReactComponent as WarningIcon} from "../../../../assets/icons/warning.svg"
@@ -19,16 +18,25 @@ const DeploySeele: FunctionComponent<{onReturnToExpandDAO: () => void}> = ({
 		"selectVotingStrategies"
 	)
 	const [activeVotingStrategyModal, setActiveVotingStrategyModal] = useState<SeeleVotingStrategy>()
-	const [votingStrategies, setVotingStrategies] = useState<SeeleVotingStrategy[]>([])
+	const [votingStrategies, setVotingStrategies] = useState<
+		{name: SeeleVotingStrategy; values: VotingStrategyFormValues}[]
+	>([])
 
-	const handleSelectVotingStrategy = (newVotingStrategy: SeeleVotingStrategy) => {
-		if (newVotingStrategy !== "singleVoting") {
-			toastWarning(
-				"This voting strategy is not implemented yet. We're actively working on bringing it to live"
+	const handleSubmitVotingStrategy = (
+		votingStrategy: SeeleVotingStrategy,
+		formValues: VotingStrategyFormValues
+	) => {
+		const addedVotingStrategy = votingStrategies.find(strategy => strategy.name === votingStrategy)
+		if (addedVotingStrategy) {
+			setVotingStrategies(prevState =>
+				prevState.map(strategy =>
+					strategy.name === votingStrategy ? {name: votingStrategy, values: formValues} : strategy
+				)
 			)
-			return
+		} else {
+			setVotingStrategies(prevState => [...prevState, {name: votingStrategy, values: formValues}])
 		}
-		setVotingStrategies(prevState => [...prevState, newVotingStrategy])
+		handleModalClose()
 	}
 
 	const handleVotingStrategyCardClick = (votingStrategy: SeeleVotingStrategy) => {
@@ -38,8 +46,9 @@ const DeploySeele: FunctionComponent<{onReturnToExpandDAO: () => void}> = ({
 
 	useClickOutside(ref, handleModalClose)
 
+	const showVotingStrategyModal = !!activeVotingStrategyModal
 	return (
-		<Paper className="deploy-seele" ref={ref}>
+		<Paper className="deploy-seele" innerRef={ref}>
 			{currentStep === "selectVotingStrategies" && (
 				<>
 					<div className="deploy-seele__voting-strategies">
@@ -88,21 +97,29 @@ const DeploySeele: FunctionComponent<{onReturnToExpandDAO: () => void}> = ({
 					<Divider type="vertical" />
 					<div className="deploy-seele__bundle-transactions">
 						<h2>Bundle Transactions</h2>
-						{votingStrategies.map(votingStrategy => (
-							<div key={votingStrategy}>
-								<StepDotDoneIcon />
-								<span>{VOTING_STRATEGIES_CONTENT[votingStrategy].title}</span>
+						{votingStrategies.map(({name}) => (
+							<div key={name} className="deploy-seele__selected-voting-strategy-row">
+								<div className="deploy-seele__selected-voting-strategy-icon">
+									<StepDotDoneIcon width="20px" height="20px" />
+								</div>
+								<span>{VOTING_STRATEGIES_CONTENT[name].title}</span>
 							</div>
 						))}
 						<Button disabled={!votingStrategies.length} onClick={() => setCurrentStep("confirm")}>
 							Continue
 						</Button>
 					</div>
-					<VotingStrategyModal
-						show={!!activeVotingStrategyModal}
-						votingStrategy={activeVotingStrategyModal}
-						onClose={handleModalClose}
-					/>
+					{showVotingStrategyModal && (
+						<VotingStrategyModal
+							show={showVotingStrategyModal}
+							votingStrategy={activeVotingStrategyModal}
+							initialState={
+								votingStrategies.find(({name}) => name === activeVotingStrategyModal)?.values
+							}
+							onClose={handleModalClose}
+							onSubmit={handleSubmitVotingStrategy}
+						/>
+					)}
 				</>
 			)}
 		</Paper>
