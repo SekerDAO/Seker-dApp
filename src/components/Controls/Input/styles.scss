@@ -3,6 +3,7 @@
 .input {
   display: flex;
   align-items: center;
+  position: relative;
 
   &__field {
     font-family: Karla, 'Open Sans', sans-serif;
@@ -30,6 +31,33 @@
     }
   }
 
+  input[type="number"] {
+    -webkit-appearance: textfield;
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+  }
+
+  &__custom-number-arrows {
+    flex-direction: column;
+    position: absolute;
+    right: 10px;
+    top: 20px;
+    display: flex;
+
+    svg {
+      cursor: pointer;
+
+      &:first-of-type {
+        margin-bottom: 7px;
+      }
+    }
+  }
+
   &__static-placeholder {
     padding: 6px;
     color: white;
@@ -52,11 +80,16 @@
 .search-input {
   position: relative;
 
+  /* stylelint-disable -- Stylelint wants this svg selector to come before custom number arrows
+  * which then conflicts with order of input and search-input
+  * the solution could be extracting those styles to separate file, but desabling seems more reasonable
+  */
   svg {
     position: absolute;
     top: 5px;
     left: 0;
   }
+  /* stylelint-enable */
 
   .input {
     &__field {

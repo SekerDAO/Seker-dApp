@@ -47,8 +47,6 @@ const CreateGnosisSafeModal: FunctionComponent<{
 	const handleThresholdChange = (e: ChangeEvent<HTMLInputElement>) => {
 		if (Number(e.target.value) > members.length) {
 			setVotingThreshold(String(members.length))
-		} else if (Number(e.target.value) < 0) {
-			setVotingThreshold("0")
 		} else {
 			setVotingThreshold(e.target.value)
 		}
@@ -167,7 +165,7 @@ const CreateGnosisSafeModal: FunctionComponent<{
 								/>
 							</div>
 							<div className="create-gnosis-safe__row">
-								<label>Add Admins</label>
+								<label>Add Admins(s)</label>
 								<ArrayInput
 									items={members}
 									onAdd={handleMemberAdd}
@@ -181,6 +179,9 @@ const CreateGnosisSafeModal: FunctionComponent<{
 								<Input
 									borders="all"
 									number
+									step={1}
+									min={1}
+									max={members.length}
 									value={votingThreshold}
 									onChange={handleThresholdChange}
 								/>
