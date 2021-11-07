@@ -15,10 +15,6 @@
       margin-top: 20px;
     }
 
-    &:last-of-type {
-      margin-bottom: 0;
-    }
-
     .input,
     .array-input {
       width: 100%;
@@ -33,5 +29,16 @@
         width: 100%;
       }
     }
+
+    .array-input {
+      &__option {
+        margin-right: 0;
+        width: 100%;
+      }
+    }
+  }
+
+  + .divider {
+    margin-top: 0;
   }
 }
