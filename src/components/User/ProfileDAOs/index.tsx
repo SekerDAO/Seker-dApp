@@ -8,8 +8,7 @@ import ErrorPlaceholder from "../../UI/ErrorPlaceholder"
 import {AuthContext} from "../../../context/AuthContext"
 import {Link} from "react-router-dom"
 import CreateGnosisSafeModal from "../../Modals/CreateGnosisSafeModal"
-import Button from "../../Controls/Button"
-import {ReactComponent as BookmarkIcon} from "../../../assets/icons/bookmark.svg"
+import BookmarkDAOModal from "../../Modals/BookmarkDAOModal"
 
 const columns = [
 	{
@@ -34,7 +33,12 @@ const columns = [
 const ProfileDAOs: FunctionComponent = () => {
 	const {DAOs, loading, error, refetch} = useMyDAOs()
 	const {account} = useContext(AuthContext)
-	const handleDAODelete = (gnosisAddress: string | number) => {
+
+	const handleDeleteDAO = (gnosisAddress: string | number) => {
+		console.log("TODO: Implement me!")
+	}
+
+	const handleBookmarkDAO = (daoAddress: string) => {
 		console.log("TODO: Implement me!")
 	}
 
@@ -51,11 +55,7 @@ const ProfileDAOs: FunctionComponent = () => {
 					<SearchInput />
 				</div>
 				<div>
-					{/* TODO: Implement Add a DAO */}
-					<Button buttonType="link" extraClassName="profile__add-dao">
-						<BookmarkIcon width="15px" height="20px" />
-						Add a DAO
-					</Button>
+					<BookmarkDAOModal onSubmit={handleBookmarkDAO} />
 				</div>
 			</div>
 			<div className="profile-daos__table">
@@ -72,7 +72,7 @@ const ProfileDAOs: FunctionComponent = () => {
 					})}
 					columns={columns}
 					idCol="gnosisAddress"
-					onItemDelete={gnosisAddress => handleDAODelete(gnosisAddress)}
+					onItemDelete={handleDeleteDAO}
 				/>
 			</div>
 		</>
