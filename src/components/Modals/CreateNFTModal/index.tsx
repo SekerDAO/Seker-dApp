@@ -294,6 +294,7 @@ const CreateNFTModalContent: FunctionComponent<{
 			{stage === "loadExisting" && (
 				<>
 					<h2>Load NFT</h2>
+					<p>Step 2. Input NFT information.</p>
 					<label>NFT Address</label>
 					<Input
 						borders="all"

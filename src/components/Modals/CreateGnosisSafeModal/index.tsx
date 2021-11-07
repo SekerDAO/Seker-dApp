@@ -6,7 +6,7 @@ import RadioButton from "../../Controls/RadioButton"
 import Input from "../../Controls/Input"
 import createGnosisSafe from "../../../api/ethers/functions/gnosisSafe/createGnosisSafe"
 import EthersContext from "../../../context/EthersContext"
-import {toastError, toastSuccess} from "../../UI/Toast"
+import {toastError, toastSuccess, toastWarning} from "../../UI/Toast"
 import addDAO from "../../../api/firebase/DAO/addDAO"
 import "./styles.scss"
 import editDAO from "../../../api/firebase/DAO/editDAO"
@@ -25,9 +25,11 @@ const CreateGnosisSafeModal: FunctionComponent<{
 	const [processing, setProcessing] = useState(false)
 	const [stage, setStage] = useState<CreateGnosisSafeStage>("chooseOption")
 	const [newGnosis, setNewGnosis] = useState(true)
+	const [gnosisSafeAddress, setGnosisSafeAddress] = useState("")
 	const [daoName, setDaoName] = useState("")
 	const [votingThreshold, setVotingThreshold] = useState("")
 	const [members, setMembers] = useState<string[]>([])
+
 	useEffect(() => {
 		if (account) {
 			setMembers([account])
@@ -57,7 +59,7 @@ const CreateGnosisSafeModal: FunctionComponent<{
 			if (newGnosis) {
 				setStage("create")
 			} else {
-				console.log("TODO")
+				setStage("import")
 			}
 		} else if (stage === "create") {
 			if (!(account && signer && votingThreshold)) return
@@ -74,6 +76,8 @@ const CreateGnosisSafeModal: FunctionComponent<{
 				toastError("Failed to create DAO")
 			}
 			setProcessing(false)
+		} else if (stage === "import") {
+			toastWarning("This feature is not yet supported. Please, try later.")
 		}
 	}
 
@@ -88,16 +92,23 @@ const CreateGnosisSafeModal: FunctionComponent<{
 				Number(votingThreshold) <= members.length &&
 				members.length &&
 				members.reduce((acc, cur) => acc && !!cur, true)
-			))
+			)) ||
+		(stage === "import" && !gnosisSafeAddress)
+
 	let title = "Start a DAO"
 	let submitButtonText = "Continue"
 	if (stage === "create") {
 		title = "Create Gnosis Safe"
-		submitButtonText = "Submit"
+	} else if (stage === "import") {
+		title = "Load Existing Gnosis Safe"
 	}
+
 	if (processing) {
 		submitButtonText = "Processing..."
+	} else if (stage === "create" || stage === "import") {
+		submitButtonText = "Submit"
 	}
+
 	return (
 		<>
 			<Button
@@ -134,7 +145,7 @@ const CreateGnosisSafeModal: FunctionComponent<{
 							</div>
 							<div className="create-gnosis-safe__row">
 								<RadioButton
-									label="TODO: Load Existing Gnosis Safe"
+									label="Load Existing Gnosis Safe"
 									id="create-gnosis-safe-existing"
 									checked={!newGnosis}
 									onChange={() => setNewGnosis(false)}
@@ -175,6 +186,19 @@ const CreateGnosisSafeModal: FunctionComponent<{
 								/>
 							</div>
 						</>
+					)}
+					{stage === "import" && (
+						<div className="create-gnosis-safe__row">
+							<label htmlFor="import-gnosis-address">Gnosis Safe Address</label>
+							<Input
+								borders="all"
+								value={gnosisSafeAddress}
+								onChange={e => setGnosisSafeAddress(e.target.value)}
+								validation={
+									gnosisSafeAddress && !isAddress(gnosisSafeAddress) ? "Bad address format" : null
+								}
+							/>
+						</div>
 					)}
 				</div>
 			</Modal>
