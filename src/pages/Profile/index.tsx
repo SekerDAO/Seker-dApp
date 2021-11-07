@@ -158,7 +158,7 @@ const Profile: FunctionComponent = () => {
 					<div className="profile__main">
 						{page === "nfts" && isOwner && userAccount && (
 							<div className="profile__edit-buttons">
-								<CreateCustomDomainModal afterCreate={refetch} />
+								<CreateCustomDomainModal afterCreate={() => refetch(false)} />
 								<CreateNFTModal afterCreate={updateGallery} account={userAccount} />
 							</div>
 						)}

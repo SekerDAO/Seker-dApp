@@ -56,22 +56,22 @@ const CreateCustomDomainModal: FunctionComponent<{
 			<Modal
 				show={isOpened}
 				onClose={handleClose}
-				title={success ? "Success" : "Create a Custom Domain"}
-				warningMessage={`This request will incur a gas fee. If you would like to proceed, please click "Submit" below.`}
+				title={success ? "Success!" : "Create a Custom Domain"}
+				warningMessage={
+					success
+						? ""
+						: `This request will incur a gas fee. If you would like to proceed, please click "Submit" below.`
+				}
 				onSubmit={handleSubmit}
 				submitButtonDisabled={!(name && symbol) || loading}
-				submitButtonText={loading ? "Processing..." : "Submit"}
+				submitButtonText={success ? undefined : loading ? "Processing..." : "Submit"}
 			>
 				<div className="create-custom-domain">
 					{success ? (
 						<p>
-							You now have an immutable, unique, and versatile
-							<br />
-							domain to host your newly created NFTs. To create your
-							<br />
-							first NFT, click on the &quot;Create / Load NFT&quot; button at the
-							<br />
-							top of your profile dashboard.
+							{`You now have an immutable, unique, and versatile domain to host your newly created
+							NFTs. To create your first NFT, click on the "Create / Load NFT" button at the top of
+							your profile dashboard.`}
 						</p>
 					) : (
 						<>

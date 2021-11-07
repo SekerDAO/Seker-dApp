@@ -33,6 +33,7 @@
     cursor: pointer;
     display: flex;
     justify-content: flex-end;
+    margin-bottom: 20px;
   }
 
   &__warning-message {
@@ -42,5 +43,11 @@
     svg {
       margin-right: 10px;
     }
+  }
+}
+
+.confirmation-modal {
+  &__text {
+    margin-top: 20px;
   }
 }

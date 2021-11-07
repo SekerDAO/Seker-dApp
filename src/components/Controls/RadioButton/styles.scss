@@ -7,8 +7,8 @@
   align-self: center;
 
   &::before {
-    width: 15px;
-    height: 15px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     top: -2px;
     left: -1px;
@@ -16,15 +16,15 @@
     background-color: white;
     content: '';
     display: inline-block;
-    border: 2px solid $dark-grey50;
+    border: 2px solid $dark-grey25;
   }
 
   &:checked::after {
-    width: 9px;
-    height: 9px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
-    top: 1px;
-    left: 2px;
+    top: 3px;
+    left: 4px;
     position: absolute;
     background-color: $dark-grey;
     content: '';
@@ -33,6 +33,6 @@
 
   &__label {
     cursor: pointer;
-    margin-left: 5px;
+    margin-left: 10px;
   }
 }
