@@ -115,6 +115,11 @@ const CreateGnosisSafeModal: FunctionComponent<{
 				submitButtonText={submitButtonText}
 				onSubmit={handleSubmit}
 				submitButtonDisabled={submitButtonDisabled}
+				warningMessage={
+					stage === "create"
+						? `This request will incur a gas fee. If you would like to proceed, please click "Submit" below.`
+						: undefined
+				}
 			>
 				<div className="create-gnosis-safe">
 					{stage === "chooseOption" && (
@@ -139,30 +144,36 @@ const CreateGnosisSafeModal: FunctionComponent<{
 					)}
 					{stage === "create" && (
 						<>
-							<label htmlFor="create-gnosis-name">DAO Name</label>
-							<Input
-								id="create-gnosis-name"
-								borders="all"
-								value={daoName}
-								onChange={e => {
-									setDaoName(e.target.value)
-								}}
-							/>
-							<label>Add Admins</label>
-							<ArrayInput
-								items={members}
-								onAdd={handleMemberAdd}
-								onRemove={handleMemberRemove}
-								placeholder="Paste address and press enter. Add more addresses if needed"
-								validator={(value: string) => (isAddress(value) ? null : "Bad address format")}
-							/>
-							<label htmlFor="create-gnosis-threshold">Admin Voting Threshold</label>
-							<Input
-								borders="all"
-								number
-								value={votingThreshold}
-								onChange={handleThresholdChange}
-							/>
+							<div className="create-gnosis-safe__row">
+								<label htmlFor="create-gnosis-name">DAO Name</label>
+								<Input
+									id="create-gnosis-name"
+									borders="all"
+									value={daoName}
+									onChange={e => {
+										setDaoName(e.target.value)
+									}}
+								/>
+							</div>
+							<div className="create-gnosis-safe__row">
+								<label>Add Admins</label>
+								<ArrayInput
+									items={members}
+									onAdd={handleMemberAdd}
+									onRemove={handleMemberRemove}
+									placeholder="Paste address and press enter or tab"
+									validator={(value: string) => (isAddress(value) ? null : "Bad address format")}
+								/>
+							</div>
+							<div className="create-gnosis-safe__row">
+								<label htmlFor="create-gnosis-threshold">Admin Voting Threshold</label>
+								<Input
+									borders="all"
+									number
+									value={votingThreshold}
+									onChange={handleThresholdChange}
+								/>
+							</div>
 						</>
 					)}
 				</div>
