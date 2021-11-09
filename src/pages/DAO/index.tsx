@@ -23,7 +23,6 @@ import {formatDate} from "../../utlls"
 import DAOOwners from "../../components/DAO/DAOOwners"
 import Paper from "../../components/UI/Paper"
 import DashboardMenu from "../../components/UI/DashboardMenu"
-import DecentralizeDAOPage from "../../components/Modals/DecentralizeDAOModal"
 
 type DAOAdminPage = "nfts" | "edit" | "createProposal" | "expand"
 type DAOContentPage = "collection" | "about" | "members" | "proposals"
@@ -194,7 +193,12 @@ const DAOPage: FunctionComponent = () => {
 									ownersCount={dao.owners.length}
 								/>
 							)}
-							{page === "expand" && isAdmin && <ExpandDAO />}
+							{page === "expand" && isAdmin && (
+								<ExpandDAO
+									gnosisAddress={dao.gnosisAddress}
+									gnosisVotingThreshold={dao.gnosisVotingThreshold}
+								/>
+							)}
 							{page === "collection" && (
 								<DAOCollection gnosisAddress={dao.gnosisAddress} canEdit={false} />
 							)}

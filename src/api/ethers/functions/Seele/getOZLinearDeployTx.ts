@@ -8,7 +8,7 @@ import {getCreate2Address} from "@ethersproject/address"
 import {buildContractCall, SafeTransaction} from "../gnosisSafe/safeUtils"
 const {REACT_APP_MODULE_FACTORY_ADDRESS, REACT_APP_OZ_LINEAR_MASTER_ADDRESS} = process.env
 
-const getOZLinearDeployTx = async (
+const getOZLinearDeployTx = (
 	safeAddress: string,
 	governanceToken: string,
 	quorumThreshold: number,
@@ -16,7 +16,7 @@ const getOZLinearDeployTx = async (
 	votingPeriod: number,
 	name: string,
 	signer: JsonRpcSigner
-): Promise<[SafeTransaction, string]> => {
+): {tx: SafeTransaction; expectedAddress: string} => {
 	const linearVotingMaster = new Contract(
 		REACT_APP_OZ_LINEAR_MASTER_ADDRESS!,
 		OZLinearVoting.abi,
@@ -47,7 +47,7 @@ const getOZLinearDeployTx = async (
 		["bytes32", "uint256"],
 		[keccak256(["bytes"], [initLinearData]), "0x01"]
 	)
-	const expectedLinearAddress = getCreate2Address(
+	const expectedAddress = getCreate2Address(
 		factory.address,
 		saltLinear,
 		keccak256(["bytes"], [byteCodeLinear])
@@ -58,7 +58,7 @@ const getOZLinearDeployTx = async (
 		[linearVotingMaster.address, initLinearData, "0x01"],
 		0
 	)
-	return [deployLinear, expectedLinearAddress]
+	return {tx: deployLinear, expectedAddress}
 }
 
 export default getOZLinearDeployTx

@@ -7,10 +7,12 @@ import EthersContext from "../../../context/EthersContext"
 import {AuthContext} from "../../../context/AuthContext"
 import {toastError} from "../../UI/Toast"
 import {ERC20Token} from "../../../types/ERC20Token"
+import Modal from "../Modal"
 
-const CreateERC20Token: FunctionComponent<{
-	afterCreate: (token: ERC20Token) => void
-}> = ({afterCreate}) => {
+const CreateERC20TokenModal: FunctionComponent<{
+	onSubmit: (token: ERC20Token) => void
+	onClose: () => void
+}> = ({onSubmit, onClose}) => {
 	const [name, setName] = useState("")
 	const [symbol, setSymbol] = useState("")
 	const [totalSupply, setTotalSupply] = useState("")
@@ -31,7 +33,7 @@ const CreateERC20Token: FunctionComponent<{
 		setLoading(true)
 		try {
 			const address = await deployERC20Token(name, symbol, Number(totalSupply), signer)
-			afterCreate({name, symbol, address, totalSupply: Number(totalSupply)})
+			onSubmit({name, symbol, address, totalSupply: Number(totalSupply)})
 			setLoading(false)
 		} catch (e) {
 			console.error(e)
@@ -41,38 +43,40 @@ const CreateERC20Token: FunctionComponent<{
 	}
 
 	return (
-		<div className="create-erc20-token">
-			<h2>Create ERC-20 Token</h2>
-			<label htmlFor="create-erc20-name">Token Name</label>
-			<Input
-				id="create-erc20-name"
-				value={name}
-				onChange={e => {
-					setName(e.target.value)
-				}}
-			/>
-			<label htmlFor="create-erc20-symbol">Symbol</label>
-			<Input
-				id="create-erc20-symbol"
-				value={symbol}
-				onChange={e => {
-					setSymbol(e.target.value)
-				}}
-			/>
-			<label htmlFor="create-erc20-ts">Total Supply</label>
-			<Input
-				min={0}
-				max={100}
-				number
-				id="create-erc20-ts"
-				value={totalSupply}
-				onChange={handleTotalSupplyChange}
-			/>
-			<Button disabled={!(name && symbol && totalSupply) || loading} onClick={handleSubmit}>
-				{loading ? "Processing..." : "Submit"}
-			</Button>
-		</div>
+		<Modal show onClose={onClose} zIndex={6}>
+			<div className="create-erc20-token">
+				<h2>Create ERC-20 Token</h2>
+				<label htmlFor="create-erc20-name">Token Name</label>
+				<Input
+					id="create-erc20-name"
+					value={name}
+					onChange={e => {
+						setName(e.target.value)
+					}}
+				/>
+				<label htmlFor="create-erc20-symbol">Symbol</label>
+				<Input
+					id="create-erc20-symbol"
+					value={symbol}
+					onChange={e => {
+						setSymbol(e.target.value)
+					}}
+				/>
+				<label htmlFor="create-erc20-ts">Total Supply</label>
+				<Input
+					min={0}
+					max={100}
+					number
+					id="create-erc20-ts"
+					value={totalSupply}
+					onChange={handleTotalSupplyChange}
+				/>
+				<Button disabled={!(name && symbol && totalSupply) || loading} onClick={handleSubmit}>
+					{loading ? "Processing..." : "Submit"}
+				</Button>
+			</div>
+		</Modal>
 	)
 }
 
-export default CreateERC20Token
+export default CreateERC20TokenModal
