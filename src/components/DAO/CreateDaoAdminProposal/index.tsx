@@ -61,7 +61,6 @@ const CreateDaoAdminProposal: FunctionComponent<{
 			/>
 			<label htmlFor="change-role-title">Title</label>
 			<Input
-				borders="all"
 				id="change-role-title"
 				onChange={e => {
 					setTitle(e.target.value)
@@ -70,7 +69,6 @@ const CreateDaoAdminProposal: FunctionComponent<{
 			/>
 			<label htmlFor="change-role-desc">Description</label>
 			<Input
-				borders="all"
 				id="change-role-desc"
 				onChange={e => {
 					setDescription(e.target.value)

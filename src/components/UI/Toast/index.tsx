@@ -7,28 +7,28 @@ import {ReactComponent as ToastSuccessIcon} from "../../../assets/icons/toasts-s
 
 const ErrorToast: FunctionComponent<{message: string}> = ({message}) => (
 	<div className="toast">
-		<ToastErrorIcon />
+		<ToastErrorIcon width="40px" height="40px" />
 		{message}
 	</div>
 )
 
 const WarningToast: FunctionComponent<{message: string}> = ({message}) => (
 	<div className="toast">
-		<ToastWarningIcon />
+		<ToastWarningIcon width="40px" height="40px" />
 		{message}
 	</div>
 )
 
 const InfoToast: FunctionComponent<{message: string}> = ({message}) => (
 	<div className="toast">
-		<ToastInfoIcon />
+		<ToastInfoIcon width="40px" height="40px" />
 		{message}
 	</div>
 )
 
 const SuccessToast: FunctionComponent<{message: string}> = ({message}) => (
 	<div className="toast">
-		<ToastSuccessIcon />
+		<ToastSuccessIcon width="40px" height="40px" />
 		{message}
 	</div>
 )

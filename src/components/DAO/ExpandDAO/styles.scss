@@ -1,0 +1,44 @@
+.expand-dao {
+  &__header {
+    h2 {
+      margin-top: 45px;
+      margin-bottom: 20px;
+    }
+
+    p {
+      white-space: pre-line;
+    }
+  }
+
+  &__content {
+    margin-top: 40px;
+  }
+
+  &__modules {
+    position: relative;
+
+    &-gnosis-safe {
+      display: flex;
+      justify-content: center;
+    }
+
+    &-connectable {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-top: -60px;
+    }
+
+    &-seele {
+      width: 200px;
+      height: 200px;
+      margin-right: 200px; // TODO: remove this margin once Bridge module is added
+      background-image: url("../../../assets/icons/seele-default.svg");
+
+      &:hover {
+        background-image: url("../../../assets/icons/seele-hover.svg");
+        cursor: pointer;
+      }
+    }
+  }
+}

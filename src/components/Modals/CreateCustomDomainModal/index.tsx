@@ -76,7 +76,6 @@ const CreateCustomDomainModal: FunctionComponent<{
 							<label htmlFor="create-custom-domain-name">Domain Name</label>
 							<Input
 								id="create-custom-domain-name"
-								borders="all"
 								value={name}
 								onChange={e => {
 									setName(e.target.value)
@@ -85,7 +84,6 @@ const CreateCustomDomainModal: FunctionComponent<{
 							<label htmlFor="create-custom-domain-symbol">Symbol</label>
 							<Input
 								id="create-custom-domain-symbol"
-								borders="all"
 								value={symbol}
 								onChange={e => {
 									setSymbol(e.target.value)

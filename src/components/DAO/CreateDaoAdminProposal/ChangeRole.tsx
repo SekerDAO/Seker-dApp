@@ -129,7 +129,6 @@ const ChangeRole: FunctionComponent<{
 				/>
 			) : (
 				<Input
-					borders="all"
 					id="change-role-address"
 					value={address}
 					onChange={e => {
@@ -150,7 +149,6 @@ const ChangeRole: FunctionComponent<{
 			<label htmlFor="change-role-threshold">New Threshold</label>
 			<Input
 				id="change-role-threshold"
-				borders="all"
 				number
 				value={newThreshold}
 				onChange={handleThresholdChange}

@@ -151,7 +151,6 @@ const CreateAuction: FunctionComponent<{
 			<Input
 				number
 				min={0}
-				borders="all"
 				value={reservePrice}
 				id="create-auction-price"
 				onChange={handlePriceChange}
@@ -172,7 +171,6 @@ const CreateAuction: FunctionComponent<{
 				<>
 					<label htmlFor="create-auction-currency-id">Custom Currency Token Address</label>
 					<Input
-						borders="all"
 						value={currencyAddress}
 						id="create-auction-currency-id"
 						onChange={e => {
@@ -186,7 +184,6 @@ const CreateAuction: FunctionComponent<{
 					<label htmlFor="create-auction-curator-address">Curator&apos;s Address</label>
 					<Input
 						id="create-auction-curator-address"
-						borders="all"
 						value={curatorAddress}
 						onChange={e => {
 							setCuratorAddress(e.target.value)
@@ -199,7 +196,6 @@ const CreateAuction: FunctionComponent<{
 						number
 						min={0}
 						id="create-auction-curator-fee"
-						borders="all"
 						value={curatorFeePercentage}
 						onChange={handleFeeChange}
 					/>
@@ -210,7 +206,6 @@ const CreateAuction: FunctionComponent<{
 				number
 				min={0}
 				id="create-auction-curator-duration"
-				borders="all"
 				value={duration}
 				onChange={handleDurationChange}
 			/>
