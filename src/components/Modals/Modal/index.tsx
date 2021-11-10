@@ -8,12 +8,16 @@ import {ReactComponent as WarningIcon} from "../../../assets/icons/warning.svg"
 const Modal: FunctionComponent<{
 	show: boolean
 	onClose: () => void
+	zIndex?: number
+	width?: number
 	title?: string
 	submitButtonText?: string
 	submitButtonDisabled?: boolean
 	onSubmit?: () => void
 	warningMessage?: string
 }> = ({
+	zIndex,
+	width,
 	show,
 	onClose,
 	submitButtonText,
@@ -27,8 +31,18 @@ const Modal: FunctionComponent<{
 
 	return (
 		<>
-			<div className="modal__overlay" onClick={onClose} />
-			<div className="modal__body">
+			<div
+				className="modal__overlay"
+				onClick={onClose}
+				style={zIndex ? {zIndex: zIndex - 1} : undefined}
+			/>
+			<div
+				className="modal__body"
+				style={{
+					...(zIndex ? {zIndex} : {}),
+					...(width ? {width: `${width}px`} : {})
+				}}
+			>
 				<div className="modal__close" onClick={onClose}>
 					<CloseIcon width="30px" height="30px" />
 				</div>

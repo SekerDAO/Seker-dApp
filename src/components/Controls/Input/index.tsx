@@ -5,12 +5,12 @@ import "./styles.scss"
 
 const Input: FunctionComponent<
 	{
-		borders: "bottom" | "all"
+		borders?: "bottom" | "all"
 		number?: boolean
 		validation?: string | null
 		staticPlaceholder?: string
 	} & Omit<InputHTMLAttributes<HTMLInputElement>, "type">
-> = ({borders, number = false, validation, staticPlaceholder, ...inputProps}) => {
+> = ({borders = "all", number = false, validation, staticPlaceholder, ...inputProps}) => {
 	const ref = useRef<HTMLInputElement>(null)
 	return (
 		<div className="input">

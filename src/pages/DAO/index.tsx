@@ -18,11 +18,11 @@ import {ReactComponent as TwitterIcon} from "../../assets/icons/twitter.svg"
 import {ReactComponent as TelegramIcon} from "../../assets/icons/telegram.svg"
 import {ReactComponent as DiscordIcon} from "../../assets/icons/discord.svg"
 import DashboardHeader from "../../components/UI/DashboardHeader"
+import ExpandDAO from "../../components/DAO/ExpandDAO"
 import {formatDate} from "../../utlls"
 import DAOOwners from "../../components/DAO/DAOOwners"
 import Paper from "../../components/UI/Paper"
 import DashboardMenu from "../../components/UI/DashboardMenu"
-import DecentralizeDAOPage from "../../components/Modals/DecentralizeDAOModal"
 
 type DAOAdminPage = "nfts" | "edit" | "createProposal" | "expand"
 type DAOContentPage = "collection" | "about" | "members" | "proposals"
@@ -193,6 +193,12 @@ const DAOPage: FunctionComponent = () => {
 									ownersCount={dao.owners.length}
 								/>
 							)}
+							{page === "expand" && isAdmin && (
+								<ExpandDAO
+									gnosisAddress={dao.gnosisAddress}
+									gnosisVotingThreshold={dao.gnosisVotingThreshold}
+								/>
+							)}
 							{page === "collection" && (
 								<DAOCollection gnosisAddress={dao.gnosisAddress} canEdit={false} />
 							)}
@@ -203,15 +209,6 @@ const DAOPage: FunctionComponent = () => {
 									gnosisVotingThreshold={dao.gnosisVotingThreshold}
 									gnosisAddress={dao.gnosisAddress}
 									isAdmin={isAdmin}
-								/>
-							)}
-							{page === "expand" && (
-								<DecentralizeDAOPage
-									gnosisAddress={dao.gnosisAddress}
-									gnosisVotingThreshold={dao.gnosisVotingThreshold}
-									afterSubmit={() => {
-										console.log("TODO?")
-									}}
 								/>
 							)}
 						</>

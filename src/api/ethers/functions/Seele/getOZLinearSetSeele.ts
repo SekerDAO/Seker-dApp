@@ -4,11 +4,11 @@ import {Contract} from "@ethersproject/contracts"
 import {buildContractCallVariable, SafeTransaction} from "../gnosisSafe/safeUtils"
 const {REACT_APP_OZ_LINEAR_MASTER_ADDRESS} = process.env
 
-const getOZLinearSetSeele = async (
+const getOZLinearSetSeele = (
 	expectedSeeleAddress: string,
 	expectedStrategyAddress: string,
 	signer: JsonRpcSigner
-): Promise<SafeTransaction> => {
+): SafeTransaction => {
 	const linearVotingMaster = new Contract(
 		REACT_APP_OZ_LINEAR_MASTER_ADDRESS!,
 		OZLinearVoting.abi,

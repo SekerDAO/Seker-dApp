@@ -1,4 +1,5 @@
 import firebase from "firebase"
+import {SafeTransaction} from "../api/ethers/functions/gnosisSafe/safeUtils"
 
 export type DAOFirebaseData = {
 	// Main properties, required at the moment of gnosis-safe deployment
@@ -40,3 +41,17 @@ export type DAOListItemProps = Pick<
 	DAO,
 	"gnosisAddress" | "name" | "description" | "profileImage" | "owners"
 >
+
+export type VotingStrategy =
+	| "singleVoting"
+	| "singleVotingSimpleMembership"
+	| "linearVotingCompoundBravo"
+	| "linearVotingSimpleMembership"
+	| "molochLinearVoting"
+	| "quadraticVotingSimpleMembership"
+
+export type BuiltVotingStrategy = {
+	tx: SafeTransaction
+	strategy: VotingStrategy
+	expectedAddress: string
+}

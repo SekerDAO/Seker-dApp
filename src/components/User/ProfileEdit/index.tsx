@@ -62,7 +62,6 @@ const ProfileEdit: FunctionComponent<{
 			<label htmlFor="profile-edit-name">Display Name</label>
 			<Input
 				id="profile-edit-name"
-				borders="all"
 				value={name}
 				onChange={e => {
 					setName(e.target.value)
@@ -73,7 +72,6 @@ const ProfileEdit: FunctionComponent<{
 				validation={urlValidation}
 				staticPlaceholder="hyphal.hyz/"
 				id="profile-edit-url"
-				borders="all"
 				value={url}
 				onChange={e => {
 					setUrl(e.target.value)
@@ -82,7 +80,6 @@ const ProfileEdit: FunctionComponent<{
 			<label htmlFor="profile-edit-bio">Biography</label>
 			<Input
 				id="profile-edit-bio"
-				borders="all"
 				maxLength={280}
 				value={bio}
 				onChange={e => {
@@ -92,7 +89,6 @@ const ProfileEdit: FunctionComponent<{
 			<label htmlFor="profile-edit-loc">Location</label>
 			<Input
 				id="profile-edit-loc"
-				borders="all"
 				value={location}
 				onChange={e => {
 					setLocation(e.target.value)
@@ -101,7 +97,6 @@ const ProfileEdit: FunctionComponent<{
 			<label htmlFor="profile-edit-email">Email</label>
 			<Input
 				id="profile-edit-email"
-				borders="all"
 				value={email}
 				onChange={e => {
 					setEmail(e.target.value)
@@ -111,7 +106,6 @@ const ProfileEdit: FunctionComponent<{
 			<Input
 				staticPlaceholder="https://"
 				id="profile-edit-site"
-				borders="all"
 				value={website}
 				onChange={e => {
 					setWebsite(e.target.value)
@@ -123,7 +117,6 @@ const ProfileEdit: FunctionComponent<{
 					<Input
 						staticPlaceholder="twitter.com/"
 						id="profile-edit-tw"
-						borders="all"
 						value={twitter}
 						onChange={e => {
 							setTwitter(e.target.value)
@@ -135,7 +128,6 @@ const ProfileEdit: FunctionComponent<{
 					<Input
 						staticPlaceholder="instagram.com/"
 						id="profile-edit-inst"
-						borders="all"
 						value={instagram}
 						onChange={e => {
 							setInstagram(e.target.value)

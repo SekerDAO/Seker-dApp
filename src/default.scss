@@ -1,10 +1,10 @@
-@import "src/assets/styles/variables";
+@import "variables";
 
 @font-face {
   font-family: 'Karla';
   font-style: normal;
   font-weight: normal;
-  src: url("../fonts/Karla-Regular.ttf");
+  src: url("assets/fonts/Karla-Regular.ttf");
   font-display: swap;
 }
 
@@ -12,7 +12,7 @@
   font-family: 'SairaSemiCondensed';
   font-style: normal;
   font-weight: 600;
-  src: url("../fonts/SairaSemiCondensed-SemiBold.ttf");
+  src: url("assets/fonts/SairaSemiCondensed-SemiBold.ttf");
   font-display: swap;
 }
 

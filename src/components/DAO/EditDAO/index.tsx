@@ -47,7 +47,6 @@ const EditDAO: FunctionComponent<{
 			<div className="edit-dao__row">
 				<label htmlFor="edit-dao-name">Display Name</label>
 				<Input
-					borders="all"
 					value={name}
 					onChange={e => {
 						setName(e.target.value)
@@ -58,7 +57,6 @@ const EditDAO: FunctionComponent<{
 			<div className="edit-dao__row">
 				<label htmlFor="edit-dao-desc">About</label>
 				<Input
-					borders="all"
 					value={description}
 					onChange={e => {
 						setDescription(e.target.value)
@@ -71,7 +69,6 @@ const EditDAO: FunctionComponent<{
 					<label htmlFor="edit-dao-website">Website</label>
 					<Input
 						staticPlaceholder="https://"
-						borders="all"
 						value={website}
 						onChange={e => {
 							setWebsite(e.target.value)
@@ -83,7 +80,6 @@ const EditDAO: FunctionComponent<{
 					<label htmlFor="edit-dao-tw">Twitter URL</label>
 					<Input
 						staticPlaceholder="twitter.com/"
-						borders="all"
 						value={twitter}
 						onChange={e => {
 							setTwitter(e.target.value)
@@ -97,7 +93,6 @@ const EditDAO: FunctionComponent<{
 					<label htmlFor="edit-dao-tg">Telegram URL</label>
 					<Input
 						staticPlaceholder="t.me/"
-						borders="all"
 						value={telegram}
 						onChange={e => {
 							setTelegram(e.target.value)
@@ -109,7 +104,6 @@ const EditDAO: FunctionComponent<{
 					<label htmlFor="edit-dao-discord">Discord URL</label>
 					<Input
 						staticPlaceholder="discord.gg/"
-						borders="all"
 						value={discord}
 						onChange={e => {
 							setDiscord(e.target.value)

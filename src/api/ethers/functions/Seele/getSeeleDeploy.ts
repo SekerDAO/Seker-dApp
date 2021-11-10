@@ -8,11 +8,11 @@ import {getCreate2Address} from "@ethersproject/address"
 import {buildContractCall, SafeTransaction} from "../gnosisSafe/safeUtils"
 const {REACT_APP_SEELE_MASTERCOPY_ADDRESS, REACT_APP_MODULE_FACTORY_ADDRESS} = process.env
 
-const getSeeleDeploy = async (
+const getSeeleDeploy = (
 	safeAddress: string,
 	strategyAddresses: string[],
 	signer: JsonRpcSigner
-): Promise<[SafeTransaction, string]> => {
+): {tx: SafeTransaction; expectedAddress: string} => {
 	const seeleMaster = new Contract(REACT_APP_SEELE_MASTERCOPY_ADDRESS!, Seele.abi, signer)
 	const factory = new Contract(REACT_APP_MODULE_FACTORY_ADDRESS!, ModuleFactory.abi, signer)
 	const encodedInitParams = defaultAbiCoder.encode(
@@ -33,7 +33,7 @@ const getSeeleDeploy = async (
 		[seeleMaster.address, initData, "0x01"],
 		0
 	)
-	return [deploySeele, expectedAddress]
+	return {tx: deploySeele, expectedAddress}
 }
 
 export default getSeeleDeploy

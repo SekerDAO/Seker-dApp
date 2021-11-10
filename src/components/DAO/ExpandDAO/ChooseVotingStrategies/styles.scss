@@ -1,0 +1,41 @@
+@import "src/variables";
+
+.voting-strategies {
+  width: 880px;
+  display: flex;
+
+  &__strategies,
+  &__transactions {
+    padding: 20px;
+
+    h2 {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+  }
+
+  &__strategies {
+    flex: 3;
+  }
+
+  &__row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 0 -10px;
+    min-height: 260px;
+  }
+
+  .divider {
+    margin-bottom: 20px;
+  }
+
+  &__transactions {
+    flex: 1;
+
+    .btn {
+      width: 100%;
+      margin-top: 20px;
+    }
+  }
+}

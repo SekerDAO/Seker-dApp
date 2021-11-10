@@ -3,10 +3,10 @@ import "./styles.scss"
 
 const Textarea: FunctionComponent<
 	{
-		borders: "bottom" | "all"
+		borders?: "bottom" | "all"
 		validation?: string | null
 	} & TextareaHTMLAttributes<HTMLTextAreaElement>
-> = ({borders, validation, ...inputProps}) => {
+> = ({borders = "all", validation, ...inputProps}) => {
 	return (
 		<>
 			<textarea
