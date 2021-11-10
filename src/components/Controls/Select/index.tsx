@@ -47,7 +47,6 @@ const Select = <ValueType extends string | number>({
 			onItemClick={handleItemClick}
 			onTriggerClick={handleDropdownTriggerClick}
 			items={options}
-			borders="all"
 		/>
 	)
 }

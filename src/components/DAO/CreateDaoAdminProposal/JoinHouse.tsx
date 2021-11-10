@@ -44,7 +44,6 @@ const JoinHouse: FunctionComponent<{
 		<>
 			<label htmlFor="join-house-title">Title</label>
 			<Input
-				borders="all"
 				id="join-house-title"
 				onChange={e => {
 					setTitle(e.target.value)
@@ -53,7 +52,6 @@ const JoinHouse: FunctionComponent<{
 			/>
 			<label htmlFor="join-house-desc">Description</label>
 			<Input
-				borders="all"
 				id="join-house-desc"
 				onChange={e => {
 					setDescription(e.target.value)

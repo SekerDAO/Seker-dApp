@@ -18,6 +18,7 @@ import {ReactComponent as TwitterIcon} from "../../assets/icons/twitter.svg"
 import {ReactComponent as TelegramIcon} from "../../assets/icons/telegram.svg"
 import {ReactComponent as DiscordIcon} from "../../assets/icons/discord.svg"
 import DashboardHeader from "../../components/UI/DashboardHeader"
+import ExpandDAO from "../../components/DAO/ExpandDAO"
 import {formatDate} from "../../utlls"
 import DAOOwners from "../../components/DAO/DAOOwners"
 import Paper from "../../components/UI/Paper"
@@ -211,13 +212,10 @@ const DAOPage: FunctionComponent = () => {
 								isAdmin={isAdmin}
 							/>
 						)}
-						{page === "expand" && (
-							<DecentralizeDAOPage
+						{page === "expand" && isAdmin && (
+							<ExpandDAO
 								gnosisAddress={dao.gnosisAddress}
 								gnosisVotingThreshold={dao.gnosisVotingThreshold}
-								afterSubmit={() => {
-									console.log("TODO?")
-								}}
 							/>
 						)}
 					</div>

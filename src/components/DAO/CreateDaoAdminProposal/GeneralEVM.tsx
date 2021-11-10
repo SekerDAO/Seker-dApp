@@ -195,7 +195,6 @@ const GeneralEVM: FunctionComponent<{
 			<label htmlFor="general-evm-address">Contract Address</label>
 			<Input
 				id="general-evm-address"
-				borders="all"
 				value={address}
 				onChange={handleAddressChange}
 				validation={addressBad ? "Not a valid address" : null}
@@ -203,7 +202,6 @@ const GeneralEVM: FunctionComponent<{
 			{fetchingAbi && <p>TODO: fetching ABI...</p>}
 			<label htmlFor="general-evm-abi">ABI</label>
 			<Textarea
-				borders="all"
 				value={abiString}
 				onChange={e => {
 					setAbiString(e.target.value)
@@ -260,7 +258,6 @@ const GeneralEVM: FunctionComponent<{
 										/>
 									) : (
 										<Input
-											borders="all"
 											value={args[index] ?? ""}
 											onChange={e => {
 												handleArgumentChange(e.target.value, index)
