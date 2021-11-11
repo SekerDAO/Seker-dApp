@@ -4,7 +4,7 @@ import Modal from "../Modal"
 const ConfirmationModal: FunctionComponent<{
 	title: string
 	text: string
-	warningText: string
+	warningText?: string
 	onSubmit: () => Promise<void>
 	submitText: string
 	cancelText?: string
