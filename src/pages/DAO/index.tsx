@@ -25,7 +25,6 @@ import Paper from "../../components/UI/Paper"
 import DashboardMenu from "../../components/UI/DashboardMenu"
 import CreateNFTForm from "../../components/CreateNFTForm"
 import useUser from "../../hooks/getters/useUser"
-import DecentralizeDAOPage from "../../components/Modals/DecentralizeDAOModal"
 
 type DAOAdminPage = "createNFT" | "edit" | "createProposal" | "expand"
 type DAOContentPage = "collection" | "about" | "members" | "proposals"
