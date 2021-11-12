@@ -22,19 +22,32 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+
+    .divider {
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
   }
 
   &__close {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 30px;
-    height: 30px;
-    background-color: $dark-grey75;
-    border-radius: 50%;
     cursor: pointer;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+  }
+
+  &__warning-message {
+    margin-bottom: 20px;
+    display: flex;
+
+    svg {
+      margin-right: 10px;
+    }
+  }
+}
+
+.confirmation-modal {
+  &__text {
+    margin-top: 20px;
   }
 }

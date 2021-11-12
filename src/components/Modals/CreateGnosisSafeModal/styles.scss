@@ -7,31 +7,38 @@
 
   &__row {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    margin: 5px 0;
+    margin-bottom: 20px;
 
-    input[type="text"] {
-      flex: 1;
+    &:first-of-type {
+      margin-top: 20px;
     }
 
-    button {
-      margin-left: 15px;
-      padding: 0 15px;
-      height: 32px;
-      font-size: 20px;
+    .input,
+    .array-input {
+      width: 100%;
+      flex-wrap: wrap;
+
+      &__validation {
+        width: 100%;
+      }
+
+      input {
+        margin-top: 10px;
+        width: 100%;
+      }
+    }
+
+    .array-input {
+      &__option {
+        margin-right: 0;
+        width: 100%;
+      }
     }
   }
 
-  h2 {
-    margin: 50px 0 20px 0;
-  }
-
-  > button {
-    align-self: flex-start;
-    margin-top: 20px;
-  }
-
-  > label {
-    margin: 15px 0 5px 0;
+  + .divider {
+    margin-top: 0;
   }
 }

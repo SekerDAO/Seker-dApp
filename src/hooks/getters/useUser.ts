@@ -8,14 +8,17 @@ const useUser = (
 	user: UserWithAccount | null
 	loading: boolean
 	error: boolean
-	refetch: () => void
+	refetch: (shouldChangeLoadingState?: boolean) => void
 } => {
 	const [user, setUser] = useState<UserWithAccount | null>(null)
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
 
-	const getInfo = async () => {
-		setLoading(true)
+	const getInfo = async (shouldChangeLoadingState = true) => {
+		if (shouldChangeLoadingState) {
+			setLoading(true)
+		}
+
 		setError(false)
 		try {
 			const _user = await getUser(account)
@@ -24,7 +27,9 @@ const useUser = (
 			console.error(e)
 			setError(true)
 		}
-		setLoading(false)
+		if (shouldChangeLoadingState) {
+			setLoading(false)
+		}
 	}
 
 	useEffect(() => {
