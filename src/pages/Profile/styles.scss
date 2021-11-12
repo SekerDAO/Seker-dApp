@@ -67,12 +67,12 @@
     align-items: center;
     justify-content: space-between;
     align-self: stretch;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+    margin-top: 50px;
+    max-width: 880px;
   }
 
   &__edit-buttons {
-    margin: 0 0 30px 0;
-
     > button {
       margin-right: 20px;
     }
