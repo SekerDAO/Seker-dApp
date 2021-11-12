@@ -35,8 +35,8 @@ export const VOTING_STRATEGIES: {
 		cardImage: singleVotingSimpleMembershipCard
 	},
 	{
-		strategy: "linearVotingCompoundBravo",
-		title: "ERC-20 Linear Voting Compound Bravo with OZ Voting Tokens",
+		strategy: "linearVotingSimpleMembershipZodiacExitModule",
+		title: "ERC-20 Linear Voting Simple Membership + Zodiac Exit Module",
 		description: VOTING_STRATEGY_DESCRIPTION_PLACEHOLDER,
 		cardImage: linearVotingCompoundBravoCard
 	},

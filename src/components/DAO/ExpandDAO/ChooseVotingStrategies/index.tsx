@@ -1,15 +1,19 @@
-import {FunctionComponent, useState} from "react"
+import {FunctionComponent, useState, useContext} from "react"
 import Paper from "../../../UI/Paper"
 import Divider from "../../../UI/Divider"
 import Button from "../../../Controls/Button"
 import {VotingStrategy, BuiltVotingStrategy} from "../../../../types/DAO"
 import VotingStrategyCard from "../../../UI/VotingStrategyCard"
 import {VOTING_STRATEGIES} from "../../../../constants/votingStrategies"
-import DeployVotingStrategyModal from "../../../Modals/DeployVotingStrategyModal"
+import DeployVotingStrategyModal, {
+	VotingStrategyFormValues
+} from "../../../Modals/DeployVotingStrategyModal"
 import ConfirmationModal from "../../../Modals/ConfirmationModal"
 import {ReactComponent as StepDotDoneIcon} from "../../../../assets/icons/step-dot-done.svg"
 import "./styles.scss"
 import {SafeTransaction} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
+import getOZLinearDeployTx from "../../../../api/ethers/functions/Seele/getOZLinearDeployTx"
+import EthersContext from "../../../../context/EthersContext"
 
 const ChooseVotingStrategies: FunctionComponent<{
 	gnosisAddress: string
@@ -18,13 +22,37 @@ const ChooseVotingStrategies: FunctionComponent<{
 	onStrategyAdd: (strategy: BuiltVotingStrategy) => void
 	onStrategyRemove: (index: number) => void
 	onSubmit: () => void
-}> = ({gnosisAddress, strategies, transactions, onStrategyAdd, onStrategyRemove, onSubmit}) => {
+}> = ({gnosisAddress, strategies, onStrategyAdd, onStrategyRemove, onSubmit}) => {
+	const {signer} = useContext(EthersContext)
 	const [addStrategyModalOpened, setAddStrategyModalOpened] = useState<VotingStrategy | null>(null)
 	const [removeStrategyModalOpened, setRemoveStrategyModalOpened] = useState<number | null>(null)
 
-	const handleSubmitVotingStrategy = (votingStrategy: BuiltVotingStrategy) => {
-		onStrategyAdd(votingStrategy)
-		setAddStrategyModalOpened(null)
+	const handleSubmitVotingStrategy = async (
+		strategy: VotingStrategy,
+		{erc20TokenAddress, quorumThreshold, delay, votingPeriod}: VotingStrategyFormValues
+	) => {
+		if (
+			delay &&
+			!isNaN(Number(delay)) &&
+			quorumThreshold &&
+			!isNaN(Number(quorumThreshold)) &&
+			Number(quorumThreshold) > 1 && // TODO: validation
+			votingPeriod &&
+			!isNaN(Number(votingPeriod)) &&
+			signer
+		) {
+			const {tx, expectedAddress} = await getOZLinearDeployTx(
+				gnosisAddress,
+				erc20TokenAddress,
+				Number(quorumThreshold),
+				Number(delay),
+				Number(votingPeriod),
+				"DeployLinear",
+				signer
+			)
+			onStrategyAdd({strategy, tx, expectedAddress})
+			setAddStrategyModalOpened(null)
+		}
 	}
 
 	const handleStrategyRemove = (index: number) => {
@@ -50,7 +78,6 @@ const ChooseVotingStrategies: FunctionComponent<{
 			)}
 			{addStrategyModalOpened && (
 				<DeployVotingStrategyModal
-					gnosisAddress={gnosisAddress}
 					strategy={addStrategyModalOpened}
 					onClose={() => setAddStrategyModalOpened(null)}
 					onSubmit={handleSubmitVotingStrategy}
@@ -96,15 +123,20 @@ const ChooseVotingStrategies: FunctionComponent<{
 				</div>
 				<Divider type="vertical" />
 				<div className="voting-strategies__transactions">
-					<h2>Bundle Transactions</h2>
-					{transactions.map((tx, index) => (
-						<div key={index} className="voting-strategies__transaction">
-							<div className="voting-strategies__transaction-icon">
-								<StepDotDoneIcon width="20px" height="20px" />
+					<h2>Bundle Deployments</h2>
+					{strategies.map((strategy, index) => {
+						const strategyContent = VOTING_STRATEGIES.find(
+							votingStrategy => votingStrategy.strategy === strategy.strategy
+						)
+						return (
+							<div key={index} className="voting-strategies__transaction">
+								<div className="voting-strategies__transaction-icon">
+									<StepDotDoneIcon width="20px" height="20px" />
+								</div>
+								<span>{strategyContent?.title}</span>
 							</div>
-							<span>{tx.name}</span>
-						</div>
-					))}
+						)
+					})}
 					<Button disabled={strategies.length === 0} onClick={onSubmit}>
 						Continue
 					</Button>

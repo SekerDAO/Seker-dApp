@@ -30,6 +30,17 @@
     font-size: 14px;
   }
 
+  &__warning-message {
+    display: flex;
+    align-items: center;
+    height: 100%;
+
+    svg {
+      width: 42px;
+      margin-right: 10px;
+    }
+  }
+
   &:hover {
     cursor: pointer;
 

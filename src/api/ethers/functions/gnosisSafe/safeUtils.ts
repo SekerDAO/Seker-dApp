@@ -272,7 +272,7 @@ export const buildSeeleDeployTxSequence = async (
 	)
 	const setSeeleTransactions = strategies.map(strategy => {
 		switch (strategy.strategy) {
-			case "linearVotingCompoundBravo":
+			case "linearVotingSimpleMembershipZodiacExitModule":
 				return {
 					tx: getOZLinearSetSeele(expectedSeeleAddress, strategy.expectedAddress, signer),
 					name: "OzLinearSetSeele"
