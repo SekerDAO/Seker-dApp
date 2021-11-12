@@ -11,7 +11,7 @@ import AboutDAO from "../../components/DAO/AboutDAO"
 import CreateDaoAdminProposal from "../../components/DAO/CreateDaoAdminProposal"
 import DAOProposals from "../../components/DAO/DAOProposals"
 import EditDAO from "../../components/DAO/EditDAO"
-import DAOCollection from "../../components/DAO/DAOCollection"
+import NFTGallery from "../../components/NFTGallery"
 import UploadImageModal from "../../components/Modals/UploadImageModal"
 import updateDAOImage from "../../api/firebase/DAO/updateDAOImage"
 import {ReactComponent as TwitterIcon} from "../../assets/icons/twitter.svg"
@@ -23,8 +23,10 @@ import {formatDate} from "../../utlls"
 import DAOOwners from "../../components/DAO/DAOOwners"
 import Paper from "../../components/UI/Paper"
 import DashboardMenu from "../../components/UI/DashboardMenu"
+import CreateNFTForm from "../../components/CreateNFTForm"
+import useUser from "../../hooks/getters/useUser"
 
-type DAOAdminPage = "nfts" | "edit" | "createProposal" | "expand"
+type DAOAdminPage = "createNFT" | "edit" | "createProposal" | "expand"
 type DAOContentPage = "collection" | "about" | "members" | "proposals"
 
 const menuEntries = [
@@ -37,6 +39,7 @@ const menuEntries = [
 // Make sense to rebuild all this internal "page" handling to plain react-router routes
 const DAOPage: FunctionComponent = () => {
 	const {account, connected} = useContext(AuthContext)
+	const {user} = useUser(account as string)
 	const {address} = useParams<{address: string}>()
 	const {dao, loading, error, refetch} = useDAO(address)
 	const {pathname, search} = useLocation()
@@ -138,8 +141,8 @@ const DAOPage: FunctionComponent = () => {
 								items={[
 									{
 										title: "Create / Load NFTs",
-										to: `${pathname}?page=nfts`,
-										page: "nfts"
+										to: `${pathname}?page=createNFT`,
+										page: "createNFT"
 									},
 									{
 										title: "Edit DAO Profile",
@@ -166,52 +169,54 @@ const DAOPage: FunctionComponent = () => {
 						)}
 					</div>
 					<div className="dao__main">
-						<>
-							<HorizontalMenu
-								pages={menuEntries}
-								currentPage={page}
-								onChange={nextPage => {
-									push(`${pathname}?page=${nextPage}`)
+						<HorizontalMenu
+							pages={menuEntries}
+							currentPage={page}
+							onChange={nextPage => {
+								push(`${pathname}?page=${nextPage}`)
+							}}
+						/>
+						{isAdmin && page === "createNFT" && user && (
+							<CreateNFTForm
+								gnosisAddress={dao.gnosisAddress}
+								domains={user.myDomains}
+								afterCreate={() => push(`${pathname}?page=collection`)}
+							/>
+						)}
+						{isAdmin && page === "edit" && (
+							<EditDAO
+								dao={dao}
+								afterEdit={refetch}
+								onClose={() => {
+									push(pathname)
 								}}
 							/>
-							{isAdmin && page === "nfts" && (
-								<DAOCollection gnosisAddress={dao.gnosisAddress} canEdit />
-							)}
-							{isAdmin && page === "edit" && (
-								<EditDAO
-									dao={dao}
-									afterEdit={refetch}
-									onClose={() => {
-										push(pathname)
-									}}
-								/>
-							)}
-							{page === "createProposal" && isAdmin && (
-								<CreateDaoAdminProposal
-									gnosisAddress={dao.gnosisAddress}
-									gnosisVotingThreshold={dao.gnosisVotingThreshold}
-									ownersCount={dao.owners.length}
-								/>
-							)}
-							{page === "expand" && isAdmin && (
-								<ExpandDAO
-									gnosisAddress={dao.gnosisAddress}
-									gnosisVotingThreshold={dao.gnosisVotingThreshold}
-								/>
-							)}
-							{page === "collection" && (
-								<DAOCollection gnosisAddress={dao.gnosisAddress} canEdit={false} />
-							)}
-							{page === "about" && <AboutDAO dao={dao} />}
-							{page === "members" && <DAOOwners owners={dao.owners} />}
-							{page === "proposals" && (
-								<DAOProposals
-									gnosisVotingThreshold={dao.gnosisVotingThreshold}
-									gnosisAddress={dao.gnosisAddress}
-									isAdmin={isAdmin}
-								/>
-							)}
-						</>
+						)}
+						{isAdmin && page === "createProposal" && (
+							<CreateDaoAdminProposal
+								gnosisAddress={dao.gnosisAddress}
+								gnosisVotingThreshold={dao.gnosisVotingThreshold}
+								ownersCount={dao.owners.length}
+							/>
+						)}
+						{page === "collection" && (
+							<NFTGallery account={dao.gnosisAddress} isDao canDelete={isAdmin} />
+						)}
+						{page === "about" && <AboutDAO dao={dao} />}
+						{page === "members" && <DAOOwners owners={dao.owners} />}
+						{page === "proposals" && (
+							<DAOProposals
+								gnosisVotingThreshold={dao.gnosisVotingThreshold}
+								gnosisAddress={dao.gnosisAddress}
+								isAdmin={isAdmin}
+							/>
+						)}
+						{page === "expand" && isAdmin && (
+							<ExpandDAO
+								gnosisAddress={dao.gnosisAddress}
+								gnosisVotingThreshold={dao.gnosisVotingThreshold}
+							/>
+						)}
 					</div>
 				</div>
 			</div>
