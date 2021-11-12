@@ -176,10 +176,10 @@ const DAOPage: FunctionComponent = () => {
 								push(`${pathname}?page=${nextPage}`)
 							}}
 						/>
-						{isAdmin && page === "createNFT" && (
+						{isAdmin && page === "createNFT" && user && (
 							<CreateNFTForm
 								gnosisAddress={dao.gnosisAddress}
-								domains={user ? user.myDomains : []}
+								domains={user.myDomains}
 								afterCreate={() => push(`${pathname}?page=collection`)}
 							/>
 						)}
