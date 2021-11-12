@@ -128,7 +128,7 @@ const DeployVotingStrategyModal: FunctionComponent<{
 							onChange={handleChange}
 						/>
 					</div>
-					{strategy === "molochLinearVoting" && (
+					{strategy === "linearVotingSimpleMembershipZodiacExitModule" && (
 						<>
 							<Divider />
 							<div className="voting-strategy-form__row">

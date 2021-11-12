@@ -108,15 +108,14 @@ const ChooseVotingStrategies: FunctionComponent<{
 					<Divider />
 					<h2>All Strategies</h2>
 					<div className="voting-strategies__row">
-						{VOTING_STRATEGIES.map(strategy => (
+						{VOTING_STRATEGIES.map(({strategy, title, description, cardImage, active}) => (
 							<VotingStrategyCard
-								key={strategy.strategy}
-								title={strategy.title}
-								description={strategy.description}
-								image={strategy.cardImage}
-								onClick={() => {
-									setAddStrategyModalOpened(strategy.strategy)
-								}}
+								key={strategy}
+								title={title}
+								description={description}
+								image={cardImage}
+								isActive={active}
+								onClick={() => setAddStrategyModalOpened(strategy)}
 							/>
 						))}
 					</div>

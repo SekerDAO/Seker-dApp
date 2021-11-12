@@ -50,4 +50,14 @@
       border-radius: 5px;
     }
   }
+
+  &--disabled {
+    &:hover {
+      cursor: not-allowed;
+
+      .voting-strategy-card__back {
+        background-color: $light-grey;
+      }
+    }
+  }
 }

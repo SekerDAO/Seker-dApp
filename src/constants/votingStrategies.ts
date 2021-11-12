@@ -1,8 +1,8 @@
 import singleVotingCard from "../assets/icons/single-voting.svg"
 import singleVotingSimpleMembershipCard from "../assets/icons/single-voting-simple-membership.svg"
-import linearVotingCompoundBravoCard from "../assets/icons/linear-voting-compound-bravo.svg"
+import linearVotingCard from "../assets/icons/linear-voting.svg"
 import linearVotingSimpleMembershipCard from "../assets/icons/linear-voting-simple-membership.svg"
-import linearVotingMolochSimpleMembershipCard from "../assets/icons/linear-voting-moloch-simple-membership.svg"
+import linearVotingSimpleMembershipZodiacExitModuleCard from "../assets/icons/linear-voting-simple-membership-zodiac-exit.svg"
 import quadraticVotingSimpleMembershipCard from "../assets/icons/quadratic-voting-simple-membership.svg"
 import {VotingStrategy} from "../types/DAO"
 
@@ -24,13 +24,6 @@ export const VOTING_STRATEGIES: {
 	active: boolean
 }[] = [
 	{
-		strategy: "singleVoting",
-		title: "ERC-20 Single Voting",
-		description: VOTING_STRATEGY_DESCRIPTION_PLACEHOLDER,
-		cardImage: singleVotingCard,
-		active: false
-	},
-	{
 		strategy: "singleVotingSimpleMembership",
 		title: "Single Voting + Simple Membership",
 		description: VOTING_STRATEGY_DESCRIPTION_PLACEHOLDER,
@@ -38,10 +31,17 @@ export const VOTING_STRATEGIES: {
 		active: false
 	},
 	{
-		strategy: "linearVotingSimpleMembershipZodiacExitModule",
-		title: "ERC-20 Linear Voting Simple Membership + Zodiac Exit Module",
+		strategy: "singleVoting",
+		title: "ERC-20 Single Voting",
 		description: VOTING_STRATEGY_DESCRIPTION_PLACEHOLDER,
-		cardImage: linearVotingCompoundBravoCard,
+		cardImage: singleVotingCard,
+		active: false
+	},
+	{
+		strategy: "linearVoting",
+		title: "ERC-20 Linear Voting",
+		description: VOTING_STRATEGY_DESCRIPTION_PLACEHOLDER,
+		cardImage: linearVotingCard,
 		active: true
 	},
 	{
@@ -52,10 +52,10 @@ export const VOTING_STRATEGIES: {
 		active: false
 	},
 	{
-		strategy: "molochLinearVoting",
-		title: "ERC-20 Linear Voting (Moloch) Simple Membership + Zodiac Exit Module",
+		strategy: "linearVotingSimpleMembershipZodiacExitModule",
+		title: "ERC-20 Linear Voting Simple Membership + Zodiac Exit Module",
 		description: VOTING_STRATEGY_DESCRIPTION_PLACEHOLDER,
-		cardImage: linearVotingMolochSimpleMembershipCard,
+		cardImage: linearVotingSimpleMembershipZodiacExitModuleCard,
 		active: false
 	},
 	{
