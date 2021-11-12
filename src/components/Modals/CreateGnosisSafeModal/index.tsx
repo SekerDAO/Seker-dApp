@@ -6,7 +6,7 @@ import RadioButton from "../../Controls/RadioButton"
 import Input from "../../Controls/Input"
 import createGnosisSafe from "../../../api/ethers/functions/gnosisSafe/createGnosisSafe"
 import EthersContext from "../../../context/EthersContext"
-import {toastError, toastSuccess, toastWarning} from "../../UI/Toast"
+import {toastError, toastSuccess} from "../../UI/Toast"
 import addDAO from "../../../api/firebase/DAO/addDAO"
 import "./styles.scss"
 import editDAO from "../../../api/firebase/DAO/editDAO"
@@ -47,6 +47,8 @@ const CreateGnosisSafeModal: FunctionComponent<{
 	const handleThresholdChange = (e: ChangeEvent<HTMLInputElement>) => {
 		if (Number(e.target.value) > members.length) {
 			setVotingThreshold(String(members.length))
+		} else if (Number(e.target.value) < 0) {
+			setVotingThreshold("0")
 		} else {
 			setVotingThreshold(e.target.value)
 		}
@@ -75,7 +77,7 @@ const CreateGnosisSafeModal: FunctionComponent<{
 			}
 			setProcessing(false)
 		} else if (stage === "import") {
-			toastWarning("This feature is not yet supported. Please, try later.")
+			console.log("TODO: Implement importing Gnosis Safe")
 		}
 	}
 
@@ -93,19 +95,18 @@ const CreateGnosisSafeModal: FunctionComponent<{
 			)) ||
 		(stage === "import" && !gnosisSafeAddress)
 
-	let title = "Start a DAO"
-	let submitButtonText = "Continue"
-	if (stage === "create") {
-		title = "Create Gnosis Safe"
-	} else if (stage === "import") {
-		title = "Load Existing Gnosis Safe"
-	}
+	const title =
+		stage === "create"
+			? "Create Gnosis Safe"
+			: stage === "import"
+			? "Load Existing Gnosis Safe"
+			: "Start a DAO"
 
-	if (processing) {
-		submitButtonText = "Processing..."
-	} else if (stage === "create" || stage === "import") {
-		submitButtonText = "Submit"
-	}
+	const submitButtonText = processing
+		? "Submit"
+		: stage === "create" || stage === "import"
+		? "Submit"
+		: "Continue"
 
 	return (
 		<>
