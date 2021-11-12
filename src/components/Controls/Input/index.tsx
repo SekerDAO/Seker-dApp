@@ -10,8 +10,31 @@ const Input: FunctionComponent<
 		validation?: string | null
 		staticPlaceholder?: string
 	} & Omit<InputHTMLAttributes<HTMLInputElement>, "type">
-> = ({borders = "all", number = false, validation, staticPlaceholder, ...inputProps}) => {
-	const ref = useRef<HTMLInputElement>(null)
+> = ({
+	borders = "all",
+	number = false,
+	validation,
+	staticPlaceholder,
+	step = 1,
+	onChange,
+	value,
+	...inputProps
+}) => {
+	const ref = useRef<HTMLInputElement & EventTarget>(null)
+	const handleArrowClick = (addedValue: number) => {
+		if (onChange && !isNaN(Number(value))) {
+			const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+				window.HTMLInputElement.prototype,
+				"value"
+			)?.set
+			if (nativeInputValueSetter) {
+				nativeInputValueSetter.call(ref.current, String(Number(value) + Number(addedValue)))
+				const changeEvent = new Event("change", {bubbles: true})
+				ref?.current?.dispatchEvent(changeEvent)
+			}
+		}
+	}
+
 	return (
 		<div className="input">
 			{staticPlaceholder && <div className="input__static-placeholder">{staticPlaceholder}</div>}
@@ -20,13 +43,15 @@ const Input: FunctionComponent<
 					validation ? " input__field--bad" : ""
 				}`}
 				type={number ? "number" : "text"}
+				step={step}
+				onChange={onChange}
 				ref={ref}
 				{...inputProps}
 			/>
 			{number && (
 				<div className="input__custom-number-arrows">
-					<ArrowUp width="14px" height="7px" onClick={() => ref.current?.stepUp()} />
-					<ArrowDown width="14px" height="7px" onClick={() => ref.current?.stepDown()} />
+					<ArrowUp width="14px" height="7px" onClick={() => handleArrowClick(+step)} />
+					<ArrowDown width="14px" height="7px" onClick={() => handleArrowClick(-step)} />
 				</div>
 			)}
 			{validation && <span className="input__validation">{validation}</span>}
