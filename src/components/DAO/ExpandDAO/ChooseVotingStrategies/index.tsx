@@ -31,27 +31,31 @@ const ChooseVotingStrategies: FunctionComponent<{
 		strategy: VotingStrategy,
 		{erc20TokenAddress, quorumThreshold, delay, votingPeriod}: VotingStrategyFormValues
 	) => {
-		if (
-			delay &&
-			!isNaN(Number(delay)) &&
-			quorumThreshold &&
-			!isNaN(Number(quorumThreshold)) &&
-			Number(quorumThreshold) > 1 && // TODO: validation
-			votingPeriod &&
-			!isNaN(Number(votingPeriod)) &&
-			signer
-		) {
-			const {tx, expectedAddress} = await getOZLinearDeployTx(
-				gnosisAddress,
-				erc20TokenAddress,
-				Number(quorumThreshold),
-				Number(delay),
-				Number(votingPeriod),
-				"DeployLinear",
+		if (strategy === "linearVoting") {
+			if (
+				delay &&
+				!isNaN(Number(delay)) &&
+				quorumThreshold &&
+				!isNaN(Number(quorumThreshold)) &&
+				Number(quorumThreshold) > 1 && // TODO: validation
+				votingPeriod &&
+				!isNaN(Number(votingPeriod)) &&
 				signer
-			)
-			onStrategyAdd({strategy, tx, expectedAddress})
-			setAddStrategyModalOpened(null)
+			) {
+				const {tx, expectedAddress} = await getOZLinearDeployTx(
+					gnosisAddress,
+					erc20TokenAddress,
+					Number(quorumThreshold),
+					Number(delay),
+					Number(votingPeriod),
+					"DeployLinear",
+					signer
+				)
+				onStrategyAdd({strategy, tx, expectedAddress})
+				setAddStrategyModalOpened(null)
+			}
+		} else {
+			throw new Error("Voting Strategy is not supported yet")
 		}
 	}
 

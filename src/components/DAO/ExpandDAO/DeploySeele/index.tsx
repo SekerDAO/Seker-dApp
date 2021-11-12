@@ -1,4 +1,5 @@
 import {FunctionComponent, useContext, useEffect, useState} from "react"
+import {buildMultiSendTx} from "../../../../api/ethers/functions/Seele/multiSend"
 import ExpandDaoLayout from "../ExpandDaoLayout"
 import {BuiltVotingStrategy} from "../../../../types/DAO"
 import ChooseVotingStrategies from "../ChooseVotingStrategies"
@@ -7,13 +8,13 @@ import {
 	SafeTransaction
 } from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
 import EthersContext from "../../../../context/EthersContext"
-import ReviewDeploySeele from "../ReviewDeploySeele"
+import ConfirmDeploySeele from "../ConfirmDeploySeele"
 import useDAOProposals from "../../../../hooks/getters/useDAOProposals"
 import ErrorPlaceholder from "../../../UI/ErrorPlaceholder"
 
-type ExpandDaoStage = "chooseStrategies" | "review" | "waiting" | "done"
+type ExpandDaoStage = "chooseStrategies" | "confirm"
 
-const STAGE_HEADERS: {[key in ExpandDaoStage]: {title: string; description?: string}} = {
+const STAGE_HEADERS: {[key in ExpandDaoStage]: {title?: string; description?: string}} = {
 	chooseStrategies: {
 		title: "Seele",
 		description: `This module allows avatars to operate with trustless tokenized DeGov, similar to Compound
@@ -25,15 +26,7 @@ const STAGE_HEADERS: {[key in ExpandDaoStage]: {title: string; description?: str
 		can add as many as you would like. Once you have finished, proceed to the next step to
 		confirm your transactions and deploy.`
 	},
-	review: {
-		title: "Confirm Bundle Transactions"
-	},
-	waiting: {
-		title: "Waiting for approval"
-	},
-	done: {
-		title: "Seele deployed"
-	}
+	confirm: {}
 }
 
 const DeploySeele: FunctionComponent<{
@@ -61,11 +54,23 @@ const DeploySeele: FunctionComponent<{
 				proposal => proposal.type === "decentralizeDAO" && proposal.state === "active"
 			)
 			if (expandProposal) {
-				setStage("waiting")
+				// TODO: Redirect to proposal details page
+				console.log("TODO")
 			}
 		}
 	}, [proposals])
 
+	const handleProceedToConfirm = async () => {
+		if (signer) {
+			const multiTx = await buildMultiSendTx(
+				transactions.map(t => t.tx),
+				gnosisAddress,
+				signer
+			)
+			setTransactions(prevState => [...prevState, {tx: multiTx, name: "multiSend"}])
+			setStage("confirm")
+		}
+	}
 	if (error) return <ErrorPlaceholder />
 
 	return (
@@ -84,24 +89,22 @@ const DeploySeele: FunctionComponent<{
 					onStrategyRemove={index => {
 						setStrategies(prevState => prevState.filter((_, idx) => idx !== index))
 					}}
-					onSubmit={() => {
-						setStage("review")
-					}}
+					onSubmit={handleProceedToConfirm}
 				/>
 			)}
-			{stage === "review" && (
-				<ReviewDeploySeele
+			{stage === "confirm" && (
+				<ConfirmDeploySeele
+					onGoBack={() => setStage("chooseStrategies")}
 					transactions={transactions}
 					gnosisAddress={gnosisAddress}
 					gnosisVotingThreshold={gnosisVotingThreshold}
 					expectedSeeleAddress={expectedSeeleAddress}
 					afterSubmit={() => {
-						setStage(gnosisVotingThreshold === 1 ? "done" : "waiting")
+						// TODO: Redirect to proposal details page
+						console.log("TODO")
 					}}
 				/>
 			)}
-			{stage === "waiting" && <div>TODO: waiting for approval</div>}
-			{stage === "done" && <div>TODO: success</div>}
 		</ExpandDaoLayout>
 	)
 }
