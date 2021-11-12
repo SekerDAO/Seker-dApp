@@ -20,6 +20,11 @@
 
   &__connect-button {
     width: 140px;
+
+    &:not(:disabled):hover {
+      background-color: $purple75;
+      color: $white;
+    }
   }
 
   &__main-nav {

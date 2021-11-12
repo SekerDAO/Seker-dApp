@@ -43,7 +43,7 @@ const Input: FunctionComponent<
 					validation ? " input__field--bad" : ""
 				}`}
 				type={number ? "number" : "text"}
-				step={step}
+				step={number ? step : undefined}
 				onChange={onChange}
 				ref={ref}
 				{...inputProps}

@@ -21,41 +21,48 @@ export const VOTING_STRATEGIES: {
 	title: string
 	description: string
 	cardImage: string
+	active: boolean
 }[] = [
 	{
 		strategy: "singleVoting",
 		title: "ERC-20 Single Voting",
 		description: VOTING_STRATEGY_DESCRIPTION_PLACEHOLDER,
-		cardImage: singleVotingCard
+		cardImage: singleVotingCard,
+		active: false
 	},
 	{
 		strategy: "singleVotingSimpleMembership",
 		title: "Single Voting + Simple Membership",
 		description: VOTING_STRATEGY_DESCRIPTION_PLACEHOLDER,
-		cardImage: singleVotingSimpleMembershipCard
+		cardImage: singleVotingSimpleMembershipCard,
+		active: false
 	},
 	{
 		strategy: "linearVotingSimpleMembershipZodiacExitModule",
 		title: "ERC-20 Linear Voting Simple Membership + Zodiac Exit Module",
 		description: VOTING_STRATEGY_DESCRIPTION_PLACEHOLDER,
-		cardImage: linearVotingCompoundBravoCard
+		cardImage: linearVotingCompoundBravoCard,
+		active: true
 	},
 	{
 		strategy: "linearVotingSimpleMembership",
 		title: "ERC-20 Linear Voting + Simple Membership",
 		description: VOTING_STRATEGY_DESCRIPTION_PLACEHOLDER,
-		cardImage: linearVotingSimpleMembershipCard
+		cardImage: linearVotingSimpleMembershipCard,
+		active: false
 	},
 	{
 		strategy: "molochLinearVoting",
 		title: "ERC-20 Linear Voting (Moloch) Simple Membership + Zodiac Exit Module",
 		description: VOTING_STRATEGY_DESCRIPTION_PLACEHOLDER,
-		cardImage: linearVotingMolochSimpleMembershipCard
+		cardImage: linearVotingMolochSimpleMembershipCard,
+		active: false
 	},
 	{
 		strategy: "quadraticVotingSimpleMembership",
 		title: "ERC-20 Quadratic Voting + Simple Membership",
 		description: VOTING_STRATEGY_DESCRIPTION_PLACEHOLDER,
-		cardImage: quadraticVotingSimpleMembershipCard
+		cardImage: quadraticVotingSimpleMembershipCard,
+		active: false
 	}
 ]
