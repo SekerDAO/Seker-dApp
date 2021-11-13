@@ -4,11 +4,8 @@ import ExpandDaoLayout from "./ExpandDaoLayout"
 import DeploySeele from "./DeploySeele"
 import "./styles.scss"
 
-const DESCRIPTION = `Modules are your way of customizing, upgrading, and expanding your DAO. 
-        Here you can choose to swap voting strategies, add multiple strategies, or remove a strategy at any time. 
-        You can also introduce the Zodiac modules Bridge (for a constellation of voting strategies across chains), 
-        Exit (for a Moloch-style rage quit assigned to different asset holders), 
-        or Photon (a way to enact governance at the speed of light — coming soon).`
+const DESCRIPTION =
+	"Modules are your way of customizing, upgrading, and expanding your DAO. Here you can choose to swap voting strategies, add multiple strategies, or remove a strategy at any time. You can also introduce the Zodiac modules Bridge (for a constellation of voting strategies across chains), Exit (for a Moloch-style rage quit assigned to different asset holders), or Photon (a way to enact governance at the speed of light — coming soon)."
 
 const ExpandDAO: FunctionComponent<{
 	gnosisAddress: string

@@ -32,13 +32,9 @@ const DeployVotingStrategyModal: FunctionComponent<{
 	const [formValues, setFormValues] = useState<VotingStrategyFormValues>(EMPTY_STATE)
 
 	const {votingPeriod, delay, quorumThreshold} = formValues
-	let title = ""
-	const currentVotingStrategy = VOTING_STRATEGIES.find(
+	const subTitle = VOTING_STRATEGIES.find(
 		votingStrategy => votingStrategy.strategy === strategy
-	)
-	if (currentVotingStrategy) {
-		title = currentVotingStrategy.title
-	}
+	)?.title
 	const handleTokenCreate = (token: ERC20Token) => {
 		setFormValues(prevState => ({...prevState, erc20TokenAddress: token.address}))
 		setCreateTokenModalOpened(false)
@@ -58,7 +54,7 @@ const DeployVotingStrategyModal: FunctionComponent<{
 		!isNaN(Number(delay)) &&
 		quorumThreshold &&
 		!isNaN(Number(quorumThreshold)) &&
-		Number(quorumThreshold) > 1 && // TODO: validation
+		Number(quorumThreshold) > 0 && // TODO: validation
 		votingPeriod &&
 		!isNaN(Number(votingPeriod)) &&
 		signer
@@ -74,32 +70,37 @@ const DeployVotingStrategyModal: FunctionComponent<{
 					}}
 				/>
 			)}
-			<Modal show onClose={onClose}>
+			<Modal show onClose={onClose} title="Deploy Strategy">
 				<form className="voting-strategy-form" onSubmit={handleSubmit}>
-					<h2>Deploy Strategy</h2>
-					<h3>{title}</h3>
+					<h3>{subTitle}</h3>
 					{strategy !== "singleVotingSimpleMembership" && (
 						<div className="voting-strategy-form__row">
 							<label>ERC-20 Token Address</label>
 							<Input
+								required
 								name="erc20TokenAddress"
 								value={formValues.erc20TokenAddress}
 								onChange={handleChange}
 							/>
-							<Button
-								buttonType="link"
-								onClick={() => {
-									setCreateTokenModalOpened(true)
-								}}
-							>
-								Create token
-							</Button>
+							<div className="voting-strategy-form__create-token">
+								<span>{`Don't have ERC-20 token yet?`}</span>
+								<Button
+									buttonType="link"
+									onClick={event => {
+										event.preventDefault()
+										setCreateTokenModalOpened(true)
+									}}
+								>
+									Create
+								</Button>
+							</div>
 						</div>
 					)}
 					<div className="voting-strategy-form__row">
 						<div className="voting-strategy-form__col">
 							<label>Voting Period</label>
 							<Input
+								required
 								number
 								placeholder="# of hours"
 								name="votingPeriod"
@@ -110,6 +111,7 @@ const DeployVotingStrategyModal: FunctionComponent<{
 						<div className="voting-strategy-form__col">
 							<label>Time Delay</label>
 							<Input
+								required
 								number
 								placeholder="# of hours"
 								name="delay"
@@ -122,7 +124,8 @@ const DeployVotingStrategyModal: FunctionComponent<{
 						<label>Quorum Threshold</label>
 						<Input
 							number
-							placeholder="# of tokens"
+							required
+							placeholder="% of tokens"
 							name="quorumThreshold"
 							value={formValues.quorumThreshold}
 							onChange={handleChange}

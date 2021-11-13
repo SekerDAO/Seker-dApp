@@ -8,8 +8,8 @@ import {VOTING_STRATEGIES} from "../../../../constants/votingStrategies"
 import DeployVotingStrategyModal, {
 	VotingStrategyFormValues
 } from "../../../Modals/DeployVotingStrategyModal"
-import ConfirmationModal from "../../../Modals/ConfirmationModal"
 import {ReactComponent as StepDotDoneIcon} from "../../../../assets/icons/step-dot-done.svg"
+import {ReactComponent as DeleteIcon} from "../../../../assets/icons/delete.svg"
 import "./styles.scss"
 import {SafeTransaction} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
 import getOZLinearDeployTx from "../../../../api/ethers/functions/Seele/getOZLinearDeployTx"
@@ -25,7 +25,6 @@ const ChooseVotingStrategies: FunctionComponent<{
 }> = ({gnosisAddress, strategies, onStrategyAdd, onStrategyRemove, onSubmit}) => {
 	const {signer} = useContext(EthersContext)
 	const [addStrategyModalOpened, setAddStrategyModalOpened] = useState<VotingStrategy | null>(null)
-	const [removeStrategyModalOpened, setRemoveStrategyModalOpened] = useState<number | null>(null)
 
 	const handleSubmitVotingStrategy = async (
 		strategy: VotingStrategy,
@@ -37,7 +36,7 @@ const ChooseVotingStrategies: FunctionComponent<{
 				!isNaN(Number(delay)) &&
 				quorumThreshold &&
 				!isNaN(Number(quorumThreshold)) &&
-				Number(quorumThreshold) > 1 && // TODO: validation
+				Number(quorumThreshold) > 0 && // TODO: validation
 				votingPeriod &&
 				!isNaN(Number(votingPeriod)) &&
 				signer
@@ -61,25 +60,10 @@ const ChooseVotingStrategies: FunctionComponent<{
 
 	const handleStrategyRemove = (index: number) => {
 		onStrategyRemove(index)
-		setRemoveStrategyModalOpened(null)
 	}
 
 	return (
 		<>
-			{removeStrategyModalOpened != null && (
-				<ConfirmationModal
-					title="Remove strategy"
-					text="Are you sure you want to remove this strategy?"
-					onSubmit={async () => {
-						handleStrategyRemove(removeStrategyModalOpened)
-					}}
-					submitText="Confirm"
-					isOpened
-					handleClose={() => {
-						setRemoveStrategyModalOpened(null)
-					}}
-				/>
-			)}
 			{addStrategyModalOpened && (
 				<DeployVotingStrategyModal
 					strategy={addStrategyModalOpened}
@@ -89,28 +73,7 @@ const ChooseVotingStrategies: FunctionComponent<{
 			)}
 			<Paper className="voting-strategies">
 				<div className="voting-strategies__strategies">
-					<h2>Selected Strategies</h2>
-					<div className="voting-strategies__row">
-						{strategies.map((strategy, index) => {
-							const strategyContent = VOTING_STRATEGIES.find(s => s.strategy === strategy.strategy)
-							if (!strategyContent) {
-								throw new Error("Unexpected strategy")
-							}
-							return (
-								<VotingStrategyCard
-									key={index}
-									title={strategyContent.title}
-									description={strategyContent.description}
-									image={strategyContent.cardImage}
-									onClick={() => {
-										setRemoveStrategyModalOpened(index)
-									}}
-								/>
-							)
-						})}
-					</div>
-					<Divider />
-					<h2>All Strategies</h2>
+					<h3>Voting Strategies</h3>
 					<div className="voting-strategies__row">
 						{VOTING_STRATEGIES.map(({strategy, title, description, cardImage, active}) => (
 							<VotingStrategyCard
@@ -125,16 +88,20 @@ const ChooseVotingStrategies: FunctionComponent<{
 					</div>
 				</div>
 				<Divider type="vertical" />
-				<div className="voting-strategies__transactions">
-					<h2>Bundle Deployments</h2>
+				<div className="voting-strategies__deployments">
+					<h3>Bundle Deployments</h3>
 					{strategies.map((strategy, index) => {
 						const strategyContent = VOTING_STRATEGIES.find(
 							votingStrategy => votingStrategy.strategy === strategy.strategy
 						)
 						return (
-							<div key={index} className="voting-strategies__transaction">
-								<div className="voting-strategies__transaction-icon">
+							<div key={index} className="voting-strategies__deployment">
+								<div
+									className="voting-strategies__deployment-icon"
+									onClick={() => handleStrategyRemove(index)}
+								>
 									<StepDotDoneIcon width="20px" height="20px" />
+									<DeleteIcon width="20px" height="20px" className="deployment__delete-icon" />
 								</div>
 								<span>{strategyContent?.title}</span>
 							</div>

@@ -83,8 +83,8 @@ const DeploySeele: FunctionComponent<{
 					gnosisAddress={gnosisAddress}
 					strategies={strategies}
 					transactions={transactions}
-					onStrategyAdd={strat => {
-						setStrategies(prevState => [...prevState, strat])
+					onStrategyAdd={strategy => {
+						setStrategies(prevState => [...prevState, strategy])
 					}}
 					onStrategyRemove={index => {
 						setStrategies(prevState => prevState.filter((_, idx) => idx !== index))

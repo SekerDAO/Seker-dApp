@@ -45,6 +45,18 @@
     margin-top: 20px;
   }
 
+  &__create-token {
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    .btn {
+      padding: 0;
+      margin: 0;
+      height: auto;
+      margin-left: 10px;
+    }
+  }
+
   &__warning-message {
     margin-top: 20px;
     flex-wrap: nowrap;
