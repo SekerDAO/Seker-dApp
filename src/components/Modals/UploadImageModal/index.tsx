@@ -1,6 +1,5 @@
 import {FunctionComponent, useState} from "react"
 import Button from "../../Controls/Button"
-import "./styles.scss"
 import Modal from "../Modal"
 import MediaUpload from "../../Controls/MediaUpload"
 import {toastError, toastSuccess} from "../../UI/Toast"
@@ -46,19 +45,17 @@ const UploadImageModal: FunctionComponent<{
 				onClose={() => {
 					setIsOpened(false)
 				}}
+				title={titleText}
+				submitButtonText={processing ? "Processing..." : "Save"}
+				onSubmit={handleSave}
+				submitButtonDisabled={!image || processing}
 			>
-				<div className="upload-image-modal">
-					<h2>{titleText}</h2>
-					<MediaUpload
-						onUpload={file => {
-							setImage(file)
-						}}
-						initialUrl={initialUrl}
-					/>
-					<Button onClick={handleSave} disabled={!image || processing}>
-						{processing ? "Processing..." : "Save"}
-					</Button>
-				</div>
+				<MediaUpload
+					onUpload={file => {
+						setImage(file)
+					}}
+					initialUrl={initialUrl}
+				/>
 			</Modal>
 		</>
 	)

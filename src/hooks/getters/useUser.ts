@@ -16,6 +16,7 @@ const useUser = (
 
 	const getInfo = async () => {
 		setLoading(true)
+
 		setError(false)
 		try {
 			const _user = await getUser(account)

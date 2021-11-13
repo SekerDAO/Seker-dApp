@@ -28,7 +28,7 @@ const Profile: FunctionComponent = () => {
 	const [galleryKey, setGalleryKey] = useState(Math.random())
 
 	const {userId} = useParams<{userId: string}>()
-	const {user, loading, error, refetch} = useUser(userId)
+	const {user, error, refetch} = useUser(userId)
 	useEffect(() => {
 		if (user && user.url && isAddress(userId)) {
 			replace(`/profile/${user.url}`)
@@ -39,7 +39,7 @@ const Profile: FunctionComponent = () => {
 	const page: ProfilePage = (isOwner && (parse(search).page as ProfilePage)) || "nfts"
 
 	if (error) return <ErrorPlaceholder />
-	if (loading || !user) return <Loader />
+	if (!user) return <Loader />
 
 	const updateGallery = () => {
 		setGalleryKey(Math.random())

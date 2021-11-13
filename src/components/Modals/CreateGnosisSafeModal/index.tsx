@@ -15,17 +15,21 @@ import {isAddress} from "@ethersproject/address"
 
 type CreateGnosisSafeStage = "chooseOption" | "create" | "import" | "success"
 
-const CreateGnosisSafeModalContent: FunctionComponent<{
+const CreateGnosisSafeModal: FunctionComponent<{
 	afterCreate: () => void
 }> = ({afterCreate}) => {
+	const [isOpened, setIsOpened] = useState(false)
+
 	const {account} = useContext(AuthContext)
 	const {signer} = useContext(EthersContext)
 	const [processing, setProcessing] = useState(false)
 	const [stage, setStage] = useState<CreateGnosisSafeStage>("chooseOption")
 	const [newGnosis, setNewGnosis] = useState(true)
+	const [gnosisSafeAddress, setGnosisSafeAddress] = useState("")
 	const [daoName, setDaoName] = useState("")
 	const [votingThreshold, setVotingThreshold] = useState("")
 	const [members, setMembers] = useState<string[]>([])
+
 	useEffect(() => {
 		if (account) {
 			setMembers([account])
@@ -55,7 +59,7 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 			if (newGnosis) {
 				setStage("create")
 			} else {
-				console.log("TODO")
+				setStage("import")
 			}
 		} else if (stage === "create") {
 			if (!(account && signer && votingThreshold)) return
@@ -65,12 +69,15 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 				await addDAO(gnosisAddress)
 				await editDAO({gnosisAddress, name: daoName})
 				toastSuccess("DAO successfully created!")
+				setIsOpened(false)
 				afterCreate()
 			} catch (e) {
 				console.error(e)
 				toastError("Failed to create DAO")
 			}
 			setProcessing(false)
+		} else if (stage === "import") {
+			console.log("TODO: Implement importing Gnosis Safe")
 		}
 	}
 
@@ -85,69 +92,21 @@ const CreateGnosisSafeModalContent: FunctionComponent<{
 				Number(votingThreshold) <= members.length &&
 				members.length &&
 				members.reduce((acc, cur) => acc && !!cur, true)
-			))
+			)) ||
+		(stage === "import" && !gnosisSafeAddress)
 
-	return (
-		<div className="create-gnosis-safe">
-			{stage === "chooseOption" && (
-				<>
-					<h2>Start a DAO</h2>
-					<div className="create-gnosis-safe__row">
-						<RadioButton
-							label="Create Gnosis Safe"
-							id="create-gnosis-safe-new"
-							checked={newGnosis}
-							onChange={() => {
-								setNewGnosis(true)
-							}}
-						/>
-					</div>
-					<div className="create-gnosis-safe__row">
-						<RadioButton
-							label="TODO: Load Existing Gnosis Safe"
-							id="create-gnosis-safe-existing"
-							checked={!newGnosis}
-							onChange={() => {
-								setNewGnosis(false)
-							}}
-						/>
-					</div>
-				</>
-			)}
-			{stage === "create" && (
-				<>
-					<h2>Create Gnosis Safe</h2>
-					<label htmlFor="create-gnosis-name">DAO Name</label>
-					<Input
-						id="create-gnosis-name"
-						value={daoName}
-						onChange={e => {
-							setDaoName(e.target.value)
-						}}
-					/>
-					<label>Add Admins</label>
-					<ArrayInput
-						items={members}
-						onAdd={handleMemberAdd}
-						onRemove={handleMemberRemove}
-						placeholder="Paste address and press enter. Add more addresses if needed"
-						validator={(value: string) => (isAddress(value) ? null : "Bad address format")}
-					/>
-					<label htmlFor="create-gnosis-threshold">Admin Voting Threshold</label>
-					<Input number value={votingThreshold} onChange={handleThresholdChange} />
-				</>
-			)}
-			<Button buttonType="primary" onClick={handleSubmit} disabled={submitButtonDisabled}>
-				{processing ? "Processing..." : stage === "chooseOption" ? "Continue" : "Submit"}
-			</Button>
-		</div>
-	)
-}
+	const title =
+		stage === "create"
+			? "Create Gnosis Safe"
+			: stage === "import"
+			? "Load Existing Gnosis Safe"
+			: "Start a DAO"
 
-const CreateGnosisSafeModal: FunctionComponent<{
-	afterCreate: () => void
-}> = ({afterCreate}) => {
-	const [isOpened, setIsOpened] = useState(false)
+	const submitButtonText = processing
+		? "Submit"
+		: stage === "create" || stage === "import"
+		? "Submit"
+		: "Continue"
 
 	return (
 		<>
@@ -160,17 +119,90 @@ const CreateGnosisSafeModal: FunctionComponent<{
 				Start a DAO
 			</Button>
 			<Modal
+				title={title}
 				show={isOpened}
-				onClose={() => {
-					setIsOpened(false)
-				}}
+				onClose={() => setIsOpened(false)}
+				submitButtonText={submitButtonText}
+				onSubmit={handleSubmit}
+				submitButtonDisabled={submitButtonDisabled}
+				warningMessage={
+					stage === "create"
+						? `This request will incur a gas fee. If you would like to proceed, please click "Submit" below.`
+						: undefined
+				}
 			>
-				<CreateGnosisSafeModalContent
-					afterCreate={() => {
-						setIsOpened(false)
-						afterCreate()
-					}}
-				/>
+				<div className="create-gnosis-safe">
+					{stage === "chooseOption" && (
+						<>
+							<div className="create-gnosis-safe__row">
+								<RadioButton
+									label="Create Gnosis Safe"
+									id="create-gnosis-safe-new"
+									checked={newGnosis}
+									onChange={() => setNewGnosis(true)}
+								/>
+							</div>
+							<div className="create-gnosis-safe__row">
+								<RadioButton
+									label="Load Existing Gnosis Safe"
+									id="create-gnosis-safe-existing"
+									checked={!newGnosis}
+									onChange={() => setNewGnosis(false)}
+								/>
+							</div>
+						</>
+					)}
+					{stage === "create" && (
+						<>
+							<div className="create-gnosis-safe__row">
+								<label htmlFor="create-gnosis-name">DAO Name</label>
+								<Input
+									id="create-gnosis-name"
+									borders="all"
+									value={daoName}
+									onChange={e => {
+										setDaoName(e.target.value)
+									}}
+								/>
+							</div>
+							<div className="create-gnosis-safe__row">
+								<label>Add Admins(s)</label>
+								<ArrayInput
+									items={members}
+									onAdd={handleMemberAdd}
+									onRemove={handleMemberRemove}
+									placeholder="Paste address and press enter or tab"
+									validator={(value: string) => (isAddress(value) ? null : "Bad address format")}
+								/>
+							</div>
+							<div className="create-gnosis-safe__row">
+								<label htmlFor="create-gnosis-threshold">Admin Voting Threshold</label>
+								<Input
+									borders="all"
+									number
+									step={1}
+									min={1}
+									max={members.length}
+									value={votingThreshold}
+									onChange={handleThresholdChange}
+								/>
+							</div>
+						</>
+					)}
+					{stage === "import" && (
+						<div className="create-gnosis-safe__row">
+							<label htmlFor="import-gnosis-address">Gnosis Safe Address</label>
+							<Input
+								borders="all"
+								value={gnosisSafeAddress}
+								onChange={e => setGnosisSafeAddress(e.target.value)}
+								validation={
+									gnosisSafeAddress && !isAddress(gnosisSafeAddress) ? "Bad address format" : null
+								}
+							/>
+						</div>
+					)}
+				</div>
 			</Modal>
 		</>
 	)

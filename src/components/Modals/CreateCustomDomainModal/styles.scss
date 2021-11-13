@@ -7,14 +7,6 @@
   align-items: stretch;
   justify-content: space-between;
 
-  button {
-    align-self: flex-start;
-  }
-
-  h2 {
-    margin-top: 50px;
-  }
-
   label,
   button,
   p {
@@ -22,25 +14,10 @@
     margin-bottom: 0;
   }
 
-  .divider {
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
-
   .input {
     &__field {
       margin-top: 10px;
       width: 100%;
-    }
-  }
-
-  &__warning {
-    display: flex;
-    align-items: center;
-
-    p {
-      margin-top: 0;
-      margin-left: 10px;
     }
   }
 }
