@@ -42,18 +42,28 @@
     -webkit-appearance: none;
   }
 
-  &__custom-number-arrows {
-    flex-direction: column;
-    position: absolute;
-    right: 10px;
-    top: 20px;
-    display: flex;
+  &__custom-number {
+    &-arrows {
+      flex-direction: column;
+      position: absolute;
+      right: 10px;
+      top: 7px;
+      display: flex;
+    }
 
-    svg {
-      cursor: pointer;
+    &-arrow {
+      width: 20px;
+      height: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
       &:first-of-type {
         margin-bottom: 7px;
+      }
+
+      svg {
+        cursor: pointer;
       }
     }
   }
@@ -64,6 +74,9 @@
     background-color: $dark-grey;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
+    height: 40px;
+    display: flex;
+    align-items: center;
 
     & + .input__field {
       border-top-left-radius: 0;

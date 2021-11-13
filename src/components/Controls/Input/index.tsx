@@ -50,8 +50,12 @@ const Input: FunctionComponent<
 			/>
 			{number && (
 				<div className="input__custom-number-arrows">
-					<ArrowUp width="14px" height="7px" onClick={() => handleArrowClick(+step)} />
-					<ArrowDown width="14px" height="7px" onClick={() => handleArrowClick(-step)} />
+					<div className="input__custom-number-arrow" onClick={() => handleArrowClick(+step)}>
+						<ArrowUp width="14px" height="7px" />
+					</div>
+					<div className="input__custom-number-arrow" onClick={() => handleArrowClick(-step)}>
+						<ArrowDown width="14px" height="7px" />
+					</div>
 				</div>
 			)}
 			{validation && <span className="input__validation">{validation}</span>}
