@@ -37,28 +37,30 @@ const Input: FunctionComponent<
 
 	return (
 		<div className="input">
-			{staticPlaceholder && <div className="input__static-placeholder">{staticPlaceholder}</div>}
-			<input
-				className={`input__field${borders === "all" ? " input__field--bordered" : ""}${
-					validation ? " input__field--bad" : ""
-				}`}
-				type={number ? "number" : "text"}
-				step={step}
-				onChange={onChange}
-				ref={ref}
-				{...inputProps}
-			/>
-			{number && (
-				<div className="input__custom-number-arrows">
-					<div className="input__custom-number-arrow" onClick={() => handleArrowClick(+step)}>
-						<ArrowUp width="14px" height="7px" />
+			<div className="input__wrapper">
+				{staticPlaceholder && <div className="input__static-placeholder">{staticPlaceholder}</div>}
+				<input
+					className={`input__field${borders === "all" ? " input__field--bordered" : ""}${
+						validation ? " input__field--bad" : ""
+					}`}
+					type={number ? "number" : "text"}
+					step={step}
+					onChange={onChange}
+					ref={ref}
+					{...inputProps}
+				/>
+				{number && (
+					<div className="input__custom-number-arrows">
+						<div className="input__custom-number-arrow" onClick={() => handleArrowClick(+step)}>
+							<ArrowUp width="14px" height="7px" />
+						</div>
+						<div className="input__custom-number-arrow" onClick={() => handleArrowClick(-step)}>
+							<ArrowDown width="14px" height="7px" />
+						</div>
 					</div>
-					<div className="input__custom-number-arrow" onClick={() => handleArrowClick(-step)}>
-						<ArrowDown width="14px" height="7px" />
-					</div>
-				</div>
-			)}
-			{validation && <span className="input__validation">{validation}</span>}
+				)}
+				{validation && <span className="input__validation">{validation}</span>}
+			</div>
 		</div>
 	)
 }

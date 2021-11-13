@@ -3,7 +3,13 @@
 .input {
   display: flex;
   align-items: center;
-  position: relative;
+
+  &__wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+    flex: 1;
+  }
 
   &__field {
     font-family: Karla, 'Open Sans', sans-serif;
