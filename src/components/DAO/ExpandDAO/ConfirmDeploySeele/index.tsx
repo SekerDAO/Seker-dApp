@@ -34,7 +34,7 @@ const ConfirmDeploySeele: FunctionComponent<{
 	useEffect(() => {
 		const loadSignerDetails = async () => {
 			setSignerAddress(await signer?.getAddress())
-			setSignerBalance(await (await signer?.getBalance())?.toString())
+			setSignerBalance((await signer?.getBalance())?.toString())
 		}
 		loadSignerDetails()
 	}, [signer])
@@ -83,11 +83,11 @@ const ConfirmDeploySeele: FunctionComponent<{
 				<div className="confirm-deploy-seele__general-data-row">
 					<div className="confirm-deploy-seele__general-data-col">
 						<label>Send {transactionsTotal} ETH to</label>
-						<div className="copy-field">{signerAddress}</div>
+						<div className="copy-field">{multiTx?.tx.to}</div>
 					</div>
 					<div className="confirm-deploy-seele__general-data-col">
 						<label>Data (Hex Encoded)</label>
-						<div className="copy-field">{multiTx?.tx.data.length} bytes</div>
+						<div className="copy-field">{(multiTx?.tx.data.length as number) / 2 - 2} bytes</div>
 					</div>
 				</div>
 			</div>
@@ -95,7 +95,7 @@ const ConfirmDeploySeele: FunctionComponent<{
 				{transactions.map(({tx, name}) => (
 					<li key={tx.data} className="confirm-deploy-seele__transaction-row">
 						<div>
-							<span>Contract Deployment</span>
+							<span>Contract Interaction</span>
 						</div>
 						<div>
 							<span className="confirm-deploy-seele__transaction-name">{name}</span>
