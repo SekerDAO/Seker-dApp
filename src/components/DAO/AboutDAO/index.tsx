@@ -1,5 +1,6 @@
 import {FunctionComponent} from "react"
 import {DAO} from "../../../types/DAO"
+import {formatReadableAddress} from "../../../utlls"
 import Button from "../../Controls/Button"
 import Paper from "../../UI/Paper"
 import "./styles.scss"
@@ -29,9 +30,7 @@ const AboutDAO: FunctionComponent<{
 			<div className="about-dao__parameters">
 				<Paper>
 					<h3>DAO Contract</h3>
-					<span>
-						{dao.gnosisAddress.slice(0, 6)}...${dao.gnosisAddress.slice(-4)}
-					</span>
+					<span>{formatReadableAddress(dao.gnosisAddress)}</span>
 				</Paper>
 				{dao.tokenSymbol && (
 					<Paper>

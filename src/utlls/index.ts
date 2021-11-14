@@ -4,6 +4,9 @@ import {BigNumber} from "@ethersproject/bignumber"
 
 export const capitalize = (str: string): string => `${str[0].toUpperCase()}${str.slice(1)}`
 
+export const formatReadableAddress = (address?: string): string =>
+	address ? `${address.slice(0, 5)}...${address.slice(-4)}` : ""
+
 export const throttle = <T extends unknown[]>(
 	func: (...args: T) => unknown,
 	delay: number

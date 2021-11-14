@@ -7,7 +7,7 @@ import "./styles.scss"
 import Table from "../../components/UI/Table"
 import Button from "../../components/Controls/Button"
 import {Auction} from "../../types/auction"
-import {formatTimeDifference} from "../../utlls"
+import {formatReadableAddress, formatTimeDifference} from "../../utlls"
 import BidAuctionModal from "../../components/Modals/BidAuctionModal"
 import {toastError, toastSuccess} from "../../components/UI/Toast"
 import endAuction from "../../api/ethers/functions/auction/endAuction"
@@ -87,15 +87,13 @@ const NFTCard: FunctionComponent = () => {
 					<p>
 						<b>Creator:</b>
 					</p>
-					<Link to={`/profile/${nft.creator}`}>{`${nft.creator.slice(0, 3)}...${nft.creator.slice(
-						-4
-					)}`}</Link>
+					<Link to={`/profile/${nft.creator}`}>{formatReadableAddress(nft.creator)}</Link>
 					<p>
 						<b>Owner:</b>
 					</p>
-					<Link
-						to={`/${nft.ownerType === "dao" ? "dao" : "profile"}/${nft.owner}`}
-					>{`${nft.owner.slice(0, 3)}...${nft.owner.slice(-4)}`}</Link>
+					<Link to={`/${nft.ownerType === "dao" ? "dao" : "profile"}/${nft.owner}`}>
+						{formatReadableAddress(nft.owner)}
+					</Link>
 					{nft.desc && (
 						<>
 							<p>
@@ -111,7 +109,7 @@ const NFTCard: FunctionComponent = () => {
 					<p>
 						<b>Token Address:</b>
 					</p>
-					<p>{`${nft.address.slice(0, 3)}...${nft.address.slice(-4)}`}</p>
+					<p>{formatReadableAddress(nft.address)}</p>
 					<a
 						target="_blank"
 						rel="noopener noreferrer"
@@ -173,9 +171,7 @@ const NFTCard: FunctionComponent = () => {
 									<p>
 										<b>Curator:</b>
 									</p>
-									<p>{`${auction.curatorAddress.slice(0, 3)}...${auction.curatorAddress.slice(
-										-4
-									)}`}</p>
+									<p>{formatReadableAddress(auction.curatorAddress)}</p>
 								</div>
 							)}
 						</div>

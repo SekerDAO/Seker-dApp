@@ -4,6 +4,7 @@ import {AuthContext} from "../../context/AuthContext"
 import Dropdown from "../Controls/Dropdown"
 import Button from "../Controls/Button"
 import Divider from "../UI/Divider"
+import {formatReadableAddress} from "../../utlls"
 
 const HeaderMenu: FunctionComponent = () => {
 	const {account, url, connected, connecting, connectWallet, disconnect} = useContext(AuthContext)
@@ -47,11 +48,7 @@ const HeaderMenu: FunctionComponent = () => {
 					items={[
 						{
 							value: "profile",
-							name: (
-								<Link to={`/profile/${url ?? account}`}>{`${account.slice(0, 6)}...${account.slice(
-									-4
-								)}`}</Link>
-							)
+							name: <Link to={`/profile/${url ?? account}`}>{formatReadableAddress(account)}</Link>
 						},
 						{
 							value: "disconnect",

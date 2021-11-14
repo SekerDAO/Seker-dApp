@@ -10,6 +10,8 @@ import {ReactComponent as WarningIcon} from "../../../../assets/icons/warning.sv
 import {ReactComponent as ArrowDown} from "../../../../assets/icons/arrow-down.svg"
 import "./styles.scss"
 import Paper from "../../../UI/Paper"
+import CopyField from "../../../UI/Copy"
+import {formatReadableAddress} from "../../../../utlls"
 
 const ConfirmDeploySeele: FunctionComponent<{
 	transactions: {tx: SafeTransaction; name: string}[]
@@ -77,17 +79,19 @@ const ConfirmDeploySeele: FunctionComponent<{
 			<div className="confirm-deploy-seele__general-data">
 				<div className="confirm-deploy-seele__general-data-row">
 					<label>From</label>
-					<div className="copy-field">{signerAddress}</div>
+					<CopyField value={signerAddress}>{formatReadableAddress(signerAddress)}</CopyField>
 					<span className="confirm-deploy-seele__data-balance">Balance: {signerBalance} ETH</span>
 				</div>
 				<div className="confirm-deploy-seele__general-data-row">
 					<div className="confirm-deploy-seele__general-data-col">
 						<label>Send {transactionsTotal} ETH to</label>
-						<div className="copy-field">{multiTx?.tx.to}</div>
+						<CopyField value={multiTx?.tx.to}>{formatReadableAddress(multiTx?.tx.to)}</CopyField>
 					</div>
 					<div className="confirm-deploy-seele__general-data-col">
 						<label>Data (Hex Encoded)</label>
-						<div className="copy-field">{(multiTx?.tx.data.length as number) / 2 - 2} bytes</div>
+						<CopyField value={multiTx?.tx.data}>
+							{(multiTx?.tx.data.length as number) / 2 - 2} bytes
+						</CopyField>
 					</div>
 				</div>
 			</div>

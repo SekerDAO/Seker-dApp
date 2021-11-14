@@ -1,14 +1,15 @@
 import {FunctionComponent} from "react"
+import "./styles.scss"
 
-const Copy: FunctionComponent<{text: string; value: string}> = ({text, value}) => {
+const CopyField: FunctionComponent<{value?: string}> = ({children, value}) => {
 	const handleCopy = () => {
-		navigator.clipboard.writeText(value)
+		value && navigator.clipboard.writeText(value)
 	}
 	return (
-		<div className="copy" onClick={handleCopy}>
-			{text}
+		<div className="copy-field" onClick={handleCopy}>
+			{children}
 		</div>
 	)
 }
 
-export default Copy
+export default CopyField

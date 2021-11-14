@@ -3,6 +3,7 @@ import {Link} from "react-router-dom"
 import "./styles.scss"
 import {NFTGalleryItemProps} from "../../types/NFT"
 import {ReactComponent as CloseIcon} from "../../assets/icons/delete.svg"
+import {formatReadableAddress} from "../../utlls"
 
 const GalleryItem: FunctionComponent<NFTGalleryItemProps> = ({
 	id,
@@ -44,7 +45,7 @@ const GalleryItem: FunctionComponent<NFTGalleryItemProps> = ({
 					)}
 				</div>
 				<div className="gallery__details-row">
-					<div>{`${creator.slice(0, 3)}...${creator.slice(-4)}`}</div>
+					<div>{formatReadableAddress(creator)}</div>
 				</div>
 			</div>
 		</div>
