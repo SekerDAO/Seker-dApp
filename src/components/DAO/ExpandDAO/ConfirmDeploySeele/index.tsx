@@ -1,4 +1,4 @@
-import {FunctionComponent, useContext, useState, useEffect} from "react"
+import {FunctionComponent, Fragment, useContext, useState, useEffect} from "react"
 import {SafeTransaction} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
 import {toastError} from "../../../UI/Toast"
 import {executeMultiSend, signMultiSend} from "../../../../api/ethers/functions/Seele/multiSend"
@@ -12,6 +12,7 @@ import "./styles.scss"
 import Paper from "../../../UI/Paper"
 import CopyField from "../../../UI/Copy"
 import {formatReadableAddress} from "../../../../utlls"
+import TransactionDetailsModal from "../../../Modals/TransactionDetailsModal"
 
 const ConfirmDeploySeele: FunctionComponent<{
 	transactions: {tx: SafeTransaction; name: string}[]
@@ -29,6 +30,7 @@ const ConfirmDeploySeele: FunctionComponent<{
 	onGoBack
 }) => {
 	const {signer} = useContext(EthersContext)
+	const [openedTxDetails, setOpenedTxDetails] = useState<number | undefined>()
 	const [loading, setLoading] = useState(false)
 	const [signerAddress, setSignerAddress] = useState<string | undefined>()
 	const [signerBalance, setSignerBalance] = useState<string | undefined>()
@@ -40,6 +42,10 @@ const ConfirmDeploySeele: FunctionComponent<{
 		}
 		loadSignerDetails()
 	}, [signer])
+
+	const handleTxDetailsClose = () => {
+		setOpenedTxDetails(undefined)
+	}
 
 	const handleSubmit = async () => {
 		if (!signer) return
@@ -96,16 +102,27 @@ const ConfirmDeploySeele: FunctionComponent<{
 				</div>
 			</div>
 			<ul className="confirm-deploy-seele__transaction-list">
-				{transactions.map(({tx, name}) => (
-					<li key={tx.data} className="confirm-deploy-seele__transaction-row">
-						<div>
-							<span>Contract Interaction</span>
-						</div>
-						<div>
-							<span className="confirm-deploy-seele__transaction-name">{name}</span>
-							<ArrowDown width="14px" height="7px" />
-						</div>
-					</li>
+				{transactions.map(({tx, name}, index) => (
+					<Fragment key={tx.data}>
+						<li
+							key={tx.data}
+							className="confirm-deploy-seele__transaction-row"
+							onClick={() => setOpenedTxDetails(index)}
+						>
+							<div>
+								<span>Contract Interaction</span>
+							</div>
+							<div>
+								<span className="confirm-deploy-seele__transaction-name">{name}</span>
+								<ArrowDown width="14px" height="7px" />
+							</div>
+						</li>
+						<TransactionDetailsModal
+							transaction={{tx, name}}
+							show={openedTxDetails === index}
+							onClose={handleTxDetailsClose}
+						/>
+					</Fragment>
 				))}
 			</ul>
 			<div className="confirm-deploy-seele__warning-message">
