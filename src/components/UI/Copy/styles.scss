@@ -10,4 +10,8 @@
   border-radius: 5px;
   display: flex;
   justify-content: space-between;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
