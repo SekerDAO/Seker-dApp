@@ -19,16 +19,8 @@ const ConfirmDeploySeele: FunctionComponent<{
 	gnosisAddress: string
 	gnosisVotingThreshold: number
 	afterSubmit: () => void
-	onGoBack: () => void
 	expectedSeeleAddress: string
-}> = ({
-	transactions,
-	gnosisAddress,
-	gnosisVotingThreshold,
-	afterSubmit,
-	expectedSeeleAddress,
-	onGoBack
-}) => {
+}> = ({transactions, gnosisAddress, gnosisVotingThreshold, afterSubmit, expectedSeeleAddress}) => {
 	const {signer} = useContext(EthersContext)
 	const [openedTxDetails, setOpenedTxDetails] = useState<number | undefined>()
 	const [loading, setLoading] = useState(false)
@@ -81,7 +73,6 @@ const ConfirmDeploySeele: FunctionComponent<{
 	const transactionsTotal = transactions.reduce((current, {tx: {value}}) => current + +value, 0)
 	return (
 		<Paper className="confirm-deploy-seele">
-			<h2>Confirm Bundle Transactions</h2>
 			<div className="confirm-deploy-seele__general-data">
 				<div className="confirm-deploy-seele__general-data-row">
 					<label>From</label>
@@ -132,14 +123,6 @@ const ConfirmDeploySeele: FunctionComponent<{
 					Create Proposal" below.`}
 				</span>
 			</div>
-			<Button
-				buttonType="secondary"
-				disabled={loading}
-				onClick={onGoBack}
-				extraClassName="confirm-deploy-seele__footer-button"
-			>
-				Back
-			</Button>
 			<Button
 				disabled={loading}
 				onClick={handleSubmit}

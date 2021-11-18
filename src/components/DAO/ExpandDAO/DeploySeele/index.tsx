@@ -26,7 +26,9 @@ const STAGE_HEADERS: {[key in ExpandDaoStage]: {title?: string; description?: st
 		can add as many as you would like. Once you have finished, proceed to the next step to
 		confirm your transactions and deploy.`
 	},
-	confirm: {}
+	confirm: {
+		title: "Confirm Bundle Transactions"
+	}
 }
 
 const DeploySeele: FunctionComponent<{
@@ -77,6 +79,8 @@ const DeploySeele: FunctionComponent<{
 		<ExpandDaoLayout
 			title={STAGE_HEADERS[stage].title}
 			description={STAGE_HEADERS[stage].description}
+			onGoBack={() => setStage("chooseStrategies")}
+			showBackButton={stage === "confirm"}
 		>
 			{stage === "chooseStrategies" && (
 				<ChooseVotingStrategies
@@ -94,7 +98,6 @@ const DeploySeele: FunctionComponent<{
 			)}
 			{stage === "confirm" && (
 				<ConfirmDeploySeele
-					onGoBack={() => setStage("chooseStrategies")}
 					transactions={transactions}
 					gnosisAddress={gnosisAddress}
 					gnosisVotingThreshold={gnosisVotingThreshold}
