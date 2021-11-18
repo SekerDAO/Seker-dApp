@@ -3,9 +3,13 @@
   display: flex;
   flex-direction: column;
 
-  input {
+  .input {
     margin-top: 10px;
     width: 100%;
+
+    input {
+      width: 100%;
+    }
   }
 
   label {
