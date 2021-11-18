@@ -29,7 +29,7 @@ import CreateDaoProposal from "../../components/DAO/CreateDaoProposal"
 type DAOAdminPage = "createNFT" | "edit" | "createProposal" | "expand"
 type DAOContentPage = "collection" | "about" | "members" | "proposals"
 
-const menuEntries = [
+export const daoMenuEntries = [
 	{id: "collection", name: "Collection"},
 	{id: "about", name: "About"},
 	{id: "members", name: "Members"},
@@ -166,7 +166,7 @@ const DAOPage: FunctionComponent = () => {
 					</div>
 					<div className="dao__main">
 						<HorizontalMenu
-							pages={menuEntries}
+							pages={daoMenuEntries}
 							currentPage={page}
 							onChange={nextPage => {
 								push(`${pathname}?page=${nextPage}`)

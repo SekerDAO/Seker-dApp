@@ -1,0 +1,10 @@
+.dashboard {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1;
+
+  &__content {
+    max-width: 880px;
+  }
+}
