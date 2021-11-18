@@ -1,7 +1,7 @@
 import {FunctionComponent, Fragment, useContext, useState, useEffect} from "react"
 import {SafeTransaction} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
 import {toastError} from "../../../UI/Toast"
-import {executeMultiSend, signMultiSend} from "../../../../api/ethers/functions/Seele/multiSend"
+import {executeMultiSend, signMultiSend} from "../../../../api/ethers/functions/Usul/multiSend"
 import editDAO from "../../../../api/firebase/DAO/editDAO"
 import addSafeProposal from "../../../../api/firebase/safeProposal/addSafeProposal"
 import EthersContext from "../../../../context/EthersContext"
@@ -14,19 +14,19 @@ import CopyField from "../../../UI/Copy"
 import {formatReadableAddress} from "../../../../utlls"
 import TransactionDetailsModal from "../../../Modals/TransactionDetailsModal"
 
-const ConfirmDeploySeele: FunctionComponent<{
+const ConfirmDeployUsul: FunctionComponent<{
 	transactions: {tx: SafeTransaction; name: string}[]
 	gnosisAddress: string
 	gnosisVotingThreshold: number
 	afterSubmit: () => void
 	onGoBack: () => void
-	expectedSeeleAddress: string
+	expectedUsulAddress: string
 }> = ({
 	transactions,
 	gnosisAddress,
 	gnosisVotingThreshold,
 	afterSubmit,
-	expectedSeeleAddress,
+	expectedUsulAddress,
 	onGoBack
 }) => {
 	const {signer} = useContext(EthersContext)
@@ -57,13 +57,13 @@ const ConfirmDeploySeele: FunctionComponent<{
 					await executeMultiSend(multiTx.tx, gnosisAddress, [signature], signer)
 					await editDAO({
 						gnosisAddress,
-						seeleAddress: expectedSeeleAddress
+						usulAddress: expectedUsulAddress
 					})
 				}
 				await addSafeProposal({
 					type: "decentralizeDAO",
 					gnosisAddress,
-					seeleAddress: expectedSeeleAddress,
+					usulAddress: expectedUsulAddress,
 					title: "Decentralize DAO",
 					state: gnosisVotingThreshold === 1 ? "executed" : "active",
 					signatures: [signature],
@@ -80,20 +80,20 @@ const ConfirmDeploySeele: FunctionComponent<{
 
 	const transactionsTotal = transactions.reduce((current, {tx: {value}}) => current + +value, 0)
 	return (
-		<Paper className="confirm-deploy-seele">
+		<Paper className="confirm-deploy-usul">
 			<h2>Confirm Bundle Transactions</h2>
-			<div className="confirm-deploy-seele__general-data">
-				<div className="confirm-deploy-seele__general-data-row">
+			<div className="confirm-deploy-usul__general-data">
+				<div className="confirm-deploy-usul__general-data-row">
 					<label>From</label>
 					<CopyField value={signerAddress}>{formatReadableAddress(signerAddress)}</CopyField>
-					<span className="confirm-deploy-seele__data-balance">Balance: {signerBalance} ETH</span>
+					<span className="confirm-deploy-usul__data-balance">Balance: {signerBalance} ETH</span>
 				</div>
-				<div className="confirm-deploy-seele__general-data-row">
-					<div className="confirm-deploy-seele__general-data-col">
+				<div className="confirm-deploy-usul__general-data-row">
+					<div className="confirm-deploy-usul__general-data-col">
 						<label>Send {transactionsTotal} ETH to</label>
 						<CopyField value={multiTx?.tx.to}>{formatReadableAddress(multiTx?.tx.to)}</CopyField>
 					</div>
-					<div className="confirm-deploy-seele__general-data-col">
+					<div className="confirm-deploy-usul__general-data-col">
 						<label>Data (Hex Encoded)</label>
 						<CopyField value={multiTx?.tx.data}>
 							{(multiTx?.tx.data.length as number) / 2 - 2} bytes
@@ -101,19 +101,19 @@ const ConfirmDeploySeele: FunctionComponent<{
 					</div>
 				</div>
 			</div>
-			<ul className="confirm-deploy-seele__transaction-list">
+			<ul className="confirm-deploy-usul__transaction-list">
 				{transactions.map(({tx, name}, index) => (
 					<Fragment key={tx.data}>
 						<li
 							key={tx.data}
-							className="confirm-deploy-seele__transaction-row"
+							className="confirm-deploy-usul__transaction-row"
 							onClick={() => setOpenedTxDetails(index)}
 						>
 							<div>
 								<span>Contract Interaction</span>
 							</div>
 							<div>
-								<span className="confirm-deploy-seele__transaction-name">{name}</span>
+								<span className="confirm-deploy-usul__transaction-name">{name}</span>
 								<ArrowDown width="14px" height="7px" />
 							</div>
 						</li>
@@ -125,7 +125,7 @@ const ConfirmDeploySeele: FunctionComponent<{
 					</Fragment>
 				))}
 			</ul>
-			<div className="confirm-deploy-seele__warning-message">
+			<div className="confirm-deploy-usul__warning-message">
 				<WarningIcon width="20px" height="20px" />
 				<span>
 					{`This request will incur a gas fee. If you would like to proceed, please click "Confirm and
@@ -136,23 +136,23 @@ const ConfirmDeploySeele: FunctionComponent<{
 				buttonType="secondary"
 				disabled={loading}
 				onClick={onGoBack}
-				extraClassName="confirm-deploy-seele__footer-button"
+				extraClassName="confirm-deploy-usul__footer-button"
 			>
 				Back
 			</Button>
 			<Button
 				disabled={loading}
 				onClick={handleSubmit}
-				extraClassName="confirm-deploy-seele__footer-button"
+				extraClassName="confirm-deploy-usul__footer-button"
 			>
 				{loading
 					? "Submitting..."
 					: gnosisVotingThreshold
-					? "Confirm and Deploy Seele"
+					? "Confirm and Deploy Usul"
 					: "Confirm and Create Proposal"}
 			</Button>
 		</Paper>
 	)
 }
 
-export default ConfirmDeploySeele
+export default ConfirmDeployUsul

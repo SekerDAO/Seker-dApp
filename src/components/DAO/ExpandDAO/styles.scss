@@ -29,12 +29,12 @@
       margin-top: -60px;
     }
 
-    &-seele {
+    &-usul {
       display: flex;
       width: 200px;
       height: 200px;
       margin-right: 200px; // TODO: remove this margin once Bridge module is added
-      background-image: url("../../../assets/icons/seele-default.svg");
+      background-image: url("../../../assets/icons/usul-default.svg");
 
       h2 {
         display: flex;
@@ -43,16 +43,16 @@
       }
 
       &:hover {
-        background-image: url("../../../assets/icons/seele-hover.svg");
+        background-image: url("../../../assets/icons/usul-hover.svg");
         cursor: pointer;
       }
 
       &--deployed {
-        background-image: url("../../../assets/icons/seele-deployed.svg");
+        background-image: url("../../../assets/icons/usul-deployed.svg");
 
         &:hover {
           cursor: not-allowed;
-          background-image: url("../../../assets/icons/seele-deployed.svg");
+          background-image: url("../../../assets/icons/usul-deployed.svg");
         }
       }
     }

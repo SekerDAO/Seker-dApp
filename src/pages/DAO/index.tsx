@@ -211,7 +211,7 @@ const DAOPage: FunctionComponent = () => {
 							<ExpandDAO
 								gnosisAddress={dao.gnosisAddress}
 								gnosisVotingThreshold={dao.gnosisVotingThreshold}
-								seeleAddress={dao.seeleAddress}
+								usulAddress={dao.usulAddress}
 							/>
 						)}
 					</div>

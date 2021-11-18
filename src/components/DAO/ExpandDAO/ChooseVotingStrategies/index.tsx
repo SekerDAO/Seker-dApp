@@ -12,7 +12,7 @@ import {ReactComponent as StepDotDoneIcon} from "../../../../assets/icons/step-d
 import {ReactComponent as DeleteIcon} from "../../../../assets/icons/delete.svg"
 import "./styles.scss"
 import {SafeTransaction} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
-import getOZLinearDeployTx from "../../../../api/ethers/functions/Seele/getOZLinearDeployTx"
+import getOZLinearDeployTx from "../../../../api/ethers/functions/Usul/getOZLinearDeployTx"
 import EthersContext from "../../../../context/EthersContext"
 
 const ChooseVotingStrategies: FunctionComponent<{
