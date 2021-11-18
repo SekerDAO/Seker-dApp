@@ -38,6 +38,6 @@ export const executeMultiSend = async (
 	signer: JsonRpcSigner
 ): Promise<void> => {
 	const safeContract = new Contract(safeAddress, GnosisSafeL2.abi, signer)
-	const tx = await executeTx(safeContract, multiSendTx, signatures, {gasLimit: 5000000})
+	const tx = await executeTx(safeContract, multiSendTx, signatures)
 	await tx.wait()
 }

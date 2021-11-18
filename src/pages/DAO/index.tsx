@@ -154,15 +154,11 @@ const DAOPage: FunctionComponent = () => {
 										to: `${pathname}?page=createProposal`,
 										page: "createProposal"
 									},
-									...(dao.seeleAddress
-										? []
-										: [
-												{
-													title: "Expand Dao",
-													to: `${pathname}?page=expand`,
-													page: "expand"
-												}
-										  ])
+									{
+										title: "Expand Dao",
+										to: `${pathname}?page=expand`,
+										page: "expand"
+									}
 								]}
 								currentPage={page}
 							/>
@@ -215,6 +211,7 @@ const DAOPage: FunctionComponent = () => {
 							<ExpandDAO
 								gnosisAddress={dao.gnosisAddress}
 								gnosisVotingThreshold={dao.gnosisVotingThreshold}
+								seeleAddress={dao.seeleAddress}
 							/>
 						)}
 					</div>

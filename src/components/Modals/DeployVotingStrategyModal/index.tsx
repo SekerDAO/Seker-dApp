@@ -57,6 +57,7 @@ const DeployVotingStrategyModal: FunctionComponent<{
 		Number(quorumThreshold) > 0 && // TODO: validation
 		votingPeriod &&
 		!isNaN(Number(votingPeriod)) &&
+		Number(votingPeriod) > 1 &&
 		signer
 	)
 
@@ -102,6 +103,7 @@ const DeployVotingStrategyModal: FunctionComponent<{
 							<Input
 								required
 								number
+								min={2}
 								placeholder="# of hours"
 								name="votingPeriod"
 								value={formValues.votingPeriod}
@@ -113,6 +115,7 @@ const DeployVotingStrategyModal: FunctionComponent<{
 							<Input
 								required
 								number
+								min={0}
 								placeholder="# of hours"
 								name="delay"
 								value={formValues.delay}
@@ -125,6 +128,8 @@ const DeployVotingStrategyModal: FunctionComponent<{
 						<Input
 							number
 							required
+							min={1}
+							max={100}
 							placeholder="% of tokens"
 							name="quorumThreshold"
 							value={formValues.quorumThreshold}

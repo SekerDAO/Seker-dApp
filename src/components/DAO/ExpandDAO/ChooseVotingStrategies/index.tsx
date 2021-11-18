@@ -39,6 +39,7 @@ const ChooseVotingStrategies: FunctionComponent<{
 				Number(quorumThreshold) > 0 && // TODO: validation
 				votingPeriod &&
 				!isNaN(Number(votingPeriod)) &&
+				Number(votingPeriod) > 1 &&
 				signer
 			) {
 				const {tx, expectedAddress} = await getOZLinearDeployTx(
