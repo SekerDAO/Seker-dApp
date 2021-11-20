@@ -9,7 +9,6 @@ export const getStrategies = async (
 	signer: JsonRpcSigner
 ): Promise<string[]> => {
 	const usulProxy = new Contract(usulAddress, Seele.abi, signer)
-	console.log(usulAddress)
 	const strategies: string[] = await usulProxy.getStrategiesPaginated(
 		"0x0000000000000000000000000000000000000001",
 		10
@@ -19,9 +18,32 @@ export const getStrategies = async (
 }
 
 export const inspectStrategy = async (strategy: string, signer: JsonRpcSigner): Promise<string> => {
-	console.log(strategy)
 	const Strategy = new Contract(strategy, OZLinearVoting.abi, signer)
 	const name = await Strategy.name()
-	console.log(test)
 	return name
+}
+
+export const generateTxHashes = async (
+	usulAddress: string,
+	transactions: SafeTransaction[],
+	signer: JsonRpcSigner
+): Promise<string[]> => {
+	const usulProxy = new Contract(usulAddress, Seele.abi, signer)
+	const txHashes: string[] = await Promise.all(
+		transactions.map(async (tx): Promise<string> => {
+			return await usulProxy.getTransactionHash(tx.to, tx.value, tx.data, tx.operation)
+		})
+	)
+	return txHashes
+}
+
+export const submitProposal = async (
+	usulAddress: string,
+	strategyAddress: string,
+	txHashes: SafeTransaction[],
+	signer: JsonRpcSigner,
+	extraData = "0x"
+): Promise<void> => {
+	const usulProxy = new Contract(usulAddress, Seele.abi, signer)
+	await usulProxy.submitProposal(txHashes, strategyAddress, extraData)
 }
