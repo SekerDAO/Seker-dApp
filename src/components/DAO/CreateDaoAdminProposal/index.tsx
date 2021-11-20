@@ -6,7 +6,7 @@ import {AuthContext} from "../../../context/AuthContext"
 import {SafeProposalsTypeNames, SafeProposalType} from "../../../types/safeProposal"
 import CreateAuction from "./CreateAuction"
 import CancelAuction from "./CancelAuction"
-import useDAOProposals from "../../../hooks/getters/useDAOProposals"
+import useProposals from "../../../hooks/getters/useProposals"
 import ErrorPlaceholder from "../../UI/ErrorPlaceholder"
 import Loader from "../../UI/Loader"
 import GeneralEVM from "./GeneralEVM"
@@ -22,7 +22,7 @@ const CreateDaoAdminProposal: FunctionComponent<{
 	const [type, setType] = useState<SafeProposalType>("changeRole")
 	const [title, setTitle] = useState("")
 	const [description, setDescription] = useState("")
-	const {proposals, loading, error} = useDAOProposals(gnosisAddress)
+	const {proposals, loading, error} = useProposals(gnosisAddress)
 
 	if (error) return <ErrorPlaceholder />
 	if (loading) return <Loader />

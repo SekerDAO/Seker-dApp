@@ -16,6 +16,7 @@ import DAOsPage from "./pages/DAOs"
 import Header from "./components/Header"
 import Footer from "./components/Footer"
 import ErrorPlaceholder from "./components/UI/ErrorPlaceholder"
+import Proposal from "./pages/Proposal"
 
 const AppWithEthers: FunctionComponent = () => {
 	const auth = useAuth()
@@ -33,6 +34,7 @@ const AppWithEthers: FunctionComponent = () => {
 						<Route exact path="/profile/:userId" component={Profile} />
 						<Route exact path="/dao/:address" component={DAOPage} />
 						<Route exact path="/daos" component={DAOsPage} />
+						<Route exact path="/proposal/:id" component={Proposal} />
 					</Switch>
 					<Footer />
 				</div>

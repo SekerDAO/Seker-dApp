@@ -47,6 +47,7 @@ const Input: FunctionComponent<
 					step={step}
 					onChange={onChange}
 					ref={ref}
+					value={value}
 					{...inputProps}
 				/>
 				{number && (

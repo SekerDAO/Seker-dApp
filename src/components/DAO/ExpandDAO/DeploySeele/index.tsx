@@ -8,7 +8,7 @@ import {
 } from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
 import EthersContext from "../../../../context/EthersContext"
 import ReviewDeploySeele from "../ReviewDeploySeele"
-import useDAOProposals from "../../../../hooks/getters/useDAOProposals"
+import useProposals from "../../../../hooks/getters/useProposals"
 import ErrorPlaceholder from "../../../UI/ErrorPlaceholder"
 
 type ExpandDaoStage = "chooseStrategies" | "review" | "waiting" | "done"
@@ -54,7 +54,7 @@ const DeploySeele: FunctionComponent<{
 		}
 	}, [strategies, gnosisAddress, signer])
 
-	const {proposals, error} = useDAOProposals(gnosisAddress)
+	const {proposals, error} = useProposals(gnosisAddress)
 	useEffect(() => {
 		if (proposals) {
 			const expandProposal = proposals.find(
