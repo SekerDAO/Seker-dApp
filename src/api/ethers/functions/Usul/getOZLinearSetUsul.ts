@@ -4,7 +4,7 @@ import {Contract} from "@ethersproject/contracts"
 import {buildContractCallVariable, SafeTransaction} from "../gnosisSafe/safeUtils"
 const {REACT_APP_OZ_LINEAR_MASTER_ADDRESS} = process.env
 
-const getOZLinearSetSeele = (
+const getOZLinearSetUsul = (
 	expectedSeeleAddress: string,
 	expectedStrategyAddress: string,
 	signer: JsonRpcSigner
@@ -17,10 +17,10 @@ const getOZLinearSetSeele = (
 	return buildContractCallVariable(
 		linearVotingMaster,
 		expectedStrategyAddress,
-		"setSeele",
+		"setUsul",
 		[expectedSeeleAddress],
 		0
 	)
 }
 
-export default getOZLinearSetSeele
+export default getOZLinearSetUsul

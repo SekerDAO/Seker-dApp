@@ -26,7 +26,7 @@ import "./styles.scss"
 import useProposal from "../../hooks/getters/useProposal"
 import Loader from "../../components/UI/Loader"
 import ErrorPlaceholder from "../../components/UI/ErrorPlaceholder"
-import {executeMultiSend, signMultiSend} from "../../api/ethers/functions/Seele/multiSend"
+import {executeMultiSend, signMultiSend} from "../../api/ethers/functions/Usul/multiSend"
 import editDAO from "../../api/firebase/DAO/editDAO"
 
 const Proposal: FunctionComponent = () => {

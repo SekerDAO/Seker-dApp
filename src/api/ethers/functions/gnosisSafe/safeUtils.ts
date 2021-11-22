@@ -7,9 +7,9 @@ import {pack} from "@ethersproject/solidity"
 import {JsonRpcProvider, JsonRpcSigner, TransactionResponse} from "@ethersproject/providers"
 import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
 import {BuiltVotingStrategy} from "../../../../types/DAO"
-import getSeeleDeploy from "../Seele/getSeeleDeploy"
-import getRegisterSeeleTx from "../Seele/getRegisterSeeleTx"
-import getOZLinearSetSeele from "../Seele/getOZLinearSetSeele"
+import getUsulDeploy from "../Usul/getUsulDeploy"
+import getRegisterUsulTx from "../Usul/getRegisterUsulTx"
+import getOZLinearSetUsul from "../Usul/getOZLinearSetUsul"
 
 const EIP712_SAFE_TX_TYPE = {
 	SafeTx: [
@@ -265,7 +265,7 @@ export const buildSeeleDeployTxSequence = async (
 			transactions: [],
 			expectedSeeleAddress: ""
 		}
-	const {tx: deploySeeleTx, expectedAddress: expectedSeeleAddress} = getSeeleDeploy(
+	const {tx: deploySeeleTx, expectedAddress: expectedSeeleAddress} = getUsulDeploy(
 		gnosisAddress,
 		strategies.map(strategy => strategy.expectedAddress),
 		signer
@@ -274,14 +274,14 @@ export const buildSeeleDeployTxSequence = async (
 		switch (strategy.strategy) {
 			case "linearVotingCompoundBravo":
 				return {
-					tx: getOZLinearSetSeele(expectedSeeleAddress, strategy.expectedAddress, signer),
+					tx: getOZLinearSetUsul(expectedSeeleAddress, strategy.expectedAddress, signer),
 					name: "OzLinearSetSeele"
 				}
 			default:
 				throw new Error("This strategy is not supported yet")
 		}
 	})
-	const registerSeeleTx = await getRegisterSeeleTx(gnosisAddress, expectedSeeleAddress, signer)
+	const registerSeeleTx = await getRegisterUsulTx(gnosisAddress, expectedSeeleAddress, signer)
 	return {
 		transactions: [
 			...strategies.map(strategy => ({tx: strategy.tx, name: strategy.strategy})),

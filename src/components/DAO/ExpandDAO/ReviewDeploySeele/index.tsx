@@ -5,7 +5,7 @@ import {
 	buildMultiSendTx,
 	executeMultiSend,
 	signMultiSend
-} from "../../../../api/ethers/functions/Seele/multiSend"
+} from "../../../../api/ethers/functions/Usul/multiSend"
 import editDAO from "../../../../api/firebase/DAO/editDAO"
 import addSafeProposal from "../../../../api/firebase/safeProposal/addSafeProposal"
 import EthersContext from "../../../../context/EthersContext"
