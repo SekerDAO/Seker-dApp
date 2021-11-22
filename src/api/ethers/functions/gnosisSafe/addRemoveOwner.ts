@@ -9,7 +9,7 @@ export const signAddOwner = async (
 	adminAddress: string,
 	newThreshold: number,
 	signer: JsonRpcSigner
-): Promise<SafeSignature> => {
+): Promise<[SafeSignature, number]> => {
 	const safeContract = new Contract(safeAddress, GnosisSafeL2.abi, signer)
 	const nonce = await safeContract.nonce()
 	const call = buildContractCall(
@@ -18,7 +18,7 @@ export const signAddOwner = async (
 		[adminAddress, newThreshold],
 		nonce
 	)
-	return safeSignMessage(signer, safeContract, call)
+	return [await safeSignMessage(signer, safeContract, call), nonce.toNumber()]
 }
 
 export const executeAddOwner = async (
@@ -45,7 +45,7 @@ export const signRemoveOwner = async (
 	adminAddress: string,
 	newThreshold: number,
 	signer: JsonRpcSigner
-): Promise<SafeSignature> => {
+): Promise<[SafeSignature, number]> => {
 	const safeContract = new Contract(safeAddress, GnosisSafeL2.abi, signer)
 	const nonce = await safeContract.nonce()
 	const owners: string[] = await safeContract.getOwners()
@@ -70,7 +70,7 @@ export const signRemoveOwner = async (
 		[ownerIndex === 0 ? SENTINEL_OWNER : owners[ownerIndex - 1], adminAddress, newThreshold],
 		nonce
 	)
-	return safeSignMessage(signer, safeContract, call)
+	return [await safeSignMessage(signer, safeContract, call), nonce.toNumber()]
 }
 
 export const executeRemoveOwner = async (

@@ -1,21 +1,21 @@
 import {ChangeEvent, Fragment, FunctionComponent, useContext, useEffect, useState} from "react"
-import Input from "../../Controls/Input"
-import ArrayInput from "../../Controls/ArrayInput"
+import Input from "../../../Controls/Input"
+import ArrayInput from "../../../Controls/ArrayInput"
 import {isAddress} from "@ethersproject/address"
-import {toastError, toastSuccess, toastWarning} from "../../UI/Toast"
-import fetchContractAbi from "../../../api/etherscan/fetchContractAbi"
-import Textarea from "../../Controls/Textarea"
-import {Abi, AbiFunction} from "../../../types/abi"
-import Select from "../../Controls/Select"
-import {prepareArguments, validateArgument} from "../../../utlls"
-import Button from "../../Controls/Button"
+import {toastError, toastSuccess, toastWarning} from "../../../UI/Toast"
+import fetchContractAbi from "../../../../api/etherscan/fetchContractAbi"
+import Textarea from "../../../Controls/Textarea"
+import {Abi, AbiFunction} from "../../../../types/abi"
+import Select from "../../../Controls/Select"
+import {prepareArguments, validateArgument} from "../../../../utlls"
+import Button from "../../../Controls/Button"
 import {
 	createSafeSignature,
 	executeSafeTx
-} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
-import EthersContext from "../../../context/EthersContext"
-import addSafeProposal from "../../../api/firebase/safeProposal/addSafeProposal"
-import {AuthContext} from "../../../context/AuthContext"
+} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
+import EthersContext from "../../../../context/EthersContext"
+import addSafeProposal from "../../../../api/firebase/safeProposal/addSafeProposal"
+import {AuthContext} from "../../../../context/AuthContext"
 
 const GeneralEVM: FunctionComponent<{
 	gnosisAddress: string
@@ -123,7 +123,7 @@ const GeneralEVM: FunctionComponent<{
 		if (!(selectedMethodIndex != null && signer && account)) return
 		setProcessing(true)
 		try {
-			const signature = await createSafeSignature(
+			const [signature, nonce] = await createSafeSignature(
 				gnosisAddress,
 				address,
 				contractMethods,
@@ -152,6 +152,7 @@ const GeneralEVM: FunctionComponent<{
 				type: "generalEVM",
 				title,
 				description,
+				nonce,
 				gnosisAddress,
 				signatures: [signature],
 				state: gnosisVotingThreshold === 1 ? "executed" : "active",

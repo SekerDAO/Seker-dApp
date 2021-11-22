@@ -4,7 +4,7 @@ import EthersContext from "../../../context/EthersContext"
 import Modal from "../Modal"
 import Input from "../../Controls/Input"
 import Button from "../../Controls/Button"
-import getOZLinearDeployTx from "../../../api/ethers/functions/Seele/getOZLinearDeployTx"
+import getOZLinearDeployTx from "../../../api/ethers/functions/Usul/getOZLinearDeployTx"
 import CreateERC20TokenModal from "../CreateERC20TokenModal"
 import {ERC20Token} from "../../../types/ERC20Token"
 

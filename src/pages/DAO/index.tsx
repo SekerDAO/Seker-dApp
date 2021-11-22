@@ -8,7 +8,6 @@ import ErrorPlaceholder from "../../components/UI/ErrorPlaceholder"
 import Loader from "../../components/UI/Loader"
 import {AuthContext} from "../../context/AuthContext"
 import AboutDAO from "../../components/DAO/AboutDAO"
-import CreateDaoAdminProposal from "../../components/DAO/CreateDaoAdminProposal"
 import DAOProposals from "../../components/DAO/DAOProposals"
 import EditDAO from "../../components/DAO/EditDAO"
 import NFTGallery from "../../components/NFTGallery"
@@ -25,6 +24,7 @@ import Paper from "../../components/UI/Paper"
 import DashboardMenu from "../../components/UI/DashboardMenu"
 import CreateNFTForm from "../../components/CreateNFTForm"
 import useUser from "../../hooks/getters/useUser"
+import CreateDaoProposal from "../../components/DAO/CreateDaoProposal"
 
 type DAOAdminPage = "createNFT" | "edit" | "createProposal" | "expand"
 type DAOContentPage = "collection" | "about" | "members" | "proposals"
@@ -193,7 +193,7 @@ const DAOPage: FunctionComponent = () => {
 							/>
 						)}
 						{isAdmin && page === "createProposal" && (
-							<CreateDaoAdminProposal
+							<CreateDaoProposal
 								gnosisAddress={dao.gnosisAddress}
 								gnosisVotingThreshold={dao.gnosisVotingThreshold}
 								ownersCount={dao.owners.length}

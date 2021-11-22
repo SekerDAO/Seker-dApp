@@ -26,7 +26,7 @@ import "./styles.scss"
 import useProposal from "../../hooks/getters/useProposal"
 import Loader from "../../components/UI/Loader"
 import ErrorPlaceholder from "../../components/UI/ErrorPlaceholder"
-import {executeMultiSend, signMultiSend} from "../../api/ethers/functions/Seele/multiSend"
+import {executeMultiSend, signMultiSend} from "../../api/ethers/functions/Usul/multiSend"
 import editDAO from "../../api/firebase/DAO/editDAO"
 
 const Proposal: FunctionComponent = () => {
@@ -62,7 +62,7 @@ const Proposal: FunctionComponent = () => {
 						proposal.auctionCurrencyAddress!,
 						signer
 					] as const
-					signature = await signApproveNFTForAuction(...signingArgs)
+					;[signature] = await signApproveNFTForAuction(...signingArgs)
 					signatureStep2 = await signCreateAuction(...signingArgs)
 					if (proposal.signatures?.length === gnosisVotingThreshold - 1) {
 						await executeApproveNFTForAuction(
@@ -88,7 +88,11 @@ const Proposal: FunctionComponent = () => {
 					}
 					break
 				case "cancelAuction":
-					signature = await signCancelAuction(proposal.gnosisAddress, proposal.auctionId!, signer)
+					;[signature] = await signCancelAuction(
+						proposal.gnosisAddress,
+						proposal.auctionId!,
+						signer
+					)
 					if (proposal.signatures?.length === gnosisVotingThreshold - 1) {
 						await executeCancelAuction(
 							proposal.gnosisAddress,
@@ -101,7 +105,7 @@ const Proposal: FunctionComponent = () => {
 					break
 				case "changeRole":
 					if (["head", "admin"].includes(proposal.newRole!)) {
-						signature = await signAddOwner(
+						;[signature] = await signAddOwner(
 							proposal.gnosisAddress,
 							proposal.recipientAddress!,
 							proposal.newThreshold!,
@@ -118,13 +122,20 @@ const Proposal: FunctionComponent = () => {
 							executed = true
 						}
 					} else {
-						signature = await signRemoveOwner(
+						;[signature] = await signRemoveOwner(
 							proposal.gnosisAddress,
 							proposal.recipientAddress!,
 							proposal.newThreshold!,
 							signer
 						)
 						if (proposal.signatures?.length === gnosisVotingThreshold - 1) {
+							await addSafeProposalSignature({
+								proposalId: id,
+								signature: signature!,
+								signatureStep2,
+								...(executed ? {newState: "executed"} : {})
+							})
+							signatureAdded = true
 							await executeRemoveOwner(
 								proposal.gnosisAddress,
 								proposal.recipientAddress!,
@@ -133,13 +144,6 @@ const Proposal: FunctionComponent = () => {
 								signer
 							)
 							executed = true
-							await addSafeProposalSignature({
-								proposalId: id,
-								signature: signature!,
-								signatureStep2,
-								...(executed ? {newState: "executed"} : {})
-							})
-							signatureAdded = true
 						}
 					}
 					break
@@ -150,7 +154,7 @@ const Proposal: FunctionComponent = () => {
 					if (!proposal.seeleAddress) {
 						throw new Error("Unexpected empty seeleAddress in proposal")
 					}
-					signature = await signMultiSend(proposal.multiTx, proposal.gnosisAddress, signer)
+					;[signature] = await signMultiSend(proposal.multiTx, proposal.gnosisAddress, signer)
 					if (proposal.signatures?.length === gnosisVotingThreshold - 1) {
 						await executeMultiSend(
 							proposal.multiTx,
