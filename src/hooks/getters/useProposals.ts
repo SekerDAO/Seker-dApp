@@ -1,6 +1,8 @@
-import {useEffect, useState} from "react"
+import {useContext, useEffect, useState} from "react"
 import {SafeProposal} from "../../types/safeProposal"
 import getSafeProposals from "../../api/firebase/safeProposal/getSafeProposals"
+import {getNonce} from "../../api/ethers/functions/gnosisSafe/safeUtils"
+import EthersContext from "../../context/EthersContext"
 
 const useProposals = (
 	gnosisAddress: string
@@ -13,12 +15,17 @@ const useProposals = (
 	const [proposals, setProposals] = useState<(SafeProposal & {proposalId: string})[]>([])
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
+	const {provider} = useContext(EthersContext)
 
 	const getData = async () => {
 		setLoading(true)
 		setError(false)
 		try {
-			const firebaseData = (await getSafeProposals(gnosisAddress)).docs.map(doc => ({
+			const [proposalsSnapshots, nonce] = await Promise.all([
+				getSafeProposals(gnosisAddress),
+				getNonce(gnosisAddress, provider)
+			])
+			const firebaseData = proposalsSnapshots.docs.map(doc => ({
 				...doc.data(),
 				proposalId: doc.id
 			}))
@@ -28,7 +35,7 @@ const useProposals = (
 						({
 							...p,
 							id: Number(p.id),
-							state: p.state
+							state: p.state === "active" && p.nonce < nonce ? "outdated" : p.state
 						} as SafeProposal & {proposalId: string})
 				)
 			)

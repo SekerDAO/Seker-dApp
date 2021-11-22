@@ -1,21 +1,21 @@
 import {ChangeEvent, FunctionComponent, useContext, useState} from "react"
-import Input from "../../Controls/Input"
-import Button from "../../Controls/Button"
-import Select from "../../Controls/Select"
-import {AuthContext} from "../../../context/AuthContext"
-import EthersContext from "../../../context/EthersContext"
-import addSafeProposal from "../../../api/firebase/safeProposal/addSafeProposal"
-import {toastError, toastSuccess} from "../../UI/Toast"
-import {SafeSignature} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
+import Input from "../../../Controls/Input"
+import Button from "../../../Controls/Button"
+import Select from "../../../Controls/Select"
+import {AuthContext} from "../../../../context/AuthContext"
+import EthersContext from "../../../../context/EthersContext"
+import addSafeProposal from "../../../../api/firebase/safeProposal/addSafeProposal"
+import {toastError, toastSuccess} from "../../../UI/Toast"
+import {SafeSignature} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
 import {
 	executeAddOwner,
 	executeRemoveOwner,
 	signAddOwner,
 	signRemoveOwner
-} from "../../../api/ethers/functions/gnosisSafe/addRemoveOwner"
-import useDAO from "../../../hooks/getters/useDAO"
-import ErrorPlaceholder from "../../UI/ErrorPlaceholder"
-import Loader from "../../UI/Loader"
+} from "../../../../api/ethers/functions/gnosisSafe/addRemoveOwner"
+import useDAO from "../../../../hooks/getters/useDAO"
+import ErrorPlaceholder from "../../../UI/ErrorPlaceholder"
+import Loader from "../../../UI/Loader"
 
 const ChangeRole: FunctionComponent<{
 	gnosisAddress: string
@@ -66,10 +66,16 @@ const ChangeRole: FunctionComponent<{
 		}
 		setProcessing(true)
 		let signature: SafeSignature
+		let nonce: number
 		try {
 			if (newRole === "admin") {
 				// processing add owner
-				signature = await signAddOwner(gnosisAddress, address, Number(newThreshold), signer)
+				;[signature, nonce] = await signAddOwner(
+					gnosisAddress,
+					address,
+					Number(newThreshold),
+					signer
+				)
 				if (gnosisVotingThreshold === 1) {
 					await executeAddOwner(gnosisAddress, address, Number(newThreshold), [signature], signer)
 				}
@@ -79,7 +85,12 @@ const ChangeRole: FunctionComponent<{
 				if (!owner) {
 					throw new Error("Member not exists")
 				}
-				signature = await signRemoveOwner(gnosisAddress, address, Number(newThreshold), signer)
+				;[signature, nonce] = await signRemoveOwner(
+					gnosisAddress,
+					address,
+					Number(newThreshold),
+					signer
+				)
 				if (gnosisVotingThreshold === 1) {
 					await executeRemoveOwner(
 						gnosisAddress,
@@ -94,6 +105,7 @@ const ChangeRole: FunctionComponent<{
 				type: "changeRole",
 				gnosisAddress,
 				title,
+				nonce,
 				...(description ? {description} : {}),
 				recipientAddress: address,
 				newThreshold: Number(newThreshold),

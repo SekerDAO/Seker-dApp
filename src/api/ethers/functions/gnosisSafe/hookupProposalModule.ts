@@ -6,7 +6,7 @@ export const signHookupProposalModule = async (
 	safeAddress: string,
 	proposalModule: string,
 	signer: JsonRpcSigner
-): Promise<SafeSignature> =>
+): Promise<[SafeSignature, number]> =>
 	createSafeSignature(
 		safeAddress,
 		safeAddress,

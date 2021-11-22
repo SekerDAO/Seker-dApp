@@ -4,6 +4,10 @@
   position: relative;
   width: 140px;
 
+  &--opened {
+    z-index: 3;
+  }
+
   &__content {
     position: absolute;
     right: 0;
