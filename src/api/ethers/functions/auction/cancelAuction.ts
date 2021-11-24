@@ -7,7 +7,7 @@ export const signCancelAuction = async (
 	safeAddress: string,
 	auctionID: number,
 	signer: JsonRpcSigner
-): Promise<SafeSignature> =>
+): Promise<[SafeSignature, number]> =>
 	createSafeSignature(
 		safeAddress,
 		REACT_APP_ZORA_ADDRESS!,

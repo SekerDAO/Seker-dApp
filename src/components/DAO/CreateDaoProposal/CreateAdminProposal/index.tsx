@@ -1,40 +1,22 @@
-import {FunctionComponent, useContext, useState} from "react"
-import Select from "../../Controls/Select"
+import {FunctionComponent, useState} from "react"
+import Select from "../../../Controls/Select"
 import "./styles.scss"
 import ChangeRole from "./ChangeRole"
-import {AuthContext} from "../../../context/AuthContext"
-import {SafeProposalsTypeNames, SafeProposalType} from "../../../types/safeProposal"
+import {SafeProposalsTypeNames, SafeProposalType} from "../../../../types/safeProposal"
 import CreateAuction from "./CreateAuction"
 import CancelAuction from "./CancelAuction"
-import useDAOProposals from "../../../hooks/getters/useDAOProposals"
-import ErrorPlaceholder from "../../UI/ErrorPlaceholder"
-import Loader from "../../UI/Loader"
 import GeneralEVM from "./GeneralEVM"
-import Input from "../../Controls/Input"
-import Divider from "../../UI/Divider"
+import Input from "../../../Controls/Input"
+import Divider from "../../../UI/Divider"
 
-const CreateDaoAdminProposal: FunctionComponent<{
+const CreateAdminProposal: FunctionComponent<{
 	gnosisAddress: string
 	gnosisVotingThreshold: number
 	ownersCount: number
 }> = ({gnosisAddress, gnosisVotingThreshold, ownersCount}) => {
-	const {connected} = useContext(AuthContext)
 	const [type, setType] = useState<SafeProposalType>("changeRole")
 	const [title, setTitle] = useState("")
 	const [description, setDescription] = useState("")
-	const {proposals, loading, error} = useDAOProposals(gnosisAddress)
-
-	if (error) return <ErrorPlaceholder />
-	if (loading) return <Loader />
-
-	if (proposals?.filter(p => p.state === "active").length > 0)
-		return (
-			<div>
-				TODO: This DAO already has an active proposal. No more than 1 proposal at a time can be
-				created.
-			</div>
-		)
-	if (!connected) return <div>TODO: Please connect wallet</div>
 
 	const afterSubmit = () => {
 		setTitle("")
@@ -42,8 +24,7 @@ const CreateDaoAdminProposal: FunctionComponent<{
 	}
 
 	return (
-		<div className="create-dao-proposal">
-			<h2>Create a New Proposal</h2>
+		<>
 			<label>Safe proposal type</label>
 			<Select<SafeProposalType>
 				placeholder="Choose safe proposal type"
@@ -76,9 +57,6 @@ const CreateDaoAdminProposal: FunctionComponent<{
 				value={description}
 			/>
 			<Divider />
-			{/*{type === "joinHouse" && daoAddress && (*/}
-			{/*	<JoinHouse gnosisAddress={gnosisAddress} daoAddress={daoAddress} />*/}
-			{/*)}*/}
 			{type === "createAuction" && (
 				<CreateAuction
 					gnosisAddress={gnosisAddress}
@@ -116,11 +94,8 @@ const CreateDaoAdminProposal: FunctionComponent<{
 					afterSubmit={afterSubmit}
 				/>
 			)}
-			{/*{type === "requestFunding" && (*/}
-			{/*	<RequestFunding gnosisAddress={gnosisAddress} daoAddress={daoAddress!} />*/}
-			{/*)}*/}
-		</div>
+		</>
 	)
 }
 
-export default CreateDaoAdminProposal
+export default CreateAdminProposal

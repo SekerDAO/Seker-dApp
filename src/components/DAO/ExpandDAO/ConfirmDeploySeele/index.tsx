@@ -2,7 +2,7 @@ import {FunctionComponent, Fragment, useContext, useState} from "react"
 import {formatEther} from "@ethersproject/units"
 import {SafeTransaction} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
 import {toastError} from "../../../UI/Toast"
-import {executeMultiSend, signMultiSend} from "../../../../api/ethers/functions/Seele/multiSend"
+import {executeMultiSend, signMultiSend} from "../../../../api/ethers/functions/Usul/multiSend"
 import editDAO from "../../../../api/firebase/DAO/editDAO"
 import addSafeProposal from "../../../../api/firebase/safeProposal/addSafeProposal"
 import EthersContext from "../../../../context/EthersContext"
@@ -38,7 +38,7 @@ const ConfirmDeploySeele: FunctionComponent<{
 		setLoading(true)
 		try {
 			if (multiTx) {
-				const signature = await signMultiSend(multiTx.tx, gnosisAddress, signer)
+				const [signature, nonce] = await signMultiSend(multiTx.tx, gnosisAddress, signer)
 				if (gnosisVotingThreshold === 1) {
 					await executeMultiSend(multiTx.tx, gnosisAddress, [signature], signer)
 					await editDAO({
@@ -49,6 +49,7 @@ const ConfirmDeploySeele: FunctionComponent<{
 				await addSafeProposal({
 					type: "decentralizeDAO",
 					gnosisAddress,
+					nonce,
 					seeleAddress: expectedSeeleAddress,
 					title: "Decentralize DAO",
 					state: gnosisVotingThreshold === 1 ? "executed" : "active",

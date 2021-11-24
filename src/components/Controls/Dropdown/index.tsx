@@ -37,7 +37,7 @@ const Dropdown = <ItemValueType extends string | number>({
 	}
 
 	return (
-		<div className={`dropdown ${className ?? ""}`} ref={ref}>
+		<div className={`dropdown${isOpened ? " dropdown--opened" : ""} ${className ?? ""}`} ref={ref}>
 			<ul className={`dropdown__content dropdown__content--borders-${borders}`}>
 				<li className="dropdown__trigger" onClick={onTriggerClick}>
 					{triggerText}

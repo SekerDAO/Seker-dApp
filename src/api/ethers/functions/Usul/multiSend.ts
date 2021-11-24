@@ -26,9 +26,10 @@ export const signMultiSend = async (
 	multiSendTx: SafeTransaction,
 	safeAddress: string,
 	signer: JsonRpcSigner
-): Promise<SafeSignature> => {
+): Promise<[SafeSignature, number]> => {
 	const safeContract = new Contract(safeAddress, GnosisSafeL2.abi, signer)
-	return safeSignMessage(signer, safeContract, multiSendTx)
+	const nonce = await safeContract.nonce()
+	return [await safeSignMessage(signer, safeContract, multiSendTx), nonce.toNumber()]
 }
 
 export const executeMultiSend = async (

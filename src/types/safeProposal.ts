@@ -18,20 +18,13 @@ export const SafeProposalsTypeNames = {
 	decentralizeDAO: "Decentralize DAO"
 } as const
 
-// TODO: this list contains DAO proposals states, remove unused
-export type SafeProposalState =
-	| "active"
-	| "canceled"
-	| "executed"
-	| "passed"
-	| "failed"
-	| "queued"
-	| "waiting"
+export type SafeProposalState = "active" | "executed" | "outdated"
 
 export type SafeProposal = {
 	id?: number
 	gnosisAddress: string
 	title: string
+	nonce: number
 	description?: string
 	state: SafeProposalState
 	type: SafeProposalType
