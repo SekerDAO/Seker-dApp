@@ -39,6 +39,7 @@ const DeploySeele: FunctionComponent<{
 	const [stage, setStage] = useState<ExpandDaoStage>("chooseStrategies")
 	const [strategies, setStrategies] = useState<BuiltVotingStrategy[]>([])
 	const [transactions, setTransactions] = useState<{tx: SafeTransaction; name: string}[]>([])
+	const [multiTx, setMultiTx] = useState<SafeTransaction>()
 	const [expectedSeeleAddress, setExpectedSeeleAddress] = useState("")
 	useEffect(() => {
 		if (signer) {
@@ -64,12 +65,13 @@ const DeploySeele: FunctionComponent<{
 
 	const handleProceedToConfirm = async () => {
 		if (signer) {
-			const multiTx = await buildMultiSendTx(
-				transactions.map(t => t.tx),
-				gnosisAddress,
-				signer
+			setMultiTx(
+				await buildMultiSendTx(
+					transactions.map(t => t.tx),
+					gnosisAddress,
+					signer
+				)
 			)
-			setTransactions(prevState => [...prevState, {tx: multiTx, name: "multiSend"}])
 			setStage("confirm")
 		}
 	}
@@ -97,6 +99,7 @@ const DeploySeele: FunctionComponent<{
 			)}
 			{stage === "confirm" && (
 				<ConfirmDeploySeele
+					multiTx={multiTx}
 					transactions={transactions}
 					gnosisAddress={gnosisAddress}
 					gnosisVotingThreshold={gnosisVotingThreshold}

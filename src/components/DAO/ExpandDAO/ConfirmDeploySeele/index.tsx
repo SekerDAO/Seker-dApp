@@ -1,4 +1,4 @@
-import {FunctionComponent, Fragment, useContext, useState} from "react"
+import {FunctionComponent, useContext, useState} from "react"
 import {formatEther} from "@ethersproject/units"
 import {SafeTransaction} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
 import {toastError} from "../../../UI/Toast"
@@ -17,17 +17,26 @@ import TransactionDetailsModal from "../../../Modals/TransactionDetailsModal"
 import {AuthContext} from "../../../../context/AuthContext"
 
 const ConfirmDeploySeele: FunctionComponent<{
+	multiTx?: SafeTransaction
 	transactions: {tx: SafeTransaction; name: string}[]
 	gnosisAddress: string
 	gnosisVotingThreshold: number
 	afterSubmit: () => void
 	expectedSeeleAddress: string
-}> = ({transactions, gnosisAddress, gnosisVotingThreshold, afterSubmit, expectedSeeleAddress}) => {
+}> = ({
+	multiTx,
+	transactions,
+	gnosisAddress,
+	gnosisVotingThreshold,
+	afterSubmit,
+	expectedSeeleAddress
+}) => {
 	const {signer} = useContext(EthersContext)
 	const {account, balance} = useContext(AuthContext)
-	const [openedTxDetails, setOpenedTxDetails] = useState<number | undefined>()
+	const [openedTxDetails, setOpenedTxDetails] = useState<
+		{tx: SafeTransaction; name: string} | undefined
+	>()
 	const [loading, setLoading] = useState(false)
-	const multiTx = transactions.find(tx => tx.name === "multiSend")
 
 	const handleTxDetailsClose = () => {
 		setOpenedTxDetails(undefined)
@@ -38,9 +47,9 @@ const ConfirmDeploySeele: FunctionComponent<{
 		setLoading(true)
 		try {
 			if (multiTx) {
-				const [signature, nonce] = await signMultiSend(multiTx.tx, gnosisAddress, signer)
+				const [signature, nonce] = await signMultiSend(multiTx, gnosisAddress, signer)
 				if (gnosisVotingThreshold === 1) {
-					await executeMultiSend(multiTx.tx, gnosisAddress, [signature], signer)
+					await executeMultiSend(multiTx, gnosisAddress, [signature], signer)
 					await editDAO({
 						gnosisAddress,
 						seeleAddress: expectedSeeleAddress
@@ -50,11 +59,11 @@ const ConfirmDeploySeele: FunctionComponent<{
 					type: "decentralizeDAO",
 					gnosisAddress,
 					nonce,
+					multiTx,
 					seeleAddress: expectedSeeleAddress,
 					title: "Decentralize DAO",
 					state: gnosisVotingThreshold === 1 ? "executed" : "active",
-					signatures: [signature],
-					multiTx: multiTx.tx
+					signatures: [signature]
 				})
 				afterSubmit()
 			}
@@ -81,39 +90,49 @@ const ConfirmDeploySeele: FunctionComponent<{
 				<div className="confirm-deploy-seele__general-data-row">
 					<div className="confirm-deploy-seele__general-data-col">
 						<label>Send {transactionsTotal} ETH to</label>
-						<CopyField value={multiTx?.tx.to}>{formatReadableAddress(multiTx?.tx.to)}</CopyField>
+						<CopyField value={multiTx?.to}>{formatReadableAddress(multiTx?.to)}</CopyField>
 					</div>
 					<div className="confirm-deploy-seele__general-data-col">
 						<label>Data (Hex Encoded)</label>
-						<CopyField value={multiTx?.tx.data}>
-							{(multiTx?.tx.data.length as number) / 2 - 2} bytes
+						<CopyField value={multiTx?.data}>
+							{(multiTx?.data.length as number) / 2 - 2} bytes
 						</CopyField>
 					</div>
 				</div>
 			</div>
 			<ul className="confirm-deploy-seele__transaction-list">
-				{transactions.map(({tx, name}, index) => (
-					<Fragment key={tx.data}>
-						<li
-							key={tx.data}
-							className="confirm-deploy-seele__transaction-row"
-							onClick={() => setOpenedTxDetails(index)}
-						>
-							<div>
-								<span>Contract Interaction</span>
-							</div>
-							<div>
-								<span className="confirm-deploy-seele__transaction-name">{name}</span>
-								<ArrowDown width="14px" height="7px" />
-							</div>
-						</li>
-						<TransactionDetailsModal
-							transaction={{tx, name}}
-							show={openedTxDetails === index}
-							onClose={handleTxDetailsClose}
-						/>
-					</Fragment>
+				{transactions.map(({tx, name}) => (
+					<li
+						key={tx.data}
+						className="confirm-deploy-seele__transaction-row"
+						onClick={() => setOpenedTxDetails({tx, name})}
+					>
+						<div>
+							<span>Contract Interaction</span>
+						</div>
+						<div>
+							<span className="confirm-deploy-seele__transaction-name">{name}</span>
+							<ArrowDown width="14px" height="7px" />
+						</div>
+					</li>
 				))}
+				<li
+					className="confirm-deploy-seele__transaction-row"
+					onClick={() => setOpenedTxDetails({tx: multiTx as SafeTransaction, name: "multiSend"})}
+				>
+					<div>
+						<span>Contract Interaction</span>
+					</div>
+					<div>
+						<span className="confirm-deploy-seele__transaction-name">multiSend</span>
+						<ArrowDown width="14px" height="7px" />
+					</div>
+				</li>
+				<TransactionDetailsModal
+					transaction={openedTxDetails}
+					show={!!openedTxDetails}
+					onClose={handleTxDetailsClose}
+				/>
 			</ul>
 			<div className="confirm-deploy-seele__warning-message">
 				<WarningIcon width="20px" height="20px" />
