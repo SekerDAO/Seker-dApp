@@ -1,5 +1,5 @@
 import {FunctionComponent, useContext, useEffect, useState} from "react"
-import {buildMultiSendTx} from "../../../../api/ethers/functions/Seele/multiSend"
+import {buildMultiSendTx} from "../../../../api/ethers/functions/Usul/multiSend"
 import ExpandDaoLayout from "../ExpandDaoLayout"
 import {BuiltVotingStrategy} from "../../../../types/DAO"
 import ChooseVotingStrategies from "../ChooseVotingStrategies"
