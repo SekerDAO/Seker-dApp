@@ -8,7 +8,7 @@ import {
 	SafeTransaction
 } from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
 import EthersContext from "../../../../context/EthersContext"
-import ConfirmDeploySeele from "../ConfirmDeploySeele"
+import ConfirmDeploySeele from "../ReviewDeploySeele"
 import useProposals from "../../../../hooks/getters/useProposals"
 import ErrorPlaceholder from "../../../UI/ErrorPlaceholder"
 
@@ -41,6 +41,8 @@ const DeploySeele: FunctionComponent<{
 	const [transactions, setTransactions] = useState<{tx: SafeTransaction; name: string}[]>([])
 	const [multiTx, setMultiTx] = useState<SafeTransaction>()
 	const [expectedSeeleAddress, setExpectedSeeleAddress] = useState("")
+	const {proposals, error} = useProposals(gnosisAddress)
+
 	useEffect(() => {
 		if (signer) {
 			buildSeeleDeployTxSequence(strategies, gnosisAddress, signer).then(res => {
@@ -50,7 +52,6 @@ const DeploySeele: FunctionComponent<{
 		}
 	}, [strategies, gnosisAddress, signer])
 
-	const {proposals, error} = useProposals(gnosisAddress)
 	useEffect(() => {
 		if (proposals) {
 			const expandProposal = proposals.find(
