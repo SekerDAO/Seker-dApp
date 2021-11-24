@@ -4,10 +4,12 @@ import EthersContext from "./EthersContext"
 import firebase from "firebase"
 import getUser from "../api/firebase/user/getUser"
 import {Web3Provider} from "@ethersproject/providers"
+import {BigNumberish} from "@ethersproject/bignumber"
 const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
 type AuthContext = {
 	account: string | null
+	balance: BigNumberish | null
 	url: string | null
 	connectWallet: () => void
 	connected: boolean
@@ -17,6 +19,7 @@ type AuthContext = {
 
 export const useAuth = (): AuthContext => {
 	const [account, setAccount] = useState<string | null>(null)
+	const [balance, setBalance] = useState<BigNumberish | null>(null)
 	const [connected, setConnected] = useState(false)
 	const [connecting, setConnecting] = useState(false)
 	const {signer} = useContext(EthersContext)
@@ -28,6 +31,7 @@ export const useAuth = (): AuthContext => {
 					setUrl(user.url)
 				}
 			})
+			signer?.getBalance().then(_balance => setBalance(_balance))
 		}
 	}, [account])
 
@@ -109,6 +113,7 @@ export const useAuth = (): AuthContext => {
 
 	return {
 		account,
+		balance,
 		url,
 		connected,
 		connectWallet,

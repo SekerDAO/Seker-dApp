@@ -3,7 +3,7 @@ import {ReactComponent as CopyIcon} from "../../../assets/icons/copy-white.svg"
 import {toastSuccess} from "../Toast"
 import "./styles.scss"
 
-const CopyField: FunctionComponent<{value?: string}> = ({children, value}) => {
+const CopyField: FunctionComponent<{value?: string | null}> = ({children, value}) => {
 	const handleCopy = () => {
 		if (value) {
 			navigator.clipboard.writeText(value)

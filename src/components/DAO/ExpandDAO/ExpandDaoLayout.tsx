@@ -5,13 +5,12 @@ import {ReactComponent as ArrowDown} from "../../../assets/icons/arrow-down.svg"
 const ExpandDaoLayout: FunctionComponent<{
 	title?: string
 	description?: string
-	showBackButton?: boolean
 	onGoBack?: () => void
-}> = ({title, description, showBackButton, onGoBack, children}) => (
+}> = ({title, description, onGoBack, children}) => (
 	<>
 		{(title || description) && (
 			<div className="expand-dao__header">
-				{showBackButton && (
+				{onGoBack && (
 					<Button buttonType="link" onClick={onGoBack} extraClassName="expand-dao__back-button">
 						<ArrowDown width="10px" height="20px" />
 						Back

@@ -1,4 +1,5 @@
-import {FunctionComponent, Fragment, useContext, useState, useEffect} from "react"
+import {FunctionComponent, Fragment, useContext, useState} from "react"
+import {formatEther} from "@ethersproject/units"
 import {SafeTransaction} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
 import {toastError} from "../../../UI/Toast"
 import {executeMultiSend, signMultiSend} from "../../../../api/ethers/functions/Seele/multiSend"
@@ -13,6 +14,7 @@ import Paper from "../../../UI/Paper"
 import CopyField from "../../../UI/Copy"
 import {formatReadableAddress} from "../../../../utlls"
 import TransactionDetailsModal from "../../../Modals/TransactionDetailsModal"
+import {AuthContext} from "../../../../context/AuthContext"
 
 const ConfirmDeploySeele: FunctionComponent<{
 	transactions: {tx: SafeTransaction; name: string}[]
@@ -22,18 +24,10 @@ const ConfirmDeploySeele: FunctionComponent<{
 	expectedSeeleAddress: string
 }> = ({transactions, gnosisAddress, gnosisVotingThreshold, afterSubmit, expectedSeeleAddress}) => {
 	const {signer} = useContext(EthersContext)
+	const {account, balance} = useContext(AuthContext)
 	const [openedTxDetails, setOpenedTxDetails] = useState<number | undefined>()
 	const [loading, setLoading] = useState(false)
-	const [signerAddress, setSignerAddress] = useState<string | undefined>()
-	const [signerBalance, setSignerBalance] = useState<string | undefined>()
 	const multiTx = transactions.find(tx => tx.name === "multiSend")
-	useEffect(() => {
-		const loadSignerDetails = async () => {
-			setSignerAddress(await signer?.getAddress())
-			setSignerBalance((await signer?.getBalance())?.toString())
-		}
-		loadSignerDetails()
-	}, [signer])
 
 	const handleTxDetailsClose = () => {
 		setOpenedTxDetails(undefined)
@@ -76,8 +70,12 @@ const ConfirmDeploySeele: FunctionComponent<{
 			<div className="confirm-deploy-seele__general-data">
 				<div className="confirm-deploy-seele__general-data-row">
 					<label>From</label>
-					<CopyField value={signerAddress}>{formatReadableAddress(signerAddress)}</CopyField>
-					<span className="confirm-deploy-seele__data-balance">Balance: {signerBalance} ETH</span>
+					<CopyField value={account}>{formatReadableAddress(account)}</CopyField>
+					{balance && (
+						<span className="confirm-deploy-seele__data-balance">
+							Balance: {formatEther(balance)} ETH
+						</span>
+					)}
 				</div>
 				<div className="confirm-deploy-seele__general-data-row">
 					<div className="confirm-deploy-seele__general-data-col">

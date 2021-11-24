@@ -79,8 +79,7 @@ const DeploySeele: FunctionComponent<{
 		<ExpandDaoLayout
 			title={STAGE_HEADERS[stage].title}
 			description={STAGE_HEADERS[stage].description}
-			onGoBack={() => setStage("chooseStrategies")}
-			showBackButton={stage === "confirm"}
+			onGoBack={stage === "confirm" ? () => setStage("chooseStrategies") : undefined}
 		>
 			{stage === "chooseStrategies" && (
 				<ChooseVotingStrategies
