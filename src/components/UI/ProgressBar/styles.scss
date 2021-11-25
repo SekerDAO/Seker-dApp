@@ -2,10 +2,15 @@
 
 .progress-bar {
   position: relative;
+  height: 10px;
+  border-radius: 5px;
 
   &__background {
+    height: 10px;
+    border-radius: 5px;
+
     &--green {
-      background-color: $light-grey;
+      background-color: $light-green;
     }
 
     &--red {
@@ -20,8 +25,9 @@
   &__fill {
     position: absolute;
     top: 0;
-    right: 0;
-    width: 100%;
+    left: 0;
+    height: 10px;
+    border-radius: 5px;
 
     &--green {
       background-color: $success;

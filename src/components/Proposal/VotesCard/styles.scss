@@ -1,0 +1,54 @@
+@import "src/variables";
+
+.votes-card {
+  width: 280px;
+  padding: 20px;
+
+  &__header {
+    h2 {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .progress-bar {
+      width: 100%;
+      margin: 5px 0;
+    }
+  }
+
+  &__tokens-value {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__body {
+    h3 {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+
+      li {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid $dark-grey25;
+        margin-top: 10px;
+        padding-bottom: 10px;
+
+        a {
+          color: $purple;
+        }
+      }
+    }
+
+    .btn {
+      margin: 20px auto 10px;
+      display: flex;
+    }
+  }
+}

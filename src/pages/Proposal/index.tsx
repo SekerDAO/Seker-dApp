@@ -34,6 +34,7 @@ import Tag from "../../components/UI/Tag"
 import {capitalize, formatReadableAddress} from "../../utlls"
 import useDAO from "../../hooks/getters/useDAO"
 import BackButton from "../../components/Controls/Button/BackButton"
+import VotesCard from "../../components/Proposal/VotesCard"
 
 const Proposal: FunctionComponent = () => {
 	const {id} = useParams<{id: string}>()
@@ -43,6 +44,16 @@ const Proposal: FunctionComponent = () => {
 	const [processing, setProcessing] = useState(false)
 	const {signer} = useContext(EthersContext)
 	const {push} = useHistory()
+
+	// TODO: Get votes from proposal info
+	const MOCK_VOTES = [
+		{address: account ?? "", tokens: 100250},
+		{address: account ?? "", tokens: 100250},
+		{address: account ?? "", tokens: 50250},
+		{address: account ?? "", tokens: 50250},
+		{address: account ?? "", tokens: 49250},
+		{address: account ?? "", tokens: 39250}
+	]
 
 	if (loading || !proposal || !dao) return <Loader />
 	if (error) return <ErrorPlaceholder />
@@ -210,7 +221,7 @@ const Proposal: FunctionComponent = () => {
 					</div>
 					<div className="proposal__header-subtitle">
 						<Tag variant={proposal.state}>{capitalize(proposal.state)}</Tag>
-						<span>ID {proposal.id}</span>
+						<span>ID [ {id} ]</span>
 						<span>•</span>
 						<span>[ # ] Days, [ # ] Hours Left</span>
 					</div>
@@ -227,7 +238,28 @@ const Proposal: FunctionComponent = () => {
 						</p>
 					</div>
 				</div>
-				<div className="proposal__content"></div>
+				<div className="proposal__content">
+					<div className="proposal__content-heading">
+						<span>Quorum Status</span> <Tag variant="canceled">75%</Tag>
+					</div>
+					<div className="proposal__content-body">
+						<div className="proposal__content-votes-cards">
+							<VotesCard type="for" tokensValue={500000} percentageValue={50} votes={MOCK_VOTES} />
+							<VotesCard
+								type="against"
+								tokensValue={250000}
+								percentageValue={25}
+								votes={MOCK_VOTES}
+							/>
+							<VotesCard
+								type="abstain"
+								tokensValue={250000}
+								percentageValue={25}
+								votes={MOCK_VOTES}
+							/>
+						</div>
+					</div>
+				</div>
 			</div>
 		</DAODashboard>
 	)

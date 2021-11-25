@@ -2,7 +2,9 @@
 
 .proposal {
   display: flex;
+  flex-wrap: wrap;
   margin-top: 40px;
+  width: 880px;
 
   &__header {
     width: 100%;
@@ -38,6 +40,33 @@
           margin-left: 5px;
         }
       }
+    }
+  }
+
+  &__content {
+    width: 100%;
+
+    &-heading {
+      margin-top: 45px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+
+      .tag {
+        width: 55px;
+        margin-left: 10px;
+        background-color: $dark-grey;
+      }
+
+      span:not(.tag) {
+        color: $dark-grey50;
+      }
+    }
+
+    &-votes-cards {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
     }
   }
 }
