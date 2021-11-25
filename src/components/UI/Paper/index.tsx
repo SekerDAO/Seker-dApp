@@ -5,12 +5,10 @@ const Paper: FunctionComponent<{className?: string; innerRef?: Ref<HTMLDivElemen
 	children,
 	className,
 	innerRef
-}) => {
-	return (
-		<div className={`paper ${className ?? ""}`} ref={innerRef}>
-			{children}
-		</div>
-	)
-}
+}) => (
+	<div className={`paper ${className ?? ""}`} ref={innerRef}>
+		{children}
+	</div>
+)
 
 export default Paper
