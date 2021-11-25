@@ -6,14 +6,14 @@ import {defaultAbiCoder} from "@ethersproject/abi"
 import {keccak256} from "@ethersproject/solidity"
 import {getCreate2Address} from "@ethersproject/address"
 import {buildContractCall, SafeTransaction} from "../gnosisSafe/safeUtils"
-const {REACT_APP_SEELE_MASTERCOPY_ADDRESS, REACT_APP_MODULE_FACTORY_ADDRESS} = process.env
+const {REACT_APP_USUL_MASTERCOPY_ADDRESS, REACT_APP_MODULE_FACTORY_ADDRESS} = process.env
 
 const getUsulDeploy = (
 	safeAddress: string,
 	strategyAddresses: string[],
 	signer: JsonRpcSigner
 ): {tx: SafeTransaction; expectedAddress: string} => {
-	const usulMaster = new Contract(REACT_APP_SEELE_MASTERCOPY_ADDRESS!, Usul.abi, signer)
+	const usulMaster = new Contract(REACT_APP_USUL_MASTERCOPY_ADDRESS!, Usul.abi, signer)
 	const factory = new Contract(REACT_APP_MODULE_FACTORY_ADDRESS!, ModuleFactory.abi, signer)
 	const encodedInitParams = defaultAbiCoder.encode(
 		["address", "address", "address", "address[]"],

@@ -8,7 +8,7 @@ export const signSendNFT = async (
 	nftAddress: string,
 	to: string,
 	signer: JsonRpcSigner
-): Promise<SafeSignature> =>
+): Promise<[SafeSignature, number]> =>
 	createSafeSignature(
 		safeAddress,
 		nftAddress,

@@ -8,8 +8,12 @@ import "./styles.scss"
 const TransactionDetailsModal: FunctionComponent<{
 	show: boolean
 	onClose: () => void
-	transaction: {tx: SafeTransaction; name: string}
-}> = ({show, onClose, transaction: {name, tx}}) => {
+	transaction?: {tx: SafeTransaction; name: string}
+}> = ({show, onClose, transaction}) => {
+	if (!transaction) {
+		return null
+	}
+	const {name, tx} = transaction
 	// TODO: decode tx.data and display from, to, gas from there
 	return (
 		<Modal show={show} onClose={onClose} title={`Contract Interaction ${name}`}>

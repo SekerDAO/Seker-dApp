@@ -4,19 +4,19 @@ import ExpandDaoLayout from "../ExpandDaoLayout"
 import {BuiltVotingStrategy} from "../../../../types/DAO"
 import ChooseVotingStrategies from "../ChooseVotingStrategies"
 import {
-	buildUsulDeployTxSequence,
+	buildSeeleDeployTxSequence,
 	SafeTransaction
 } from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
 import EthersContext from "../../../../context/EthersContext"
-import ConfirmDeployUsul from "../ConfirmDeployUsul"
-import useDAOProposals from "../../../../hooks/getters/useDAOProposals"
+import ConfirmDeploySeele from "../ReviewDeploySeele"
+import useProposals from "../../../../hooks/getters/useProposals"
 import ErrorPlaceholder from "../../../UI/ErrorPlaceholder"
 
 type ExpandDaoStage = "chooseStrategies" | "confirm"
 
 const STAGE_HEADERS: {[key in ExpandDaoStage]: {title?: string; description?: string}} = {
 	chooseStrategies: {
-		title: "Usul",
+		title: "Seele",
 		description: `This module allows avatars to operate with trustless tokenized DeGov, similar to Compound
         or Gitcoin, with a proposal core that can register swappable voting contracts. This
         enables DAOs to choose from various on-chain voting methods that best suit their needs.
@@ -26,10 +26,12 @@ const STAGE_HEADERS: {[key in ExpandDaoStage]: {title?: string; description?: st
 		can add as many as you would like. Once you have finished, proceed to the next step to
 		confirm your transactions and deploy.`
 	},
-	confirm: {}
+	confirm: {
+		title: "Confirm Bundle Transactions"
+	}
 }
 
-const DeployUsul: FunctionComponent<{
+const DeploySeele: FunctionComponent<{
 	gnosisAddress: string
 	gnosisVotingThreshold: number
 }> = ({gnosisAddress, gnosisVotingThreshold}) => {
@@ -37,17 +39,19 @@ const DeployUsul: FunctionComponent<{
 	const [stage, setStage] = useState<ExpandDaoStage>("chooseStrategies")
 	const [strategies, setStrategies] = useState<BuiltVotingStrategy[]>([])
 	const [transactions, setTransactions] = useState<{tx: SafeTransaction; name: string}[]>([])
-	const [expectedUsulAddress, setExpectedUsulAddress] = useState("")
+	const [multiTx, setMultiTx] = useState<SafeTransaction>()
+	const [expectedSeeleAddress, setExpectedSeeleAddress] = useState("")
+	const {proposals, error} = useProposals(gnosisAddress)
+
 	useEffect(() => {
 		if (signer) {
-			buildUsulDeployTxSequence(strategies, gnosisAddress, signer).then(res => {
+			buildSeeleDeployTxSequence(strategies, gnosisAddress, signer).then(res => {
 				setTransactions(res.transactions)
-				setExpectedUsulAddress(res.expectedUsulAddress)
+				setExpectedSeeleAddress(res.expectedSeeleAddress)
 			})
 		}
 	}, [strategies, gnosisAddress, signer])
 
-	const {proposals, error} = useDAOProposals(gnosisAddress)
 	useEffect(() => {
 		if (proposals) {
 			const expandProposal = proposals.find(
@@ -62,12 +66,13 @@ const DeployUsul: FunctionComponent<{
 
 	const handleProceedToConfirm = async () => {
 		if (signer) {
-			const multiTx = await buildMultiSendTx(
-				transactions.map(t => t.tx),
-				gnosisAddress,
-				signer
+			setMultiTx(
+				await buildMultiSendTx(
+					transactions.map(t => t.tx),
+					gnosisAddress,
+					signer
+				)
 			)
-			setTransactions(prevState => [...prevState, {tx: multiTx, name: "multiSend"}])
 			setStage("confirm")
 		}
 	}
@@ -77,6 +82,7 @@ const DeployUsul: FunctionComponent<{
 		<ExpandDaoLayout
 			title={STAGE_HEADERS[stage].title}
 			description={STAGE_HEADERS[stage].description}
+			onGoBack={stage === "confirm" ? () => setStage("chooseStrategies") : undefined}
 		>
 			{stage === "chooseStrategies" && (
 				<ChooseVotingStrategies
@@ -93,12 +99,12 @@ const DeployUsul: FunctionComponent<{
 				/>
 			)}
 			{stage === "confirm" && (
-				<ConfirmDeployUsul
-					onGoBack={() => setStage("chooseStrategies")}
+				<ConfirmDeploySeele
+					multiTx={multiTx}
 					transactions={transactions}
 					gnosisAddress={gnosisAddress}
 					gnosisVotingThreshold={gnosisVotingThreshold}
-					expectedUsulAddress={expectedUsulAddress}
+					expectedSeeleAddress={expectedSeeleAddress}
 					afterSubmit={() => {
 						// TODO: Redirect to proposal details page
 						console.log("TODO")
@@ -109,4 +115,4 @@ const DeployUsul: FunctionComponent<{
 	)
 }
 
-export default DeployUsul
+export default DeploySeele

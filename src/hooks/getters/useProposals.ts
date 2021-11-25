@@ -1,8 +1,10 @@
-import {useEffect, useState} from "react"
+import {useContext, useEffect, useState} from "react"
 import {SafeProposal} from "../../types/safeProposal"
 import getSafeProposals from "../../api/firebase/safeProposal/getSafeProposals"
+import {getNonce} from "../../api/ethers/functions/gnosisSafe/safeUtils"
+import EthersContext from "../../context/EthersContext"
 
-const useDAOProposals = (
+const useProposals = (
 	gnosisAddress: string
 ): {
 	proposals: (SafeProposal & {proposalId: string})[]
@@ -13,45 +15,27 @@ const useDAOProposals = (
 	const [proposals, setProposals] = useState<(SafeProposal & {proposalId: string})[]>([])
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
+	const {provider} = useContext(EthersContext)
 
 	const getData = async () => {
 		setLoading(true)
 		setError(false)
 		try {
-			const firebaseData = (await getSafeProposals(gnosisAddress)).docs.map(doc => ({
+			const [proposalsSnapshots, nonce] = await Promise.all([
+				getSafeProposals(gnosisAddress),
+				getNonce(gnosisAddress, provider)
+			])
+			const firebaseData = proposalsSnapshots.docs.map(doc => ({
 				...doc.data(),
 				proposalId: doc.id
 			}))
-			// TODO
-			// const ethersData = await Promise.all(
-			// 	firebaseData.map(async p => {
-			// 		if (p.type === "joinHouse") {
-			// 			const balance = await getERC20Balance(dao.tokenAddress!, p.userAddress, provider)
-			// 			const proposalData = await getHouseERC20DAOProposal(
-			// 				dao.daoAddress!,
-			// 				Number(p.id),
-			// 				provider
-			// 			)
-			// 			return {
-			// 				...proposalData,
-			// 				balance
-			// 			}
-			// 		}
-			// 		if (p.module === "DAO") {
-			// 			return getHouseERC20DAOProposal(dao.daoAddress!, Number(p.id), provider)
-			// 		} else {
-			// 			return {}
-			// 		}
-			// 	})
-			// )
 			setProposals(
 				firebaseData.map(
 					p =>
 						({
 							...p,
-							// ...ethersData[index],
 							id: Number(p.id),
-							state: p.state!
+							state: p.state === "active" && p.nonce < nonce ? "outdated" : p.state
 						} as SafeProposal & {proposalId: string})
 				)
 			)
@@ -74,4 +58,4 @@ const useDAOProposals = (
 	}
 }
 
-export default useDAOProposals
+export default useProposals

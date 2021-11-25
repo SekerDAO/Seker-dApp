@@ -17,6 +17,7 @@
 
     .input,
     .array-input {
+      margin-top: 10px;
       width: 100%;
       flex-wrap: wrap;
 
@@ -25,7 +26,6 @@
       }
 
       input {
-        margin-top: 10px;
         width: 100%;
       }
     }

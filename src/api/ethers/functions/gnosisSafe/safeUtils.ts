@@ -4,7 +4,7 @@ import {BigNumber, BigNumberish} from "@ethersproject/bignumber"
 import {arrayify} from "@ethersproject/bytes"
 import {AddressZero} from "@ethersproject/constants"
 import {pack} from "@ethersproject/solidity"
-import {JsonRpcSigner, TransactionResponse} from "@ethersproject/providers"
+import {JsonRpcProvider, JsonRpcSigner, TransactionResponse} from "@ethersproject/providers"
 import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
 import {BuiltVotingStrategy} from "../../../../types/DAO"
 import getUsulDeploy from "../Usul/getUsulDeploy"
@@ -184,12 +184,12 @@ export const createSafeSignature = async (
 	method: string,
 	args: unknown[],
 	signer: JsonRpcSigner
-): Promise<SafeSignature> => {
+): Promise<[SafeSignature, number]> => {
 	const safeContract = new Contract(safeAddress, GnosisSafeL2.abi, signer)
 	const targetContract = new Contract(contractAddress, contractAbi, signer)
 	const nonce = await safeContract.nonce()
 	const call = buildContractCall(targetContract, method, args, nonce)
-	return safeSignMessage(signer, safeContract, call)
+	return [await safeSignMessage(signer, safeContract, call), nonce.toString()]
 }
 
 export const executeSafeTx = async (
@@ -265,7 +265,7 @@ export const buildUsulDeployTxSequence = async (
 			transactions: [],
 			expectedUsulAddress: ""
 		}
-	const {tx: deployUsulTx, expectedAddress: expectedUsulAddress} = getUsulDeploy(
+	const {tx: deploySeeleTx, expectedAddress: expectedSeeleAddress} = getUsulDeploy(
 		gnosisAddress,
 		strategies.map(strategy => strategy.expectedAddress),
 		signer
@@ -274,14 +274,14 @@ export const buildUsulDeployTxSequence = async (
 		switch (strategy.strategy) {
 			case "linearVoting":
 				return {
-					tx: getOZLinearSetUsul(expectedUsulAddress, strategy.expectedAddress, signer),
-					name: "OzLinearSetUsul"
+					tx: getOZLinearSetUsul(expectedSeeleAddress, strategy.expectedAddress, signer),
+					name: "OzLinearSetSeele"
 				}
 			default:
 				throw new Error("This strategy is not supported yet")
 		}
 	})
-	const registerUsulTx = await getRegisterUsulTx(gnosisAddress, expectedUsulAddress, signer)
+	const registerSeeleTx = await getRegisterUsulTx(gnosisAddress, expectedSeeleAddress, signer)
 	return {
 		transactions: [
 			...strategies.map(strategy => ({tx: strategy.tx, name: strategy.strategy})),
@@ -291,4 +291,10 @@ export const buildUsulDeployTxSequence = async (
 		],
 		expectedUsulAddress
 	}
+}
+
+export const getNonce = async (address: string, provider: JsonRpcProvider): Promise<number> => {
+	const safeContract = new Contract(address, GnosisSafeL2.abi, provider)
+	const nonce = await safeContract.nonce()
+	return nonce.toNumber()
 }

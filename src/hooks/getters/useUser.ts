@@ -29,7 +29,9 @@ const useUser = (
 	}
 
 	useEffect(() => {
-		getInfo()
+		if (account) {
+			getInfo()
+		}
 	}, [account])
 
 	return {
