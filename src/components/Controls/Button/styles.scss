@@ -45,3 +45,18 @@
     }
   }
 }
+
+.back-button {
+  padding-left: 0;
+  display: flex;
+  align-items: center;
+
+  svg {
+    transform: rotate(90deg);
+    margin-right: 10px;
+
+    path {
+      stroke: $purple;
+    }
+  }
+}

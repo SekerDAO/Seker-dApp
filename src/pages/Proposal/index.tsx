@@ -1,6 +1,8 @@
 import {FunctionComponent, useContext, useState} from "react"
-import {Link, useParams} from "react-router-dom"
+import {Link, useParams, useHistory} from "react-router-dom"
+import DAODashboard from "../../components/DAO/DAODashboard"
 import EthersContext from "../../context/EthersContext"
+import {AuthContext} from "../../context/AuthContext"
 import {SafeSignature} from "../../api/ethers/functions/gnosisSafe/safeUtils"
 import {
 	executeApproveNFTForAuction,
@@ -30,15 +32,22 @@ import {executeMultiSend, signMultiSend} from "../../api/ethers/functions/Usul/m
 import editDAO from "../../api/firebase/DAO/editDAO"
 import Tag from "../../components/UI/Tag"
 import {capitalize, formatReadableAddress} from "../../utlls"
+import useDAO from "../../hooks/getters/useDAO"
+import BackButton from "../../components/Controls/Button/BackButton"
 
 const Proposal: FunctionComponent = () => {
 	const {id} = useParams<{id: string}>()
+	const {account, connected} = useContext(AuthContext)
 	const {proposal, gnosisVotingThreshold, loading, error, canSign} = useProposal(id)
+	const {dao} = useDAO(proposal?.gnosisAddress)
 	const [processing, setProcessing] = useState(false)
 	const {signer} = useContext(EthersContext)
+	const {push} = useHistory()
 
-	if (loading || !proposal) return <Loader />
+	if (loading || !proposal || !dao) return <Loader />
 	if (error) return <ErrorPlaceholder />
+
+	const isAdmin = connected && !!dao.owners.find(addr => addr === account)
 
 	const sign = async () => {
 		if (!(signer && proposal && gnosisVotingThreshold !== null && canSign)) return
@@ -191,37 +200,36 @@ const Proposal: FunctionComponent = () => {
 	}
 
 	return (
-		<div className="proposal">
-			<div>
-				<div>
-					<h1>{proposal.title}</h1>
-					<span>Linear Voting</span>
+		<DAODashboard page="proposals" loading={loading} error={error} isAdmin={isAdmin} dao={dao}>
+			<div className="proposal">
+				<div className="proposal__header">
+					<BackButton onClick={() => push(`/dao/${proposal.gnosisAddress}?page=proposals`)} />
+					<div className="proposal__header-title">
+						<h1>{proposal.title}</h1>
+						<span>Linear Voting</span>
+					</div>
+					<div className="proposal__header-subtitle">
+						<Tag variant={proposal.state}>{capitalize(proposal.state)}</Tag>
+						<span>ID {proposal.id}</span>
+						<span>•</span>
+						<span>[ # ] Days, [ # ] Hours Left</span>
+					</div>
+					<div className="proposal__header-links">
+						<p>
+							Proposed by:
+							<Link to={`/profile/${proposal.userAddress}`}>
+								{formatReadableAddress(proposal.userAddress)}
+							</Link>
+						</p>
+						<p>
+							Voting Token:
+							<Link to={`TODO`}>{formatReadableAddress(proposal.userAddress)}</Link>
+						</p>
+					</div>
 				</div>
-				<div>
-					<Tag variant={proposal.state}>{capitalize(proposal.state)}</Tag>
-					<span>ID {proposal.id}</span>
-					<span>•</span>
-					<span>[ # ] Days, [ # ] Hours Left</span>
-				</div>
-				<div>
-					<p>
-						Proposed by:
-						<Link to={`/profile/${proposal.userAddress}`}>
-							{formatReadableAddress(proposal.userAddress)}
-						</Link>
-					</p>
-					<p>
-						Voting Token:
-						<Link to={`TODO`}>{formatReadableAddress(proposal.userAddress)}</Link>
-					</p>
-				</div>
+				<div className="proposal__content"></div>
 			</div>
-			{canSign && (
-				<button className="btn" onClick={sign} disabled={processing}>
-					{processing ? "Processing..." : "Sign"}
-				</button>
-			)}
-		</div>
+		</DAODashboard>
 	)
 }
 

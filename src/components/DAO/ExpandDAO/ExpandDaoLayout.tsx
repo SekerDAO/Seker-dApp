@@ -1,6 +1,5 @@
 import {FunctionComponent} from "react"
-import Button from "../../Controls/Button"
-import {ReactComponent as ArrowDown} from "../../../assets/icons/arrow-down.svg"
+import BackButton from "../../Controls/Button/BackButton"
 
 const ExpandDaoLayout: FunctionComponent<{
 	title?: string
@@ -10,12 +9,7 @@ const ExpandDaoLayout: FunctionComponent<{
 	<>
 		{(title || description) && (
 			<div className="expand-dao__header">
-				{onGoBack && (
-					<Button buttonType="link" onClick={onGoBack} extraClassName="expand-dao__back-button">
-						<ArrowDown width="10px" height="20px" />
-						Back
-					</Button>
-				)}
+				{onGoBack && <BackButton onClick={onGoBack} />}
 				{title && <h2>{title}</h2>}
 				{description && <p>{description}</p>}
 			</div>

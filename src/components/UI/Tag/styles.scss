@@ -5,6 +5,9 @@
   height: 30px;
   border-radius: 5px;
   color: $white;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 
   &--active {
     background-color: $info;

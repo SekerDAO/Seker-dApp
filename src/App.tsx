@@ -33,7 +33,6 @@ const AppWithEthers: FunctionComponent = () => {
 						<Route exact path="/nft/:id" component={NFTDetails} />
 						<Route exact path="/profile/:userId" component={Profile} />
 						<Route exact path="/dao/:address" component={DAOPage} />
-						<Route exact path="/dao/:address/proposals/:proposalId" component={ProposalPage} />
 						<Route exact path="/daos" component={DAOsPage} />
 						<Route exact path="/proposal/:id" component={Proposal} />
 					</Switch>
