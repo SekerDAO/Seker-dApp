@@ -265,7 +265,7 @@ export const buildUsulDeployTxSequence = async (
 			transactions: [],
 			expectedUsulAddress: ""
 		}
-	const {tx: deploySeeleTx, expectedAddress: expectedSeeleAddress} = getUsulDeploy(
+	const {tx: deployUsulTx, expectedAddress: expectedUsulAddress} = getUsulDeploy(
 		gnosisAddress,
 		strategies.map(strategy => strategy.expectedAddress),
 		signer
@@ -274,14 +274,14 @@ export const buildUsulDeployTxSequence = async (
 		switch (strategy.strategy) {
 			case "linearVoting":
 				return {
-					tx: getOZLinearSetUsul(expectedSeeleAddress, strategy.expectedAddress, signer),
-					name: "OzLinearSetSeele"
+					tx: getOZLinearSetUsul(expectedUsulAddress, strategy.expectedAddress, signer),
+					name: "OzLinearSetUsul"
 				}
 			default:
 				throw new Error("This strategy is not supported yet")
 		}
 	})
-	const registerSeeleTx = await getRegisterUsulTx(gnosisAddress, expectedSeeleAddress, signer)
+	const registerUsulTx = await getRegisterUsulTx(gnosisAddress, expectedUsulAddress, signer)
 	return {
 		transactions: [
 			...strategies.map(strategy => ({tx: strategy.tx, name: strategy.strategy})),

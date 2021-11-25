@@ -151,8 +151,8 @@ const Proposal: FunctionComponent = () => {
 					if (!proposal.multiTx) {
 						throw new Error("Unexpected empty mulitTx in proposal")
 					}
-					if (!proposal.seeleAddress) {
-						throw new Error("Unexpected empty seeleAddress in proposal")
+					if (!proposal.usulAddress) {
+						throw new Error("Unexpected empty usulAddress in proposal")
 					}
 					;[signature] = await signMultiSend(proposal.multiTx, proposal.gnosisAddress, signer)
 					if (proposal.signatures?.length === gnosisVotingThreshold - 1) {
@@ -164,7 +164,7 @@ const Proposal: FunctionComponent = () => {
 						)
 						await editDAO({
 							gnosisAddress: proposal.gnosisAddress,
-							seeleAddress: proposal.seeleAddress
+							usulAddress: proposal.usulAddress
 						})
 						executed = true
 					}
