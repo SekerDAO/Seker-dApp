@@ -2,14 +2,17 @@ import {FunctionComponent, useContext, useState} from "react"
 import {AuthContext} from "../../../context/AuthContext"
 import Select from "../../Controls/Select"
 import CreateAdminProposal from "./CreateAdminProposal"
+import {VotingStrategy} from "../../../types/DAO"
+import CreateStrategyProposal from "./CreateStrategyProposal"
 
 const CreateDaoProposal: FunctionComponent<{
 	gnosisAddress: string
 	gnosisVotingThreshold: number
 	ownersCount: number
-}> = ({gnosisAddress, gnosisVotingThreshold, ownersCount}) => {
+	strategies: VotingStrategy[]
+}> = ({gnosisAddress, gnosisVotingThreshold, ownersCount, strategies}) => {
 	const {connected} = useContext(AuthContext)
-	const [module, setModule] = useState("admin")
+	const [module, setModule] = useState<"admin" | VotingStrategy>("admin")
 
 	if (!connected) return <div>TODO: Please connect wallet</div>
 
@@ -22,18 +25,24 @@ const CreateDaoProposal: FunctionComponent<{
 					{
 						name: "Admin",
 						value: "admin"
-					}
+					},
+					...strategies.map(strategy => ({
+						name: strategy,
+						value: strategy
+					}))
 				]}
 				value={module}
 				placeholder="Select Module"
 				onChange={setModule}
 			/>
-			{module === "admin" && (
+			{module === "admin" ? (
 				<CreateAdminProposal
 					gnosisAddress={gnosisAddress}
 					gnosisVotingThreshold={gnosisVotingThreshold}
 					ownersCount={ownersCount}
 				/>
+			) : (
+				<CreateStrategyProposal />
 			)}
 		</div>
 	)

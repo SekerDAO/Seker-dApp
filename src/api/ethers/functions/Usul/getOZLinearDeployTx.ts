@@ -14,7 +14,6 @@ const getOZLinearDeployTx = (
 	quorumThreshold: number,
 	delay: number,
 	votingPeriod: number,
-	name: string,
 	signer: JsonRpcSigner
 ): {tx: SafeTransaction; expectedAddress: string} => {
 	const linearVotingMaster = new Contract(
@@ -32,7 +31,7 @@ const getOZLinearDeployTx = (
 			votingPeriod,
 			quorumThreshold, // number of votes wieghted to pass
 			delay, // number of days proposals are active
-			name
+			"linearVoting"
 		]
 	)
 	const initLinearData = linearVotingMaster.interface.encodeFunctionData("setUp", [

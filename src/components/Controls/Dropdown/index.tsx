@@ -49,9 +49,9 @@ const Dropdown = <ItemValueType extends string | number>({
 				</li>
 				{isOpened && (
 					<>
-						{items.map(({value, name}) => (
+						{items.map(({value, name}, index) => (
 							<li
-								key={value}
+								key={index}
 								onClick={() => handleItemClick(value)}
 								className={`dropdown__item${
 									highlightSelected && value === selected ? " dropdown__item--selected" : ""
