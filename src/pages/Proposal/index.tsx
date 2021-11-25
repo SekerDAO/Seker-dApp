@@ -1,5 +1,5 @@
 import {FunctionComponent, useContext, useState} from "react"
-import {useParams} from "react-router-dom"
+import {Link, useParams} from "react-router-dom"
 import EthersContext from "../../context/EthersContext"
 import {SafeSignature} from "../../api/ethers/functions/gnosisSafe/safeUtils"
 import {
@@ -28,6 +28,8 @@ import Loader from "../../components/UI/Loader"
 import ErrorPlaceholder from "../../components/UI/ErrorPlaceholder"
 import {executeMultiSend, signMultiSend} from "../../api/ethers/functions/Usul/multiSend"
 import editDAO from "../../api/firebase/DAO/editDAO"
+import Tag from "../../components/UI/Tag"
+import {capitalize, formatReadableAddress} from "../../utlls"
 
 const Proposal: FunctionComponent = () => {
 	const {id} = useParams<{id: string}>()
@@ -35,7 +37,7 @@ const Proposal: FunctionComponent = () => {
 	const [processing, setProcessing] = useState(false)
 	const {signer} = useContext(EthersContext)
 
-	if (loading) return <Loader />
+	if (loading || !proposal) return <Loader />
 	if (error) return <ErrorPlaceholder />
 
 	const sign = async () => {
@@ -190,7 +192,30 @@ const Proposal: FunctionComponent = () => {
 
 	return (
 		<div className="proposal">
-			<div>TODO: proposal page</div>
+			<div>
+				<div>
+					<h1>{proposal.title}</h1>
+					<span>Linear Voting</span>
+				</div>
+				<div>
+					<Tag variant={proposal.state}>{capitalize(proposal.state)}</Tag>
+					<span>ID {proposal.id}</span>
+					<span>•</span>
+					<span>[ # ] Days, [ # ] Hours Left</span>
+				</div>
+				<div>
+					<p>
+						Proposed by:
+						<Link to={`/profile/${proposal.userAddress}`}>
+							{formatReadableAddress(proposal.userAddress)}
+						</Link>
+					</p>
+					<p>
+						Voting Token:
+						<Link to={`TODO`}>{formatReadableAddress(proposal.userAddress)}</Link>
+					</p>
+				</div>
+			</div>
 			{canSign && (
 				<button className="btn" onClick={sign} disabled={processing}>
 					{processing ? "Processing..." : "Sign"}

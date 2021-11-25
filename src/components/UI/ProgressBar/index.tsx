@@ -3,9 +3,9 @@ import "./styles.scss"
 
 const ProgressBar: FunctionComponent<{color: "green" | "red" | "black"}> = ({color}) => {
 	return (
-		<div className={`progress-bar progress-bar--${color}`}>
-			<div className="progress-bar__background" />
-			<div className="progress-bar__fill" />
+		<div className="progress-bar">
+			<div className={`progress-bar__background progress-bar__background--${color}`} />
+			<div className={`progress-bar__fill progress-bar__fill--${color}`} />
 		</div>
 	)
 }

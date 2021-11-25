@@ -1,3 +1,38 @@
+@import "src/variables";
+
 .progress-bar {
   position: relative;
+
+  &__background {
+    &--green {
+      background-color: $light-grey;
+    }
+
+    &--red {
+      background-color: $light-red;
+    }
+
+    &--grey {
+      background-color: $dark-grey25;
+    }
+  }
+
+  &__fill {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+
+    &--green {
+      background-color: $success;
+    }
+
+    &--red {
+      background-color: $error;
+    }
+
+    &--grey {
+      background-color: $dark-grey75;
+    }
+  }
 }
