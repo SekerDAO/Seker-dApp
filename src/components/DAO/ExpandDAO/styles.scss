@@ -1,4 +1,23 @@
+@import "src/variables";
+
 .expand-dao {
+  &__back-button {
+    margin-bottom: -25px;
+    margin-top: 10px;
+    padding-left: 0;
+    display: flex;
+    align-items: center;
+
+    svg {
+      transform: rotate(90deg);
+      margin-right: 10px;
+
+      path {
+        stroke: $purple;
+      }
+    }
+  }
+
   &__header {
     h2 {
       margin-top: 45px;
@@ -30,14 +49,30 @@
     }
 
     &-seele {
+      display: flex;
       width: 200px;
       height: 200px;
       margin-right: 200px; // TODO: remove this margin once Bridge module is added
       background-image: url("../../../assets/icons/seele-default.svg");
 
+      h2 {
+        display: flex;
+        align-self: flex-end;
+        margin: 0 auto;
+      }
+
       &:hover {
         background-image: url("../../../assets/icons/seele-hover.svg");
         cursor: pointer;
+      }
+
+      &--deployed {
+        background-image: url("../../../assets/icons/seele-deployed.svg");
+
+        &:hover {
+          cursor: not-allowed;
+          background-image: url("../../../assets/icons/seele-deployed.svg");
+        }
       }
     }
   }

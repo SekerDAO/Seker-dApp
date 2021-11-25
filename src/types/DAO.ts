@@ -45,9 +45,9 @@ export type DAOListItemProps = Pick<
 export type VotingStrategy =
 	| "singleVoting"
 	| "singleVotingSimpleMembership"
-	| "linearVotingCompoundBravo"
+	| "linearVoting"
 	| "linearVotingSimpleMembership"
-	| "molochLinearVoting"
+	| "linearVotingSimpleMembershipZodiacExitModule"
 	| "quadraticVotingSimpleMembership"
 
 export type BuiltVotingStrategy = {

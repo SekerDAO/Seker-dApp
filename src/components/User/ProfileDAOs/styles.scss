@@ -7,12 +7,13 @@
 
     svg {
       margin-right: 10px;
+      fill: $purple;
     }
 
     &:hover {
       svg {
         path {
-          fill: $white;
+          fill: $purple75;
         }
       }
     }
@@ -21,6 +22,7 @@
 
 .profile-daos {
   &__table {
+    max-width: 880px;
     margin-top: 10px;
 
     .purple {

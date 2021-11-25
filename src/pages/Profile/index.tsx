@@ -18,6 +18,7 @@ import {ReactComponent as InstagramIcon} from "../../assets/icons/instagram.svg"
 import DashboardHeader from "../../components/UI/DashboardHeader"
 import {isAddress} from "@ethersproject/address"
 import DashboardMenu from "../../components/UI/DashboardMenu"
+import {formatReadableAddress} from "../../utlls"
 
 type ProfilePage = "nfts" | "edit" | "daos" | "profile"
 
@@ -96,7 +97,7 @@ const Profile: FunctionComponent = () => {
 					</div>
 					<div className="profile__info">
 						<h2>{user.name || "Unnamed user"}</h2>
-						<p>{`${user.account.slice(0, 3)}...${user.account.slice(-4)}`}</p>
+						<p>{formatReadableAddress(user.account)}</p>
 						<p>{user.location}</p>
 						<a target="_blank" rel="noopener noreferrer" href={`mailto:${user.email}`}>
 							{user.email}

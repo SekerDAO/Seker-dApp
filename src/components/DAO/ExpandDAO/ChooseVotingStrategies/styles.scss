@@ -5,12 +5,13 @@
   display: flex;
 
   &__strategies,
-  &__transactions {
+  &__deployments {
     padding: 20px;
 
-    h2 {
+    h3 {
       width: 100%;
       margin-bottom: 20px;
+      color: $dark-grey;
     }
   }
 
@@ -26,16 +27,40 @@
     min-height: 260px;
   }
 
-  .divider {
-    margin-bottom: 20px;
-  }
-
-  &__transactions {
+  &__deployments {
     flex: 1;
 
     .btn {
       width: 100%;
       margin-top: 20px;
+    }
+  }
+
+  &__deployment {
+    display: flex;
+
+    &-icon {
+      height: 20px;
+
+      svg {
+        margin-right: 10px;
+      }
+
+      .deployment__delete-icon {
+        display: none;
+      }
+
+      &:hover {
+        cursor: pointer;
+
+        svg {
+          display: none;
+        }
+
+        .deployment__delete-icon {
+          display: block;
+        }
+      }
     }
   }
 }

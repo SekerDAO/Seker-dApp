@@ -38,5 +38,10 @@
     color: $purple;
     background-color: transparent;
     border: none;
+
+    &:not(:disabled):hover {
+      background-color: transparent;
+      color: $purple75;
+    }
   }
 }

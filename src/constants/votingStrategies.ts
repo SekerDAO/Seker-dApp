@@ -1,8 +1,8 @@
 import singleVotingCard from "../assets/icons/single-voting.svg"
 import singleVotingSimpleMembershipCard from "../assets/icons/single-voting-simple-membership.svg"
-import linearVotingCompoundBravoCard from "../assets/icons/linear-voting-compound-bravo.svg"
+import linearVotingCard from "../assets/icons/linear-voting.svg"
 import linearVotingSimpleMembershipCard from "../assets/icons/linear-voting-simple-membership.svg"
-import linearVotingMolochSimpleMembershipCard from "../assets/icons/linear-voting-moloch-simple-membership.svg"
+import linearVotingSimpleMembershipZodiacExitModuleCard from "../assets/icons/linear-voting-simple-membership-zodiac-exit.svg"
 import quadraticVotingSimpleMembershipCard from "../assets/icons/quadratic-voting-simple-membership.svg"
 import {VotingStrategy} from "../types/DAO"
 
@@ -21,41 +21,48 @@ export const VOTING_STRATEGIES: {
 	title: string
 	description: string
 	cardImage: string
+	active: boolean
 }[] = [
-	{
-		strategy: "singleVoting",
-		title: "ERC-20 Single Voting",
-		description: VOTING_STRATEGY_DESCRIPTION_PLACEHOLDER,
-		cardImage: singleVotingCard
-	},
 	{
 		strategy: "singleVotingSimpleMembership",
 		title: "Single Voting + Simple Membership",
 		description: VOTING_STRATEGY_DESCRIPTION_PLACEHOLDER,
-		cardImage: singleVotingSimpleMembershipCard
+		cardImage: singleVotingSimpleMembershipCard,
+		active: false
 	},
 	{
-		strategy: "linearVotingCompoundBravo",
-		title: "ERC-20 Linear Voting Compound Bravo with OZ Voting Tokens",
+		strategy: "singleVoting",
+		title: "ERC-20 Single Voting",
 		description: VOTING_STRATEGY_DESCRIPTION_PLACEHOLDER,
-		cardImage: linearVotingCompoundBravoCard
+		cardImage: singleVotingCard,
+		active: false
+	},
+	{
+		strategy: "linearVoting",
+		title: "ERC-20 Linear Voting",
+		description: VOTING_STRATEGY_DESCRIPTION_PLACEHOLDER,
+		cardImage: linearVotingCard,
+		active: true
 	},
 	{
 		strategy: "linearVotingSimpleMembership",
 		title: "ERC-20 Linear Voting + Simple Membership",
 		description: VOTING_STRATEGY_DESCRIPTION_PLACEHOLDER,
-		cardImage: linearVotingSimpleMembershipCard
+		cardImage: linearVotingSimpleMembershipCard,
+		active: false
 	},
 	{
-		strategy: "molochLinearVoting",
-		title: "ERC-20 Linear Voting (Moloch) Simple Membership + Zodiac Exit Module",
+		strategy: "linearVotingSimpleMembershipZodiacExitModule",
+		title: "ERC-20 Linear Voting Simple Membership + Zodiac Exit Module",
 		description: VOTING_STRATEGY_DESCRIPTION_PLACEHOLDER,
-		cardImage: linearVotingMolochSimpleMembershipCard
+		cardImage: linearVotingSimpleMembershipZodiacExitModuleCard,
+		active: false
 	},
 	{
 		strategy: "quadraticVotingSimpleMembership",
 		title: "ERC-20 Quadratic Voting + Simple Membership",
 		description: VOTING_STRATEGY_DESCRIPTION_PLACEHOLDER,
-		cardImage: quadraticVotingSimpleMembershipCard
+		cardImage: quadraticVotingSimpleMembershipCard,
+		active: false
 	}
 ]

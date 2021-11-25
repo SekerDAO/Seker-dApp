@@ -1,4 +1,5 @@
 import {FunctionComponent, useContext, useEffect, useState} from "react"
+import {buildMultiSendTx} from "../../../../api/ethers/functions/Usul/multiSend"
 import ExpandDaoLayout from "../ExpandDaoLayout"
 import {BuiltVotingStrategy} from "../../../../types/DAO"
 import ChooseVotingStrategies from "../ChooseVotingStrategies"
@@ -7,13 +8,13 @@ import {
 	SafeTransaction
 } from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
 import EthersContext from "../../../../context/EthersContext"
-import ReviewDeploySeele from "../ReviewDeploySeele"
+import ConfirmDeploySeele from "../ReviewDeploySeele"
 import useProposals from "../../../../hooks/getters/useProposals"
 import ErrorPlaceholder from "../../../UI/ErrorPlaceholder"
 
-type ExpandDaoStage = "chooseStrategies" | "review" | "waiting" | "done"
+type ExpandDaoStage = "chooseStrategies" | "confirm"
 
-const STAGE_HEADERS: {[key in ExpandDaoStage]: {title: string; description?: string}} = {
+const STAGE_HEADERS: {[key in ExpandDaoStage]: {title?: string; description?: string}} = {
 	chooseStrategies: {
 		title: "Seele",
 		description: `This module allows avatars to operate with trustless tokenized DeGov, similar to Compound
@@ -25,14 +26,8 @@ const STAGE_HEADERS: {[key in ExpandDaoStage]: {title: string; description?: str
 		can add as many as you would like. Once you have finished, proceed to the next step to
 		confirm your transactions and deploy.`
 	},
-	review: {
+	confirm: {
 		title: "Confirm Bundle Transactions"
-	},
-	waiting: {
-		title: "Waiting for approval"
-	},
-	done: {
-		title: "Seele deployed"
 	}
 }
 
@@ -44,7 +39,10 @@ const DeploySeele: FunctionComponent<{
 	const [stage, setStage] = useState<ExpandDaoStage>("chooseStrategies")
 	const [strategies, setStrategies] = useState<BuiltVotingStrategy[]>([])
 	const [transactions, setTransactions] = useState<{tx: SafeTransaction; name: string}[]>([])
+	const [multiTx, setMultiTx] = useState<SafeTransaction>()
 	const [expectedSeeleAddress, setExpectedSeeleAddress] = useState("")
+	const {proposals, error} = useProposals(gnosisAddress)
+
 	useEffect(() => {
 		if (signer) {
 			buildSeeleDeployTxSequence(strategies, gnosisAddress, signer).then(res => {
@@ -54,54 +52,65 @@ const DeploySeele: FunctionComponent<{
 		}
 	}, [strategies, gnosisAddress, signer])
 
-	const {proposals, error} = useProposals(gnosisAddress)
 	useEffect(() => {
 		if (proposals) {
 			const expandProposal = proposals.find(
 				proposal => proposal.type === "decentralizeDAO" && proposal.state === "active"
 			)
 			if (expandProposal) {
-				setStage("waiting")
+				// TODO: Redirect to proposal details page
+				console.log("TODO")
 			}
 		}
 	}, [proposals])
 
+	const handleProceedToConfirm = async () => {
+		if (signer) {
+			setMultiTx(
+				await buildMultiSendTx(
+					transactions.map(t => t.tx),
+					gnosisAddress,
+					signer
+				)
+			)
+			setStage("confirm")
+		}
+	}
 	if (error) return <ErrorPlaceholder />
 
 	return (
 		<ExpandDaoLayout
 			title={STAGE_HEADERS[stage].title}
 			description={STAGE_HEADERS[stage].description}
+			onGoBack={stage === "confirm" ? () => setStage("chooseStrategies") : undefined}
 		>
 			{stage === "chooseStrategies" && (
 				<ChooseVotingStrategies
 					gnosisAddress={gnosisAddress}
 					strategies={strategies}
 					transactions={transactions}
-					onStrategyAdd={strat => {
-						setStrategies(prevState => [...prevState, strat])
+					onStrategyAdd={strategy => {
+						setStrategies(prevState => [...prevState, strategy])
 					}}
 					onStrategyRemove={index => {
 						setStrategies(prevState => prevState.filter((_, idx) => idx !== index))
 					}}
-					onSubmit={() => {
-						setStage("review")
-					}}
+					onSubmit={handleProceedToConfirm}
 				/>
 			)}
-			{stage === "review" && (
-				<ReviewDeploySeele
+			{stage === "confirm" && (
+				<ConfirmDeploySeele
+					multiTx={multiTx}
 					transactions={transactions}
 					gnosisAddress={gnosisAddress}
 					gnosisVotingThreshold={gnosisVotingThreshold}
 					expectedSeeleAddress={expectedSeeleAddress}
 					afterSubmit={() => {
-						setStage(gnosisVotingThreshold === 1 ? "done" : "waiting")
+						// TODO: Redirect to proposal details page
+						console.log("TODO")
 					}}
 				/>
 			)}
-			{stage === "waiting" && <div>TODO: waiting for approval</div>}
-			{stage === "done" && <div>TODO: success</div>}
 		</ExpandDaoLayout>
 	)
 }

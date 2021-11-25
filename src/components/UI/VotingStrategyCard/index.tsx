@@ -1,5 +1,6 @@
 import {FunctionComponent} from "react"
 import Paper from "../Paper"
+import {ReactComponent as WarningIcon} from "../../../assets/icons/warning.svg"
 import "./styles.scss"
 
 const VotingStrategyCard: FunctionComponent<{
@@ -7,14 +8,25 @@ const VotingStrategyCard: FunctionComponent<{
 	description: string
 	image: string
 	onClick: () => void
-}> = ({title, description, image, onClick}) => (
-	<div className="voting-strategy-card" onClick={onClick}>
+	isActive?: boolean
+}> = ({title, description, image, onClick, isActive = true}) => (
+	<div
+		className={`voting-strategy-card${!isActive ? " voting-strategy-card--disabled" : ""}`}
+		onClick={onClick}
+	>
 		<div className="voting-strategy-card__inner">
 			<div className="voting-strategy-card__front">
 				<img src={image} alt={title} />
 			</div>
 			<Paper className="voting-strategy-card__back">
-				<p>{description}</p>
+				{isActive ? (
+					<p>{description}</p>
+				) : (
+					<div className="voting-strategy-card__warning-message">
+						<WarningIcon width="22px" height="22px" />
+						<span>This Voting Strategy is not supported yet</span>
+					</div>
+				)}
 			</Paper>
 		</div>
 	</div>
