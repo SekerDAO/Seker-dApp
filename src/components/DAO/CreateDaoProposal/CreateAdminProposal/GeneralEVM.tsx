@@ -1,3 +1,5 @@
+import {isAddress} from "@ethersproject/address"
+import {ChangeEvent, Fragment, FunctionComponent, useContext, useEffect, useState} from "react"
 import {
 	createSafeSignature,
 	executeSafeTx
@@ -14,8 +16,6 @@ import Input from "../../../Controls/Input"
 import Select from "../../../Controls/Select"
 import Textarea from "../../../Controls/Textarea"
 import {toastError, toastSuccess, toastWarning} from "../../../UI/Toast"
-import {isAddress} from "@ethersproject/address"
-import {ChangeEvent, Fragment, FunctionComponent, useContext, useEffect, useState} from "react"
 
 const GeneralEVM: FunctionComponent<{
 	gnosisAddress: string

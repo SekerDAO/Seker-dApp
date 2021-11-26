@@ -1,5 +1,5 @@
-import {throttle} from "../utlls"
 import {useEffect, useRef, useState} from "react"
+import {throttle} from "../utlls"
 
 const useValidation = (
 	value: string,

@@ -1,7 +1,7 @@
+import {FunctionComponent, InputHTMLAttributes, useRef} from "react"
 import {ReactComponent as ArrowDown} from "../../../assets/icons/arrow-down.svg"
 import {ReactComponent as ArrowUp} from "../../../assets/icons/arrow-up.svg"
 import "./styles.scss"
-import {FunctionComponent, InputHTMLAttributes, useRef} from "react"
 
 const Input: FunctionComponent<
 	{
@@ -52,7 +52,10 @@ const Input: FunctionComponent<
 				/>
 				{number && (
 					<div className="input__custom-number-arrows">
-						<div className="input__custom-number-arrow" onClick={() => handleArrowClick(+step)}>
+						<div
+							className="input__custom-number-arrow"
+							onClick={() => handleArrowClick(Number(step))}
+						>
 							<ArrowUp width="14px" height="7px" />
 						</div>
 						<div className="input__custom-number-arrow" onClick={() => handleArrowClick(-step)}>

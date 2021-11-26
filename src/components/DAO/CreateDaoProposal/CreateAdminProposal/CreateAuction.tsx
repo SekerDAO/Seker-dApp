@@ -1,3 +1,4 @@
+import {ChangeEvent, FunctionComponent, useContext, useState} from "react"
 import currencies from "../../../../constants/currencies"
 import {AuthContext} from "../../../../context/AuthContext"
 import EthersContext from "../../../../context/EthersContext"
@@ -9,7 +10,6 @@ import Select from "../../../Controls/Select"
 import ErrorPlaceholder from "../../../UI/ErrorPlaceholder"
 import Loader from "../../../UI/Loader"
 import {toastError, toastSuccess} from "../../../UI/Toast"
-import {ChangeEvent, FunctionComponent, useContext, useState} from "react"
 
 const CreateAuction: FunctionComponent<{
 	gnosisAddress: string

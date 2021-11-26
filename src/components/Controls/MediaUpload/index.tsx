@@ -1,9 +1,9 @@
+import {FunctionComponent, useRef, useState} from "react"
 import {imageTypes, videoTypes} from "../../../constants/mimeTypes"
 import useFileDrop from "../../../hooks/useFileDrop"
 import {toastError} from "../../UI/Toast"
 import Button from "../Button"
 import "./styles.scss"
-import {FunctionComponent, useRef, useState} from "react"
 
 const MediaUpload: FunctionComponent<{
 	initialUrl?: string

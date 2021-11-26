@@ -1,9 +1,9 @@
+import {ChangeEvent, FunctionComponent, useContext, useState} from "react"
 import {AuthContext} from "../../../../context/AuthContext"
 import EthersContext from "../../../../context/EthersContext"
 import Button from "../../../Controls/Button"
 import Input from "../../../Controls/Input"
 import {toastError, toastSuccess} from "../../../UI/Toast"
-import {ChangeEvent, FunctionComponent, useContext, useState} from "react"
 
 const RequestFunding: FunctionComponent<{
 	gnosisAddress: string

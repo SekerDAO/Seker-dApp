@@ -1,3 +1,5 @@
+import {FunctionComponent, useContext} from "react"
+import {Link} from "react-router-dom"
 import {AuthContext} from "../../../context/AuthContext"
 import useMyDAOs from "../../../hooks/getters/useMyDAOs"
 import SearchInput from "../../Controls/Input/SearchInput"
@@ -7,8 +9,6 @@ import ErrorPlaceholder from "../../UI/ErrorPlaceholder"
 import Loader from "../../UI/Loader"
 import Table from "../../UI/Table"
 import "./styles.scss"
-import {FunctionComponent, useContext} from "react"
-import {Link} from "react-router-dom"
 
 const columns = [
 	{

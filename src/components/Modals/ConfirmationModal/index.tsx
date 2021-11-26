@@ -1,5 +1,5 @@
-import Modal from "../Modal"
 import {FunctionComponent, useState} from "react"
+import Modal from "../Modal"
 
 const ConfirmationModal: FunctionComponent<{
 	title: string

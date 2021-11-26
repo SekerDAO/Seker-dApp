@@ -1,10 +1,10 @@
+import firebase from "firebase"
 import {SafeProposalState} from "../../../types/safeProposal"
 import {SafeSignature} from "../../ethers/functions/gnosisSafe/safeUtils"
-import firebase from "firebase"
 
 const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
-const addProposalSignatures = async ({
+const addSafeProposalSignatures = async ({
 	proposalId,
 	signature,
 	signatureStep2,
@@ -37,4 +37,4 @@ const addProposalSignatures = async ({
 	}
 }
 
-export default addProposalSignatures
+export default addSafeProposalSignatures

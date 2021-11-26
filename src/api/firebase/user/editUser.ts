@@ -1,5 +1,5 @@
-import {User} from "../../../types/user"
 import firebase from "firebase"
+import {User} from "../../../types/user"
 
 const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 

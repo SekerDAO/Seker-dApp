@@ -1,5 +1,5 @@
-import BackButton from "../../Controls/Button/BackButton"
 import {FunctionComponent} from "react"
+import BackButton from "../../Controls/Button/BackButton"
 
 const ExpandDaoLayout: FunctionComponent<{
 	title?: string

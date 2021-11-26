@@ -1,6 +1,6 @@
-import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
 import {Contract} from "@ethersproject/contracts"
 import {JsonRpcProvider} from "@ethersproject/providers"
+import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
 
 const getVotingThreshold = async (
 	gnosisAddress: string,

@@ -1,5 +1,5 @@
-import {DAOFirebaseData} from "../../../types/DAO"
 import firebase from "firebase"
+import {DAOFirebaseData} from "../../../types/DAO"
 
 const getDAO = async (gnosisAddress: string): Promise<DAOFirebaseData> => {
 	const snapshot = await firebase

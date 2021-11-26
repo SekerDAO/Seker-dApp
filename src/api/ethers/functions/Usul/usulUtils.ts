@@ -1,9 +1,9 @@
+import {Contract} from "@ethersproject/contracts"
+import {JsonRpcProvider, JsonRpcSigner} from "@ethersproject/providers"
 import {VotingStrategy} from "../../../../types/DAO"
 import OZLinearVoting from "../../abis/OZLinearVoting.json"
 import Usul from "../../abis/Usul.json"
 import {SafeTransaction} from "../gnosisSafe/safeUtils"
-import {Contract} from "@ethersproject/contracts"
-import {JsonRpcProvider, JsonRpcSigner} from "@ethersproject/providers"
 
 export const getStrategies = async (
 	usulAddress: string,

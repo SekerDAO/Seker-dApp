@@ -1,9 +1,9 @@
+import {FunctionComponent} from "react"
+import {toast} from "react-toastify"
 import {ReactComponent as ToastErrorIcon} from "../../../assets/icons/toasts-error.svg"
 import {ReactComponent as ToastInfoIcon} from "../../../assets/icons/toasts-info.svg"
 import {ReactComponent as ToastSuccessIcon} from "../../../assets/icons/toasts-success.svg"
 import {ReactComponent as ToastWarningIcon} from "../../../assets/icons/toasts-warning.svg"
-import {FunctionComponent} from "react"
-import {toast} from "react-toastify"
 
 const ErrorToast: FunctionComponent<{message: string}> = ({message}) => (
 	<div className="toast">

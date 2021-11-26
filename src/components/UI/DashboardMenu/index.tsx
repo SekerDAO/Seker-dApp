@@ -1,7 +1,7 @@
-import Paper from "../Paper"
-import "./styles.scss"
 import {FunctionComponent} from "react"
 import {Link} from "react-router-dom"
+import Paper from "../Paper"
+import "./styles.scss"
 
 const DashboardMenu: FunctionComponent<{
 	currentPage: string

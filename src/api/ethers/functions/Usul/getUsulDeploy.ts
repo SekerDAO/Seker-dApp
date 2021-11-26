@@ -1,11 +1,11 @@
-import ModuleFactory from "../../abis/ModuleFactory.json"
-import Usul from "../../abis/Usul.json"
-import {buildContractCall, SafeTransaction} from "../gnosisSafe/safeUtils"
 import {defaultAbiCoder} from "@ethersproject/abi"
 import {getCreate2Address} from "@ethersproject/address"
 import {Contract} from "@ethersproject/contracts"
 import {JsonRpcSigner} from "@ethersproject/providers"
 import {keccak256} from "@ethersproject/solidity"
+import ModuleFactory from "../../abis/ModuleFactory.json"
+import Usul from "../../abis/Usul.json"
+import {buildContractCall, SafeTransaction} from "../gnosisSafe/safeUtils"
 
 const {REACT_APP_USUL_MASTERCOPY_ADDRESS, REACT_APP_MODULE_FACTORY_ADDRESS} = process.env
 

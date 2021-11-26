@@ -1,7 +1,7 @@
-import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
-import {buildContractCall, SafeTransaction} from "../gnosisSafe/safeUtils"
 import {Contract} from "@ethersproject/contracts"
 import {JsonRpcSigner} from "@ethersproject/providers"
+import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
+import {buildContractCall, SafeTransaction} from "../gnosisSafe/safeUtils"
 
 const getRegisterUsulTx = async (
 	safeAddress: string,

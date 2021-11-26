@@ -1,3 +1,4 @@
+import {FunctionComponent, useState} from "react"
 import deleteDAONFT from "../../api/firebase/NFT/deleteDaoNft"
 import deleteNft from "../../api/firebase/NFT/deleteNft"
 import useNFTs from "../../hooks/getters/useNFTs"
@@ -10,7 +11,6 @@ import ConfirmationModal from "../Modals/ConfirmationModal"
 import ErrorPlaceholder from "../UI/ErrorPlaceholder"
 import Loader from "../UI/Loader"
 import {toastError, toastSuccess} from "../UI/Toast"
-import {FunctionComponent, useState} from "react"
 
 const NFTGallery: FunctionComponent<{
 	account: string

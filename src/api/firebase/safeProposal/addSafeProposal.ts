@@ -1,5 +1,5 @@
-import {SafeProposal} from "../../../types/safeProposal"
 import firebase from "firebase"
+import {SafeProposal} from "../../../types/safeProposal"
 
 const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 

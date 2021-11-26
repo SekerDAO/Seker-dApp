@@ -1,3 +1,5 @@
+import {Fragment, FunctionComponent, useContext, useMemo, useState} from "react"
+import {Link, useLocation, useHistory} from "react-router-dom"
 import {executeMultiSend, signMultiSend} from "../../../api/ethers/functions/Usul/multiSend"
 import {
 	executeApproveNFTForAuction,
@@ -28,7 +30,7 @@ import useProposal from "../../../hooks/getters/useProposal"
 import {capitalize, formatReadableAddress} from "../../../utlls"
 import Button from "../../Controls/Button"
 import BackButton from "../../Controls/Button/BackButton"
-import CopyField from "../../UI/Copy"
+import Copy from "../../UI/Copy"
 import Divider from "../../UI/Divider"
 import ErrorPlaceholder from "../../UI/ErrorPlaceholder"
 import Expandable from "../../UI/Expandable"
@@ -36,10 +38,8 @@ import Loader from "../../UI/Loader"
 import Paper from "../../UI/Paper"
 import Tag from "../../UI/Tag"
 import {toastError, toastSuccess} from "../../UI/Toast"
-import ProposalVotes from "./VotesCard"
+import ProposalVotes from "./ProposalVotes"
 import "./styles.scss"
-import {Fragment, FunctionComponent, useContext, useMemo, useState} from "react"
-import {Link, useLocation, useHistory} from "react-router-dom"
 
 // TODO: Get votes from proposal info
 const MOCK_VOTES = [
@@ -322,9 +322,9 @@ const Proposal: FunctionComponent = () => {
 								<div className="proposal__content-participate-step">
 									<h3>Step 1: Wrap Tokens</h3>
 									<p>Wrapped Token Address</p>
-									<CopyField value="TODO: Add real token address here">
+									<Copy value="TODO: Add real token address here">
 										{formatReadableAddress(account)}
-									</CopyField>
+									</Copy>
 									<Button buttonType="link">Unwrap Tokens</Button>
 								</div>
 								<Divider />
@@ -334,9 +334,9 @@ const Proposal: FunctionComponent = () => {
 								<div className="proposal__content-participate-step">
 									<h3>Step 2: Delegate</h3>
 									<p>Currently Delegated to</p>
-									<CopyField value="TODO: Add delegated user address here">
+									<Copy value="TODO: Add delegated user address here">
 										{formatReadableAddress(account)}
-									</CopyField>
+									</Copy>
 									<Button buttonType="link">Change Delegation</Button>
 								</div>
 								<Divider />

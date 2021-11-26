@@ -1,6 +1,6 @@
+import {JsonRpcSigner} from "@ethersproject/providers"
 import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
 import {createSafeSignature, executeSafeTx, SafeSignature} from "./safeUtils"
-import {JsonRpcSigner} from "@ethersproject/providers"
 
 export const signHookupProposalModule = async (
 	safeAddress: string,

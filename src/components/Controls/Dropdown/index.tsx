@@ -1,7 +1,7 @@
+import {ReactElement, useRef} from "react"
 import {ReactComponent as ArrowDown} from "../../../assets/icons/arrow-down.svg"
 import useClickOutside from "../../../hooks/useClickOutside"
 import "./styles.scss"
-import {ReactElement, useRef} from "react"
 
 const Dropdown = <ItemValueType extends string | number>({
 	isOpened,

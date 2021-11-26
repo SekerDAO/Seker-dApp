@@ -1,3 +1,4 @@
+import {FunctionComponent, useContext, useEffect, useState} from "react"
 import {buildMultiSendTx} from "../../../../api/ethers/functions/Usul/multiSend"
 import {
 	buildUsulDeployTxSequence,
@@ -10,7 +11,6 @@ import ErrorPlaceholder from "../../../UI/ErrorPlaceholder"
 import ChooseVotingStrategies from "../ChooseVotingStrategies"
 import ConfirmDeployUsul from "../ConfirmDeployUsul"
 import ExpandDaoLayout from "../ExpandDaoLayout"
-import {FunctionComponent, useContext, useEffect, useState} from "react"
 
 type ExpandDaoStage = "chooseStrategies" | "confirm"
 

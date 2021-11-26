@@ -1,9 +1,9 @@
+import {FunctionComponent} from "react"
 import {ReactComponent as CloseIcon} from "../../../assets/icons/delete.svg"
 import {ReactComponent as WarningIcon} from "../../../assets/icons/warning.svg"
 import Button from "../../Controls/Button"
 import Divider from "../../UI/Divider"
 import "./styles.scss"
-import {FunctionComponent} from "react"
 
 const Modal: FunctionComponent<{
 	show: boolean

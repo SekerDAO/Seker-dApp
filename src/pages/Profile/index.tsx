@@ -1,3 +1,7 @@
+import {isAddress} from "@ethersproject/address"
+import {parse} from "query-string"
+import {FunctionComponent, useContext, useEffect, useState} from "react"
+import {useHistory, useLocation, useParams} from "react-router-dom"
 import updateUserImage from "../../api/firebase/user/updateUserImage"
 import {ReactComponent as InstagramIcon} from "../../assets/icons/instagram.svg"
 import {ReactComponent as TwitterIcon} from "../../assets/icons/twitter.svg"
@@ -15,10 +19,6 @@ import {AuthContext} from "../../context/AuthContext"
 import useUser from "../../hooks/getters/useUser"
 import {formatReadableAddress} from "../../utlls"
 import "./styles.scss"
-import {isAddress} from "@ethersproject/address"
-import {parse} from "query-string"
-import {FunctionComponent, useContext, useEffect, useState} from "react"
-import {useHistory, useLocation, useParams} from "react-router-dom"
 
 type ProfilePage = "nfts" | "edit" | "daos" | "profile"
 

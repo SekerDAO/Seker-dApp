@@ -1,3 +1,4 @@
+import {useContext, useEffect, useState} from "react"
 import {getStrategies} from "../../api/ethers/functions/Usul/usulUtils"
 import getOwners from "../../api/ethers/functions/gnosisSafe/getOwners"
 import getVotingThreshold from "../../api/ethers/functions/gnosisSafe/getVotingThreshold"
@@ -6,7 +7,6 @@ import getUser from "../../api/firebase/user/getUser"
 import {AuthContext} from "../../context/AuthContext"
 import EthersContext from "../../context/EthersContext"
 import {DAO} from "../../types/DAO"
-import {useContext, useEffect, useState} from "react"
 
 const useMyDAOs = (): {
 	DAOs: DAO[]

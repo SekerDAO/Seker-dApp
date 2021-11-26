@@ -1,3 +1,5 @@
+import {isAddress} from "@ethersproject/address"
+import {ChangeEvent, FunctionComponent, useContext, useEffect, useState} from "react"
 import createGnosisSafe from "../../../api/ethers/functions/gnosisSafe/createGnosisSafe"
 import addDAO from "../../../api/firebase/DAO/addDAO"
 import editDAO from "../../../api/firebase/DAO/editDAO"
@@ -10,8 +12,6 @@ import RadioButton from "../../Controls/RadioButton"
 import {toastError, toastSuccess} from "../../UI/Toast"
 import Modal from "../Modal"
 import "./styles.scss"
-import {isAddress} from "@ethersproject/address"
-import {ChangeEvent, FunctionComponent, useContext, useEffect, useState} from "react"
 
 type CreateGnosisSafeStage = "chooseOption" | "create" | "import" | "success"
 

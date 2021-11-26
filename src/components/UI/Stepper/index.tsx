@@ -1,8 +1,8 @@
+import {FunctionComponent, ReactElement} from "react"
 import {ReactComponent as StepDotCurrentIcon} from "../../../assets/icons/step-dot-current.svg"
 import {ReactComponent as StepDotDoneIcon} from "../../../assets/icons/step-dot-done.svg"
 import {ReactComponent as StepDotNextIcon} from "../../../assets/icons/step-dot-next.svg"
 import "./styles.scss"
-import {FunctionComponent, ReactElement} from "react"
 
 const Stepper: FunctionComponent<{
 	steps: {title: string; content: ReactElement}[]

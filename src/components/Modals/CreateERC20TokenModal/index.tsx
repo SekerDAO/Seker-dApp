@@ -1,3 +1,4 @@
+import {ChangeEvent, FunctionComponent, useContext, useState} from "react"
 import deployERC20Token from "../../../api/ethers/functions/ERC20Token/deployERC20Token"
 import {AuthContext} from "../../../context/AuthContext"
 import EthersContext from "../../../context/EthersContext"
@@ -7,7 +8,6 @@ import Input from "../../Controls/Input"
 import {toastError} from "../../UI/Toast"
 import Modal from "../Modal"
 import "./styles.scss"
-import {ChangeEvent, FunctionComponent, useContext, useState} from "react"
 
 const CreateERC20TokenModal: FunctionComponent<{
 	onSubmit: (token: ERC20Token) => void

@@ -1,10 +1,10 @@
+import {FunctionComponent, useState} from "react"
 import editDAO from "../../../api/firebase/DAO/editDAO"
 import {DAOFirebaseData} from "../../../types/DAO"
 import Button from "../../Controls/Button"
 import Input from "../../Controls/Input"
 import {toastError, toastSuccess} from "../../UI/Toast"
 import "./styles.scss"
-import {FunctionComponent, useState} from "react"
 
 const EditDAO: FunctionComponent<{
 	dao: DAOFirebaseData

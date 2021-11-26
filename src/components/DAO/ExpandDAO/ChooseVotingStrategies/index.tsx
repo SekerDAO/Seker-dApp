@@ -1,3 +1,4 @@
+import {FunctionComponent, useState, useContext} from "react"
 import getOZLinearDeployTx from "../../../../api/ethers/functions/Usul/getOZLinearDeployTx"
 import {SafeTransaction} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
 import {ReactComponent as DeleteIcon} from "../../../../assets/icons/delete.svg"
@@ -13,7 +14,6 @@ import Divider from "../../../UI/Divider"
 import Paper from "../../../UI/Paper"
 import VotingStrategyCard from "../../../UI/VotingStrategyCard"
 import "./styles.scss"
-import {FunctionComponent, useState, useContext} from "react"
 
 const ChooseVotingStrategies: FunctionComponent<{
 	gnosisAddress: string

@@ -1,3 +1,4 @@
+import {FunctionComponent, useState} from "react"
 import {SafeProposalsTypeNames, SafeProposalType} from "../../../../types/safeProposal"
 import Input from "../../../Controls/Input"
 import Select from "../../../Controls/Select"
@@ -7,7 +8,6 @@ import ChangeRole from "./ChangeRole"
 import CreateAuction from "./CreateAuction"
 import GeneralEVM from "./GeneralEVM"
 import "./styles.scss"
-import {FunctionComponent, useState} from "react"
 
 const CreateAdminProposal: FunctionComponent<{
 	gnosisAddress: string

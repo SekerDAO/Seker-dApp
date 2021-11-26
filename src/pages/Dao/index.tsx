@@ -1,3 +1,6 @@
+import {parse} from "query-string"
+import {FunctionComponent, useContext} from "react"
+import {useHistory, useLocation, useParams} from "react-router-dom"
 import updateDAOImage from "../../api/firebase/DAO/updateDAOImage"
 import {ReactComponent as DiscordIcon} from "../../assets/icons/discord.svg"
 import {ReactComponent as TelegramIcon} from "../../assets/icons/telegram.svg"
@@ -23,9 +26,6 @@ import useDAO from "../../hooks/getters/useDAO"
 import useUser from "../../hooks/getters/useUser"
 import {formatDate} from "../../utlls"
 import "./styles.scss"
-import {parse} from "query-string"
-import {FunctionComponent, useContext} from "react"
-import {useHistory, useLocation, useParams} from "react-router-dom"
 
 type DAOAdminPage = "createNFT" | "edit" | "createProposal" | "expand"
 type DAOContentPage = "collection" | "about" | "members" | "proposals" | "proposal"
@@ -38,7 +38,7 @@ const menuEntries = [
 ]
 
 // Make sense to rebuild all this internal "page" handling to plain react-router routes
-const DAOPage: FunctionComponent = () => {
+const Dao: FunctionComponent = () => {
 	const {account, connected} = useContext(AuthContext)
 	const {user} = useUser(account as string)
 	const {address} = useParams<{address: string}>()
@@ -218,4 +218,4 @@ const DAOPage: FunctionComponent = () => {
 	)
 }
 
-export default DAOPage
+export default Dao

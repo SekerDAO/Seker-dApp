@@ -1,5 +1,5 @@
-import {FileDropHook} from "../types/hooks"
 import {ChangeEvent, DragEvent} from "react"
+import {FileDropHook} from "../types/hooks"
 
 const useFileDrop: FileDropHook = ({uploadRef, onUpload, acceptedMimeTypes}) => {
 	const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {

@@ -1,5 +1,5 @@
-import "./styles.scss"
 import {FunctionComponent, TextareaHTMLAttributes} from "react"
+import "./styles.scss"
 
 const Textarea: FunctionComponent<
 	{

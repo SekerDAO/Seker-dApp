@@ -1,7 +1,7 @@
-import MultiArtToken from "../../abis/MultiArtToken.json"
-import TWDomainToken from "../../abis/TWDomainToken.json"
 import {Contract} from "@ethersproject/contracts"
 import {JsonRpcSigner} from "@ethersproject/providers"
+import MultiArtToken from "../../abis/MultiArtToken.json"
+import TWDomainToken from "../../abis/TWDomainToken.json"
 
 const {REACT_APP_DOMAIN_ADDRESS} = process.env
 

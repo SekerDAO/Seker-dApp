@@ -8,7 +8,7 @@
       "jsx": true
     }
   },
-  "plugins": ["import", "prefer-arrow"],
+  "plugins": ["import", "prefer-arrow", "filenames"],
   "ignorePatterns": ["node_modules/**/*"],
   "settings": {
     "react": {
@@ -56,6 +56,8 @@
     }],
     "import/extensions": ["error", {"tsx": "never", "json": "always", "scss": "always"}],
     "import/no-unresolved": "off", // does not work with foo/index.ts
+    "import/imports-first": ["error", "absolute-first"],
+    "filenames/match-exported": "error",
     "no-bitwise": "error",
     "@typescript-eslint/no-shadow": "error",
     "no-array-constructor": "error",
@@ -78,6 +80,10 @@
         "classPropertiesAllowed": false
       }
     ],
-    "@typescript-eslint/no-var-requires": "error"
+    "@typescript-eslint/no-var-requires": "error",
+    "react/jsx-props-no-spreading": ["error", {
+      "html": "ignore"
+    }],
+    "no-implicit-coercion": ["error", {"boolean": false}]
   }
 }

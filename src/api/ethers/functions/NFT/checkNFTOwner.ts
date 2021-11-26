@@ -1,6 +1,6 @@
-import MultiArtToken from "../../abis/MultiArtToken.json"
 import {Contract} from "@ethersproject/contracts"
 import {JsonRpcProvider} from "@ethersproject/providers"
+import MultiArtToken from "../../abis/MultiArtToken.json"
 
 const checkNFTOwner = async (
 	account: string,

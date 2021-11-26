@@ -1,10 +1,10 @@
+import {FunctionComponent, useContext, useState} from "react"
+import {Link} from "react-router-dom"
 import {AuthContext} from "../../context/AuthContext"
 import {formatReadableAddress} from "../../utlls"
 import Button from "../Controls/Button"
 import Dropdown from "../Controls/Dropdown"
 import Divider from "../UI/Divider"
-import {FunctionComponent, useContext, useState} from "react"
-import {Link} from "react-router-dom"
 
 const HeaderMenu: FunctionComponent = () => {
 	const {account, url, connected, connecting, connectWallet, disconnect} = useContext(AuthContext)

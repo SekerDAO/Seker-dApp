@@ -1,5 +1,5 @@
-import "./styles.scss"
 import {FunctionComponent} from "react"
+import "./styles.scss"
 
 const ProgressBar: FunctionComponent<{color: "green" | "red" | "grey"; value: number}> = ({
 	color,

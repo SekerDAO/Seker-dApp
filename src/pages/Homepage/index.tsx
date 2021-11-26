@@ -1,9 +1,9 @@
-import Button from "../../components/Controls/Button"
-import "./styles.scss"
 import {FunctionComponent} from "react"
 import {Link} from "react-router-dom"
+import Button from "../../components/Controls/Button"
+import "./styles.scss"
 
-const HomePage: FunctionComponent = () => (
+const Homepage: FunctionComponent = () => (
 	<div className="home-page">
 		<video src="/assets/Homepage_Video.mp4" muted autoPlay loop />
 		<h1 className="home-page__title">
@@ -25,4 +25,4 @@ const HomePage: FunctionComponent = () => (
 	</div>
 )
 
-export default HomePage
+export default Homepage

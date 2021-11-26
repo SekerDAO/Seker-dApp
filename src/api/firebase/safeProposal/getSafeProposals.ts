@@ -1,5 +1,5 @@
-import {SafeProposal} from "../../../types/safeProposal"
 import firebase from "firebase"
+import {SafeProposal} from "../../../types/safeProposal"
 
 const getSafeProposals = async (
 	address: string

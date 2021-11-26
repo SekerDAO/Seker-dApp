@@ -1,5 +1,5 @@
-import "./styles.scss"
 import {FunctionComponent} from "react"
+import "./styles.scss"
 
 const DashboardHeader: FunctionComponent<{
 	background?: string

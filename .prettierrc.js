@@ -6,5 +6,6 @@ module.exports = {
 	tabWidth: 2,
 	useTabs: true,
 	bracketSpacing: false,
-	arrowParens: 'avoid'
+	arrowParens: "avoid",
+	"importOrder": ["^[a-zA-Z]", "^[./]"]
 };

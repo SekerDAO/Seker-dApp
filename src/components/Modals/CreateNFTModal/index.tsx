@@ -1,10 +1,10 @@
+import {FunctionComponent, useState} from "react"
 import useUser from "../../../hooks/getters/useUser"
 import Button from "../../Controls/Button"
 import CreateNFTForm from "../../CreateNFTForm"
 import ErrorPlaceholder from "../../UI/ErrorPlaceholder"
 import Loader from "../../UI/Loader"
 import Modal from "../Modal"
-import {FunctionComponent, useState} from "react"
 
 const CreateNFTModal: FunctionComponent<{
 	gnosisAddress?: string

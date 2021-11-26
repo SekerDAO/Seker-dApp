@@ -1,6 +1,6 @@
+import {JsonRpcSigner} from "@ethersproject/providers"
 import Auction from "../../abis/Auction.json"
 import {createSafeSignature, executeSafeTx, SafeSignature} from "../gnosisSafe/safeUtils"
-import {JsonRpcSigner} from "@ethersproject/providers"
 
 const {REACT_APP_ZORA_ADDRESS} = process.env
 

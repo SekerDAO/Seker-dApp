@@ -1,5 +1,5 @@
-import "./styles.scss"
 import {FunctionComponent, Ref} from "react"
+import "./styles.scss"
 
 const Paper: FunctionComponent<{className?: string; innerRef?: Ref<HTMLDivElement>}> = ({
 	children,

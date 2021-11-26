@@ -1,3 +1,5 @@
+import {FunctionComponent} from "react"
+import {Link, useLocation} from "react-router-dom"
 import useProposals from "../../../hooks/getters/useProposals"
 import {SafeProposalsTypeNames, SafeProposal} from "../../../types/safeProposal"
 import {capitalize} from "../../../utlls"
@@ -6,8 +8,6 @@ import Select from "../../Controls/Select"
 import ErrorPlaceholder from "../../UI/ErrorPlaceholder"
 import Loader from "../../UI/Loader"
 import "./styles.scss"
-import {FunctionComponent} from "react"
-import {Link, useLocation} from "react-router-dom"
 
 const DAOProposalCard: FunctionComponent<{
 	proposal: SafeProposal & {proposalId: string}

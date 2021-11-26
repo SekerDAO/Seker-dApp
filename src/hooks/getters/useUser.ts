@@ -1,6 +1,6 @@
+import {useEffect, useState} from "react"
 import getUser from "../../api/firebase/user/getUser"
 import {UserWithAccount} from "../../types/user"
-import {useEffect, useState} from "react"
 
 const useUser = (
 	account: string

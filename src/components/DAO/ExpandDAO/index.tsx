@@ -1,9 +1,9 @@
+import {FunctionComponent, useState} from "react"
 import {ReactComponent as GnosisSafeIcon} from "../../../assets/icons/gnosis-safe.svg"
 import {toastWarning} from "../../UI/Toast"
 import DeployUsul from "./DeployUsul"
 import ExpandDaoLayout from "./ExpandDaoLayout"
 import "./styles.scss"
-import {FunctionComponent, useState} from "react"
 
 const DESCRIPTION =
 	"Modules are your way of customizing, upgrading, and expanding your DAO. Here you can choose to swap voting strategies, add multiple strategies, or remove a strategy at any time. You can also introduce the Zodiac modules Bridge (for a constellation of voting strategies across chains), Exit (for a Moloch-style rage quit assigned to different asset holders), or Photon (a way to enact governance at the speed of light — coming soon)."

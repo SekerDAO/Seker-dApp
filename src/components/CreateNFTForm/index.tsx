@@ -1,3 +1,4 @@
+import {FunctionComponent, useState, useContext} from "react"
 import checkNFTOwner from "../../api/ethers/functions/NFT/checkNFTOwner"
 import createNFT from "../../api/ethers/functions/NFT/createNFT"
 import getNFTMetadata from "../../api/ethers/functions/NFT/getNFTMetadata"
@@ -16,7 +17,6 @@ import Select from "../Controls/Select"
 import Textarea from "../Controls/Textarea"
 import {toastError} from "../UI/Toast"
 import "./styles.scss"
-import {FunctionComponent, useState, useContext} from "react"
 
 const {REACT_APP_DOMAIN_ADDRESS} = process.env
 

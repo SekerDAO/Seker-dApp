@@ -1,3 +1,4 @@
+import {FunctionComponent, useContext, useState} from "react"
 import checkUserUrl from "../../../api/firebase/user/checkUserUrl"
 import editUser from "../../../api/firebase/user/editUser"
 import {AuthContext} from "../../../context/AuthContext"
@@ -7,7 +8,6 @@ import Button from "../../Controls/Button"
 import Input from "../../Controls/Input"
 import {toastError, toastSuccess} from "../../UI/Toast"
 import "./styles.scss"
-import {FunctionComponent, useContext, useState} from "react"
 
 const ProfileEdit: FunctionComponent<{
 	user: Omit<User, "myDaos" | "myDomains">

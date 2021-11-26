@@ -1,6 +1,6 @@
-import Auction from "../../abis/Auction.json"
 import {Contract} from "@ethersproject/contracts"
 import {JsonRpcSigner} from "@ethersproject/providers"
+import Auction from "../../abis/Auction.json"
 
 const {REACT_APP_ZORA_ADDRESS} = process.env
 

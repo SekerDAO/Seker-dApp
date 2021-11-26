@@ -1,5 +1,5 @@
-import {User, UserWithAccount} from "../../../types/user"
 import firebase from "firebase"
+import {User, UserWithAccount} from "../../../types/user"
 
 const getUser = async (account: string): Promise<UserWithAccount | null> => {
 	const userByURLSnapshot = await firebase

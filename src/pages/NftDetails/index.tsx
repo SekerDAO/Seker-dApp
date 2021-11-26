@@ -1,3 +1,5 @@
+import {FunctionComponent, useContext, useState} from "react"
+import {Link, useParams} from "react-router-dom"
 import endAuction from "../../api/ethers/functions/auction/endAuction"
 import Button from "../../components/Controls/Button"
 import BidAuctionModal from "../../components/Modals/BidAuctionModal"
@@ -10,8 +12,6 @@ import useNFT from "../../hooks/getters/useNFT"
 import {Auction} from "../../types/auction"
 import {formatReadableAddress, formatTimeDifference} from "../../utlls"
 import "./styles.scss"
-import {FunctionComponent, useContext, useState} from "react"
-import {Link, useParams} from "react-router-dom"
 
 const {REACT_APP_CHAIN_ID} = process.env
 
@@ -45,7 +45,7 @@ const mockBids = [
 	}
 ]
 
-const NFTCard: FunctionComponent = () => {
+const NftDetails: FunctionComponent = () => {
 	const {id} = useParams<{id: string}>()
 	const {nft, auctions, loading, error} = useNFT(id)
 	const [processing, setProcessing] = useState(false)
@@ -187,4 +187,4 @@ const NFTCard: FunctionComponent = () => {
 	)
 }
 
-export default NFTCard
+export default NftDetails

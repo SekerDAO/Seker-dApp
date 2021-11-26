@@ -1,6 +1,6 @@
-import {AbiDataType, AbiScalar} from "../types/abi"
 import {isAddress} from "@ethersproject/address"
 import {BigNumber} from "@ethersproject/bignumber"
+import {AbiDataType, AbiScalar} from "../types/abi"
 
 export const capitalize = (str: string): string => `${str[0].toUpperCase()}${str.slice(1)}`
 

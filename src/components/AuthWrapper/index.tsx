@@ -1,5 +1,5 @@
-import "./styles.scss"
 import {FunctionComponent} from "react"
+import "./styles.scss"
 
 const AuthWrapper: FunctionComponent<{
 	headline: string

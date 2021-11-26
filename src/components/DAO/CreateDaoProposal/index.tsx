@@ -1,9 +1,9 @@
+import {FunctionComponent, useContext, useState} from "react"
 import {AuthContext} from "../../../context/AuthContext"
 import {VotingStrategy} from "../../../types/DAO"
 import Select from "../../Controls/Select"
 import CreateAdminProposal from "./CreateAdminProposal"
 import CreateStrategyProposal from "./CreateStrategyProposal"
-import {FunctionComponent, useContext, useState} from "react"
 
 const CreateDaoProposal: FunctionComponent<{
 	gnosisAddress: string

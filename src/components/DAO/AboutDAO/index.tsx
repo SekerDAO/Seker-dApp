@@ -1,9 +1,9 @@
+import {FunctionComponent} from "react"
 import {DAO} from "../../../types/DAO"
 import {formatReadableAddress} from "../../../utlls"
 import Button from "../../Controls/Button"
 import Paper from "../../UI/Paper"
 import "./styles.scss"
-import {FunctionComponent} from "react"
 
 const AboutDAO: FunctionComponent<{
 	dao: DAO

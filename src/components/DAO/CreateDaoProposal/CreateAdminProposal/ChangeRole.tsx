@@ -1,3 +1,4 @@
+import {ChangeEvent, FunctionComponent, useContext, useState} from "react"
 import {
 	executeAddOwner,
 	executeRemoveOwner,
@@ -15,7 +16,6 @@ import Select from "../../../Controls/Select"
 import ErrorPlaceholder from "../../../UI/ErrorPlaceholder"
 import Loader from "../../../UI/Loader"
 import {toastError, toastSuccess} from "../../../UI/Toast"
-import {ChangeEvent, FunctionComponent, useContext, useState} from "react"
 
 const ChangeRole: FunctionComponent<{
 	gnosisAddress: string

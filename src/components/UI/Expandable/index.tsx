@@ -1,7 +1,7 @@
+import {FunctionComponent, useState} from "react"
 import {ReactComponent as ArrowDown} from "../../../assets/icons/arrow-down.svg"
 import Paper from "../Paper"
 import "./styles.scss"
-import {FunctionComponent, useState} from "react"
 
 const Expandable: FunctionComponent<{title: string}> = ({children, title}) => {
 	const [expanded, setExpanded] = useState(false)

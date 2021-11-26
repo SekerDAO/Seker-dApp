@@ -1,6 +1,6 @@
+import {ReactElement, SelectHTMLAttributes, useState} from "react"
 import Dropdown from "../Dropdown"
 import "./styles.scss"
-import {ReactElement, SelectHTMLAttributes, useState} from "react"
 
 const Select = <ValueType extends string | number>({
 	options,

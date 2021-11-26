@@ -1,3 +1,4 @@
+import {useContext, useEffect, useState} from "react"
 import getOwners from "../../api/ethers/functions/gnosisSafe/getOwners"
 import getVotingThreshold from "../../api/ethers/functions/gnosisSafe/getVotingThreshold"
 import {getNonce} from "../../api/ethers/functions/gnosisSafe/safeUtils"
@@ -6,7 +7,6 @@ import getSafeProposal from "../../api/firebase/safeProposal/getSafeProposal"
 import {AuthContext} from "../../context/AuthContext"
 import EthersContext from "../../context/EthersContext"
 import {SafeProposal, SafeProposalState} from "../../types/safeProposal"
-import {useContext, useEffect, useState} from "react"
 
 const useProposal = (
 	id: string

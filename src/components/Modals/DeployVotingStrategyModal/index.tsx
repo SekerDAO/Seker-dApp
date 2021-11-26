@@ -1,3 +1,4 @@
+import {ChangeEvent, FunctionComponent, useContext, useState} from "react"
 import {ReactComponent as WarningIcon} from "../../../assets/icons/warning.svg"
 import {VOTING_STRATEGIES} from "../../../constants/votingStrategies"
 import EthersContext from "../../../context/EthersContext"
@@ -9,7 +10,6 @@ import Divider from "../../UI/Divider"
 import CreateERC20TokenModal from "../CreateERC20TokenModal"
 import Modal from "../Modal"
 import "./styles.scss"
-import {ChangeEvent, FunctionComponent, useContext, useState} from "react"
 
 export type VotingStrategyFormValues = {[key: string]: string}
 

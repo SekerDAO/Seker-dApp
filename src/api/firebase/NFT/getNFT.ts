@@ -1,5 +1,5 @@
-import {NFT} from "../../../types/NFT"
 import firebase from "firebase"
+import {NFT} from "../../../types/NFT"
 
 const getNFT = async (id: string): Promise<NFT> => {
 	const snapshot = await firebase.firestore().collection("nfts").doc(id).get()

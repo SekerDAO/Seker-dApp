@@ -1,3 +1,5 @@
+import {formatEther} from "@ethersproject/units"
+import {FunctionComponent, useContext, useState} from "react"
 import {executeMultiSend, signMultiSend} from "../../../../api/ethers/functions/Usul/multiSend"
 import {SafeTransaction} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
 import editDAO from "../../../../api/firebase/DAO/editDAO"
@@ -9,12 +11,10 @@ import EthersContext from "../../../../context/EthersContext"
 import {formatReadableAddress} from "../../../../utlls"
 import Button from "../../../Controls/Button"
 import TransactionDetailsModal from "../../../Modals/TransactionDetailsModal"
-import CopyField from "../../../UI/Copy"
+import Copy from "../../../UI/Copy"
 import Paper from "../../../UI/Paper"
 import {toastError} from "../../../UI/Toast"
 import "./styles.scss"
-import {formatEther} from "@ethersproject/units"
-import {FunctionComponent, useContext, useState} from "react"
 
 const ConfirmDeployUsul: FunctionComponent<{
 	multiTx?: SafeTransaction
@@ -74,13 +74,16 @@ const ConfirmDeployUsul: FunctionComponent<{
 		setLoading(false)
 	}
 
-	const transactionsTotal = transactions.reduce((current, {tx: {value}}) => current + +value, 0)
+	const transactionsTotal = transactions.reduce(
+		(current, {tx: {value}}) => current + Number(value),
+		0
+	)
 	return (
 		<Paper className="confirm-deploy-usul">
 			<div className="confirm-deploy-usul__general-data">
 				<div className="confirm-deploy-usul__general-data-row">
 					<label>From</label>
-					<CopyField value={account}>{formatReadableAddress(account)}</CopyField>
+					<Copy value={account}>{formatReadableAddress(account)}</Copy>
 					{balance && (
 						<span className="confirm-deploy-usul__data-balance">
 							Balance: {formatEther(balance)} ETH
@@ -90,13 +93,11 @@ const ConfirmDeployUsul: FunctionComponent<{
 				<div className="confirm-deploy-usul__general-data-row">
 					<div className="confirm-deploy-usul__general-data-col">
 						<label>Send {transactionsTotal} ETH to</label>
-						<CopyField value={multiTx?.to}>{formatReadableAddress(multiTx?.to)}</CopyField>
+						<Copy value={multiTx?.to}>{formatReadableAddress(multiTx?.to)}</Copy>
 					</div>
 					<div className="confirm-deploy-usul__general-data-col">
 						<label>Data (Hex Encoded)</label>
-						<CopyField value={multiTx?.data}>
-							{(multiTx?.data.length as number) / 2 - 2} bytes
-						</CopyField>
+						<Copy value={multiTx?.data}>{(multiTx?.data.length as number) / 2 - 2} bytes</Copy>
 					</div>
 				</div>
 			</div>

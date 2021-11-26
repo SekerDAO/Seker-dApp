@@ -1,3 +1,4 @@
+//eslint-disable-next-line filenames/match-exported
 import {Learn} from "../types/learn"
 
 const LEARN_ARTICLES: Learn = [

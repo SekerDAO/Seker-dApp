@@ -1,7 +1,7 @@
-import GovToken from "../../abis/GovToken.json"
 import {Contract} from "@ethersproject/contracts"
 import {JsonRpcProvider} from "@ethersproject/providers"
 import {formatEther} from "@ethersproject/units"
+import GovToken from "../../abis/GovToken.json"
 
 const getERC20Balance = async (
 	govTokenAddress: string,
