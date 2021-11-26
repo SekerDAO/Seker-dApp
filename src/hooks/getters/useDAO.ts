@@ -4,6 +4,7 @@ import getDAO from "../../api/firebase/DAO/getDAO"
 import EthersContext from "../../context/EthersContext"
 import getVotingThreshold from "../../api/ethers/functions/gnosisSafe/getVotingThreshold"
 import getOwners from "../../api/ethers/functions/gnosisSafe/getOwners"
+import {getStrategies} from "../../api/ethers/functions/Usul/usulUtils"
 
 const useDAO = (
 	gnosisAddress: string
@@ -25,6 +26,7 @@ const useDAO = (
 			const _dao = await getDAO(gnosisAddress)
 			const gnosisVotingThreshold = await getVotingThreshold(gnosisAddress, provider)
 			const owners = await getOwners(gnosisAddress, provider)
+			const strategies = _dao.usulAddress ? await getStrategies(_dao.usulAddress, provider) : []
 			const tokenSymbol = ""
 			const balance = 0
 			const fundedProjects = 0
@@ -42,7 +44,8 @@ const useDAO = (
 				balance,
 				fundedProjects,
 				gnosisVotingThreshold,
-				owners
+				owners,
+				strategies
 			})
 		} catch (e) {
 			console.error(e)

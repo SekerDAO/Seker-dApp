@@ -6,12 +6,10 @@ const Button: FunctionComponent<
 		buttonType?: "primary" | "secondary" | "link"
 		extraClassName?: string
 	} & ButtonHTMLAttributes<HTMLButtonElement>
-> = ({buttonType = "primary", extraClassName, children, ...buttonProps}) => {
-	return (
-		<button className={`btn btn--${buttonType} ${extraClassName ?? ""}`} {...buttonProps}>
-			{children}
-		</button>
-	)
-}
+> = ({buttonType = "primary", extraClassName, children, ...buttonProps}) => (
+	<button className={`btn btn--${buttonType} ${extraClassName ?? ""}`} {...buttonProps}>
+		{children}
+	</button>
+)
 
 export default Button

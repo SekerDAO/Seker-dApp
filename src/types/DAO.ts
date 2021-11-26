@@ -24,6 +24,7 @@ type DAOEthersData = {
 	balance: number
 	fundedProjects: number
 	owners: string[]
+	strategies: VotingStrategy[]
 }
 
 export type DAO = DAOFirebaseData & DAOEthersData
