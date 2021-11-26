@@ -59,6 +59,7 @@ const Proposal: FunctionComponent = () => {
 	if (error) return <ErrorPlaceholder />
 
 	const isAdmin = connected && !!dao.owners.find(addr => addr === account)
+	const isExecuted = proposal.state === "executed"
 
 	return (
 		<DAODashboard page="proposals" loading={loading} error={error} isAdmin={isAdmin} dao={dao}>
@@ -72,8 +73,12 @@ const Proposal: FunctionComponent = () => {
 					<div className="proposal__header-subtitle">
 						<Tag variant={proposal.state}>{capitalize(proposal.state)}</Tag>
 						<span>ID [ {id} ]</span>
-						<span>•</span>
-						<span>[ # ] Days, [ # ] Hours Left</span>
+						{!isExecuted && (
+							<>
+								<span>•</span>
+								<span>[ # ] Days, [ # ] Hours Left</span>
+							</>
+						)}
 					</div>
 					<div className="proposal__header-links">
 						<p>
@@ -142,37 +147,43 @@ const Proposal: FunctionComponent = () => {
 							<div className="proposal__content-details-right">
 								<h2>Participate</h2>
 								<Paper className="proposal__content-participate">
-									<div>
-										<WrapTokenDone width="50px" height="50px" />
-									</div>
-									<div className="proposal__content-participate-step">
-										<h3>Step 1: Wrap Tokens</h3>
-										<p>Wrapped Token Address</p>
-										<CopyField value="TODO: Add real token address here">
-											{formatReadableAddress(account)}
-										</CopyField>
-										<Button buttonType="link">Unwrap Tokens</Button>
-									</div>
-									<Divider />
-									<div>
-										<DelegateTokenDone width="50px" height="50px" />
-									</div>
-									<div className="proposal__content-participate-step">
-										<h3>Step 2: Delegate</h3>
-										<p>Currently Delegated to</p>
-										<CopyField value="TODO: Add delegated user address here">
-											{formatReadableAddress(account)}
-										</CopyField>
-										<Button buttonType="link">Change Delegation</Button>
-									</div>
-									<Divider />
-									<Button
-										disabled={!canSign && !processing}
-										onClick={sign}
-										extraClassName="proposal__content-vote-button"
-									>
-										Vote
-									</Button>
+									{isExecuted ? (
+										<p>This proposal has been passed and executed.</p>
+									) : (
+										<>
+											<div>
+												<WrapTokenDone width="50px" height="50px" />
+											</div>
+											<div className="proposal__content-participate-step">
+												<h3>Step 1: Wrap Tokens</h3>
+												<p>Wrapped Token Address</p>
+												<CopyField value="TODO: Add real token address here">
+													{formatReadableAddress(account)}
+												</CopyField>
+												<Button buttonType="link">Unwrap Tokens</Button>
+											</div>
+											<Divider />
+											<div>
+												<DelegateTokenDone width="50px" height="50px" />
+											</div>
+											<div className="proposal__content-participate-step">
+												<h3>Step 2: Delegate</h3>
+												<p>Currently Delegated to</p>
+												<CopyField value="TODO: Add delegated user address here">
+													{formatReadableAddress(account)}
+												</CopyField>
+												<Button buttonType="link">Change Delegation</Button>
+											</div>
+											<Divider />
+											<Button
+												disabled={!canSign && !processing}
+												onClick={sign}
+												extraClassName="proposal__content-vote-button"
+											>
+												Vote
+											</Button>
+										</>
+									)}
 								</Paper>
 							</div>
 						</div>
