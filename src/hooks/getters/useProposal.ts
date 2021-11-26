@@ -37,7 +37,7 @@ const useProposal = (
 			if (trueState === "active") {
 				const nonce = await getNonce(_proposal.gnosisAddress, provider)
 				if (_proposal.nonce < nonce) {
-					trueState = "canceled"
+					trueState = "outdated"
 				}
 			}
 			// We don't need DAO, but it will throw an error if it's not found, so we check for it

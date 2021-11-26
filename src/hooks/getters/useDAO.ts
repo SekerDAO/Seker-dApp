@@ -7,7 +7,7 @@ import getOwners from "../../api/ethers/functions/gnosisSafe/getOwners"
 import {getStrategies} from "../../api/ethers/functions/Usul/usulUtils"
 
 const useDAO = (
-	gnosisAddress?: string
+	gnosisAddress: string
 ): {
 	dao: DAO | null
 	loading: boolean
@@ -20,39 +20,38 @@ const useDAO = (
 	const {provider} = useContext(EthersContext)
 
 	const getInfo = async () => {
-		if (gnosisAddress) {
-			setLoading(true)
-			setError(false)
-			try {
-				const _dao = await getDAO(gnosisAddress)
-				const gnosisVotingThreshold = await getVotingThreshold(gnosisAddress, provider)
-				const owners = await getOwners(gnosisAddress, provider)
-				const strategies = _dao.seeleAddress ? await getStrategies(_dao.seeleAddress, provider) : []
-				const tokenSymbol = ""
-				const balance = 0
-				const fundedProjects = 0
-				// TODO
-				// if (_dao.tokenAddress && _dao.daoAddress) {
-				// 	;[tokenSymbol, balance, fundedProjects] = await Promise.all([
-				// 		getERC20Symbol(_dao.tokenAddress, provider),
-				// 		getERC20HouseDAOBalance(_dao.daoAddress, provider),
-				// 		getERC20HouseDAOFundedProjects(_dao.daoAddress, provider)
-				// 	])
-				// }
-				setDao({
-					..._dao,
-					tokenSymbol,
-					balance,
-					fundedProjects,
-					gnosisVotingThreshold,
-					owners,
-					strategies
-				})
-			} catch (e) {
-				console.error(e)
-				setError(true)
-			}
+		setLoading(true)
+		setError(false)
+		try {
+			const _dao = await getDAO(gnosisAddress)
+			const gnosisVotingThreshold = await getVotingThreshold(gnosisAddress, provider)
+			const owners = await getOwners(gnosisAddress, provider)
+			const strategies = _dao.seeleAddress ? await getStrategies(_dao.seeleAddress, provider) : []
+			const tokenSymbol = ""
+			const balance = 0
+			const fundedProjects = 0
+			// TODO
+			// if (_dao.tokenAddress && _dao.daoAddress) {
+			// 	;[tokenSymbol, balance, fundedProjects] = await Promise.all([
+			// 		getERC20Symbol(_dao.tokenAddress, provider),
+			// 		getERC20HouseDAOBalance(_dao.daoAddress, provider),
+			// 		getERC20HouseDAOFundedProjects(_dao.daoAddress, provider)
+			// 	])
+			// }
+			setDao({
+				..._dao,
+				tokenSymbol,
+				balance,
+				fundedProjects,
+				gnosisVotingThreshold,
+				owners,
+				strategies
+			})
+		} catch (e) {
+			console.error(e)
+			setError(true)
 		}
+		setLoading(false)
 	}
 
 	useEffect(() => {
