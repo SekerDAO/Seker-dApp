@@ -1,4 +1,4 @@
-import {FunctionComponent, useContext, useState} from "react"
+import {Fragment, FunctionComponent, useContext, useState} from "react"
 import {Link, useParams, useHistory} from "react-router-dom"
 import DAODashboard from "../../components/DAO/DAODashboard"
 import EthersContext from "../../context/EthersContext"
@@ -35,6 +35,8 @@ import {capitalize, formatReadableAddress} from "../../utlls"
 import useDAO from "../../hooks/getters/useDAO"
 import BackButton from "../../components/Controls/Button/BackButton"
 import VotesCard from "../../components/Proposal/VotesCard"
+import Expandable from "../../components/UI/Expandable"
+import Divider from "../../components/UI/Divider"
 
 const Proposal: FunctionComponent = () => {
 	const {id} = useParams<{id: string}>()
@@ -54,6 +56,23 @@ const Proposal: FunctionComponent = () => {
 		{address: account ?? "", tokens: 49250},
 		{address: account ?? "", tokens: 39250}
 	]
+
+	// TODO: Decode proposal.multiTx, get list of transactions from there
+	const MOCK_TRANSACTION: {
+		signature: string
+		inputs: {name: string; value: string | null}[]
+		to: string | null
+		value: number
+	} = {
+		signature: "_setContributorCompSpeed(address,uint256)",
+		inputs: [
+			{name: "address", value: account},
+			{name: "uint256", value: "6496575342465753"}
+		],
+		to: account,
+		value: 0
+	}
+	const MOCK_TRANSACTIONS: Array<typeof MOCK_TRANSACTION> = [MOCK_TRANSACTION, MOCK_TRANSACTION]
 
 	if (loading || !proposal || !dao) return <Loader />
 	if (error) return <ErrorPlaceholder />
@@ -257,6 +276,41 @@ const Proposal: FunctionComponent = () => {
 								percentageValue={25}
 								votes={MOCK_VOTES}
 							/>
+						</div>
+						<div className="proposal__content-details">
+							<div className="proposal__content-details-left">
+								<h2>Details</h2>
+								{proposal.description && (
+									<Expandable title="Description">{proposal.description}</Expandable>
+								)}
+								<Expandable title="Executable Code">
+									{MOCK_TRANSACTIONS.map((transaction, idx) => (
+										<Fragment key={idx}>
+											<div className="proposal__transaction">
+												<h3>Function {idx + 1}</h3>
+												<div className="proposal__transaction-details">
+													<p>Signature:</p>
+													<span>{transaction.signature}</span>
+													<p>Calldatas:</p>
+													{transaction.inputs.map(input => (
+														<p key={input.name} className="proposal__transaction-input">
+															{input.name}: <span>{input.value}</span>
+														</p>
+													))}
+													<p>Target:</p>
+													<span>{transaction.to}</span>
+													<p>Value:</p>
+													<span>{transaction.value}</span>
+												</div>
+											</div>
+											{idx + 1 !== MOCK_TRANSACTIONS.length && <Divider />}
+										</Fragment>
+									))}
+								</Expandable>
+							</div>
+							<div className="proposal__content-details-right">
+								<h2>Participate</h2>
+							</div>
 						</div>
 					</div>
 				</div>

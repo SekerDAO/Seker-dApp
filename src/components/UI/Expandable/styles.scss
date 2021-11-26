@@ -1,0 +1,29 @@
+.expandable-container {
+  padding: 20px;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &--expanded {
+      svg {
+        transform: rotate(180deg) scaleX(-1);
+      }
+    }
+
+    svg {
+      -webkit-transition: all 0.4s ease-in-out;
+      -moz-transition: all 0.4s ease-in-out;
+      transition: all 0.4s ease-in-out;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  &__content {
+    margin-top: 40px;
+  }
+}

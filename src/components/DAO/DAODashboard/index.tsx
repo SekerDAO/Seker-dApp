@@ -1,5 +1,5 @@
 import {FunctionComponent} from "react"
-import {useHistory, useLocation} from "react-router-dom"
+import {useHistory} from "react-router-dom"
 import {DAO} from "../../../types/DAO"
 import ErrorPlaceholder from "../../UI/ErrorPlaceholder"
 import Loader from "../../UI/Loader"
@@ -13,7 +13,6 @@ import {ReactComponent as TelegramIcon} from "../../../assets/icons/telegram.svg
 import {ReactComponent as DiscordIcon} from "../../../assets/icons/discord.svg"
 import {formatDate} from "../../../utlls"
 import updateDAOImage from "../../../api/firebase/DAO/updateDAOImage"
-
 import "./styles.scss"
 
 type DAOAdminPage = "createNFT" | "edit" | "createProposal" | "expand"
@@ -35,7 +34,6 @@ const DAODashboard: FunctionComponent<{
 	refetch?: () => void
 }> = ({dao, page, isAdmin, error, loading, refetch, children}) => {
 	const {push} = useHistory()
-	const {pathname} = useLocation()
 
 	if (error) return <ErrorPlaceholder />
 	if (!dao || loading) return <Loader />
@@ -129,22 +127,22 @@ const DAODashboard: FunctionComponent<{
 								items={[
 									{
 										title: "Create / Load NFTs",
-										to: `${pathname}?page=createNFT`,
+										to: `/dao/${dao.gnosisAddress}?page=createNFT`,
 										page: "createNFT"
 									},
 									{
 										title: "Edit DAO Profile",
-										to: `${pathname}?page=edit`,
+										to: `/dao/${dao.gnosisAddress}?page=edit`,
 										page: "edit"
 									},
 									{
 										title: "Create Proposal",
-										to: `${pathname}?page=createProposal`,
+										to: `/dao/${dao.gnosisAddress}?page=createProposal`,
 										page: "createProposal"
 									},
 									{
 										title: "Expand Dao",
-										to: `${pathname}?page=expand`,
+										to: `/dao/${dao.gnosisAddress}?page=expand`,
 										page: "expand"
 									}
 								]}
@@ -157,7 +155,7 @@ const DAODashboard: FunctionComponent<{
 							pages={daoMenuEntries}
 							currentPage={page}
 							onChange={nextPage => {
-								push(`${pathname}?page=${nextPage}`)
+								push(`/dao/${dao.gnosisAddress}?page=${nextPage}`)
 							}}
 						/>
 						{children}
