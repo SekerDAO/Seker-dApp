@@ -1,6 +1,6 @@
 import {Contract} from "@ethersproject/contracts"
-import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
 import {JsonRpcProvider} from "@ethersproject/providers"
+import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
 
 const getOwners = async (gnosisAddress: string, provider: JsonRpcProvider): Promise<string[]> => {
 	const safeContract = new Contract(gnosisAddress, GnosisSafeL2.abi, provider)

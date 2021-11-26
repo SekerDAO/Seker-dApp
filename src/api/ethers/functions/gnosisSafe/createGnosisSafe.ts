@@ -1,8 +1,9 @@
 import {AddressZero} from "@ethersproject/constants"
-import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
-import GnosisSafeProxyFactory from "../../abis/GnosisSafeProxyFactory.json"
 import {Contract, ContractFactory} from "@ethersproject/contracts"
 import {JsonRpcSigner} from "@ethersproject/providers"
+import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
+import GnosisSafeProxyFactory from "../../abis/GnosisSafeProxyFactory.json"
+
 const {REACT_APP_PROXY_ADDRESS} = process.env
 
 const createGnosisSafe = async (

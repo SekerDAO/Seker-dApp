@@ -1,6 +1,7 @@
 import {JsonRpcSigner} from "@ethersproject/providers"
 import TWDomainToken from "../../abis/TWDomainToken.json"
 import {createSafeSignature, executeSafeTx, SafeSignature} from "../gnosisSafe/safeUtils"
+
 const {REACT_APP_ZORA_ADDRESS} = process.env
 
 export const signApproveNFTForAuction = async (

@@ -1,5 +1,5 @@
-import {JsonRpcProvider} from "@ethersproject/providers"
 import {Contract} from "@ethersproject/contracts"
+import {JsonRpcProvider} from "@ethersproject/providers"
 import MultiArtToken from "../../abis/MultiArtToken.json"
 
 const checkNFTOwner = async (

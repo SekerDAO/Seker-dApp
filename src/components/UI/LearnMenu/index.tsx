@@ -1,7 +1,7 @@
 import {FunctionComponent, useState, Fragment} from "react"
+import {useHistory, useLocation} from "react-router-dom"
 import {Learn} from "../../../types/learn"
 import "./styles.scss"
-import {useHistory, useLocation} from "react-router-dom"
 
 const LearnMenu: FunctionComponent<{
 	entries: Learn

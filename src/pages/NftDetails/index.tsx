@@ -1,17 +1,18 @@
 import {FunctionComponent, useContext, useState} from "react"
 import {Link, useParams} from "react-router-dom"
-import useNFT from "../../hooks/getters/useNFT"
-import Loader from "../../components/UI/Loader"
-import ErrorPlaceholder from "../../components/UI/ErrorPlaceholder"
-import "./styles.scss"
-import Table from "../../components/UI/Table"
+import endAuction from "../../api/ethers/functions/auction/endAuction"
 import Button from "../../components/Controls/Button"
+import BidAuctionModal from "../../components/Modals/BidAuctionModal"
+import ErrorPlaceholder from "../../components/UI/ErrorPlaceholder"
+import Loader from "../../components/UI/Loader"
+import Table from "../../components/UI/Table"
+import {toastError, toastSuccess} from "../../components/UI/Toast"
+import EthersContext from "../../context/EthersContext"
+import useNFT from "../../hooks/getters/useNFT"
 import {Auction} from "../../types/auction"
 import {formatReadableAddress, formatTimeDifference} from "../../utlls"
-import BidAuctionModal from "../../components/Modals/BidAuctionModal"
-import {toastError, toastSuccess} from "../../components/UI/Toast"
-import endAuction from "../../api/ethers/functions/auction/endAuction"
-import EthersContext from "../../context/EthersContext"
+import "./styles.scss"
+
 const {REACT_APP_CHAIN_ID} = process.env
 
 const columns = [
@@ -44,7 +45,7 @@ const mockBids = [
 	}
 ]
 
-const NFTCard: FunctionComponent = () => {
+const NftDetails: FunctionComponent = () => {
 	const {id} = useParams<{id: string}>()
 	const {nft, auctions, loading, error} = useNFT(id)
 	const [processing, setProcessing] = useState(false)
@@ -186,4 +187,4 @@ const NFTCard: FunctionComponent = () => {
 	)
 }
 
-export default NFTCard
+export default NftDetails

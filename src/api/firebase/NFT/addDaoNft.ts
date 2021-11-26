@@ -1,5 +1,6 @@
-import {NFT} from "../../../types/NFT"
 import firebase from "firebase"
+import {NFT} from "../../../types/NFT"
+
 const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
 const addDaoNft = async (nft: Omit<NFT, "owner" | "ownerType">, address: string): Promise<void> => {

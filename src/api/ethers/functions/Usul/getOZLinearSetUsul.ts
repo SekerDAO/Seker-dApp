@@ -1,11 +1,12 @@
+import {Contract} from "@ethersproject/contracts"
 import {JsonRpcSigner} from "@ethersproject/providers"
 import OZLinearVoting from "../../abis/OZLinearVoting.json"
-import {Contract} from "@ethersproject/contracts"
 import {buildContractCallVariable, SafeTransaction} from "../gnosisSafe/safeUtils"
+
 const {REACT_APP_OZ_LINEAR_MASTER_ADDRESS} = process.env
 
 const getOZLinearSetUsul = (
-	expectedSeeleAddress: string,
+	expectedUsulAddress: string,
 	expectedStrategyAddress: string,
 	signer: JsonRpcSigner
 ): SafeTransaction => {
@@ -18,7 +19,7 @@ const getOZLinearSetUsul = (
 		linearVotingMaster,
 		expectedStrategyAddress,
 		"setUsul",
-		[expectedSeeleAddress],
+		[expectedUsulAddress],
 		0
 	)
 }

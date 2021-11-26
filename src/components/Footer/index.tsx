@@ -1,13 +1,13 @@
 import {FunctionComponent} from "react"
 import {Link} from "react-router-dom"
-import {ReactComponent as Logo} from "../../assets/icons/logo-white.svg"
 import {ReactComponent as DiscordGrayscale} from "../../assets/icons/discord-grayscale.svg"
-import {ReactComponent as TwitterGrayscale} from "../../assets/icons/twitter-grayscale.svg"
-import {ReactComponent as TelegramGrayscale} from "../../assets/icons/telegram-grayscale.svg"
 import {ReactComponent as GitHubGrayscale} from "../../assets/icons/github-grayscale.svg"
+import {ReactComponent as Logo} from "../../assets/icons/logo-white.svg"
 import {ReactComponent as MediumGrayscale} from "../../assets/icons/medium-grayscale.svg"
-import "./styles.scss"
+import {ReactComponent as TelegramGrayscale} from "../../assets/icons/telegram-grayscale.svg"
+import {ReactComponent as TwitterGrayscale} from "../../assets/icons/twitter-grayscale.svg"
 import Divider from "../UI/Divider"
+import "./styles.scss"
 
 const Footer: FunctionComponent = () => (
 	<footer className="footer">

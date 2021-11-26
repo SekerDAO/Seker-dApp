@@ -1,12 +1,12 @@
 import {useContext, useEffect, useState} from "react"
-import {AuthContext} from "../../context/AuthContext"
-import {SafeProposal, SafeProposalState} from "../../types/safeProposal"
-import EthersContext from "../../context/EthersContext"
-import getSafeProposal from "../../api/firebase/safeProposal/getSafeProposal"
-import getDAO from "../../api/firebase/DAO/getDAO"
 import getOwners from "../../api/ethers/functions/gnosisSafe/getOwners"
 import getVotingThreshold from "../../api/ethers/functions/gnosisSafe/getVotingThreshold"
 import {getNonce} from "../../api/ethers/functions/gnosisSafe/safeUtils"
+import getDAO from "../../api/firebase/DAO/getDAO"
+import getSafeProposal from "../../api/firebase/safeProposal/getSafeProposal"
+import {AuthContext} from "../../context/AuthContext"
+import EthersContext from "../../context/EthersContext"
+import {SafeProposal, SafeProposalState} from "../../types/safeProposal"
 
 const useProposal = (
 	id: string
@@ -37,7 +37,7 @@ const useProposal = (
 			if (trueState === "active") {
 				const nonce = await getNonce(_proposal.gnosisAddress, provider)
 				if (_proposal.nonce < nonce) {
-					trueState = "canceled"
+					trueState = "outdated"
 				}
 			}
 			// We don't need DAO, but it will throw an error if it's not found, so we check for it

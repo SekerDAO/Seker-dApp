@@ -1,5 +1,6 @@
-import {DAOFirebaseData} from "../../../types/DAO"
 import firebase from "firebase"
+import {DAOFirebaseData} from "../../../types/DAO"
+
 const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
 const editDAO = async (

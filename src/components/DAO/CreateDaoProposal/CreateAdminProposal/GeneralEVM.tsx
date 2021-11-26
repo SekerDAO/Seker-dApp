@@ -1,21 +1,21 @@
-import {ChangeEvent, Fragment, FunctionComponent, useContext, useEffect, useState} from "react"
-import Input from "../../../Controls/Input"
-import ArrayInput from "../../../Controls/ArrayInput"
 import {isAddress} from "@ethersproject/address"
-import {toastError, toastSuccess, toastWarning} from "../../../UI/Toast"
-import fetchContractAbi from "../../../../api/etherscan/fetchContractAbi"
-import Textarea from "../../../Controls/Textarea"
-import {Abi, AbiFunction} from "../../../../types/abi"
-import Select from "../../../Controls/Select"
-import {prepareArguments, validateArgument} from "../../../../utlls"
-import Button from "../../../Controls/Button"
+import {ChangeEvent, Fragment, FunctionComponent, useContext, useEffect, useState} from "react"
 import {
 	createSafeSignature,
 	executeSafeTx
 } from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
-import EthersContext from "../../../../context/EthersContext"
+import fetchContractAbi from "../../../../api/etherscan/fetchContractAbi"
 import addSafeProposal from "../../../../api/firebase/safeProposal/addSafeProposal"
 import {AuthContext} from "../../../../context/AuthContext"
+import EthersContext from "../../../../context/EthersContext"
+import {Abi, AbiFunction} from "../../../../types/abi"
+import {prepareArguments, validateArgument} from "../../../../utlls"
+import ArrayInput from "../../../Controls/ArrayInput"
+import Button from "../../../Controls/Button"
+import Input from "../../../Controls/Input"
+import Select from "../../../Controls/Select"
+import Textarea from "../../../Controls/Textarea"
+import {toastError, toastSuccess, toastWarning} from "../../../UI/Toast"
 
 const GeneralEVM: FunctionComponent<{
 	gnosisAddress: string

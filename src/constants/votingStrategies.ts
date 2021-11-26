@@ -1,9 +1,9 @@
-import singleVotingCard from "../assets/icons/single-voting.svg"
-import singleVotingSimpleMembershipCard from "../assets/icons/single-voting-simple-membership.svg"
-import linearVotingCard from "../assets/icons/linear-voting.svg"
-import linearVotingSimpleMembershipCard from "../assets/icons/linear-voting-simple-membership.svg"
 import linearVotingSimpleMembershipZodiacExitModuleCard from "../assets/icons/linear-voting-simple-membership-zodiac-exit.svg"
+import linearVotingSimpleMembershipCard from "../assets/icons/linear-voting-simple-membership.svg"
+import linearVotingCard from "../assets/icons/linear-voting.svg"
 import quadraticVotingSimpleMembershipCard from "../assets/icons/quadratic-voting-simple-membership.svg"
+import singleVotingSimpleMembershipCard from "../assets/icons/single-voting-simple-membership.svg"
+import singleVotingCard from "../assets/icons/single-voting.svg"
 import {VotingStrategy} from "../types/DAO"
 
 const VOTING_STRATEGY_DESCRIPTION_PLACEHOLDER = `

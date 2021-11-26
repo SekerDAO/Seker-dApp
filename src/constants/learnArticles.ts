@@ -1,3 +1,4 @@
+//eslint-disable-next-line filenames/match-exported
 import {Learn} from "../types/learn"
 
 const LEARN_ARTICLES: Learn = [
@@ -16,7 +17,7 @@ const LEARN_ARTICLES: Learn = [
 	{
 		title: "What Is the Hyphal dApp?",
 		articles: [
-			`Hyphal is a dApp to help you boot up, list, and operate your DAO! We have collaborated with Gnosis Guild on building the Zodiac Module, and have developed the Seele Module to help you achieve an unstoppable organization.`,
+			`Hyphal is a dApp to help you boot up, list, and operate your DAO! We have collaborated with Gnosis Guild on building the Zodiac Module, and have developed the Usul Module to help you achieve an unstoppable organization.`,
 
 			`The Hyphal dApp is catered to DAOs of all types, with the intention of building a vibrant ecosystem of communities that fosters new financial opportunities, collaborations, expression, and growth — implemented as mutually beneficial networks of DAOs.`
 		],
@@ -27,7 +28,7 @@ const LEARN_ARTICLES: Learn = [
 					`Zodiac modules are at the core of your DAOs infrastructure. For more information on Zodiac [article link coming soon].`,
 					`With the Hyphal dApp you will be able to choose to use all or some of the following Zodiac compliant modules and modifiers.`,
 					`<ul>
-						<li>Seele: allows avatars to operate with trustless tokenized DeGov, similar to Compound or Gitcoin, with a time-boxed proposal core that can register swappable voting contracts, allowing DAOs to choose from various on-chain voting methods that best suit their needs. (Built by Hyphal)</li>
+						<li>Usul: allows avatars to operate with trustless tokenized DeGov, similar to Compound or Gitcoin, with a time-boxed proposal core that can register swappable voting contracts, allowing DAOs to choose from various on-chain voting methods that best suit their needs. (Built by Hyphal)</li>
 						<li>Exit: allows users to redeem a designated token for a relative share of an avatars assets, similar to Moloch's infamous rageQuit() function. (Built by Gnosis Guild)</li>
 						<li>Bridge: allows an address on one chain to control an avatar on another chain, via an arbitrary message bridge. (Built by Gnosis Guild)</li>
 						<li>Reality: allows on-chain execution based on the outcome of events reported by Reality.eth. Used to build the SafeSnap module for Snapshot. (Built by Gnosis Guild)</li>
@@ -64,9 +65,9 @@ const LEARN_ARTICLES: Learn = [
 				articles: [
 					`Gas costs present another challenge to large-scale on-chain voting, and examples exist for maintaining off-chain voting in a transparent way (e.g. Snapshot). While these solutions are cheap, they do introduce trust issues in the form of oracles. However, given that our dApp uses Zodiac Avatars as the asset manager core, our communities can continue to make use of SnapShot with the Reality module.`,
 
-					`While DAOs are in the early stages of development, there will likely not be many of the known issues present in DeGov. We believe that the best first step forward for DAOs moving to a cost effective trustless form of DeGov will be with delegation voting methods in the Seele module.`,
+					`While DAOs are in the early stages of development, there will likely not be many of the known issues present in DeGov. We believe that the best first step forward for DAOs moving to a cost effective trustless form of DeGov will be with delegation voting methods in the Usul module.`,
 
-					`If the user friction challenges are acceptable, DAOs can use Seele in conjunction with the Bridge module on a sidechain like xDAI. (Coming soon).`
+					`If the user friction challenges are acceptable, DAOs can use Usul in conjunction with the Bridge module on a sidechain like xDAI. (Coming soon).`
 				],
 				childArticles: []
 			}
@@ -99,7 +100,7 @@ const LEARN_ARTICLES: Learn = [
 						articles: [`Coming Soon!`]
 					},
 					{
-						title: "Seele Module",
+						title: "Usul Module",
 						articles: [`Coming Soon!`]
 					},
 					{

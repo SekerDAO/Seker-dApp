@@ -1,6 +1,7 @@
-import {JsonRpcSigner} from "@ethersproject/providers"
 import {Contract} from "@ethersproject/contracts"
+import {JsonRpcSigner} from "@ethersproject/providers"
 import Auction from "../../abis/Auction.json"
+
 const {REACT_APP_ZORA_ADDRESS} = process.env
 
 const endAuction = async (auctionId: number, signer: JsonRpcSigner): Promise<void> => {

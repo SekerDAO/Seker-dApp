@@ -1,8 +1,8 @@
 import {useContext, useEffect, useState} from "react"
-import {SafeProposal} from "../../types/safeProposal"
-import getSafeProposals from "../../api/firebase/safeProposal/getSafeProposals"
 import {getNonce} from "../../api/ethers/functions/gnosisSafe/safeUtils"
+import getSafeProposals from "../../api/firebase/safeProposal/getSafeProposals"
 import EthersContext from "../../context/EthersContext"
+import {SafeProposal} from "../../types/safeProposal"
 
 const useProposals = (
 	gnosisAddress: string

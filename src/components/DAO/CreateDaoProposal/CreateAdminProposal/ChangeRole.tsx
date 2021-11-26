@@ -1,21 +1,21 @@
 import {ChangeEvent, FunctionComponent, useContext, useState} from "react"
-import Input from "../../../Controls/Input"
-import Button from "../../../Controls/Button"
-import Select from "../../../Controls/Select"
-import {AuthContext} from "../../../../context/AuthContext"
-import EthersContext from "../../../../context/EthersContext"
-import addSafeProposal from "../../../../api/firebase/safeProposal/addSafeProposal"
-import {toastError, toastSuccess} from "../../../UI/Toast"
-import {SafeSignature} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
 import {
 	executeAddOwner,
 	executeRemoveOwner,
 	signAddOwner,
 	signRemoveOwner
 } from "../../../../api/ethers/functions/gnosisSafe/addRemoveOwner"
+import {SafeSignature} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
+import addSafeProposal from "../../../../api/firebase/safeProposal/addSafeProposal"
+import {AuthContext} from "../../../../context/AuthContext"
+import EthersContext from "../../../../context/EthersContext"
 import useDAO from "../../../../hooks/getters/useDAO"
+import Button from "../../../Controls/Button"
+import Input from "../../../Controls/Input"
+import Select from "../../../Controls/Select"
 import ErrorPlaceholder from "../../../UI/ErrorPlaceholder"
 import Loader from "../../../UI/Loader"
+import {toastError, toastSuccess} from "../../../UI/Toast"
 
 const ChangeRole: FunctionComponent<{
 	gnosisAddress: string

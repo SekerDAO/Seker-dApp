@@ -14,7 +14,11 @@ const Expandable: FunctionComponent<{title: string}> = ({children, title}) => {
 				}`}
 			>
 				<span>{title}</span>
-				<ArrowDown width="10px" height="20px" onClick={() => setExpanded(!expanded)} />
+				<ArrowDown
+					width="10px"
+					height="20px"
+					onClick={() => setExpanded(prevState => !prevState)}
+				/>
 			</div>
 			{expanded && <div className="expandable-container__content">{children}</div>}
 		</Paper>

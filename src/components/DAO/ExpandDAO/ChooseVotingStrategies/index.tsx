@@ -1,19 +1,19 @@
 import {FunctionComponent, useState, useContext} from "react"
-import Paper from "../../../UI/Paper"
-import Divider from "../../../UI/Divider"
-import Button from "../../../Controls/Button"
-import {VotingStrategy, BuiltVotingStrategy} from "../../../../types/DAO"
-import VotingStrategyCard from "../../../UI/VotingStrategyCard"
+import getOZLinearDeployTx from "../../../../api/ethers/functions/Usul/getOZLinearDeployTx"
+import {SafeTransaction} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
+import {ReactComponent as DeleteIcon} from "../../../../assets/icons/delete.svg"
+import {ReactComponent as StepDotDoneIcon} from "../../../../assets/icons/step-dot-done.svg"
 import {VOTING_STRATEGIES} from "../../../../constants/votingStrategies"
+import EthersContext from "../../../../context/EthersContext"
+import {VotingStrategy, BuiltVotingStrategy} from "../../../../types/DAO"
+import Button from "../../../Controls/Button"
 import DeployVotingStrategyModal, {
 	VotingStrategyFormValues
 } from "../../../Modals/DeployVotingStrategyModal"
-import {ReactComponent as StepDotDoneIcon} from "../../../../assets/icons/step-dot-done.svg"
-import {ReactComponent as DeleteIcon} from "../../../../assets/icons/delete.svg"
+import Divider from "../../../UI/Divider"
+import Paper from "../../../UI/Paper"
+import VotingStrategyCard from "../../../UI/VotingStrategyCard"
 import "./styles.scss"
-import {SafeTransaction} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
-import getOZLinearDeployTx from "../../../../api/ethers/functions/Usul/getOZLinearDeployTx"
-import EthersContext from "../../../../context/EthersContext"
 
 const ChooseVotingStrategies: FunctionComponent<{
 	gnosisAddress: string

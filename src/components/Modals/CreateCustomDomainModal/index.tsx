@@ -1,12 +1,12 @@
 import {FunctionComponent, useContext, useState} from "react"
-import Button from "../../Controls/Button"
-import Modal from "../Modal"
-import Input from "../../Controls/Input"
-import "./styles.scss"
-import EthersContext from "../../../context/EthersContext"
 import deployCustomDomain from "../../../api/ethers/functions/customDomain/deployCustomDomain"
-import {toastError} from "../../UI/Toast"
 import addDomain from "../../../api/firebase/user/addDomain"
+import EthersContext from "../../../context/EthersContext"
+import Button from "../../Controls/Button"
+import Input from "../../Controls/Input"
+import {toastError} from "../../UI/Toast"
+import Modal from "../Modal"
+import "./styles.scss"
 
 const CreateCustomDomainModal: FunctionComponent<{
 	afterCreate: () => void

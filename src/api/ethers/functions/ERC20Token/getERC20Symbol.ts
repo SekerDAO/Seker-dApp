@@ -1,5 +1,5 @@
-import {JsonRpcProvider} from "@ethersproject/providers"
 import {Contract} from "@ethersproject/contracts"
+import {JsonRpcProvider} from "@ethersproject/providers"
 import GovToken from "../../abis/GovToken.json"
 
 const getERC20Symbol = async (erc20Address: string, provider: JsonRpcProvider): Promise<string> => {
