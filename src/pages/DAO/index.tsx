@@ -72,6 +72,7 @@ const DAOPage: FunctionComponent = () => {
 					gnosisAddress={dao.gnosisAddress}
 					gnosisVotingThreshold={dao.gnosisVotingThreshold}
 					ownersCount={dao.owners.length}
+					strategies={dao.strategies}
 				/>
 			)}
 			{page === "collection" && (
