@@ -25,9 +25,10 @@ import DashboardMenu from "../../components/UI/DashboardMenu"
 import CreateNFTForm from "../../components/CreateNFTForm"
 import useUser from "../../hooks/getters/useUser"
 import CreateDaoProposal from "../../components/DAO/CreateDaoProposal"
+import Proposal from "../../components/DAO/Proposal"
 
 type DAOAdminPage = "createNFT" | "edit" | "createProposal" | "expand"
-type DAOContentPage = "collection" | "about" | "members" | "proposals"
+type DAOContentPage = "collection" | "about" | "members" | "proposals" | "proposal"
 
 const menuEntries = [
 	{id: "collection", name: "Collection"},
@@ -202,6 +203,7 @@ const DAOPage: FunctionComponent = () => {
 						{page === "about" && <AboutDAO dao={dao} />}
 						{page === "members" && <DAOOwners owners={dao.owners} />}
 						{page === "proposals" && <DAOProposals gnosisAddress={dao.gnosisAddress} />}
+						{page === "proposal" && <Proposal />}
 						{page === "expand" && isAdmin && (
 							<ExpandDAO
 								gnosisAddress={dao.gnosisAddress}

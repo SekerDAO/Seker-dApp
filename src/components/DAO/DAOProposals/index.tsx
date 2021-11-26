@@ -7,33 +7,37 @@ import "./styles.scss"
 import SearchInput from "../../Controls/Input/SearchInput"
 import Select from "../../Controls/Select"
 import {capitalize} from "../../../utlls"
-import {Link} from "react-router-dom"
+import {Link, useLocation} from "react-router-dom"
 
 const DAOProposalCard: FunctionComponent<{
 	proposal: SafeProposal & {proposalId: string}
-}> = ({proposal}) => (
-	<Link to={`/proposal/${proposal.proposalId}`}>
-		<div className="dao-proposals__card">
-			<div className="dao-proposals__card-header">
-				<p>{SafeProposalsTypeNames[proposal.type]}</p>
-				<p>{capitalize(proposal.state)}</p>
+}> = ({proposal}) => {
+	const {pathname} = useLocation()
+
+	return (
+		<Link to={`${pathname}?page=proposal&id=${proposal.proposalId}`}>
+			<div className="dao-proposals__card">
+				<div className="dao-proposals__card-header">
+					<p>{SafeProposalsTypeNames[proposal.type]}</p>
+					<p>{capitalize(proposal.state)}</p>
+				</div>
+				<h2>{proposal.title}</h2>
+				{proposal.type === "changeRole" && (
+					<>
+						<div className="dao-proposals__card-section">
+							<b>Member&apos;s Address:</b>
+							{` ${proposal.recipientAddress}`}
+						</div>
+						<div className="dao-proposals__card-section">
+							<b>Proposed New Role:</b>
+							{` ${capitalize(proposal.newRole!)}`}
+						</div>
+					</>
+				)}
 			</div>
-			<h2>{proposal.title}</h2>
-			{proposal.type === "changeRole" && (
-				<>
-					<div className="dao-proposals__card-section">
-						<b>Member&apos;s Address:</b>
-						{` ${proposal.recipientAddress}`}
-					</div>
-					<div className="dao-proposals__card-section">
-						<b>Proposed New Role:</b>
-						{` ${capitalize(proposal.newRole!)}`}
-					</div>
-				</>
-			)}
-		</div>
-	</Link>
-)
+		</Link>
+	)
+}
 
 const DAOProposals: FunctionComponent<{
 	gnosisAddress: string
