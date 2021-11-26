@@ -37,6 +37,11 @@ import BackButton from "../../components/Controls/Button/BackButton"
 import VotesCard from "../../components/Proposal/VotesCard"
 import Expandable from "../../components/UI/Expandable"
 import Divider from "../../components/UI/Divider"
+import Paper from "../../components/UI/Paper"
+import CopyField from "../../components/UI/Copy"
+import Button from "../../components/Controls/Button"
+import {ReactComponent as WrapTokenDone} from "../../assets/icons/wrap-token-done.svg"
+import {ReactComponent as DelegateTokenDone} from "../../assets/icons/delegate-token-done.svg"
 
 const Proposal: FunctionComponent = () => {
 	const {id} = useParams<{id: string}>()
@@ -310,6 +315,39 @@ const Proposal: FunctionComponent = () => {
 							</div>
 							<div className="proposal__content-details-right">
 								<h2>Participate</h2>
+								<Paper className="proposal__content-participate">
+									<div>
+										<WrapTokenDone width="50px" height="50px" />
+									</div>
+									<div className="proposal__content-participate-step">
+										<h3>Step 1: Wrap Tokens</h3>
+										<p>Wrapped Token Address</p>
+										<CopyField value="TODO: Add real token address here">
+											{formatReadableAddress(account)}
+										</CopyField>
+										<Button buttonType="link">Unwrap Tokens</Button>
+									</div>
+									<Divider />
+									<div>
+										<DelegateTokenDone width="50px" height="50px" />
+									</div>
+									<div className="proposal__content-participate-step">
+										<h3>Step 2: Delegate</h3>
+										<p>Currently Delegated to</p>
+										<CopyField value="TODO: Add delegated user address here">
+											{formatReadableAddress(account)}
+										</CopyField>
+										<Button buttonType="link">Change Delegation</Button>
+									</div>
+									<Divider />
+									<Button
+										disabled={!canSign && !processing}
+										onClick={sign}
+										extraClassName="proposal__content-vote-button"
+									>
+										Vote
+									</Button>
+								</Paper>
 							</div>
 						</div>
 					</div>

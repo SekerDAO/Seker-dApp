@@ -94,12 +94,14 @@
 
     &-details {
       display: flex;
+      align-items: flex-start;
       margin-top: 40px;
 
       &-left {
-        flex-grow: 1;
         display: flex;
         flex-wrap: wrap;
+        flex-grow: 1;
+        margin-right: 20px;
 
         h2 {
           width: 100%;
@@ -118,6 +120,34 @@
 
         width: 280px;
       }
+    }
+
+    &-participate {
+      padding: 20px;
+      display: flex;
+      flex-wrap: wrap;
+
+      &-step {
+        flex-grow: 1;
+        margin-left: 10px;
+
+        h3 {
+          margin: 10px 0;
+        }
+
+        .btn {
+          padding-left: 0;
+        }
+      }
+
+      .divider {
+        margin: 20px 0;
+        width: 100%;
+      }
+    }
+
+    &-vote-button {
+      width: 100%;
     }
   }
 }
