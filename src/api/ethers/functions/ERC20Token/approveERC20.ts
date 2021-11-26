@@ -1,6 +1,6 @@
-import {JsonRpcSigner, JsonRpcProvider} from "@ethersproject/providers"
-import {Contract} from "@ethersproject/contracts"
 import GovToken from "../../abis/GovToken.json"
+import {Contract} from "@ethersproject/contracts"
+import {JsonRpcSigner, JsonRpcProvider} from "@ethersproject/providers"
 import {parseEther} from "@ethersproject/units"
 
 const approveERC20 = (

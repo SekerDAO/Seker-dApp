@@ -12,9 +12,9 @@
   height: 40px;
 
   &:disabled {
-    background-color: $dark-grey50;
-    border-color: $dark-grey50;
-    color: $dark-grey25;
+    background-color: $dark-grey75;
+    border-color: $dark-grey75;
+    color: $dark-grey50;
     cursor: not-allowed;
   }
 
@@ -42,6 +42,21 @@
     &:not(:disabled):hover {
       background-color: transparent;
       color: $purple75;
+    }
+  }
+}
+
+.back-button {
+  padding-left: 0;
+  display: flex;
+  align-items: center;
+
+  svg {
+    transform: rotate(90deg);
+    margin-right: 10px;
+
+    path {
+      stroke: $purple;
     }
   }
 }

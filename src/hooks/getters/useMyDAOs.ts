@@ -1,12 +1,12 @@
-import {useContext, useEffect, useState} from "react"
-import {AuthContext} from "../../context/AuthContext"
-import {DAO} from "../../types/DAO"
-import getDAO from "../../api/firebase/DAO/getDAO"
-import getVotingThreshold from "../../api/ethers/functions/gnosisSafe/getVotingThreshold"
-import getOwners from "../../api/ethers/functions/gnosisSafe/getOwners"
-import EthersContext from "../../context/EthersContext"
-import getUser from "../../api/firebase/user/getUser"
 import {getStrategies} from "../../api/ethers/functions/Usul/usulUtils"
+import getOwners from "../../api/ethers/functions/gnosisSafe/getOwners"
+import getVotingThreshold from "../../api/ethers/functions/gnosisSafe/getVotingThreshold"
+import getDAO from "../../api/firebase/DAO/getDAO"
+import getUser from "../../api/firebase/user/getUser"
+import {AuthContext} from "../../context/AuthContext"
+import EthersContext from "../../context/EthersContext"
+import {DAO} from "../../types/DAO"
+import {useContext, useEffect, useState} from "react"
 
 const useMyDAOs = (): {
 	DAOs: DAO[]
@@ -31,7 +31,9 @@ const useMyDAOs = (): {
 						const firebaseData = await getDAO(dao)
 						const gnosisVotingThreshold = await getVotingThreshold(dao, provider)
 						const owners = await getOwners(dao, provider)
-						const strategies = await getStrategies(dao, provider)
+						const strategies = firebaseData.usulAddress
+							? await getStrategies(firebaseData.usulAddress, provider)
+							: []
 						const tokenSymbol = ""
 						const balance = 0
 						const fundedProjects = 0

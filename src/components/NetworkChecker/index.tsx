@@ -1,5 +1,6 @@
-import {FunctionComponent, useContext} from "react"
 import EthersContext from "../../context/EthersContext"
+import {FunctionComponent, useContext} from "react"
+
 const {REACT_APP_CHAIN_ID} = process.env
 
 const NetworkChecker: FunctionComponent = () => {

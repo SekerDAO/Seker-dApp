@@ -1,15 +1,15 @@
-import {Contract, ContractInterface} from "@ethersproject/contracts"
-import {_TypedDataEncoder} from "@ethersproject/hash"
+import {BuiltVotingStrategy} from "../../../../types/DAO"
+import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
+import getOZLinearSetUsul from "../Usul/getOZLinearSetUsul"
+import getRegisterUsulTx from "../Usul/getRegisterUsulTx"
+import getUsulDeploy from "../Usul/getUsulDeploy"
 import {BigNumber, BigNumberish} from "@ethersproject/bignumber"
 import {arrayify} from "@ethersproject/bytes"
 import {AddressZero} from "@ethersproject/constants"
-import {pack} from "@ethersproject/solidity"
+import {Contract, ContractInterface} from "@ethersproject/contracts"
+import {_TypedDataEncoder} from "@ethersproject/hash"
 import {JsonRpcProvider, JsonRpcSigner, TransactionResponse} from "@ethersproject/providers"
-import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
-import {BuiltVotingStrategy} from "../../../../types/DAO"
-import getUsulDeploy from "../Usul/getUsulDeploy"
-import getRegisterUsulTx from "../Usul/getRegisterUsulTx"
-import getOZLinearSetUsul from "../Usul/getOZLinearSetUsul"
+import {pack} from "@ethersproject/solidity"
 
 const EIP712_SAFE_TX_TYPE = {
 	SafeTx: [

@@ -3,15 +3,13 @@
 .header {
   height: 70px;
   width: 100%;
-  background-color: white;
+  background-color: $light-grey;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
   z-index: 2;
   padding: 0 40px;
+  position: fixed;
 
   &__logo {
     display: flex;
@@ -57,6 +55,16 @@
 
       &.active {
         color: $purple;
+      }
+    }
+  }
+
+  .dropdown__content {
+    background-color: $light-grey;
+
+    .dropdown__trigger {
+      &:hover {
+        background-color: $light-grey;
       }
     }
   }

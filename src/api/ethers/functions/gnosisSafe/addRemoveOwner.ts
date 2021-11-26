@@ -1,7 +1,8 @@
-import {JsonRpcSigner} from "@ethersproject/providers"
-import {Contract} from "@ethersproject/contracts"
 import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
 import {buildContractCall, executeTx, SafeSignature, safeSignMessage} from "./safeUtils"
+import {Contract} from "@ethersproject/contracts"
+import {JsonRpcSigner} from "@ethersproject/providers"
+
 const SENTINEL_OWNER = "0x0000000000000000000000000000000000000001"
 
 export const signAddOwner = async (

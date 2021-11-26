@@ -1,9 +1,10 @@
-import {JsonRpcSigner} from "@ethersproject/providers"
-import {Contract} from "@ethersproject/contracts"
-import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
 import Auction from "../../abis/Auction.json"
+import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
 import {buildContractCall, executeTx, SafeSignature, safeSignMessage} from "../gnosisSafe/safeUtils"
+import {Contract} from "@ethersproject/contracts"
+import {JsonRpcSigner} from "@ethersproject/providers"
 import {parseEther} from "@ethersproject/units"
+
 const {REACT_APP_ZORA_ADDRESS} = process.env
 
 export const signCreateAuction = async (

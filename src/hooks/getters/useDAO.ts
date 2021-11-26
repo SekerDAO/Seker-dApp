@@ -1,10 +1,10 @@
-import {useContext, useEffect, useState} from "react"
-import {DAO} from "../../types/DAO"
+import {getStrategies} from "../../api/ethers/functions/Usul/usulUtils"
+import getOwners from "../../api/ethers/functions/gnosisSafe/getOwners"
+import getVotingThreshold from "../../api/ethers/functions/gnosisSafe/getVotingThreshold"
 import getDAO from "../../api/firebase/DAO/getDAO"
 import EthersContext from "../../context/EthersContext"
-import getVotingThreshold from "../../api/ethers/functions/gnosisSafe/getVotingThreshold"
-import getOwners from "../../api/ethers/functions/gnosisSafe/getOwners"
-import {getStrategies} from "../../api/ethers/functions/Usul/usulUtils"
+import {DAO} from "../../types/DAO"
+import {useContext, useEffect, useState} from "react"
 
 const useDAO = (
 	gnosisAddress: string

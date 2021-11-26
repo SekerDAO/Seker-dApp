@@ -1,14 +1,14 @@
-import {FunctionComponent, useContext} from "react"
+import {AuthContext} from "../../../context/AuthContext"
+import useMyDAOs from "../../../hooks/getters/useMyDAOs"
 import SearchInput from "../../Controls/Input/SearchInput"
+import BookmarkDAOModal from "../../Modals/BookmarkDAOModal"
+import CreateGnosisSafeModal from "../../Modals/CreateGnosisSafeModal"
+import ErrorPlaceholder from "../../UI/ErrorPlaceholder"
+import Loader from "../../UI/Loader"
 import Table from "../../UI/Table"
 import "./styles.scss"
-import useMyDAOs from "../../../hooks/getters/useMyDAOs"
-import Loader from "../../UI/Loader"
-import ErrorPlaceholder from "../../UI/ErrorPlaceholder"
-import {AuthContext} from "../../../context/AuthContext"
+import {FunctionComponent, useContext} from "react"
 import {Link} from "react-router-dom"
-import CreateGnosisSafeModal from "../../Modals/CreateGnosisSafeModal"
-import BookmarkDAOModal from "../../Modals/BookmarkDAOModal"
 
 const columns = [
 	{

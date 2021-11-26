@@ -1,7 +1,8 @@
-import {JsonRpcSigner} from "@ethersproject/providers"
 import MultiArtToken from "../../abis/MultiArtToken.json"
-import {Contract} from "@ethersproject/contracts"
 import TWDomainToken from "../../abis/TWDomainToken.json"
+import {Contract} from "@ethersproject/contracts"
+import {JsonRpcSigner} from "@ethersproject/providers"
+
 const {REACT_APP_DOMAIN_ADDRESS} = process.env
 
 const transferNFT = async (

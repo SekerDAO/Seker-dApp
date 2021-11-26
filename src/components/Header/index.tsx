@@ -1,8 +1,8 @@
-import {FunctionComponent} from "react"
-import "./styles.scss"
-import HeaderMenu from "./Menu"
-import {Link} from "react-router-dom"
 import {ReactComponent as LogoColored} from "../../assets/icons/logo.svg"
+import HeaderMenu from "./Menu"
+import "./styles.scss"
+import {FunctionComponent} from "react"
+import {Link} from "react-router-dom"
 
 const Header: FunctionComponent = () => (
 	<header className="header">

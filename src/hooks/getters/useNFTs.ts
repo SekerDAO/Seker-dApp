@@ -1,10 +1,10 @@
-import {useContext, useEffect, useState} from "react"
-import {NFTQueryParams, NFTSnapshot, NftSort} from "../../types/NFT"
-import getNFTs from "../../api/firebase/NFT/getNFTs"
 import getAuctionDetails from "../../api/ethers/functions/auction/getAuctionDetails"
-import {JsonRpcProvider} from "@ethersproject/providers"
+import getNFTs from "../../api/firebase/NFT/getNFTs"
 import EthersContext from "../../context/EthersContext"
+import {NFTQueryParams, NFTSnapshot, NftSort} from "../../types/NFT"
 import {Auction} from "../../types/auction"
+import {JsonRpcProvider} from "@ethersproject/providers"
+import {useContext, useEffect, useState} from "react"
 
 const useNFTs = ({
 	user,

@@ -1,16 +1,16 @@
-import {FunctionComponent, useContext, useEffect, useState} from "react"
 import {buildMultiSendTx} from "../../../../api/ethers/functions/Usul/multiSend"
-import ExpandDaoLayout from "../ExpandDaoLayout"
-import {BuiltVotingStrategy} from "../../../../types/DAO"
-import ChooseVotingStrategies from "../ChooseVotingStrategies"
 import {
 	buildUsulDeployTxSequence,
 	SafeTransaction
 } from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
 import EthersContext from "../../../../context/EthersContext"
-import ConfirmDeployUsul from "../ConfirmDeployUsul"
 import useProposals from "../../../../hooks/getters/useProposals"
+import {BuiltVotingStrategy} from "../../../../types/DAO"
 import ErrorPlaceholder from "../../../UI/ErrorPlaceholder"
+import ChooseVotingStrategies from "../ChooseVotingStrategies"
+import ConfirmDeployUsul from "../ConfirmDeployUsul"
+import ExpandDaoLayout from "../ExpandDaoLayout"
+import {FunctionComponent, useContext, useEffect, useState} from "react"
 
 type ExpandDaoStage = "chooseStrategies" | "confirm"
 

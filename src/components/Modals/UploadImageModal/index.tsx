@@ -1,8 +1,8 @@
-import {FunctionComponent, useState} from "react"
 import Button from "../../Controls/Button"
-import Modal from "../Modal"
 import MediaUpload from "../../Controls/MediaUpload"
 import {toastError, toastSuccess} from "../../UI/Toast"
+import Modal from "../Modal"
+import {FunctionComponent, useState} from "react"
 
 const UploadImageModal: FunctionComponent<{
 	initialUrl?: string

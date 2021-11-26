@@ -1,6 +1,6 @@
-import {JsonRpcSigner} from "@ethersproject/providers"
 import MultiArtToken from "../../abis/MultiArtToken.json"
 import {createSafeSignature, executeSafeTx, SafeSignature} from "./safeUtils"
+import {JsonRpcSigner} from "@ethersproject/providers"
 
 export const signSendNFT = async (
 	safeAddress: string,

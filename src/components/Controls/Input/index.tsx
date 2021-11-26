@@ -1,7 +1,7 @@
-import {FunctionComponent, InputHTMLAttributes, useRef} from "react"
-import {ReactComponent as ArrowUp} from "../../../assets/icons/arrow-up.svg"
 import {ReactComponent as ArrowDown} from "../../../assets/icons/arrow-down.svg"
+import {ReactComponent as ArrowUp} from "../../../assets/icons/arrow-up.svg"
 import "./styles.scss"
+import {FunctionComponent, InputHTMLAttributes, useRef} from "react"
 
 const Input: FunctionComponent<
 	{

@@ -1,12 +1,13 @@
-import {ChangeEvent, FunctionComponent, useContext, useState} from "react"
-import EthersContext from "../../../context/EthersContext"
-import {toastError, toastSuccess} from "../../UI/Toast"
-import bidAuction from "../../../api/ethers/functions/auction/bidAuction"
-import Button from "../../Controls/Button"
-import Modal from "../Modal"
-import Input from "../../Controls/Input"
-import "./styles.scss"
 import approveERC20 from "../../../api/ethers/functions/ERC20Token/approveERC20"
+import bidAuction from "../../../api/ethers/functions/auction/bidAuction"
+import EthersContext from "../../../context/EthersContext"
+import Button from "../../Controls/Button"
+import Input from "../../Controls/Input"
+import {toastError, toastSuccess} from "../../UI/Toast"
+import Modal from "../Modal"
+import "./styles.scss"
+import {ChangeEvent, FunctionComponent, useContext, useState} from "react"
+
 const {REACT_APP_ZORA_ADDRESS} = process.env
 
 const BidAuctionModal: FunctionComponent<{

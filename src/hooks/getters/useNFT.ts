@@ -1,9 +1,9 @@
-import {useContext, useEffect, useState} from "react"
-import {NFT} from "../../types/NFT"
 import getNFT from "../../api/firebase/NFT/getNFT"
-import {Auction} from "../../types/auction"
 import EthersContext from "../../context/EthersContext"
+import {NFT} from "../../types/NFT"
+import {Auction} from "../../types/auction"
 import {JsonRpcProvider} from "@ethersproject/providers"
+import {useContext, useEffect, useState} from "react"
 
 const useNFT = (
 	id: string

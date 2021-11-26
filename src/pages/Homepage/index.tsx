@@ -1,6 +1,6 @@
-import {FunctionComponent} from "react"
 import Button from "../../components/Controls/Button"
 import "./styles.scss"
+import {FunctionComponent} from "react"
 import {Link} from "react-router-dom"
 
 const HomePage: FunctionComponent = () => (

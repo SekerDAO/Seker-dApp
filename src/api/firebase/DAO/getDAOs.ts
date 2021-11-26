@@ -1,7 +1,7 @@
 import {DAOQueryParams, DAOSnapshot} from "../../../types/DAO"
-import firebase from "firebase"
 import getOwners from "../../ethers/functions/gnosisSafe/getOwners"
 import {JsonRpcProvider} from "@ethersproject/providers"
+import firebase from "firebase"
 
 const defaultLimit = 6
 

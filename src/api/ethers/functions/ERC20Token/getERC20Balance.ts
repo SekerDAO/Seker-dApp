@@ -1,5 +1,5 @@
-import {Contract} from "@ethersproject/contracts"
 import GovToken from "../../abis/GovToken.json"
+import {Contract} from "@ethersproject/contracts"
 import {JsonRpcProvider} from "@ethersproject/providers"
 import {formatEther} from "@ethersproject/units"
 

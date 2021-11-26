@@ -1,7 +1,7 @@
-import {Fragment, FunctionComponent} from "react"
-import "./styles.scss"
 import LearnMenu from "../../components/UI/LearnMenu"
 import LEARN_ARTICLES from "../../constants/learnArticles"
+import "./styles.scss"
+import {Fragment, FunctionComponent} from "react"
 import {useLocation} from "react-router-dom"
 
 const Learn: FunctionComponent = () => {

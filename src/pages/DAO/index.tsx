@@ -1,33 +1,34 @@
-import {FunctionComponent, useContext} from "react"
-import {useHistory, useLocation, useParams} from "react-router-dom"
-import {parse} from "query-string"
-import HorizontalMenu from "../../components/UI/HorizontalMenu"
-import "./styles.scss"
-import useDAO from "../../hooks/getters/useDAO"
-import ErrorPlaceholder from "../../components/UI/ErrorPlaceholder"
-import Loader from "../../components/UI/Loader"
-import {AuthContext} from "../../context/AuthContext"
+import updateDAOImage from "../../api/firebase/DAO/updateDAOImage"
+import {ReactComponent as DiscordIcon} from "../../assets/icons/discord.svg"
+import {ReactComponent as TelegramIcon} from "../../assets/icons/telegram.svg"
+import {ReactComponent as TwitterIcon} from "../../assets/icons/twitter.svg"
+import CreateNFTForm from "../../components/CreateNFTForm"
 import AboutDAO from "../../components/DAO/AboutDAO"
+import CreateDaoProposal from "../../components/DAO/CreateDaoProposal"
+import DAOOwners from "../../components/DAO/DAOOwners"
 import DAOProposals from "../../components/DAO/DAOProposals"
 import EditDAO from "../../components/DAO/EditDAO"
-import NFTGallery from "../../components/NFTGallery"
-import UploadImageModal from "../../components/Modals/UploadImageModal"
-import updateDAOImage from "../../api/firebase/DAO/updateDAOImage"
-import {ReactComponent as TwitterIcon} from "../../assets/icons/twitter.svg"
-import {ReactComponent as TelegramIcon} from "../../assets/icons/telegram.svg"
-import {ReactComponent as DiscordIcon} from "../../assets/icons/discord.svg"
-import DashboardHeader from "../../components/UI/DashboardHeader"
 import ExpandDAO from "../../components/DAO/ExpandDAO"
-import {formatDate} from "../../utlls"
-import DAOOwners from "../../components/DAO/DAOOwners"
-import Paper from "../../components/UI/Paper"
+import Proposal from "../../components/DAO/Proposal"
+import UploadImageModal from "../../components/Modals/UploadImageModal"
+import NFTGallery from "../../components/NFTGallery"
+import DashboardHeader from "../../components/UI/DashboardHeader"
 import DashboardMenu from "../../components/UI/DashboardMenu"
-import CreateNFTForm from "../../components/CreateNFTForm"
+import ErrorPlaceholder from "../../components/UI/ErrorPlaceholder"
+import HorizontalMenu from "../../components/UI/HorizontalMenu"
+import Loader from "../../components/UI/Loader"
+import Paper from "../../components/UI/Paper"
+import {AuthContext} from "../../context/AuthContext"
+import useDAO from "../../hooks/getters/useDAO"
 import useUser from "../../hooks/getters/useUser"
-import CreateDaoProposal from "../../components/DAO/CreateDaoProposal"
+import {formatDate} from "../../utlls"
+import "./styles.scss"
+import {parse} from "query-string"
+import {FunctionComponent, useContext} from "react"
+import {useHistory, useLocation, useParams} from "react-router-dom"
 
 type DAOAdminPage = "createNFT" | "edit" | "createProposal" | "expand"
-type DAOContentPage = "collection" | "about" | "members" | "proposals"
+type DAOContentPage = "collection" | "about" | "members" | "proposals" | "proposal"
 
 const menuEntries = [
 	{id: "collection", name: "Collection"},
@@ -202,6 +203,7 @@ const DAOPage: FunctionComponent = () => {
 						{page === "about" && <AboutDAO dao={dao} />}
 						{page === "members" && <DAOOwners owners={dao.owners} />}
 						{page === "proposals" && <DAOProposals gnosisAddress={dao.gnosisAddress} />}
+						{page === "proposal" && <Proposal />}
 						{page === "expand" && isAdmin && (
 							<ExpandDAO
 								gnosisAddress={dao.gnosisAddress}

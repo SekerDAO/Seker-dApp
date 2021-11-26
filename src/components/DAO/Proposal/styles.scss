@@ -1,0 +1,153 @@
+@import "../../../variables";
+
+.proposal {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 40px;
+  width: 880px;
+
+  &__transaction {
+    &-details {
+      margin-top: 20px;
+      padding-left: 10px;
+
+      .proposal__transaction-input {
+        margin-top: 0;
+      }
+
+      p {
+        margin-top: 10px;
+      }
+
+      span {
+        color: $dark-grey25;
+      }
+    }
+
+    + .divider {
+      margin: 20px 0;
+    }
+  }
+
+  &__header {
+    width: 100%;
+
+    &-title {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      height: 38px;
+    }
+
+    &-subtitle {
+      margin-top: 10px;
+
+      .tag {
+        margin-right: 10px;
+      }
+
+      span:not(.tag) {
+        color: $dark-grey50;
+        margin-right: 10px;
+      }
+    }
+
+    &-links {
+      margin-top: 20px;
+
+      p {
+        margin-top: 10px;
+
+        a {
+          color: $purple;
+          margin-left: 5px;
+        }
+      }
+    }
+  }
+
+  &__content {
+    width: 100%;
+
+    &-heading {
+      margin-top: 45px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+
+      .tag {
+        width: 55px;
+        margin-left: 10px;
+        background-color: $dark-grey;
+      }
+
+      span:not(.tag) {
+        color: $dark-grey50;
+      }
+    }
+
+    &-votes-cards {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    &-details {
+      display: flex;
+      align-items: flex-start;
+      margin-top: 40px;
+
+      &-left {
+        display: flex;
+        flex-wrap: wrap;
+        flex-grow: 1;
+        margin-right: 20px;
+
+        h2 {
+          width: 100%;
+        }
+
+        .expandable-container {
+          width: 100%;
+          margin-top: 10px;
+        }
+      }
+
+      &-right {
+        h2 {
+          width: 100%;
+        }
+
+        width: 280px;
+      }
+    }
+
+    &-participate {
+      padding: 20px;
+      display: flex;
+      flex-wrap: wrap;
+
+      &-step {
+        flex-grow: 1;
+        margin-left: 10px;
+
+        h3 {
+          margin: 10px 0;
+        }
+
+        .btn {
+          padding-left: 0;
+        }
+      }
+
+      .divider {
+        margin: 20px 0;
+        width: 100%;
+      }
+    }
+
+    &-vote-button {
+      width: 100%;
+    }
+  }
+}

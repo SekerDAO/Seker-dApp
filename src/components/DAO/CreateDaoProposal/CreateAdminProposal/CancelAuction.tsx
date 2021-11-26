@@ -1,10 +1,10 @@
-import {FunctionComponent, useContext, useState} from "react"
-import {Auction} from "../../../../types/auction"
-import Select from "../../../Controls/Select"
-import Button from "../../../Controls/Button"
-import {toastError, toastSuccess} from "../../../UI/Toast"
-import EthersContext from "../../../../context/EthersContext"
 import {AuthContext} from "../../../../context/AuthContext"
+import EthersContext from "../../../../context/EthersContext"
+import {Auction} from "../../../../types/auction"
+import Button from "../../../Controls/Button"
+import Select from "../../../Controls/Select"
+import {toastError, toastSuccess} from "../../../UI/Toast"
+import {FunctionComponent, useContext, useState} from "react"
 
 const CancelAuction: FunctionComponent<{
 	gnosisAddress: string

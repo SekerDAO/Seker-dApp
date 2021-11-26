@@ -1,6 +1,6 @@
 import GovToken from "../../abis/GovToken.json"
-import {JsonRpcSigner} from "@ethersproject/providers"
 import {ContractFactory} from "@ethersproject/contracts"
+import {JsonRpcSigner} from "@ethersproject/providers"
 import {parseEther} from "@ethersproject/units"
 
 const deployERC20Token = async (

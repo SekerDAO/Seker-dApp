@@ -1,5 +1,5 @@
-import firebase from "firebase"
 import {SafeTransaction} from "../api/ethers/functions/gnosisSafe/safeUtils"
+import firebase from "firebase"
 
 export type DAOFirebaseData = {
 	// Main properties, required at the moment of gnosis-safe deployment
