@@ -1,9 +1,9 @@
+import {ReactComponent as CloseIcon} from "../../assets/icons/delete.svg"
+import {NFTGalleryItemProps} from "../../types/NFT"
+import {formatReadableAddress} from "../../utlls"
+import "./styles.scss"
 import {FunctionComponent, MouseEvent} from "react"
 import {Link} from "react-router-dom"
-import "./styles.scss"
-import {NFTGalleryItemProps} from "../../types/NFT"
-import {ReactComponent as CloseIcon} from "../../assets/icons/delete.svg"
-import {formatReadableAddress} from "../../utlls"
 
 const GalleryItem: FunctionComponent<NFTGalleryItemProps> = ({
 	id,

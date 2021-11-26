@@ -1,11 +1,12 @@
-import {JsonRpcSigner} from "@ethersproject/providers"
-import OZLinearVoting from "../../abis/OZLinearVoting.json"
 import ModuleFactory from "../../abis/ModuleFactory.json"
-import {Contract} from "@ethersproject/contracts"
-import {defaultAbiCoder} from "@ethersproject/abi"
-import {keccak256} from "@ethersproject/solidity"
-import {getCreate2Address} from "@ethersproject/address"
+import OZLinearVoting from "../../abis/OZLinearVoting.json"
 import {buildContractCall, SafeTransaction} from "../gnosisSafe/safeUtils"
+import {defaultAbiCoder} from "@ethersproject/abi"
+import {getCreate2Address} from "@ethersproject/address"
+import {Contract} from "@ethersproject/contracts"
+import {JsonRpcSigner} from "@ethersproject/providers"
+import {keccak256} from "@ethersproject/solidity"
+
 const {REACT_APP_MODULE_FACTORY_ADDRESS, REACT_APP_OZ_LINEAR_MASTER_ADDRESS} = process.env
 
 const getOZLinearDeployTx = (

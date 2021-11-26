@@ -1,10 +1,10 @@
-import {FunctionComponent, useState} from "react"
-import Paper from "../../../UI/Paper"
+import {capitalize, formatReadableAddress} from "../../../../utlls"
 import Button from "../../../Controls/Button"
 import Modal from "../../../Modals/Modal"
-import "./styles.scss"
-import {capitalize, formatReadableAddress} from "../../../../utlls"
+import Paper from "../../../UI/Paper"
 import ProgressBar from "../../../UI/ProgressBar"
+import "./styles.scss"
+import {FunctionComponent, useState} from "react"
 
 type VotesCardProps = {
 	type: "for" | "against" | "abstain"

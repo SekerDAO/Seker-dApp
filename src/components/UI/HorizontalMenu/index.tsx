@@ -1,5 +1,5 @@
-import {FunctionComponent} from "react"
 import "./styles.scss"
+import {FunctionComponent} from "react"
 
 // TODO: From new UI it pretty much looks like Tabs and not really Menu, makes sense to refactor that
 const HorizontalMenu: FunctionComponent<{

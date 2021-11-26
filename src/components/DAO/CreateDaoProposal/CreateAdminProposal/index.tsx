@@ -1,13 +1,13 @@
-import {FunctionComponent, useState} from "react"
-import Select from "../../../Controls/Select"
-import "./styles.scss"
-import ChangeRole from "./ChangeRole"
 import {SafeProposalsTypeNames, SafeProposalType} from "../../../../types/safeProposal"
-import CreateAuction from "./CreateAuction"
-import CancelAuction from "./CancelAuction"
-import GeneralEVM from "./GeneralEVM"
 import Input from "../../../Controls/Input"
+import Select from "../../../Controls/Select"
 import Divider from "../../../UI/Divider"
+import CancelAuction from "./CancelAuction"
+import ChangeRole from "./ChangeRole"
+import CreateAuction from "./CreateAuction"
+import GeneralEVM from "./GeneralEVM"
+import "./styles.scss"
+import {FunctionComponent, useState} from "react"
 
 const CreateAdminProposal: FunctionComponent<{
 	gnosisAddress: string

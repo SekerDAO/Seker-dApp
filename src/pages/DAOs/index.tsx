@@ -1,12 +1,12 @@
-import {FunctionComponent, useState} from "react"
+import Button from "../../components/Controls/Button"
+import SearchInput from "../../components/Controls/Input/SearchInput"
+import DAOList from "../../components/DAOList"
+import ErrorPlaceholder from "../../components/UI/ErrorPlaceholder"
+import Loader from "../../components/UI/Loader"
 import useDAOs from "../../hooks/getters/useDAOs"
 import {DAOSnapshot} from "../../types/DAO"
-import Loader from "../../components/UI/Loader"
-import ErrorPlaceholder from "../../components/UI/ErrorPlaceholder"
-import DAOList from "../../components/DAOList"
-import Button from "../../components/Controls/Button"
 import "./styles.scss"
-import SearchInput from "../../components/Controls/Input/SearchInput"
+import {FunctionComponent, useState} from "react"
 
 const DAOsPage: FunctionComponent = () => {
 	const [cursor, setCursor] = useState<DAOSnapshot | null>(null)

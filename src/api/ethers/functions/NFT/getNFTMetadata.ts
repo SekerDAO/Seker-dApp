@@ -1,7 +1,7 @@
-import {JsonRpcProvider} from "@ethersproject/providers"
-import {Contract} from "@ethersproject/contracts"
-import MultiArtToken from "../../abis/MultiArtToken.json"
 import {NFTMetadata} from "../../../../types/NFT"
+import MultiArtToken from "../../abis/MultiArtToken.json"
+import {Contract} from "@ethersproject/contracts"
+import {JsonRpcProvider} from "@ethersproject/providers"
 
 const getNFTMetadata = async (
 	nftAddress: string,

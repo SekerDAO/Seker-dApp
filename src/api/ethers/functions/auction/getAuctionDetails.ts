@@ -1,9 +1,10 @@
-import {JsonRpcProvider} from "@ethersproject/providers"
-import {Contract} from "@ethersproject/contracts"
-import Auction from "../../abis/Auction.json"
 import {AuctionEthersData} from "../../../../types/auction"
-import {formatEther} from "@ethersproject/units"
+import Auction from "../../abis/Auction.json"
 import {AddressZero} from "@ethersproject/constants"
+import {Contract} from "@ethersproject/contracts"
+import {JsonRpcProvider} from "@ethersproject/providers"
+import {formatEther} from "@ethersproject/units"
+
 const {REACT_APP_ZORA_ADDRESS} = process.env
 
 const getAuctionDetails = async (

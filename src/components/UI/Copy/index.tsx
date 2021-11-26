@@ -1,7 +1,7 @@
-import {FunctionComponent} from "react"
 import {ReactComponent as CopyIcon} from "../../../assets/icons/copy-white.svg"
 import {toastSuccess} from "../Toast"
 import "./styles.scss"
+import {FunctionComponent} from "react"
 
 const CopyField: FunctionComponent<{value?: string | null}> = ({children, value}) => {
 	const handleCopy = () => {

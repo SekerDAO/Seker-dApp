@@ -1,6 +1,6 @@
-import {FunctionComponent, InputHTMLAttributes} from "react"
-import Input from "./index"
 import {ReactComponent as SearchIcon} from "../../../assets/icons/search.svg"
+import Input from "./index"
+import {FunctionComponent, InputHTMLAttributes} from "react"
 
 const SearchInput: FunctionComponent<
 	Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "placeholder">

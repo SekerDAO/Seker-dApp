@@ -1,7 +1,5 @@
-import MultiSend from "../../abis/MultiSend.json"
 import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
-import {Contract} from "@ethersproject/contracts"
-import {JsonRpcSigner} from "@ethersproject/providers"
+import MultiSend from "../../abis/MultiSend.json"
 import {
 	buildMultiSendSafeTx,
 	executeTx,
@@ -9,6 +7,9 @@ import {
 	safeSignMessage,
 	SafeTransaction
 } from "../gnosisSafe/safeUtils"
+import {Contract} from "@ethersproject/contracts"
+import {JsonRpcSigner} from "@ethersproject/providers"
+
 const {REACT_APP_MULTI_SEND_ADDRESS} = process.env
 
 export const buildMultiSendTx = async (

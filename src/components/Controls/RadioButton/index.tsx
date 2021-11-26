@@ -1,5 +1,5 @@
-import {FunctionComponent, InputHTMLAttributes} from "react"
 import "./styles.scss"
+import {FunctionComponent, InputHTMLAttributes} from "react"
 
 const RadioButton: FunctionComponent<
 	{

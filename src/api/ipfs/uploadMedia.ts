@@ -1,6 +1,6 @@
-import client from "./client"
-import createImage from "../../utlls/createImage"
 import {NFTMetadata} from "../../types/NFT"
+import createImage from "../../utlls/createImage"
+import client from "./client"
 
 const uploadMedia = async (
 	file: File,

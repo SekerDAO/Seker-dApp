@@ -1,22 +1,22 @@
-import {FunctionComponent, useContext, useEffect, useState} from "react"
 import {buildMultiSendTx} from "../../../../api/ethers/functions/Usul/multiSend"
-import ExpandDaoLayout from "../ExpandDaoLayout"
-import {BuiltVotingStrategy} from "../../../../types/DAO"
-import ChooseVotingStrategies from "../ChooseVotingStrategies"
 import {
-	buildSeeleDeployTxSequence,
+	buildUsulDeployTxSequence,
 	SafeTransaction
 } from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
 import EthersContext from "../../../../context/EthersContext"
-import ConfirmDeploySeele from "../ReviewDeploySeele"
 import useProposals from "../../../../hooks/getters/useProposals"
+import {BuiltVotingStrategy} from "../../../../types/DAO"
 import ErrorPlaceholder from "../../../UI/ErrorPlaceholder"
+import ChooseVotingStrategies from "../ChooseVotingStrategies"
+import ConfirmDeployUsul from "../ConfirmDeployUsul"
+import ExpandDaoLayout from "../ExpandDaoLayout"
+import {FunctionComponent, useContext, useEffect, useState} from "react"
 
 type ExpandDaoStage = "chooseStrategies" | "confirm"
 
 const STAGE_HEADERS: {[key in ExpandDaoStage]: {title?: string; description?: string}} = {
 	chooseStrategies: {
-		title: "Seele",
+		title: "Usul",
 		description: `This module allows avatars to operate with trustless tokenized DeGov, similar to Compound
         or Gitcoin, with a proposal core that can register swappable voting contracts. This
         enables DAOs to choose from various on-chain voting methods that best suit their needs.
@@ -31,7 +31,7 @@ const STAGE_HEADERS: {[key in ExpandDaoStage]: {title?: string; description?: st
 	}
 }
 
-const DeploySeele: FunctionComponent<{
+const DeployUsul: FunctionComponent<{
 	gnosisAddress: string
 	gnosisVotingThreshold: number
 }> = ({gnosisAddress, gnosisVotingThreshold}) => {
@@ -40,14 +40,14 @@ const DeploySeele: FunctionComponent<{
 	const [strategies, setStrategies] = useState<BuiltVotingStrategy[]>([])
 	const [transactions, setTransactions] = useState<{tx: SafeTransaction; name: string}[]>([])
 	const [multiTx, setMultiTx] = useState<SafeTransaction>()
-	const [expectedSeeleAddress, setExpectedSeeleAddress] = useState("")
+	const [expectedUsulAddress, setExpectedUsulAddress] = useState("")
 	const {proposals, error} = useProposals(gnosisAddress)
 
 	useEffect(() => {
 		if (signer) {
-			buildSeeleDeployTxSequence(strategies, gnosisAddress, signer).then(res => {
+			buildUsulDeployTxSequence(strategies, gnosisAddress, signer).then(res => {
 				setTransactions(res.transactions)
-				setExpectedSeeleAddress(res.expectedSeeleAddress)
+				setExpectedUsulAddress(res.expectedUsulAddress)
 			})
 		}
 	}, [strategies, gnosisAddress, signer])
@@ -99,12 +99,12 @@ const DeploySeele: FunctionComponent<{
 				/>
 			)}
 			{stage === "confirm" && (
-				<ConfirmDeploySeele
+				<ConfirmDeployUsul
 					multiTx={multiTx}
 					transactions={transactions}
 					gnosisAddress={gnosisAddress}
 					gnosisVotingThreshold={gnosisVotingThreshold}
-					expectedSeeleAddress={expectedSeeleAddress}
+					expectedUsulAddress={expectedUsulAddress}
 					afterSubmit={() => {
 						// TODO: Redirect to proposal details page
 						console.log("TODO")
@@ -115,4 +115,4 @@ const DeploySeele: FunctionComponent<{
 	)
 }
 
-export default DeploySeele
+export default DeployUsul

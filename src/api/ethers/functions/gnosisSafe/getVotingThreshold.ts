@@ -1,5 +1,5 @@
-import {Contract} from "@ethersproject/contracts"
 import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
+import {Contract} from "@ethersproject/contracts"
 import {JsonRpcProvider} from "@ethersproject/providers"
 
 const getVotingThreshold = async (

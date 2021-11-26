@@ -1,10 +1,10 @@
-import {FunctionComponent, useState} from "react"
-import Modal from "../Modal"
-import Button from "../../Controls/Button"
 import {ReactComponent as BookmarkIcon} from "../../../assets/icons/bookmark.svg"
-import Divider from "../../UI/Divider"
+import Button from "../../Controls/Button"
 import Input from "../../Controls/Input"
+import Divider from "../../UI/Divider"
+import Modal from "../Modal"
 import "./styles.scss"
+import {FunctionComponent, useState} from "react"
 
 const BookmarkDAOModal: FunctionComponent<{
 	onSubmit: (daoAddress: string) => void

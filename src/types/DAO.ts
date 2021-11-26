@@ -1,5 +1,5 @@
-import firebase from "firebase"
 import {SafeTransaction} from "../api/ethers/functions/gnosisSafe/safeUtils"
+import firebase from "firebase"
 
 export type DAOFirebaseData = {
 	// Main properties, required at the moment of gnosis-safe deployment
@@ -14,8 +14,8 @@ export type DAOFirebaseData = {
 	discord?: string
 	profileImage?: string
 	headerImage?: string
-	// Created after deploying Seele module
-	seeleAddress?: string
+	// Created after deploying Usul module
+	usulAddress?: string
 }
 
 type DAOEthersData = {

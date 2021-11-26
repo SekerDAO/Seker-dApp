@@ -1,7 +1,7 @@
-import {useContext, useEffect, useState} from "react"
-import {DAOQueryParams, DAOSnapshot} from "../../types/DAO"
 import getDAOs from "../../api/firebase/DAO/getDAOs"
 import EthersContext from "../../context/EthersContext"
+import {DAOQueryParams, DAOSnapshot} from "../../types/DAO"
+import {useContext, useEffect, useState} from "react"
 
 const useDAOs = ({
 	limit,

@@ -1,10 +1,11 @@
-import {createContext, useContext, useEffect, useState} from "react"
-import decode from "jwt-decode"
-import EthersContext from "./EthersContext"
-import firebase from "firebase"
 import getUser from "../api/firebase/user/getUser"
-import {Web3Provider} from "@ethersproject/providers"
+import EthersContext from "./EthersContext"
 import {BigNumberish} from "@ethersproject/bignumber"
+import {Web3Provider} from "@ethersproject/providers"
+import firebase from "firebase"
+import decode from "jwt-decode"
+import {createContext, useContext, useEffect, useState} from "react"
+
 const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
 type AuthContext = {

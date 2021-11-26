@@ -1,25 +1,25 @@
-import {FunctionComponent, useState} from "react"
 import {ReactComponent as GnosisSafeIcon} from "../../../assets/icons/gnosis-safe.svg"
-import ExpandDaoLayout from "./ExpandDaoLayout"
-import DeploySeele from "./DeploySeele"
-import "./styles.scss"
 import {toastWarning} from "../../UI/Toast"
+import DeployUsul from "./DeployUsul"
+import ExpandDaoLayout from "./ExpandDaoLayout"
+import "./styles.scss"
+import {FunctionComponent, useState} from "react"
 
 const DESCRIPTION =
 	"Modules are your way of customizing, upgrading, and expanding your DAO. Here you can choose to swap voting strategies, add multiple strategies, or remove a strategy at any time. You can also introduce the Zodiac modules Bridge (for a constellation of voting strategies across chains), Exit (for a Moloch-style rage quit assigned to different asset holders), or Photon (a way to enact governance at the speed of light — coming soon)."
 
 const ExpandDAO: FunctionComponent<{
 	gnosisAddress: string
-	seeleAddress?: string
+	usulAddress?: string
 	gnosisVotingThreshold: number
-}> = ({gnosisAddress, seeleAddress, gnosisVotingThreshold}) => {
-	const [stage, setStage] = useState<"choose" | "seele" | "bridge">("choose")
+}> = ({gnosisAddress, usulAddress, gnosisVotingThreshold}) => {
+	const [stage, setStage] = useState<"choose" | "usul" | "bridge">("choose")
 
-	const handleSelectSeele = () => {
-		if (seeleAddress) {
-			toastWarning("Seele module already deployed.")
+	const handleSelectUsul = () => {
+		if (usulAddress) {
+			toastWarning("Usul module already deployed.")
 		} else {
-			setStage("seele")
+			setStage("usul")
 		}
 	}
 	return (
@@ -32,19 +32,19 @@ const ExpandDAO: FunctionComponent<{
 						</div>
 						<div className="expand-dao__modules-connectable">
 							<div
-								className={`expand-dao__modules-seele${
-									seeleAddress ? " expand-dao__modules-seele--deployed" : ""
+								className={`expand-dao__modules-usul${
+									usulAddress ? " expand-dao__modules-usul--deployed" : ""
 								}`}
-								onClick={handleSelectSeele}
+								onClick={handleSelectUsul}
 							>
-								<h2>Seele</h2>
+								<h2>Usul</h2>
 							</div>
 						</div>
 					</div>
 				</ExpandDaoLayout>
 			)}
-			{stage === "seele" && (
-				<DeploySeele gnosisAddress={gnosisAddress} gnosisVotingThreshold={gnosisVotingThreshold} />
+			{stage === "usul" && (
+				<DeployUsul gnosisAddress={gnosisAddress} gnosisVotingThreshold={gnosisVotingThreshold} />
 			)}
 		</section>
 	)

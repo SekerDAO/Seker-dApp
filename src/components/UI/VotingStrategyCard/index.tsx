@@ -1,7 +1,7 @@
-import {FunctionComponent} from "react"
-import Paper from "../Paper"
 import {ReactComponent as WarningIcon} from "../../../assets/icons/warning.svg"
+import Paper from "../Paper"
 import "./styles.scss"
+import {FunctionComponent} from "react"
 
 const VotingStrategyCard: FunctionComponent<{
 	title: string

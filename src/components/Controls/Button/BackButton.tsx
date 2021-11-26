@@ -1,6 +1,6 @@
-import {FunctionComponent} from "react"
-import Button from "./"
 import {ReactComponent as ArrowDown} from "../../../assets/icons/arrow-down.svg"
+import Button from "./"
+import {FunctionComponent} from "react"
 
 const BackButton: FunctionComponent<{onClick: () => void}> = ({onClick}) => (
 	<Button onClick={onClick} buttonType="link" extraClassName="back-button">

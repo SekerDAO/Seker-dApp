@@ -1,8 +1,8 @@
-import {FunctionComponent, useState, ChangeEventHandler, KeyboardEventHandler} from "react"
 import {ReactComponent as CloseIcon} from "../../../assets/icons/delete.svg"
-import Input from "../Input"
 import Button from "../Button"
+import Input from "../Input"
 import "./styles.scss"
+import {FunctionComponent, useState, ChangeEventHandler, KeyboardEventHandler} from "react"
 
 const ArrayInput: FunctionComponent<{
 	onAdd: (newValue: string) => void

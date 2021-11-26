@@ -1,45 +1,45 @@
-import {Fragment, FunctionComponent, useContext, useMemo, useState} from "react"
-import {Link, useLocation, useHistory} from "react-router-dom"
-import EthersContext from "../../../context/EthersContext"
-import {AuthContext} from "../../../context/AuthContext"
-import {SafeSignature} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
+import {executeMultiSend, signMultiSend} from "../../../api/ethers/functions/Usul/multiSend"
 import {
 	executeApproveNFTForAuction,
 	signApproveNFTForAuction
 } from "../../../api/ethers/functions/auction/approveNFTForAuction"
 import {
-	executeCreateAuction,
-	signCreateAuction
-} from "../../../api/ethers/functions/auction/createAuction"
-import {
 	executeCancelAuction,
 	signCancelAuction
 } from "../../../api/ethers/functions/auction/cancelAuction"
+import {
+	executeCreateAuction,
+	signCreateAuction
+} from "../../../api/ethers/functions/auction/createAuction"
 import {
 	executeAddOwner,
 	executeRemoveOwner,
 	signAddOwner,
 	signRemoveOwner
 } from "../../../api/ethers/functions/gnosisSafe/addRemoveOwner"
-import addSafeProposalSignature from "../../../api/firebase/safeProposal/addSafeProposalSignatures"
-import {toastError, toastSuccess} from "../../UI/Toast"
-import "./styles.scss"
-import useProposal from "../../../hooks/getters/useProposal"
-import Loader from "../../UI/Loader"
-import ErrorPlaceholder from "../../UI/ErrorPlaceholder"
-import {executeMultiSend, signMultiSend} from "../../../api/ethers/functions/Usul/multiSend"
+import {SafeSignature} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
 import editDAO from "../../../api/firebase/DAO/editDAO"
-import Tag from "../../UI/Tag"
-import {capitalize, formatReadableAddress} from "../../../utlls"
-import BackButton from "../../Controls/Button/BackButton"
-import ProposalVotes from "./VotesCard"
-import Expandable from "../../UI/Expandable"
-import Divider from "../../UI/Divider"
-import Paper from "../../UI/Paper"
-import CopyField from "../../UI/Copy"
-import Button from "../../Controls/Button"
-import {ReactComponent as WrapTokenDone} from "../../../assets/icons/wrap-token-done.svg"
+import addSafeProposalSignature from "../../../api/firebase/safeProposal/addSafeProposalSignatures"
 import {ReactComponent as DelegateTokenDone} from "../../../assets/icons/delegate-token-done.svg"
+import {ReactComponent as WrapTokenDone} from "../../../assets/icons/wrap-token-done.svg"
+import {AuthContext} from "../../../context/AuthContext"
+import EthersContext from "../../../context/EthersContext"
+import useProposal from "../../../hooks/getters/useProposal"
+import {capitalize, formatReadableAddress} from "../../../utlls"
+import Button from "../../Controls/Button"
+import BackButton from "../../Controls/Button/BackButton"
+import CopyField from "../../UI/Copy"
+import Divider from "../../UI/Divider"
+import ErrorPlaceholder from "../../UI/ErrorPlaceholder"
+import Expandable from "../../UI/Expandable"
+import Loader from "../../UI/Loader"
+import Paper from "../../UI/Paper"
+import Tag from "../../UI/Tag"
+import {toastError, toastSuccess} from "../../UI/Toast"
+import ProposalVotes from "./VotesCard"
+import "./styles.scss"
+import {Fragment, FunctionComponent, useContext, useMemo, useState} from "react"
+import {Link, useLocation, useHistory} from "react-router-dom"
 
 // TODO: Get votes from proposal info
 const MOCK_VOTES = [
@@ -193,8 +193,8 @@ const Proposal: FunctionComponent = () => {
 					if (!proposal.multiTx) {
 						throw new Error("Unexpected empty mulitTx in proposal")
 					}
-					if (!proposal.seeleAddress) {
-						throw new Error("Unexpected empty seeleAddress in proposal")
+					if (!proposal.usulAddress) {
+						throw new Error("Unexpected empty usulAddress in proposal")
 					}
 					;[signature] = await signMultiSend(proposal.multiTx, proposal.gnosisAddress, signer)
 					if (proposal.signatures?.length === gnosisVotingThreshold - 1) {
@@ -206,7 +206,7 @@ const Proposal: FunctionComponent = () => {
 						)
 						await editDAO({
 							gnosisAddress: proposal.gnosisAddress,
-							seeleAddress: proposal.seeleAddress
+							usulAddress: proposal.usulAddress
 						})
 						executed = true
 					}

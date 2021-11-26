@@ -1,15 +1,15 @@
-import {Contract, ContractInterface} from "@ethersproject/contracts"
-import {_TypedDataEncoder} from "@ethersproject/hash"
+import {BuiltVotingStrategy} from "../../../../types/DAO"
+import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
+import getOZLinearSetUsul from "../Usul/getOZLinearSetUsul"
+import getRegisterUsulTx from "../Usul/getRegisterUsulTx"
+import getUsulDeploy from "../Usul/getUsulDeploy"
 import {BigNumber, BigNumberish} from "@ethersproject/bignumber"
 import {arrayify} from "@ethersproject/bytes"
 import {AddressZero} from "@ethersproject/constants"
-import {pack} from "@ethersproject/solidity"
+import {Contract, ContractInterface} from "@ethersproject/contracts"
+import {_TypedDataEncoder} from "@ethersproject/hash"
 import {JsonRpcProvider, JsonRpcSigner, TransactionResponse} from "@ethersproject/providers"
-import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
-import {BuiltVotingStrategy} from "../../../../types/DAO"
-import getUsulDeploy from "../Usul/getUsulDeploy"
-import getRegisterUsulTx from "../Usul/getRegisterUsulTx"
-import getOZLinearSetUsul from "../Usul/getOZLinearSetUsul"
+import {pack} from "@ethersproject/solidity"
 
 const EIP712_SAFE_TX_TYPE = {
 	SafeTx: [
@@ -251,41 +251,41 @@ export const safeApproveHash = async (
 	}
 }
 
-export const buildSeeleDeployTxSequence = async (
+export const buildUsulDeployTxSequence = async (
 	strategies: BuiltVotingStrategy[],
 	gnosisAddress: string,
 	signer: JsonRpcSigner
-): Promise<{transactions: {tx: SafeTransaction; name: string}[]; expectedSeeleAddress: string}> => {
+): Promise<{transactions: {tx: SafeTransaction; name: string}[]; expectedUsulAddress: string}> => {
 	if (strategies.length === 0)
 		return {
 			transactions: [],
-			expectedSeeleAddress: ""
+			expectedUsulAddress: ""
 		}
-	const {tx: deploySeeleTx, expectedAddress: expectedSeeleAddress} = getUsulDeploy(
+	const {tx: deployUsulTx, expectedAddress: expectedUsulAddress} = getUsulDeploy(
 		gnosisAddress,
 		strategies.map(strategy => strategy.expectedAddress),
 		signer
 	)
-	const setSeeleTransactions = strategies.map(strategy => {
+	const setUsulTransactions = strategies.map(strategy => {
 		switch (strategy.strategy) {
 			case "linearVoting":
 				return {
-					tx: getOZLinearSetUsul(expectedSeeleAddress, strategy.expectedAddress, signer),
-					name: "OzLinearSetSeele"
+					tx: getOZLinearSetUsul(expectedUsulAddress, strategy.expectedAddress, signer),
+					name: "OzLinearSetUsul"
 				}
 			default:
 				throw new Error("This strategy is not supported yet")
 		}
 	})
-	const registerSeeleTx = await getRegisterUsulTx(gnosisAddress, expectedSeeleAddress, signer)
+	const registerUsulTx = await getRegisterUsulTx(gnosisAddress, expectedUsulAddress, signer)
 	return {
 		transactions: [
 			...strategies.map(strategy => ({tx: strategy.tx, name: strategy.strategy})),
-			{tx: deploySeeleTx, name: "deploySeele"},
-			...setSeeleTransactions,
-			{tx: registerSeeleTx, name: "registerSeele"}
+			{tx: deployUsulTx, name: "deployUsul"},
+			...setUsulTransactions,
+			{tx: registerUsulTx, name: "registerUsul"}
 		],
-		expectedSeeleAddress
+		expectedUsulAddress
 	}
 }
 

@@ -1,9 +1,9 @@
-import {FunctionComponent} from "react"
 import {SafeTransaction} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
 import {formatReadableAddress} from "../../../utlls"
 import CopyField from "../../UI/Copy"
 import Modal from "../Modal"
 import "./styles.scss"
+import {FunctionComponent} from "react"
 
 const TransactionDetailsModal: FunctionComponent<{
 	show: boolean

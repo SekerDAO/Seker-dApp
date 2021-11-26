@@ -1,4 +1,5 @@
 import firebase from "firebase"
+
 const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
 const updateDAOImage = async (

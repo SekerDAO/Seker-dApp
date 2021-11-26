@@ -5,6 +5,7 @@ import {
 	JsonRpcProvider
 } from "@ethersproject/providers"
 import {createContext, useEffect, useRef, useState} from "react"
+
 const {REACT_APP_INFURA_NETWORK, REACT_APP_INFURA_ID} = process.env
 
 type EthersContext = {

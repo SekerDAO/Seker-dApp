@@ -1,7 +1,7 @@
-import {FunctionComponent} from "react"
-import {Link} from "react-router-dom"
 import {DAOListItemProps} from "../../types/DAO"
 import "./styles.scss"
+import {FunctionComponent} from "react"
+import {Link} from "react-router-dom"
 
 const DAOListItem: FunctionComponent<DAOListItemProps> = ({
 	gnosisAddress,
