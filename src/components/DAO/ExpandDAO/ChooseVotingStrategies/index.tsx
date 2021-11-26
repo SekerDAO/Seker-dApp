@@ -42,13 +42,12 @@ const ChooseVotingStrategies: FunctionComponent<{
 				Number(votingPeriod) > 1 &&
 				signer
 			) {
-				const {tx, expectedAddress} = await getOZLinearDeployTx(
+				const {tx, expectedAddress} = getOZLinearDeployTx(
 					gnosisAddress,
 					erc20TokenAddress,
 					Number(quorumThreshold),
 					Number(delay),
 					Number(votingPeriod),
-					"DeployLinear",
 					signer
 				)
 				onStrategyAdd({strategy, tx, expectedAddress})

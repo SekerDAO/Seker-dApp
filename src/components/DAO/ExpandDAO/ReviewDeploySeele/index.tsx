@@ -74,7 +74,10 @@ const ConfirmDeploySeele: FunctionComponent<{
 		setLoading(false)
 	}
 
-	const transactionsTotal = transactions.reduce((current, {tx: {value}}) => current + +value, 0)
+	const transactionsTotal = transactions.reduce(
+		(current, {tx: {value}}) => current + Number(value),
+		0
+	)
 	return (
 		<Paper className="confirm-deploy-seele">
 			<div className="confirm-deploy-seele__general-data">
@@ -101,9 +104,9 @@ const ConfirmDeploySeele: FunctionComponent<{
 				</div>
 			</div>
 			<ul className="confirm-deploy-seele__transaction-list">
-				{transactions.map(({tx, name}) => (
+				{transactions.map(({tx, name}, index) => (
 					<li
-						key={tx.data}
+						key={index}
 						className="confirm-deploy-seele__transaction-row"
 						onClick={() => setOpenedTxDetails({tx, name})}
 					>
@@ -148,7 +151,7 @@ const ConfirmDeploySeele: FunctionComponent<{
 			>
 				{loading
 					? "Submitting..."
-					: gnosisVotingThreshold
+					: gnosisVotingThreshold === 1
 					? "Confirm and Deploy Seele"
 					: "Confirm and Create Proposal"}
 			</Button>

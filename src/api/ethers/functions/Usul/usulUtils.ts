@@ -1,22 +1,29 @@
-import {JsonRpcSigner} from "@ethersproject/providers"
+import {JsonRpcProvider, JsonRpcSigner} from "@ethersproject/providers"
 import Usul from "../../abis/Usul.json"
 import OZLinearVoting from "../../abis/OZLinearVoting.json"
 import {Contract} from "@ethersproject/contracts"
 import {SafeTransaction} from "../gnosisSafe/safeUtils"
+import {VotingStrategy} from "../../../../types/DAO"
 
-export const getStrategiesAddresses = async (
+export const getStrategies = async (
 	usulAddress: string,
-	signer: JsonRpcSigner
-): Promise<string[]> => {
-	const usulProxy = new Contract(usulAddress, Usul.abi, signer)
-	return usulProxy.getStrategiesPaginated("0x0000000000000000000000000000000000000001", 10)
+	provider: JsonRpcProvider
+): Promise<VotingStrategy[]> => {
+	const usulProxy = new Contract(usulAddress, Usul.abi, provider)
+	const addresses = await usulProxy.getStrategiesPaginated(
+		"0x0000000000000000000000000000000000000001",
+		10
+	)
+	return Promise.all(
+		addresses[0].map(async (address: string) => inspectStrategy(address, provider))
+	)
 }
 
 export const inspectStrategy = async (
 	strategyAddress: string,
-	signer: JsonRpcSigner
+	provider: JsonRpcProvider
 ): Promise<string> => {
-	const strategy = new Contract(strategyAddress, OZLinearVoting.abi, signer)
+	const strategy = new Contract(strategyAddress, OZLinearVoting.abi, provider)
 	return strategy.name()
 }
 

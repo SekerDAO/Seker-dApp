@@ -85,20 +85,18 @@ const buildSafeTransaction = (template: {
 	gasToken?: string
 	refundReceiver?: string
 	nonce: number
-}): SafeTransaction => {
-	return {
-		to: template.to,
-		value: template.value || 0,
-		data: template.data || "0x",
-		operation: template.operation || 0,
-		safeTxGas: template.safeTxGas || 0,
-		baseGas: template.baseGas || 0,
-		gasPrice: template.gasPrice || 0,
-		gasToken: template.gasToken || AddressZero,
-		refundReceiver: template.refundReceiver || AddressZero,
-		nonce: template.nonce
-	}
-}
+}): SafeTransaction => ({
+	to: template.to,
+	value: template.value || 0,
+	data: template.data || "0x",
+	operation: template.operation || 0,
+	safeTxGas: template.safeTxGas || 0,
+	baseGas: template.baseGas || 0,
+	gasPrice: template.gasPrice || 0,
+	gasToken: template.gasToken || AddressZero,
+	refundReceiver: template.refundReceiver || AddressZero,
+	nonce: template.nonce
+})
 
 export const buildContractCall = (
 	contract: Contract,
@@ -218,18 +216,16 @@ const encodeMetaTransaction = (tx: MetaTransaction): string => {
 	return encoded.slice(2)
 }
 
-export const encodeMultiSend = (txs: MetaTransaction[]): string => {
-	return "0x" + txs.map(tx => encodeMetaTransaction(tx)).join("")
-}
+export const encodeMultiSend = (txs: MetaTransaction[]): string =>
+	"0x" + txs.map(tx => encodeMetaTransaction(tx)).join("")
 
 export const buildMultiSendSafeTx = (
 	multiSend: Contract,
 	txs: MetaTransaction[],
 	nonce: number,
 	overrides?: Partial<SafeTransaction>
-): SafeTransaction => {
-	return buildContractCall(multiSend, "multiSend", [encodeMultiSend(txs)], nonce, true, overrides)
-}
+): SafeTransaction =>
+	buildContractCall(multiSend, "multiSend", [encodeMultiSend(txs)], nonce, true, overrides)
 
 export const safeApproveHash = async (
 	signer: JsonRpcSigner,

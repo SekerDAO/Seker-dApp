@@ -8,7 +8,7 @@
       "jsx": true
     }
   },
-  "plugins": ["import"],
+  "plugins": ["import", "prefer-arrow"],
   "ignorePatterns": ["node_modules/**/*"],
   "settings": {
     "react": {
@@ -23,7 +23,6 @@
     "prettier"
   ],
   "rules": {
-    "@typescript-eslint/explicit-function-return-type": "off",
     "prettier/prettier": ["error", {
       "semi": false,
       "singleQuote": false,
@@ -40,7 +39,7 @@
         "allow": ["error"]
       }
     ],
-    "no-alert": "warn",
+    "no-alert": "error",
     "no-debugger": "error",
     "import/no-extraneous-dependencies": ["error", { "devDependencies": false }],
     "react/prop-types": 0,
@@ -49,6 +48,36 @@
     "@typescript-eslint/no-explicit-any": "warn",
     "no-shadow": "error",
     "react/jsx-uses-react": "off",
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "prefer-promise-reject-errors": "error",
+    "prefer-const": ["error", {
+      "destructuring": "all",
+      "ignoreReadBeforeAssign": false
+    }],
+    "import/extensions": ["error", {"tsx": "never", "json": "always", "scss": "always"}],
+    "import/no-unresolved": "off", // does not work with foo/index.ts
+    "no-bitwise": "error",
+    "@typescript-eslint/no-shadow": "error",
+    "no-array-constructor": "error",
+    "no-caller": "error",
+    "no-class-assign": "error",
+    "no-cond-assign": "error",
+    "no-useless-escape": "error",
+    "no-useless-return": "error",
+    "no-duplicate-case": "error",
+    "no-duplicate-imports": "error",
+    "no-dupe-args": "error",
+    "no-dupe-keys": "error",
+    "no-unused-expressions": "error",
+    "arrow-body-style": ["error", "as-needed"],
+    "prefer-arrow/prefer-arrow-functions": [
+      "error",
+      {
+        "disallowPrototype": true,
+        "singleReturnOnly": false,
+        "classPropertiesAllowed": false
+      }
+    ],
+    "@typescript-eslint/no-var-requires": "error"
   }
 }
