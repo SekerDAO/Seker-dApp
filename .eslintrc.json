@@ -84,6 +84,7 @@
     "react/jsx-props-no-spreading": ["error", {
       "html": "ignore"
     }],
-    "no-implicit-coercion": ["error", {"boolean": false}]
+    "no-implicit-coercion": ["error", {"boolean": false}],
+    "no-param-reassign": ["error", {"props":  true}]
   }
 }
