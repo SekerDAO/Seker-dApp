@@ -148,6 +148,15 @@
         margin: 20px 0;
         width: 100%;
       }
+
+      &-warning {
+        display: flex;
+        margin-top: 20px;
+
+        svg {
+          margin-right: 10px;
+        }
+      }
     }
 
     &-vote-button {

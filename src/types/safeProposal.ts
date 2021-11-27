@@ -18,7 +18,7 @@ export const SafeProposalsTypeNames = {
 	decentralizeDAO: "Decentralize DAO"
 } as const
 
-export type SafeProposalState = "active" | "executed" | "outdated"
+export type SafeProposalState = "active" | "executed" | "outdated" | "executing"
 
 export type SafeProposal = {
 	id?: number
