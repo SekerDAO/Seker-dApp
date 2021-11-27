@@ -115,10 +115,13 @@ const Proposal: FunctionComponent = () => {
 							<ProposalVotes
 								fullWidth
 								type="for"
-								value={5}
-								totalValue={6}
-								votes={MOCK_ADMIN_VOTES}
-								votingStrategy={MOCK_VOTING_STRATEGY}
+								value={proposal.signatures.length}
+								totalValue={gnosisVotingThreshold || proposal.signatures.length}
+								votes={proposal.signatures.map(signature => ({
+									address: signature.signer,
+									tokens: 1
+								}))}
+								votingStrategy={"admin"}
 							/>
 						) : (
 							<>

@@ -85,19 +85,23 @@ const ProposalVotes: FunctionComponent<VotesCardProps & {fullWidth?: boolean}> =
 				totalValue={totalValue}
 				votingStrategy={votingStrategy}
 			>
-				<Button buttonType="link" onClick={() => setShowModal(true)}>
-					View More
-				</Button>
+				{votes.length > 3 && (
+					<Button buttonType="link" onClick={() => setShowModal(true)}>
+						View More
+					</Button>
+				)}
 			</VotesCard>
-			<Modal show={showModal} onClose={() => setShowModal(false)}>
-				<VotesCard
-					votes={votes}
-					type={type}
-					value={value}
-					totalValue={totalValue}
-					votingStrategy={votingStrategy}
-				/>
-			</Modal>
+			{votes.length > 3 && (
+				<Modal show={showModal} onClose={() => setShowModal(false)}>
+					<VotesCard
+						votes={votes}
+						type={type}
+						value={value}
+						totalValue={totalValue}
+						votingStrategy={votingStrategy}
+					/>
+				</Modal>
+			)}
 		</Paper>
 	)
 }
