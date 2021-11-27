@@ -1,4 +1,5 @@
 import {FunctionComponent, useContext, useEffect, useState} from "react"
+import {useHistory} from "react-router-dom"
 import {buildMultiSendTx} from "../../../../api/ethers/functions/Usul/multiSend"
 import {
 	buildUsulDeployTxSequence,
@@ -41,7 +42,8 @@ const DeployUsul: FunctionComponent<{
 	const [transactions, setTransactions] = useState<{tx: SafeTransaction; name: string}[]>([])
 	const [multiTx, setMultiTx] = useState<SafeTransaction>()
 	const [expectedUsulAddress, setExpectedUsulAddress] = useState("")
-	const {proposals, error} = useProposals(gnosisAddress)
+	const {proposals, error, refetch} = useProposals(gnosisAddress)
+	const {push} = useHistory()
 
 	useEffect(() => {
 		if (signer) {
@@ -58,8 +60,7 @@ const DeployUsul: FunctionComponent<{
 				proposal => proposal.type === "decentralizeDAO" && proposal.state === "active"
 			)
 			if (expandProposal) {
-				// TODO: Redirect to proposal details page
-				console.log("TODO")
+				push(`/dao/${gnosisAddress}?page=proposal&proposalId=${expandProposal.id}`)
 			}
 		}
 	}, [proposals])
@@ -105,10 +106,7 @@ const DeployUsul: FunctionComponent<{
 					gnosisAddress={gnosisAddress}
 					gnosisVotingThreshold={gnosisVotingThreshold}
 					expectedUsulAddress={expectedUsulAddress}
-					afterSubmit={() => {
-						// TODO: Redirect to proposal details page
-						console.log("TODO")
-					}}
+					afterSubmit={refetch}
 				/>
 			)}
 		</ExpandDaoLayout>

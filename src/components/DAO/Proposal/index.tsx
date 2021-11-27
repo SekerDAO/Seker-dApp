@@ -1,6 +1,7 @@
-import {Fragment, FunctionComponent, useContext, useMemo, useState} from "react"
+import {Fragment, FunctionComponent, useContext, useMemo} from "react"
 import {Link, useLocation, useHistory} from "react-router-dom"
 import {ReactComponent as DelegateTokenDone} from "../../../assets/icons/delegate-token-done.svg"
+import {ReactComponent as WarningIcon} from "../../../assets/icons/warning.svg"
 import {ReactComponent as WrapTokenDone} from "../../../assets/icons/wrap-token-done.svg"
 import {AuthContext} from "../../../context/AuthContext"
 import useProposal from "../../../hooks/getters/useProposal"
@@ -27,6 +28,13 @@ const MOCK_VOTES = [
 	{address: "0xF6690149C78D0254EF65FDAA6B23EC6A342f6d8D", tokens: 49250},
 	{address: "0xF6690149C78D0254EF65FDAA6B23EC6A342f6d8D", tokens: 39250}
 ]
+const MOCK_ADMIN_VOTES = [
+	{address: "0xF6690149C78D0254EF65FDAA6B23EC6A342f6d8D", tokens: 1},
+	{address: "0xF6690149C78D0254EF65FDAA6B23EC6A342f6d8D", tokens: 1},
+	{address: "0xF6690149C78D0254EF65FDAA6B23EC6A342f6d8D", tokens: 1},
+	{address: "0xF6690149C78D0254EF65FDAA6B23EC6A342f6d8D", tokens: 1},
+	{address: "0xF6690149C78D0254EF65FDAA6B23EC6A342f6d8D", tokens: 1}
+]
 
 // TODO: Decode proposal.multiTx, get list of transactions from there
 const MOCK_TRANSACTION: {
@@ -44,6 +52,7 @@ const MOCK_TRANSACTION: {
 	value: 0
 }
 const MOCK_TRANSACTIONS: Array<typeof MOCK_TRANSACTION> = [MOCK_TRANSACTION, MOCK_TRANSACTION]
+const MOCK_VOTING_STRATEGY = "admin"
 
 const Proposal: FunctionComponent = () => {
 	const {account} = useContext(AuthContext)
@@ -57,18 +66,21 @@ const Proposal: FunctionComponent = () => {
 	if (error) return <ErrorPlaceholder />
 
 	const isExcecuted = proposal.state === "executed"
+	// TODO: get actual voting strategy from proposal
+	const isAdminProposal = MOCK_VOTING_STRATEGY === "admin"
+
 	return (
 		<div className="proposal">
 			<div className="proposal__header">
 				<BackButton onClick={() => push(`/dao/${proposal.gnosisAddress}?page=proposals`)} />
 				<div className="proposal__header-title">
 					<h1>{proposal.title}</h1>
-					<span>Linear Voting</span>
+					<span>{isAdminProposal ? "Admin Voting" : "Linear Voting"}</span>
 				</div>
 				<div className="proposal__header-subtitle">
 					<Tag variant={proposal.state}>{capitalize(proposal.state)}</Tag>
 					<span>ID [ {id} ]</span>
-					{isExcecuted && (
+					{!isExcecuted && !isAdminProposal && (
 						<>
 							<span>•</span>
 							<span>[ # ] Days, [ # ] Hours Left</span>
@@ -82,36 +94,56 @@ const Proposal: FunctionComponent = () => {
 							{formatReadableAddress(proposal.userAddress)}
 						</Link>
 					</p>
-					<p>
-						Voting Token:
-						<Link to={`TODO`}>{formatReadableAddress(proposal.userAddress)}</Link>
-					</p>
+					{!isAdminProposal && (
+						<p>
+							Voting Token:
+							<Link to={`TODO`}>{formatReadableAddress(proposal.userAddress)}</Link>
+						</p>
+					)}
 				</div>
 			</div>
 			<div className="proposal__content">
-				<div className="proposal__content-heading">
-					<span>Quorum Status</span> <Tag variant="canceled">75%</Tag>
-				</div>
+				{!isAdminProposal && (
+					<div className="proposal__content-heading">
+						<span>Quorum Status</span> <Tag variant="canceled">75%</Tag>
+					</div>
+				)}
 				<div className="proposal__content-body">
 					<div className="proposal__content-votes-cards">
-						<ProposalVotes
-							type="for"
-							tokensValue={500000}
-							percentageValue={50}
-							votes={MOCK_VOTES}
-						/>
-						<ProposalVotes
-							type="against"
-							tokensValue={250000}
-							percentageValue={25}
-							votes={MOCK_VOTES}
-						/>
-						<ProposalVotes
-							type="abstain"
-							tokensValue={250000}
-							percentageValue={25}
-							votes={MOCK_VOTES}
-						/>
+						{isAdminProposal ? (
+							<ProposalVotes
+								fullWidth
+								type="for"
+								value={5}
+								totalValue={6}
+								votes={MOCK_ADMIN_VOTES}
+								votingStrategy={MOCK_VOTING_STRATEGY}
+							/>
+						) : (
+							<>
+								<ProposalVotes
+									type="for"
+									value={500000}
+									totalValue={1000000}
+									votes={MOCK_VOTES}
+									votingStrategy={MOCK_VOTING_STRATEGY}
+								/>
+								<ProposalVotes
+									type="against"
+									value={250000}
+									totalValue={1000000}
+									votes={MOCK_VOTES}
+									votingStrategy={MOCK_VOTING_STRATEGY}
+								/>
+								<ProposalVotes
+									type="abstain"
+									value={250000}
+									totalValue={1000000}
+									votes={MOCK_VOTES}
+									votingStrategy={MOCK_VOTING_STRATEGY}
+								/>
+							</>
+						)}
 					</div>
 					<div className="proposal__content-details">
 						<div className="proposal__content-details-left">
@@ -148,7 +180,24 @@ const Proposal: FunctionComponent = () => {
 							<h2>Participate</h2>
 							<Paper className="proposal__content-participate">
 								{isExcecuted ? (
-									<p>Excecuted</p>
+									<p>This proposal has been confirmed and executed.</p>
+								) : isAdminProposal ? (
+									<>
+										<Button
+											disabled={!canSign || processing}
+											onClick={sign}
+											extraClassName="proposal__content-vote-button"
+										>
+											Confirm
+										</Button>
+										<div>
+											<WarningIcon width="20px" height="20px" />
+											<p>
+												{`This request will incur a gas fee. If you would like to proceed, please
+												click "Confirm".`}
+											</p>
+										</div>
+									</>
 								) : (
 									<>
 										<div>
@@ -175,13 +224,7 @@ const Proposal: FunctionComponent = () => {
 											<Button buttonType="link">Change Delegation</Button>
 										</div>
 										<Divider />
-										<Button
-											disabled={!canSign || processing}
-											onClick={sign}
-											extraClassName="proposal__content-vote-button"
-										>
-											Vote
-										</Button>
+										<Button>Vote</Button>
 									</>
 								)}
 							</Paper>

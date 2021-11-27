@@ -1,28 +1,28 @@
 import {useState, useContext} from "react"
-import {SafeSignature} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
+import {executeMultiSend, signMultiSend} from "../../../api/ethers/functions/Usul/multiSend"
 import {
 	executeApproveNFTForAuction,
 	signApproveNFTForAuction
 } from "../../../api/ethers/functions/auction/approveNFTForAuction"
 import {
-	executeCreateAuction,
-	signCreateAuction
-} from "../../../api/ethers/functions/auction/createAuction"
-import {
 	executeCancelAuction,
 	signCancelAuction
 } from "../../../api/ethers/functions/auction/cancelAuction"
+import {
+	executeCreateAuction,
+	signCreateAuction
+} from "../../../api/ethers/functions/auction/createAuction"
 import {
 	executeAddOwner,
 	executeRemoveOwner,
 	signAddOwner,
 	signRemoveOwner
 } from "../../../api/ethers/functions/gnosisSafe/addRemoveOwner"
+import {SafeSignature} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
+import editDAO from "../../../api/firebase/DAO/editDAO"
 import addSafeProposalSignature from "../../../api/firebase/safeProposal/addSafeProposalSignatures"
 import {toastError, toastSuccess} from "../../../components/UI/Toast"
 import EthersContext from "../../../context/EthersContext"
-import {executeMultiSend, signMultiSend} from "../../../api/ethers/functions/Usul/multiSend"
-import editDAO from "../../../api/firebase/DAO/editDAO"
 import {SafeProposal} from "../../../types/safeProposal"
 
 const useSignProposal = ({
@@ -151,8 +151,8 @@ const useSignProposal = ({
 					if (!proposal.multiTx) {
 						throw new Error("Unexpected empty mulitTx in proposal")
 					}
-					if (!proposal.seeleAddress) {
-						throw new Error("Unexpected empty seeleAddress in proposal")
+					if (!proposal.usulAddress) {
+						throw new Error("Unexpected empty usulAddress in proposal")
 					}
 					;[signature] = await signMultiSend(proposal.multiTx, proposal.gnosisAddress, signer)
 					if (proposal.signatures?.length === gnosisVotingThreshold - 1) {
@@ -164,7 +164,7 @@ const useSignProposal = ({
 						)
 						await editDAO({
 							gnosisAddress: proposal.gnosisAddress,
-							seeleAddress: proposal.seeleAddress
+							usulAddress: proposal.usulAddress
 						})
 						executed = true
 					}
