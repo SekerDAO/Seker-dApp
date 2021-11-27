@@ -10,11 +10,7 @@ import "./styles.scss"
 
 const Daos: FunctionComponent = () => {
 	const [cursor, setCursor] = useState<DAOSnapshot | null>(null)
-	const {
-		DAOs: daos,
-		loading,
-		error
-	} = useDAOs({
+	const {DAOs, loading, error} = useDAOs({
 		after: cursor
 	})
 
@@ -22,7 +18,7 @@ const Daos: FunctionComponent = () => {
 	if (error) return <ErrorPlaceholder />
 
 	const handleLoadMore = () => {
-		setCursor(daos.data[daos.data.length - 1].snapshot)
+		setCursor(DAOs.data[DAOs.data.length - 1].snapshot)
 	}
 
 	return (
@@ -33,7 +29,7 @@ const Daos: FunctionComponent = () => {
 					<SearchInput />
 				</div>
 				<DAOList
-					DAOs={daos.data.map(({snapshot, owners}) => {
+					DAOs={DAOs.data.map(({snapshot, owners}) => {
 						const {name, description, profileImage} = snapshot.data()
 						return {
 							gnosisAddress: snapshot.id,
@@ -44,7 +40,7 @@ const Daos: FunctionComponent = () => {
 						}
 					})}
 				/>
-				{daos.data.length < daos.totalCount && <Button onClick={handleLoadMore}>Load More</Button>}
+				{DAOs.data.length < DAOs.totalCount && <Button onClick={handleLoadMore}>Load More</Button>}
 			</div>
 		</div>
 	)
