@@ -6,7 +6,7 @@ import Divider from "../../../UI/Divider"
 import CancelAuction from "./CancelAuction"
 import ChangeRole from "./ChangeRole"
 import CreateAuction from "./CreateAuction"
-import GeneralEVM from "./GeneralEVM"
+import GeneralEvmAdminProposal from "./GeneralEvmAdminProposal"
 import "./styles.scss"
 
 const CreateAdminProposal: FunctionComponent<{
@@ -86,7 +86,7 @@ const CreateAdminProposal: FunctionComponent<{
 				/>
 			)}
 			{type === "generalEVM" && (
-				<GeneralEVM
+				<GeneralEvmAdminProposal
 					gnosisVotingThreshold={gnosisVotingThreshold}
 					gnosisAddress={gnosisAddress}
 					title={title}

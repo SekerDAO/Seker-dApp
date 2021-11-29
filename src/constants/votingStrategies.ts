@@ -4,7 +4,7 @@ import linearVotingCard from "../assets/icons/linear-voting.svg"
 import quadraticVotingSimpleMembershipCard from "../assets/icons/quadratic-voting-simple-membership.svg"
 import singleVotingSimpleMembershipCard from "../assets/icons/single-voting-simple-membership.svg"
 import singleVotingCard from "../assets/icons/single-voting.svg"
-import {VotingStrategy} from "../types/DAO"
+import {VotingStrategyName} from "../types/DAO"
 
 const VOTING_STRATEGY_DESCRIPTION_PLACEHOLDER = `
 Lorem ipsum dolor sit amet, 
@@ -17,7 +17,7 @@ laboris nisi ut aliquip ex ea commodo consequat.
 `
 
 export const VOTING_STRATEGIES: {
-	strategy: VotingStrategy
+	strategy: VotingStrategyName
 	title: string
 	description: string
 	cardImage: string

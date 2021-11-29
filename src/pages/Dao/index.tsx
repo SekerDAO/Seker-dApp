@@ -192,6 +192,7 @@ const Dao: FunctionComponent = () => {
 						{isAdmin && page === "createProposal" && (
 							<CreateDaoProposal
 								gnosisAddress={dao.gnosisAddress}
+								usulAddress={dao.usulAddress}
 								gnosisVotingThreshold={dao.gnosisVotingThreshold}
 								ownersCount={dao.owners.length}
 								strategies={dao.strategies}

@@ -2,7 +2,7 @@ import {ChangeEvent, FunctionComponent, useContext, useState} from "react"
 import {ReactComponent as WarningIcon} from "../../../assets/icons/warning.svg"
 import {VOTING_STRATEGIES} from "../../../constants/votingStrategies"
 import EthersContext from "../../../context/EthersContext"
-import {VotingStrategy} from "../../../types/DAO"
+import {VotingStrategyName} from "../../../types/DAO"
 import {ERC20Token} from "../../../types/ERC20Token"
 import Button from "../../Controls/Button"
 import Input from "../../Controls/Input"
@@ -23,8 +23,8 @@ const EMPTY_STATE = {
 }
 
 const DeployVotingStrategyModal: FunctionComponent<{
-	strategy: VotingStrategy
-	onSubmit: (strategy: VotingStrategy, formValues: VotingStrategyFormValues) => void
+	strategy: VotingStrategyName
+	onSubmit: (strategy: VotingStrategyName, formValues: VotingStrategyFormValues) => void
 	onClose: () => void
 }> = ({strategy, onSubmit, onClose}) => {
 	const [createTokenModalOpened, setCreateTokenModalOpened] = useState(false)

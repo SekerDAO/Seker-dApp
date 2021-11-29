@@ -43,7 +43,7 @@ export type DAOListItemProps = Pick<
 	"gnosisAddress" | "name" | "description" | "profileImage" | "owners"
 >
 
-export type VotingStrategy =
+export type VotingStrategyName =
 	| "singleVoting"
 	| "singleVotingSimpleMembership"
 	| "linearVoting"
@@ -53,6 +53,11 @@ export type VotingStrategy =
 
 export type BuiltVotingStrategy = {
 	tx: SafeTransaction
-	strategy: VotingStrategy
+	strategy: VotingStrategyName
 	expectedAddress: string
+}
+
+export type VotingStrategy = {
+	name: VotingStrategyName
+	address: string
 }

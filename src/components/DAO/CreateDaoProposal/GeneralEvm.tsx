@@ -1,33 +1,25 @@
 import {isAddress} from "@ethersproject/address"
-import {ChangeEvent, Fragment, FunctionComponent, useContext, useEffect, useState} from "react"
-import {
-	createSafeSignature,
-	executeSafeTx
-} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
-import fetchContractAbi from "../../../../api/etherscan/fetchContractAbi"
-import addSafeProposal from "../../../../api/firebase/safeProposal/addSafeProposal"
-import {AuthContext} from "../../../../context/AuthContext"
-import EthersContext from "../../../../context/EthersContext"
-import {Abi, AbiFunction} from "../../../../types/abi"
-import {prepareArguments, validateArgument} from "../../../../utlls"
-import ArrayInput from "../../../Controls/ArrayInput"
-import Button from "../../../Controls/Button"
-import Input from "../../../Controls/Input"
-import Select from "../../../Controls/Select"
-import Textarea from "../../../Controls/Textarea"
-import {toastError, toastSuccess, toastWarning} from "../../../UI/Toast"
+import {ChangeEvent, Fragment, FunctionComponent, useEffect, useState} from "react"
+import fetchContractAbi from "../../../api/etherscan/fetchContractAbi"
+import {Abi, AbiFunction} from "../../../types/abi"
+import {validateArgument} from "../../../utlls"
+import ArrayInput from "../../Controls/ArrayInput"
+import Button from "../../Controls/Button"
+import Input from "../../Controls/Input"
+import Select from "../../Controls/Select"
+import Textarea from "../../Controls/Textarea"
+import {toastWarning} from "../../UI/Toast"
 
-const GeneralEVM: FunctionComponent<{
-	gnosisAddress: string
-	gnosisVotingThreshold: number
-	title: string
-	description: string
-	afterSubmit: () => void
-}> = ({gnosisAddress, gnosisVotingThreshold, title, description, afterSubmit}) => {
-	const {account} = useContext(AuthContext)
-	const {signer} = useContext(EthersContext)
-	const [processing, setProcessing] = useState(false)
-
+const GeneralEvm: FunctionComponent<{
+	buttonDisabled: boolean
+	processing: boolean
+	onSubmit: (
+		address: string,
+		contractMethods: AbiFunction[],
+		selectedMethodIndex: number,
+		args: (string | string[])[]
+	) => void
+}> = ({buttonDisabled, processing, onSubmit}) => {
 	const [address, setAddress] = useState("")
 	const [addressBad, setAddressBad] = useState(false)
 
@@ -119,70 +111,13 @@ const GeneralEVM: FunctionComponent<{
 		)
 	}
 
-	const handleSubmit = async () => {
-		if (!(selectedMethodIndex != null && signer && account)) return
-		setProcessing(true)
-		try {
-			const [signature, nonce] = await createSafeSignature(
-				gnosisAddress,
-				address,
-				contractMethods,
-				contractMethods[selectedMethodIndex].name,
-				prepareArguments(
-					args,
-					contractMethods[selectedMethodIndex].inputs.map(i => i.type)
-				),
-				signer
-			)
-			if (gnosisVotingThreshold === 1) {
-				await executeSafeTx(
-					gnosisAddress,
-					address,
-					contractMethods,
-					contractMethods[selectedMethodIndex].name,
-					prepareArguments(
-						args,
-						contractMethods[selectedMethodIndex].inputs.map(i => i.type)
-					),
-					signer,
-					[signature]
-				)
-			}
-			await addSafeProposal({
-				type: "generalEVM",
-				title,
-				description,
-				nonce,
-				gnosisAddress,
-				signatures: [signature],
-				state: gnosisVotingThreshold === 1 ? "executed" : "active",
-				contractAddress: address,
-				contractAbi: contractMethods,
-				contractMethod: contractMethods[selectedMethodIndex].name,
-				callArgs: args.reduce(
-					(acc, cur, index) => ({
-						...acc,
-						[contractMethods[selectedMethodIndex].inputs[index].name]: cur
-					}),
-					{}
-				)
-			})
-			setAddress("")
-			setAddressBad(false)
-			setAbiString("")
-			setAbiBad(false)
-			setContractMethods([])
-			afterSubmit()
-			toastSuccess("Proposal successfully created!")
-		} catch (e) {
-			console.error(e)
-			toastError("Failed to create proposal")
-		}
-		setProcessing(false)
+	const handleSubmit = () => {
+		if (!address || selectedMethodIndex == null) return
+		onSubmit(address, contractMethods, selectedMethodIndex, args)
 	}
 
 	const submitButtonDisabled =
-		!title ||
+		buttonDisabled ||
 		!address ||
 		addressBad ||
 		!abiString ||
@@ -283,4 +218,4 @@ const GeneralEVM: FunctionComponent<{
 	)
 }
 
-export default GeneralEVM
+export default GeneralEvm
