@@ -39,3 +39,29 @@ export const buildProposalTx = async (
 	const contract = new Contract(contractAddress, contractAbi, provider)
 	return buildContractCall(contract, method, args, 0)
 }
+
+export const executeProposalSingle = async (
+	usulAddress: string,
+	proposalId: number,
+	target: string,
+	value: number,
+	txData: string,
+	operation: number,
+	provider: JsonRpcProvider
+): Promise<void> => {
+	const usul = new Contract(usulAddress, Usul.abi, provider)
+	await usul.executeProposalByIndex(proposalId, target, value, txData, operation)
+}
+
+export const executeProposalBatch = async (
+	usulAddress: string,
+	proposalId: number,
+	targets: string[],
+	values: number[],
+	txDatas: string[],
+	operations: number[],
+	provider: JsonRpcProvider
+): Promise<void> => {
+	const usul = new Contract(usulAddress, Usul.abi, provider)
+	await usul.executeProposalBatch(proposalId, targets, values, txDatas, operations)
+}
