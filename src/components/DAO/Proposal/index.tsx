@@ -1,11 +1,11 @@
 import {Fragment, FunctionComponent, useContext, useMemo} from "react"
-import {Link, useLocation, useHistory} from "react-router-dom"
+import {useLocation, useHistory} from "react-router-dom"
 import {ReactComponent as DelegateTokenDone} from "../../../assets/icons/delegate-token-done.svg"
 import {ReactComponent as WarningIcon} from "../../../assets/icons/warning.svg"
 import {ReactComponent as WrapTokenDone} from "../../../assets/icons/wrap-token-done.svg"
 import {AuthContext} from "../../../context/AuthContext"
 import useProposal from "../../../hooks/getters/useProposal"
-import {capitalize, formatReadableAddress} from "../../../utlls"
+import {formatReadableAddress} from "../../../utlls"
 import Button from "../../Controls/Button"
 import BackButton from "../../Controls/Button/BackButton"
 import useSignProposal from "../../Proposal/hooks/useSignProposal"
@@ -16,6 +16,7 @@ import Expandable from "../../UI/Expandable"
 import Loader from "../../UI/Loader"
 import Paper from "../../UI/Paper"
 import Tag from "../../UI/Tag"
+import ProposalHeader from "./ProposalHeader"
 import ProposalVotes from "./ProposalVotes"
 import "./styles.scss"
 
@@ -27,13 +28,6 @@ const MOCK_VOTES = [
 	{address: "0xF6690149C78D0254EF65FDAA6B23EC6A342f6d8D", tokens: 50250},
 	{address: "0xF6690149C78D0254EF65FDAA6B23EC6A342f6d8D", tokens: 49250},
 	{address: "0xF6690149C78D0254EF65FDAA6B23EC6A342f6d8D", tokens: 39250}
-]
-const MOCK_ADMIN_VOTES = [
-	{address: "0xF6690149C78D0254EF65FDAA6B23EC6A342f6d8D", tokens: 1},
-	{address: "0xF6690149C78D0254EF65FDAA6B23EC6A342f6d8D", tokens: 1},
-	{address: "0xF6690149C78D0254EF65FDAA6B23EC6A342f6d8D", tokens: 1},
-	{address: "0xF6690149C78D0254EF65FDAA6B23EC6A342f6d8D", tokens: 1},
-	{address: "0xF6690149C78D0254EF65FDAA6B23EC6A342f6d8D", tokens: 1}
 ]
 
 // TODO: Decode proposal.multiTx, get list of transactions from there
@@ -72,37 +66,9 @@ const Proposal: FunctionComponent = () => {
 
 	return (
 		<div className="proposal">
-			<div className="proposal__header">
+			<ProposalHeader proposal={proposal} id={id}>
 				<BackButton onClick={() => push(`/dao/${proposal.gnosisAddress}?page=proposals`)} />
-				<div className="proposal__header-title">
-					<h1>{proposal.title}</h1>
-					<span>{isAdminProposal ? "Admin Voting" : "Linear Voting"}</span>
-				</div>
-				<div className="proposal__header-subtitle">
-					<Tag variant={proposal.state}>{capitalize(proposal.state)}</Tag>
-					<span>ID [ {id} ]</span>
-					{!isExcecuted && !isAdminProposal && (
-						<>
-							<span>•</span>
-							<span>[ # ] Days, [ # ] Hours Left</span>
-						</>
-					)}
-				</div>
-				<div className="proposal__header-links">
-					<p>
-						Proposed by:
-						<Link to={`/profile/${proposal.userAddress}`}>
-							{formatReadableAddress(proposal.userAddress)}
-						</Link>
-					</p>
-					{!isAdminProposal && (
-						<p>
-							Voting Token:
-							<Link to={`TODO`}>{formatReadableAddress(proposal.userAddress)}</Link>
-						</p>
-					)}
-				</div>
-			</div>
+			</ProposalHeader>
 			<div className="proposal__content">
 				{!isAdminProposal && (
 					<div className="proposal__content-heading">
@@ -121,7 +87,7 @@ const Proposal: FunctionComponent = () => {
 									address: signature.signer,
 									tokens: 1
 								}))}
-								votingStrategy={"admin"}
+								votingStrategy="admin"
 							/>
 						) : (
 							<>
