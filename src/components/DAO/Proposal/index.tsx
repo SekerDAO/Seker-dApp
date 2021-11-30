@@ -66,7 +66,7 @@ const Proposal: FunctionComponent = () => {
 
 	return (
 		<div className="proposal">
-			<ProposalHeader proposal={proposal} id={id}>
+			<ProposalHeader proposal={proposal} id={id} showLinks>
 				<BackButton onClick={() => push(`/dao/${proposal.gnosisAddress}?page=proposals`)} />
 			</ProposalHeader>
 			<div className="proposal__content">
