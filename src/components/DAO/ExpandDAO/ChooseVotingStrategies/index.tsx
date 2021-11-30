@@ -5,7 +5,7 @@ import {ReactComponent as DeleteIcon} from "../../../../assets/icons/delete.svg"
 import {ReactComponent as StepDotDoneIcon} from "../../../../assets/icons/step-dot-done.svg"
 import {VOTING_STRATEGIES} from "../../../../constants/votingStrategies"
 import EthersContext from "../../../../context/EthersContext"
-import {VotingStrategy, BuiltVotingStrategy} from "../../../../types/DAO"
+import {VotingStrategyName, BuiltVotingStrategy} from "../../../../types/DAO"
 import Button from "../../../Controls/Button"
 import DeployVotingStrategyModal, {
 	VotingStrategyFormValues
@@ -24,10 +24,12 @@ const ChooseVotingStrategies: FunctionComponent<{
 	onSubmit: () => void
 }> = ({gnosisAddress, strategies, onStrategyAdd, onStrategyRemove, onSubmit}) => {
 	const {signer} = useContext(EthersContext)
-	const [addStrategyModalOpened, setAddStrategyModalOpened] = useState<VotingStrategy | null>(null)
+	const [addStrategyModalOpened, setAddStrategyModalOpened] = useState<VotingStrategyName | null>(
+		null
+	)
 
 	const handleSubmitVotingStrategy = async (
-		strategy: VotingStrategy,
+		strategy: VotingStrategyName,
 		{erc20TokenAddress, quorumThreshold, delay, votingPeriod}: VotingStrategyFormValues
 	) => {
 		if (strategy === "linearVoting") {

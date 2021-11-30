@@ -7,12 +7,13 @@ import CreateStrategyProposal from "./CreateStrategyProposal"
 
 const CreateDaoProposal: FunctionComponent<{
 	gnosisAddress: string
+	usulAddress?: string
 	gnosisVotingThreshold: number
 	ownersCount: number
 	strategies: VotingStrategy[]
-}> = ({gnosisAddress, gnosisVotingThreshold, ownersCount, strategies}) => {
+}> = ({gnosisAddress, usulAddress, gnosisVotingThreshold, ownersCount, strategies}) => {
 	const {connected} = useContext(AuthContext)
-	const [module, setModule] = useState<"admin" | VotingStrategy>("admin")
+	const [module, setModule] = useState(-1)
 
 	if (!connected) return <div>TODO: Please connect wallet</div>
 
@@ -24,25 +25,31 @@ const CreateDaoProposal: FunctionComponent<{
 				options={[
 					{
 						name: "Admin",
-						value: "admin"
+						value: -1
 					},
-					...strategies.map(strategy => ({
-						name: strategy,
-						value: strategy
+					...strategies.map((strategy, index) => ({
+						name: strategy.name,
+						value: index
 					}))
 				]}
 				value={module}
 				placeholder="Select Module"
 				onChange={setModule}
 			/>
-			{module === "admin" ? (
+			{module === -1 && (
 				<CreateAdminProposal
 					gnosisAddress={gnosisAddress}
 					gnosisVotingThreshold={gnosisVotingThreshold}
 					ownersCount={ownersCount}
 				/>
-			) : (
-				<CreateStrategyProposal />
+			)}{" "}
+			{module > -1 && usulAddress && (
+				<CreateStrategyProposal
+					gnosisAddress={gnosisAddress}
+					usulAddress={usulAddress}
+					strategyAddress={strategies[module].address}
+					strategyType={strategies[module].name}
+				/>
 			)}
 		</div>
 	)
