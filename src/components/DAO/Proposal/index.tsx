@@ -28,13 +28,6 @@ const MOCK_VOTES = [
 	{address: "0xF6690149C78D0254EF65FDAA6B23EC6A342f6d8D", tokens: 49250},
 	{address: "0xF6690149C78D0254EF65FDAA6B23EC6A342f6d8D", tokens: 39250}
 ]
-const MOCK_ADMIN_VOTES = [
-	{address: "0xF6690149C78D0254EF65FDAA6B23EC6A342f6d8D", tokens: 1},
-	{address: "0xF6690149C78D0254EF65FDAA6B23EC6A342f6d8D", tokens: 1},
-	{address: "0xF6690149C78D0254EF65FDAA6B23EC6A342f6d8D", tokens: 1},
-	{address: "0xF6690149C78D0254EF65FDAA6B23EC6A342f6d8D", tokens: 1},
-	{address: "0xF6690149C78D0254EF65FDAA6B23EC6A342f6d8D", tokens: 1}
-]
 
 // TODO: Decode proposal.multiTx, get list of transactions from there
 const MOCK_TRANSACTION: {
@@ -65,8 +58,7 @@ const Proposal: FunctionComponent = () => {
 	if (loading || !proposal) return <Loader />
 	if (error) return <ErrorPlaceholder />
 
-	const isExcecuted = proposal.state === "executed"
-	const isExcecuting = proposal.state === "executing"
+	const isExecuted = proposal.state === "executed"
 	// TODO: get actual voting strategy from proposal
 	const isAdminProposal = MOCK_VOTING_STRATEGY === "admin"
 
@@ -81,7 +73,7 @@ const Proposal: FunctionComponent = () => {
 				<div className="proposal__header-subtitle">
 					<Tag variant={proposal.state}>{capitalize(proposal.state)}</Tag>
 					<span>ID [ {id} ]</span>
-					{!isExcecuted && !isAdminProposal && (
+					{!isExecuted && !isAdminProposal && (
 						<>
 							<span>•</span>
 							<span>[ # ] Days, [ # ] Hours Left</span>
@@ -183,20 +175,16 @@ const Proposal: FunctionComponent = () => {
 						<div className="proposal__content-details-right">
 							<h2>Participate</h2>
 							<Paper className="proposal__content-participate">
-								{isExcecuted ? (
+								{isExecuted ? (
 									<p>This proposal has been confirmed and executed.</p>
 								) : isAdminProposal ? (
 									<>
 										<Button
 											disabled={!canSign || processing}
-											onClick={
-												isExcecuting
-													? sign
-													: () => console.log("TODO: Implement confirm(aka admin vote) action")
-											}
+											onClick={sign}
 											extraClassName="proposal__content-vote-button"
 										>
-											{isExcecuting ? "Execute" : "Confirm"}
+											Sign
 										</Button>
 										<div className="proposal__content-participate-warning">
 											<div>

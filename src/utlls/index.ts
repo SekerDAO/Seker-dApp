@@ -4,6 +4,8 @@ import {AbiDataType, AbiScalar} from "../types/abi"
 
 export const capitalize = (str: string): string => `${str[0].toUpperCase()}${str.slice(1)}`
 
+export const formatNumber = (num: number): string => `${(num / 1000).toFixed(2)}k`
+
 export const formatReadableAddress = (address?: string | null): string =>
 	address ? `${address.slice(0, 7)}...${address.slice(-4)}` : ""
 

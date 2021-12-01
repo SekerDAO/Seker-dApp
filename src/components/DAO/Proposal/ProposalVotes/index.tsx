@@ -1,6 +1,6 @@
 import {FunctionComponent, useState} from "react"
 import {VotingStrategy} from "../../../../types/DAO"
-import {capitalize, formatReadableAddress} from "../../../../utlls"
+import {capitalize, formatNumber, formatReadableAddress} from "../../../../utlls"
 import Button from "../../../Controls/Button"
 import Modal from "../../../Modals/Modal"
 import Paper from "../../../UI/Paper"
@@ -24,7 +24,7 @@ const VotesCard: FunctionComponent<VotesCardProps> = ({
 }) => {
 	const isAdminProposal = votingStrategy === "admin"
 	const percentageValue = (value / totalValue) * 100
-	const formatNumber = (num: number) => `${(num / 1000).toFixed(2)}k`
+
 	return (
 		<>
 			<div className="votes-card__header">
