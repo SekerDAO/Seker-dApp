@@ -59,8 +59,7 @@ const Proposal: FunctionComponent = () => {
 	if (loading || !proposal) return <Loader />
 	if (error) return <ErrorPlaceholder />
 
-	const isExcecuted = proposal.state === "executed"
-	const isExcecuting = proposal.state === "executing"
+	const isExecuted = proposal.state === "executed"
 	// TODO: get actual voting strategy from proposal
 	const isAdminProposal = MOCK_VOTING_STRATEGY === "admin"
 
@@ -149,20 +148,16 @@ const Proposal: FunctionComponent = () => {
 						<div className="proposal__content-details-right">
 							<h2>Participate</h2>
 							<Paper className="proposal__content-participate">
-								{isExcecuted ? (
+								{isExecuted ? (
 									<p>This proposal has been confirmed and executed.</p>
 								) : isAdminProposal ? (
 									<>
 										<Button
 											disabled={!canSign || processing}
-											onClick={
-												isExcecuting
-													? sign
-													: () => console.log("TODO: Implement confirm(aka admin vote) action")
-											}
+											onClick={sign}
 											extraClassName="proposal__content-vote-button"
 										>
-											{isExcecuting ? "Execute" : "Confirm"}
+											Sign
 										</Button>
 										<div className="proposal__content-participate-warning">
 											<div>
