@@ -1,4 +1,4 @@
-import {FunctionComponent} from "react"
+import {FunctionComponent, useState} from "react"
 import Input from "../../Controls/Input"
 import Modal from "../Modal"
 
@@ -8,22 +8,32 @@ const WrapTokenModal: FunctionComponent<{
 	onClose: () => void
 	tokensHeld: number
 	onSubmit: (tokensAmout: number) => void
-}> = ({mode, show, onClose, tokensHeld}) => {
+}> = ({mode, show, onClose, tokensHeld, onSubmit}) => {
 	const isWrap = mode === "wrap"
+	const [tokensAmount, setTokensAmout] = useState<string>()
 	const handleSubmit = () => {
-		console.log("TODO: Handle wrapping/unwrapping token")
+		onSubmit(Number(tokensAmount))
 	}
 	return (
 		<Modal
 			onSubmit={handleSubmit}
 			submitButtonText="Submit"
+			submitButtonDisabled={!tokensAmount}
 			onClose={onClose}
 			show={show}
 			title={isWrap ? "Wrap Tokens" : "Unwrap Tokens"}
 			warningMessage={`This request will incur a gas fee. If you would like to proceed, please click "Submit" below.`}
 		>
-			<label>Amount of Tokens You Hold: {tokensHeld}</label>
-			<Input />
+			<label htmlFor="tokens-amount">Amount of Tokens You Hold: {tokensHeld}</label>
+			<Input
+				max={tokensAmount}
+				min={0}
+				number
+				id="tokens-amount"
+				name="wrap-tokens-amount"
+				value={tokensAmount}
+				onChange={e => setTokensAmout(e.target.value)}
+			/>
 		</Modal>
 	)
 }
