@@ -119,6 +119,10 @@
         }
 
         width: 280px;
+
+        .paper {
+          margin-top: 10px;
+        }
       }
     }
 
@@ -143,6 +147,15 @@
       .divider {
         margin: 20px 0;
         width: 100%;
+      }
+
+      &-warning {
+        display: flex;
+        margin-top: 20px;
+
+        svg {
+          margin-right: 10px;
+        }
       }
     }
 
