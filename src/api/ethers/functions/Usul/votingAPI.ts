@@ -1,7 +1,6 @@
 import {Contract, ContractInterface} from "@ethersproject/contracts"
-import {JsonRpcProvider, JsonRpcSigner} from "@ethersproject/providers"
+import {JsonRpcSigner} from "@ethersproject/providers"
 import GovToken from "../../abis/GovToken.json"
-import {buildContractCall, SafeTransaction} from "../gnosisSafe/safeUtils"
 
 export const vote = async (
 	strategyAddress: string,
