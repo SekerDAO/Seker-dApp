@@ -1,0 +1,39 @@
+
+@import "src/variables";
+
+.proposal__header {
+  width: 100%;
+
+  &-title {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    height: 38px;
+  }
+
+  &-subtitle {
+    margin-top: 10px;
+
+    .tag {
+      margin-right: 10px;
+    }
+
+    span:not(.tag) {
+      color: $dark-grey50;
+      margin-right: 10px;
+    }
+  }
+
+  &-links {
+    margin-top: 20px;
+
+    p {
+      margin-top: 10px;
+
+      a {
+        color: $purple;
+        margin-left: 5px;
+      }
+    }
+  }
+}

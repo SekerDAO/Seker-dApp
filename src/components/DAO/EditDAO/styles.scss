@@ -3,6 +3,7 @@
 .edit-dao {
   display: flex;
   flex-direction: column;
+  max-width: 880px;
 
   &__row {
     &:first-of-type {

@@ -4,91 +4,19 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  max-width: 880px;
 
   > h2 {
     margin: 40px 0;
   }
 
-  &__controls {
+  &__header {
+    margin: 40px 0;
     display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-
-    .select {
-      margin-left: 10px;
-    }
+    justify-content: space-between;
   }
 
   &__card {
-    border: 1px solid $dark-grey;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    margin-bottom: 20px;
-
-    > h2 {
-      color: $purple75;
-      margin: 0 20px 20px 20px;
-    }
-
-    > p {
-      margin: 0 20px 20px 20px;
-    }
-
-    &-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 20px;
-    }
-
-    &-section {
-      padding: 20px;
-      border-top: 1px solid $dark-grey;
-    }
-
-    &-footer {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      border-top: 1px solid $dark-grey;
-      padding: 20px;
-    }
-  }
-
-  &__voting {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    width: 200px;
-
-    &-legend {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
-
-    &-bar {
-      height: 10px;
-      background-color: $dark-grey75;
-      display: flex;
-      align-items: stretch;
-
-      &-inner {
-        background-color: $purple75;
-      }
-    }
-
-    &-buttons {
-      display: flex;
-      align-items: center;
-      min-width: 200px;
-
-      .btn {
-        flex: 1;
-        margin: 0 5px;
-      }
-    }
+    padding: 20px;
   }
 }
