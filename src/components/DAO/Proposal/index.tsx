@@ -21,6 +21,7 @@ import Expandable from "../../UI/Expandable"
 import Loader from "../../UI/Loader"
 import Paper from "../../UI/Paper"
 import Tag from "../../UI/Tag"
+import {toastWarning} from "../../UI/Toast"
 import ProposalHeader from "./ProposalHeader"
 import ProposalVotes from "./ProposalVotes"
 import useProposalPage from "./hooks/useProposalPage"
@@ -111,7 +112,7 @@ const Proposal: FunctionComponent = () => {
 					/>
 					<ConfirmationModal
 						title="Success!"
-						isOpened={showDelegateModal && !delegateTokenSuccess}
+						isOpened={showDelegateModal && delegateTokenSuccess}
 						text="You have successfully delegated your voting tokens. Your delegation choice will remain the same for all proposals utilizing voting strategies with this token, and you do not need to complete this step each time. If you wish to change your delegation choice, you may do so at any point, as long as the tokens are not being used in an open proposal."
 						handleClose={handleCloseDelegateTokenSuccessModal}
 					/>
@@ -224,71 +225,93 @@ const Proposal: FunctionComponent = () => {
 										</>
 									) : (
 										<>
-											<div>
-												{tokensWrapped ? (
-													<WrapTokenDone width="50px" height="50px" onClick={handleOpenWrapModal} />
-												) : (
-													<WrapTokenDefault
-														width="50px"
-														height="50px"
-														onClick={handleOpenWrapModal}
-													/>
-												)}
-											</div>
-											<div className="proposal__content-participate-step">
-												<h3>Step 1: Wrap Tokens</h3>
-												{tokensWrapped ? (
-													<>
-														<p>Wrapped Token Address</p>
-														<Copy value="TODO: Add real token address here">
-															{formatReadableAddress(account)}
-														</Copy>
-														<Button buttonType="link" onClick={handleOpenWrapModal}>
-															Unwrap Tokens
-														</Button>
-													</>
-												) : (
-													<p>
-														Ensure your ERC-20 tokens follow the OpenZeppelin ERC-20 Voting Token
-														Standard in order to vote.
-													</p>
-												)}
-											</div>
-											<Divider />
-											<div>
-												{voteDelegated ? (
-													<DelegateTokenDone
-														width="50px"
-														height="50px"
-														onClick={handleOpenDelegateModal}
-													/>
-												) : (
-													<DelegateTokenDefault
-														width="50px"
-														height="50px"
-														onClick={handleOpenDelegateModal}
-														className={
-															!tokensWrapped ? "proposal__content-participate-icon" : undefined
-														}
-													/>
-												)}
-											</div>
-											<div className="proposal__content-participate-step">
-												<h3>Step 2: Delegate</h3>
-												{voteDelegated ? (
-													<>
-														<p>Currently Delegated to</p>
-														<Copy value="TODO: Add delegated user address here">
-															{formatReadableAddress(account)}
-														</Copy>
-														<Button buttonType="link">Change Delegation</Button>
-													</>
-												) : (
-													<p>Choose to delegate to yourself or another address.</p>
-												)}
+											<div className="proposal__content-participate-container">
+												<div>
+													{tokensWrapped ? (
+														<WrapTokenDone
+															width="50px"
+															height="50px"
+															onClick={handleOpenWrapModal}
+														/>
+													) : (
+														<WrapTokenDefault
+															width="50px"
+															height="50px"
+															onClick={handleOpenWrapModal}
+														/>
+													)}
+												</div>
+												<div className="proposal__content-participate-step">
+													<h3>Step 1: Wrap Tokens</h3>
+													{tokensWrapped ? (
+														<>
+															<p>Wrapped Token Address</p>
+															<Copy value="TODO: Add real token address here">
+																{formatReadableAddress(account)}
+															</Copy>
+															<Button buttonType="link" onClick={handleOpenWrapModal}>
+																Unwrap Tokens
+															</Button>
+														</>
+													) : (
+														<p>
+															Ensure your ERC-20 tokens follow the OpenZeppelin ERC-20 Voting Token
+															Standard in order to vote.
+														</p>
+													)}
+												</div>
 											</div>
 											<Divider />
-											<Button disabled={!tokensWrapped || !voteDelegated}>Vote</Button>
+											<div className="proposal__content-participate-container">
+												<div>
+													{voteDelegated ? (
+														<DelegateTokenDone
+															width="50px"
+															height="50px"
+															onClick={handleOpenDelegateModal}
+														/>
+													) : (
+														<DelegateTokenDefault
+															width="50px"
+															height="50px"
+															onClick={
+																tokensWrapped
+																	? handleOpenDelegateModal
+																	: () =>
+																			toastWarning(
+																				"First - you need to wrap your tokens. Follow step above."
+																			)
+															}
+															className={
+																!tokensWrapped
+																	? "proposal__content-participate-icon--disabled"
+																	: undefined
+															}
+														/>
+													)}
+												</div>
+												<div className="proposal__content-participate-step">
+													<h3>Step 2: Delegate</h3>
+													{voteDelegated ? (
+														<>
+															<p>Currently Delegated to</p>
+															<Copy value="TODO: Add delegated user address here">
+																{formatReadableAddress(account)}
+															</Copy>
+															<Button buttonType="link">Change Delegation</Button>
+														</>
+													) : (
+														<p>Choose to delegate to yourself or another address.</p>
+													)}
+												</div>
+											</div>
+											<Divider />
+											<Button
+												disabled={!tokensWrapped || !voteDelegated}
+												extraClassName="proposal__content-vote-button"
+											>
+												Vote
+											</Button>
 										</>
 									)}
 								</Paper>

@@ -3,8 +3,6 @@ import {SafeProposal} from "../../../../types/safeProposal"
 import {StrategyProposal} from "../../../../types/strategyProposal"
 import {toastInfo} from "../../../UI/Toast"
 
-const MOCK_VOTING_STRATEGY = "admin"
-
 const useProposalPage = (
 	proposal: SafeProposal | StrategyProposal | null
 ): {
@@ -27,7 +25,7 @@ const useProposalPage = (
 } => {
 	const isExecuted = proposal?.state === "executed"
 	// TODO: get actual voting strategy from proposal
-	const isAdminProposal = MOCK_VOTING_STRATEGY === "admin"
+	const isAdminProposal = true
 	// TODO: Identify tokens being wrapped
 	const tokensWrapped = false
 	// TODO: Identify vote being delegated

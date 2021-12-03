@@ -1,6 +1,7 @@
 import {FunctionComponent, useState} from "react"
 import Input from "../../Controls/Input"
 import Modal from "../Modal"
+import "./styles.scss"
 
 const WrapTokenModal: FunctionComponent<{
 	mode: "wrap" | "unwrap"
@@ -24,16 +25,19 @@ const WrapTokenModal: FunctionComponent<{
 			title={isWrap ? "Wrap Tokens" : "Unwrap Tokens"}
 			warningMessage={`This request will incur a gas fee. If you would like to proceed, please click "Submit" below.`}
 		>
-			<label htmlFor="tokens-amount">Amount of Tokens You Hold: {tokensHeld}</label>
-			<Input
-				max={tokensAmount}
-				min={0}
-				number
-				id="tokens-amount"
-				name="wrap-tokens-amount"
-				value={tokensAmount}
-				onChange={e => setTokensAmout(e.target.value)}
-			/>
+			<div className="wrap-token-modal">
+				<p>Amount of Tokens You Hold: {tokensHeld}</p>
+				<label htmlFor="tokens-amount">Wrap Amount</label>
+				<Input
+					max={tokensAmount}
+					min={0}
+					number
+					id="tokens-amount"
+					name="wrap-tokens-amount"
+					value={tokensAmount}
+					onChange={e => setTokensAmout(e.target.value)}
+				/>
+			</div>
 		</Modal>
 	)
 }
