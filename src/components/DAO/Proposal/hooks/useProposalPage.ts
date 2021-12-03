@@ -1,10 +1,9 @@
 import {useState} from "react"
-import {SafeProposal} from "../../../../types/safeProposal"
-import {StrategyProposal} from "../../../../types/strategyProposal"
+import {ExtendedProposal} from "../../../../types/proposal"
 import {toastInfo} from "../../../UI/Toast"
 
 const useProposalPage = (
-	proposal: ((SafeProposal | StrategyProposal) & {proposalType: "admin" | "strategy"}) | null
+	proposal: ExtendedProposal | null
 ): {
 	showWrapModal: boolean
 	showDelegateModal: boolean

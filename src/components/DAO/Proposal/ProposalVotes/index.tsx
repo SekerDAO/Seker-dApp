@@ -8,7 +8,7 @@ import ProgressBar from "../../../UI/ProgressBar"
 import "./styles.scss"
 
 type VotesCardProps = {
-	votingStrategy: "admin" | VotingStrategy
+	votingStrategy: "admin" | "strategy"
 	type: "for" | "against" | "abstain"
 	totalValue: number
 	value: number

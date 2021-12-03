@@ -18,5 +18,13 @@
 
   &__card {
     padding: 20px;
+
+    &-wrapper {
+      margin-top: 20px;
+
+      &:first-of-type {
+        margin-top: 0;
+      }
+    }
   }
 }

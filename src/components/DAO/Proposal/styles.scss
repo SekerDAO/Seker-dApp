@@ -63,7 +63,7 @@
       &-left {
         display: flex;
         flex-wrap: wrap;
-        flex-grow: 1;
+        width: calc(100% - 280px);
         margin-right: 20px;
 
         h2 {

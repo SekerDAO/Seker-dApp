@@ -1,14 +1,13 @@
 import {FunctionComponent} from "react"
 import {Link} from "react-router-dom"
-import {SafeProposal} from "../../../../types/safeProposal"
-import {StrategyProposal} from "../../../../types/strategyProposal"
+import {ExtendedProposal} from "../../../../types/proposal"
 import {capitalize, formatReadableAddress} from "../../../../utlls"
 import Tag from "../../../UI/Tag"
 import "./styles.scss"
 
 const ProposalHeader: FunctionComponent<{
-	proposal: (SafeProposal | StrategyProposal) & {proposalType: string}
-	id: string
+	proposal: ExtendedProposal
+	id?: string
 	showLinks?: boolean
 }> = ({proposal, id, children, showLinks}) => {
 	const isExecuted = proposal.state === "executed"

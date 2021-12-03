@@ -3,20 +3,17 @@ import {getNonce} from "../../api/ethers/functions/gnosisSafe/safeUtils"
 import getSafeProposals from "../../api/firebase/safeProposal/getSafeProposals"
 import getStrategyProposals from "../../api/firebase/strategyProposal/getStrategyProposals"
 import EthersContext from "../../context/EthersContext"
-import {SafeProposal} from "../../types/safeProposal"
-import {StrategyProposal} from "../../types/strategyProposal"
+import {ExtendedProposal} from "../../types/proposal"
 
 const useProposals = (
 	gnosisAddress: string
 ): {
-	proposals: ((SafeProposal | StrategyProposal) & {proposalId: string; proposalType: string})[]
+	proposals: ExtendedProposal[]
 	loading: boolean
 	error: boolean
 	refetch: () => void
 } => {
-	const [proposals, setProposals] = useState<
-		((SafeProposal | StrategyProposal) & {proposalId: string; proposalType: string})[]
-	>([])
+	const [proposals, setProposals] = useState<ExtendedProposal[]>([])
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
 	const {provider} = useContext(EthersContext)
@@ -46,12 +43,12 @@ const useProposals = (
 							id: Number(p.id),
 							state: p.state === "active" && p.nonce < nonce ? "outdated" : p.state,
 							proposalType: "admin"
-						} as SafeProposal & {proposalId: string; proposalType: string})
+						} as ExtendedProposal)
 				),
 				...(strategyProposalsFirebaseData.map(p => ({
 					...p,
 					proposalType: "strategy"
-				})) as (StrategyProposal & {proposalId: string; proposalType: string})[])
+				})) as ExtendedProposal[])
 			])
 		} catch (e) {
 			console.error(e)

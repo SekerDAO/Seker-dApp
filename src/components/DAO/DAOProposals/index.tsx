@@ -1,8 +1,7 @@
 import {FunctionComponent, useState} from "react"
 import {Link, useLocation} from "react-router-dom"
 import useProposals from "../../../hooks/getters/useProposals"
-import {SafeProposal} from "../../../types/safeProposal"
-import {StrategyProposal} from "../../../types/strategyProposal"
+import {ExtendedProposal} from "../../../types/proposal"
 import Select from "../../Controls/Select"
 import ErrorPlaceholder from "../../UI/ErrorPlaceholder"
 import Loader from "../../UI/Loader"
@@ -11,12 +10,15 @@ import ProposalHeader from "../Proposal/ProposalHeader"
 import "./styles.scss"
 
 const DAOProposalCard: FunctionComponent<{
-	proposal: (SafeProposal | StrategyProposal) & {proposalId: string; proposalType: string}
+	proposal: ExtendedProposal
 }> = ({proposal}) => {
 	const {pathname} = useLocation()
 
 	return (
-		<Link to={`${pathname}?page=proposal&id=${proposal.proposalId}`}>
+		<Link
+			to={`${pathname}?page=proposal&id=${proposal.proposalId}`}
+			className="dao-proposals__card-wrapper"
+		>
 			<Paper className="dao-proposals__card">
 				<ProposalHeader proposal={proposal} id={proposal.proposalId} />
 			</Paper>

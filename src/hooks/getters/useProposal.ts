@@ -7,21 +7,19 @@ import getSafeProposal from "../../api/firebase/safeProposal/getSafeProposal"
 import getStrategyProposal from "../../api/firebase/strategyProposal/getStrategyProposal"
 import {AuthContext} from "../../context/AuthContext"
 import EthersContext from "../../context/EthersContext"
-import {SafeProposal, SafeProposalState} from "../../types/safeProposal"
-import {StrategyProposal} from "../../types/strategyProposal"
+import {ExtendedProposal} from "../../types/proposal"
+import {SafeProposalState} from "../../types/safeProposal"
 
 const useProposal = (
 	id: string
 ): {
-	proposal: ((SafeProposal | StrategyProposal) & {proposalType: "admin" | "strategy"}) | null
+	proposal: ExtendedProposal | null
 	gnosisVotingThreshold: number | null
 	loading: boolean
 	error: boolean
 	canSign: boolean
 } => {
-	const [proposal, setProposal] = useState<
-		((SafeProposal | StrategyProposal) & {proposalType: "admin" | "strategy"}) | null
-	>(null)
+	const [proposal, setProposal] = useState<ExtendedProposal | null>(null)
 	const [gnosisVotingThreshold, setGnosisVotingThreshold] = useState<number | null>(null)
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)

@@ -54,7 +54,6 @@ const MOCK_TRANSACTION: {
 	value: 0
 }
 const MOCK_TRANSACTIONS: Array<typeof MOCK_TRANSACTION> = [MOCK_TRANSACTION, MOCK_TRANSACTION]
-const MOCK_VOTING_STRATEGY = "admin"
 
 const Proposal: FunctionComponent = () => {
 	const {account} = useContext(AuthContext)
@@ -156,21 +155,21 @@ const Proposal: FunctionComponent = () => {
 										value={500000}
 										totalValue={1000000}
 										votes={MOCK_VOTES}
-										votingStrategy={MOCK_VOTING_STRATEGY}
+										votingStrategy={proposal.proposalType}
 									/>
 									<ProposalVotes
 										type="against"
 										value={250000}
 										totalValue={1000000}
 										votes={MOCK_VOTES}
-										votingStrategy={MOCK_VOTING_STRATEGY}
+										votingStrategy={proposal.proposalType}
 									/>
 									<ProposalVotes
 										type="abstain"
 										value={250000}
 										totalValue={1000000}
 										votes={MOCK_VOTES}
-										votingStrategy={MOCK_VOTING_STRATEGY}
+										votingStrategy={proposal.proposalType}
 									/>
 								</>
 							)}
