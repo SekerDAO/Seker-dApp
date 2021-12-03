@@ -4,6 +4,7 @@ import {Abi} from "./abi"
 export type StrategyProposalState = "active" // TODO
 
 export type StrategyProposal = {
+	id?: string
 	gnosisAddress: string
 	userAddress: string
 	strategyAddress: string
@@ -15,4 +16,5 @@ export type StrategyProposal = {
 	title: string
 	description?: string
 	state: StrategyProposalState
+	type?: string
 }

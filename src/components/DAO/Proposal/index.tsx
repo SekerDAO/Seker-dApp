@@ -5,6 +5,7 @@ import {ReactComponent as WarningIcon} from "../../../assets/icons/warning.svg"
 import {ReactComponent as WrapTokenDone} from "../../../assets/icons/wrap-token-done.svg"
 import {AuthContext} from "../../../context/AuthContext"
 import useProposal from "../../../hooks/getters/useProposal"
+import {SafeProposal} from "../../../types/safeProposal"
 import {formatReadableAddress} from "../../../utlls"
 import Button from "../../Controls/Button"
 import BackButton from "../../Controls/Button/BackButton"
@@ -54,14 +55,19 @@ const Proposal: FunctionComponent = () => {
 	const {search} = useLocation()
 	const id = useMemo(() => new URLSearchParams(search).get("id"), [search]) as string
 	const {proposal, gnosisVotingThreshold, loading, error, canSign} = useProposal(id)
-	const {sign, processing} = useSignProposal({proposal, gnosisVotingThreshold, canSign, id})
+	const {sign, processing} = useSignProposal({
+		proposal: proposal as SafeProposal,
+		gnosisVotingThreshold,
+		canSign,
+		id
+	})
 
+	const safeProposal = proposal as SafeProposal
 	if (loading || !proposal) return <Loader />
 	if (error) return <ErrorPlaceholder />
 
 	const isExecuted = proposal.state === "executed"
-	// TODO: get actual voting strategy from proposal
-	const isAdminProposal = MOCK_VOTING_STRATEGY === "admin"
+	const isAdminProposal = proposal.proposalType === "admin"
 
 	return (
 		<div className="proposal">
@@ -80,9 +86,9 @@ const Proposal: FunctionComponent = () => {
 							<ProposalVotes
 								fullWidth
 								type="for"
-								value={proposal.signatures.length}
-								totalValue={gnosisVotingThreshold || proposal.signatures.length}
-								votes={proposal.signatures.map(signature => ({
+								value={safeProposal.signatures.length}
+								totalValue={gnosisVotingThreshold || safeProposal.signatures.length}
+								votes={safeProposal.signatures.map(signature => ({
 									address: signature.signer,
 									tokens: 1
 								}))}

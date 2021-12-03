@@ -2,6 +2,7 @@ import {FunctionComponent, useState} from "react"
 import {Link, useLocation} from "react-router-dom"
 import useProposals from "../../../hooks/getters/useProposals"
 import {SafeProposal} from "../../../types/safeProposal"
+import {StrategyProposal} from "../../../types/strategyProposal"
 import Select from "../../Controls/Select"
 import ErrorPlaceholder from "../../UI/ErrorPlaceholder"
 import Loader from "../../UI/Loader"
@@ -10,7 +11,7 @@ import ProposalHeader from "../Proposal/ProposalHeader"
 import "./styles.scss"
 
 const DAOProposalCard: FunctionComponent<{
-	proposal: SafeProposal & {proposalId: string}
+	proposal: (SafeProposal | StrategyProposal) & {proposalId: string; proposalType: string}
 }> = ({proposal}) => {
 	const {pathname} = useLocation()
 

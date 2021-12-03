@@ -7,17 +7,20 @@ import getSafeProposal from "../../api/firebase/safeProposal/getSafeProposal"
 import {AuthContext} from "../../context/AuthContext"
 import EthersContext from "../../context/EthersContext"
 import {SafeProposal, SafeProposalState} from "../../types/safeProposal"
+import {StrategyProposal} from "../../types/strategyProposal"
 
 const useProposal = (
 	id: string
 ): {
-	proposal: SafeProposal | null
+	proposal: ((SafeProposal | StrategyProposal) & {proposalType: "admin" | "strategy"}) | null
 	gnosisVotingThreshold: number | null
 	loading: boolean
 	error: boolean
 	canSign: boolean
 } => {
-	const [proposal, setProposal] = useState<SafeProposal | null>(null)
+	const [proposal, setProposal] = useState<
+		((SafeProposal | StrategyProposal) & {proposalType: "admin" | "strategy"}) | null
+	>(null)
 	const [gnosisVotingThreshold, setGnosisVotingThreshold] = useState<number | null>(null)
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
@@ -46,7 +49,7 @@ const useProposal = (
 				getDAO(_proposal.gnosisAddress),
 				getOwners(_proposal.gnosisAddress, provider)
 			])
-			setProposal({..._proposal, state: trueState})
+			setProposal({..._proposal, proposalType: "admin", state: trueState})
 			setGnosisVotingThreshold(votingThreshold)
 			setCanSign(
 				!!(
