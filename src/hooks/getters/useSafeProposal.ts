@@ -8,17 +8,17 @@ import {AuthContext} from "../../context/AuthContext"
 import EthersContext from "../../context/EthersContext"
 import {SafeProposal, SafeProposalState} from "../../types/safeProposal"
 
-const useProposal = (
+const useSafeProposal = (
 	id: string
 ): {
-	proposal: SafeProposal | null
-	gnosisVotingThreshold: number | null
+	proposal: (SafeProposal & {proposalId: string; gnosisVotingThreshold: number}) | null
 	loading: boolean
 	error: boolean
 	canSign: boolean
 } => {
-	const [proposal, setProposal] = useState<SafeProposal | null>(null)
-	const [gnosisVotingThreshold, setGnosisVotingThreshold] = useState<number | null>(null)
+	const [proposal, setProposal] = useState<
+		(SafeProposal & {proposalId: string; gnosisVotingThreshold: number}) | null
+	>(null)
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
 	const [canSign, setCanSign] = useState(false)
@@ -29,32 +29,36 @@ const useProposal = (
 		try {
 			setLoading(true)
 			setError(false)
-			const _proposal = await getSafeProposal(id)
-			if (!_proposal) {
+			const proposalData = await getSafeProposal(id)
+			if (!proposalData) {
 				throw new Error("Proposal not found")
 			}
-			let trueState: SafeProposalState = _proposal.state
+			let trueState: SafeProposalState = proposalData.state
 			if (trueState === "active") {
-				const nonce = await getNonce(_proposal.gnosisAddress, provider)
-				if (_proposal.nonce < nonce) {
+				const nonce = await getNonce(proposalData.gnosisAddress, provider)
+				if (proposalData.nonce < nonce) {
 					trueState = "outdated"
 				}
 			}
 			// We don't need DAO, but it will throw an error if it's not found, so we check for it
 			const [votingThreshold, , owners] = await Promise.all([
-				getVotingThreshold(_proposal.gnosisAddress, provider),
-				getDAO(_proposal.gnosisAddress),
-				getOwners(_proposal.gnosisAddress, provider)
+				getVotingThreshold(proposalData.gnosisAddress, provider),
+				getDAO(proposalData.gnosisAddress),
+				getOwners(proposalData.gnosisAddress, provider)
 			])
-			setProposal({..._proposal, state: trueState})
-			setGnosisVotingThreshold(votingThreshold)
+			setProposal({
+				...proposalData,
+				state: trueState,
+				gnosisVotingThreshold: votingThreshold,
+				proposalId: id
+			})
 			setCanSign(
 				!!(
 					account &&
 					connected &&
 					owners.includes(account) &&
 					trueState === "active" &&
-					!_proposal.signatures?.find(s => s.signer.toLowerCase() === account)
+					!proposalData.signatures?.find(s => s.signer.toLowerCase() === account)
 				)
 			)
 		} catch (e) {
@@ -72,11 +76,10 @@ const useProposal = (
 
 	return {
 		proposal,
-		gnosisVotingThreshold,
 		loading,
 		error,
 		canSign
 	}
 }
 
-export default useProposal
+export default useSafeProposal

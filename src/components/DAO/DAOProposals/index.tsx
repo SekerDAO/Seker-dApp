@@ -16,7 +16,11 @@ const DAOProposalCard: FunctionComponent<{
 	const {pathname} = useLocation()
 
 	return (
-		<Link to={`${pathname}?page=proposal&id=${proposal.proposalId}`}>
+		<Link
+			to={`${pathname}?page=proposal&type=${
+				(proposal as SafeProposal).type ? "safe" : "strategy"
+			}&id=${proposal.proposalId}`}
+		>
 			<Paper className="dao-proposals__card">
 				<ProposalHeader proposal={proposal} id={proposal.proposalId} />
 			</Paper>

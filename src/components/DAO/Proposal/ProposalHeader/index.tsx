@@ -1,21 +1,17 @@
 import {FunctionComponent} from "react"
 import {Link} from "react-router-dom"
-import {SafeProposal} from "../../../../types/safeProposal"
+import {isSafeProposal, SafeProposal} from "../../../../types/safeProposal"
 import {StrategyProposal} from "../../../../types/strategyProposal"
 import {capitalize, formatReadableAddress} from "../../../../utlls"
 import Tag from "../../../UI/Tag"
 import "./styles.scss"
-
-const MOCK_VOTING_STRATEGY = "admin"
 
 const ProposalHeader: FunctionComponent<{
 	proposal: SafeProposal | StrategyProposal
 	id: string
 	showLinks?: boolean
 }> = ({proposal, id, children, showLinks}) => {
-	const isExecuted = proposal.state === "executed"
-	// TODO: get actual voting strategy from proposal
-	const isAdminProposal = MOCK_VOTING_STRATEGY === "admin"
+	const isAdminProposal = isSafeProposal(proposal)
 
 	return (
 		<div className="proposal__header">
@@ -27,7 +23,7 @@ const ProposalHeader: FunctionComponent<{
 			<div className="proposal__header-subtitle">
 				<Tag variant={proposal.state}>{capitalize(proposal.state)}</Tag>
 				<span>ID [ {id} ]</span>
-				{!isExecuted && !isAdminProposal && (
+				{proposal.state === "active" && !isAdminProposal && (
 					<>
 						<span>•</span>
 						<span>[ # ] Days, [ # ] Hours Left</span>

@@ -25,21 +25,19 @@ import {toastError, toastSuccess} from "../../../components/UI/Toast"
 import EthersContext from "../../../context/EthersContext"
 import {SafeProposal} from "../../../types/safeProposal"
 
-const useSignProposal = ({
+const useSignSafeProposal = ({
 	proposal,
-	gnosisVotingThreshold,
 	canSign,
 	id
 }: {
-	proposal: SafeProposal | null
-	gnosisVotingThreshold: number | null
+	proposal: (SafeProposal & {gnosisVotingThreshold: number}) | null
 	canSign: boolean
 	id: string
 }): {processing: boolean; sign: () => Promise<void>} => {
 	const [processing, setProcessing] = useState(false)
 	const {signer} = useContext(EthersContext)
 	const sign = async () => {
-		if (!(signer && proposal && gnosisVotingThreshold !== null && canSign)) return
+		if (!(signer && proposal && canSign)) return
 		setProcessing(true)
 		try {
 			let signature: SafeSignature | undefined = undefined
@@ -64,7 +62,7 @@ const useSignProposal = ({
 					] as const
 					;[signature] = await signApproveNFTForAuction(...signingArgs)
 					signatureStep2 = await signCreateAuction(...signingArgs)
-					if (proposal.signatures?.length === gnosisVotingThreshold - 1) {
+					if (proposal.signatures?.length === proposal.gnosisVotingThreshold - 1) {
 						await executeApproveNFTForAuction(
 							proposal.gnosisAddress,
 							proposal.nftId!,
@@ -93,7 +91,7 @@ const useSignProposal = ({
 						proposal.auctionId!,
 						signer
 					)
-					if (proposal.signatures?.length === gnosisVotingThreshold - 1) {
+					if (proposal.signatures?.length === proposal.gnosisVotingThreshold - 1) {
 						await executeCancelAuction(
 							proposal.gnosisAddress,
 							proposal.auctionId!,
@@ -111,7 +109,7 @@ const useSignProposal = ({
 							proposal.newThreshold!,
 							signer
 						)
-						if (proposal.signatures?.length === gnosisVotingThreshold - 1) {
+						if (proposal.signatures?.length === proposal.gnosisVotingThreshold - 1) {
 							await executeAddOwner(
 								proposal.gnosisAddress,
 								proposal.recipientAddress!,
@@ -128,7 +126,7 @@ const useSignProposal = ({
 							proposal.newThreshold!,
 							signer
 						)
-						if (proposal.signatures?.length === gnosisVotingThreshold - 1) {
+						if (proposal.signatures?.length === proposal.gnosisVotingThreshold - 1) {
 							await addSafeProposalSignature({
 								proposalId: id,
 								signature: signature!,
@@ -155,7 +153,7 @@ const useSignProposal = ({
 						throw new Error("Unexpected empty usulAddress in proposal")
 					}
 					;[signature] = await signMultiSend(proposal.multiTx, proposal.gnosisAddress, signer)
-					if (proposal.signatures?.length === gnosisVotingThreshold - 1) {
+					if (proposal.signatures?.length === proposal.gnosisVotingThreshold - 1) {
 						await executeMultiSend(
 							proposal.multiTx,
 							proposal.gnosisAddress,
@@ -190,4 +188,4 @@ const useSignProposal = ({
 	return {sign, processing}
 }
 
-export default useSignProposal
+export default useSignSafeProposal

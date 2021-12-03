@@ -1,5 +1,6 @@
 import {SafeSignature, SafeTransaction} from "../api/ethers/functions/gnosisSafe/safeUtils"
 import {Abi} from "./abi"
+import {StrategyProposal} from "./strategyProposal"
 
 export type SafeProposalType =
 	| "changeRole"
@@ -58,3 +59,7 @@ export type SafeProposal = {
 	usulAddress?: string
 	multiTx?: SafeTransaction
 }
+
+export const isSafeProposal = (
+	proposal: SafeProposal | StrategyProposal
+): proposal is SafeProposal => !!(proposal as SafeProposal).type

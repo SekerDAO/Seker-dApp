@@ -1,5 +1,5 @@
 import {FunctionComponent, useState} from "react"
-import {VotingStrategy} from "../../../../types/DAO"
+import {VotingStrategyName} from "../../../../types/DAO"
 import {capitalize, formatNumber, formatReadableAddress} from "../../../../utlls"
 import Button from "../../../Controls/Button"
 import Modal from "../../../Modals/Modal"
@@ -8,12 +8,13 @@ import ProgressBar from "../../../UI/ProgressBar"
 import "./styles.scss"
 
 type VotesCardProps = {
-	votingStrategy: "admin" | VotingStrategy
+	votingStrategy: "admin" | VotingStrategyName
 	type: "for" | "against" | "abstain"
 	totalValue: number
 	value: number
 	votes: {address: string; tokens: number}[]
 }
+
 const VotesCard: FunctionComponent<VotesCardProps> = ({
 	children,
 	type,
