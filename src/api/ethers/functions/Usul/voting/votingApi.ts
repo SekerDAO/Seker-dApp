@@ -1,6 +1,6 @@
 import {Contract, ContractInterface} from "@ethersproject/contracts"
 import {JsonRpcSigner} from "@ethersproject/providers"
-import GovToken from "../../abis/GovToken.json"
+import GovToken from "../../../abis/GovToken.json"
 
 export const vote = async (
 	strategyAddress: string,

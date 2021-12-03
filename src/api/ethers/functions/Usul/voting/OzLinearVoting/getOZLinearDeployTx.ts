@@ -3,9 +3,9 @@ import {getCreate2Address} from "@ethersproject/address"
 import {Contract} from "@ethersproject/contracts"
 import {JsonRpcSigner} from "@ethersproject/providers"
 import {keccak256} from "@ethersproject/solidity"
-import ModuleFactory from "../../abis/ModuleFactory.json"
-import OZLinearVoting from "../../abis/OZLinearVoting.json"
-import {buildContractCall, SafeTransaction} from "../gnosisSafe/safeUtils"
+import ModuleFactory from "../../../../abis/ModuleFactory.json"
+import OZLinearVoting from "../../../../abis/OZLinearVoting.json"
+import {buildContractCall, SafeTransaction} from "../../../gnosisSafe/safeUtils"
 
 const {REACT_APP_MODULE_FACTORY_ADDRESS, REACT_APP_OZ_LINEAR_MASTER_ADDRESS} = process.env
 

@@ -1,5 +1,5 @@
 import {FunctionComponent, useState, useContext} from "react"
-import getOZLinearDeployTx from "../../../../api/ethers/functions/Usul/getOZLinearDeployTx"
+import getOZLinearDeployTx from "../../../../api/ethers/functions/Usul/voting/OzLinearVoting/getOZLinearDeployTx"
 import {SafeTransaction} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
 import {ReactComponent as DeleteIcon} from "../../../../assets/icons/delete.svg"
 import {ReactComponent as StepDotDoneIcon} from "../../../../assets/icons/step-dot-done.svg"

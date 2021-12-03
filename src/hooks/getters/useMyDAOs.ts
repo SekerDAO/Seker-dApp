@@ -1,5 +1,5 @@
 import {useContext, useEffect, useState} from "react"
-import {getStrategies} from "../../api/ethers/functions/Usul/usulStrategies"
+import {getStrategies} from "../../api/ethers/functions/Usul/voting/usulStrategies"
 import getOwners from "../../api/ethers/functions/gnosisSafe/getOwners"
 import getVotingThreshold from "../../api/ethers/functions/gnosisSafe/getVotingThreshold"
 import getDAO from "../../api/firebase/DAO/getDAO"
