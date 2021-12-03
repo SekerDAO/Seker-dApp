@@ -5,7 +5,6 @@ import Modal from "../Modal"
 const DelegateTokenModal: FunctionComponent<{
 	show: boolean
 	onClose: () => void
-	tokensHeld: number
 	onSubmit: (delegateesAddress: string) => void
 }> = ({show, onClose, onSubmit}) => {
 	const [delegateesAddress, setDelegateesAddress] = useState("")
