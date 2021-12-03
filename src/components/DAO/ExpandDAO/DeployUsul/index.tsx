@@ -8,6 +8,7 @@ import {
 import EthersContext from "../../../../context/EthersContext"
 import useProposals from "../../../../hooks/getters/useProposals"
 import {BuiltVotingStrategy} from "../../../../types/DAO"
+import {SafeProposal} from "../../../../types/safeProposal"
 import ErrorPlaceholder from "../../../UI/ErrorPlaceholder"
 import ChooseVotingStrategies from "../ChooseVotingStrategies"
 import ConfirmDeployUsul from "../ConfirmDeployUsul"
@@ -57,7 +58,8 @@ const DeployUsul: FunctionComponent<{
 	useEffect(() => {
 		if (proposals) {
 			const expandProposal = proposals.find(
-				proposal => proposal.type === "decentralizeDAO" && proposal.state === "active"
+				proposal =>
+					(proposal as SafeProposal).type === "decentralizeDAO" && proposal.state === "active"
 			)
 			if (expandProposal) {
 				push(`/dao/${gnosisAddress}?page=proposal&proposalId=${expandProposal.id}`)

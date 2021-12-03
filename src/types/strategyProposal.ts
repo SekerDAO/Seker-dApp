@@ -1,9 +1,26 @@
 import {VotingStrategyName} from "./DAO"
 import {Abi} from "./abi"
 
-export type StrategyProposalState = "active" // TODO
+export const strategyProposalStates: StrategyProposalState[] = [
+	"active",
+	"canceled",
+	"timeLocked",
+	"executed",
+	"executed",
+	"executing",
+	"uninitialized"
+]
 
-export type StrategyProposal = {
+export type StrategyProposalState =
+	| "active"
+	| "canceled"
+	| "timeLocked"
+	| "executed"
+	| "executing"
+	| "uninitialized"
+
+export type StrategyProposalFirebaseData = {
+	id: number
 	gnosisAddress: string
 	userAddress: string
 	strategyAddress: string
@@ -14,5 +31,8 @@ export type StrategyProposal = {
 	args: (string | string[])[] // TODO
 	title: string
 	description?: string
+}
+
+export type StrategyProposal = StrategyProposalFirebaseData & {
 	state: StrategyProposalState
 }

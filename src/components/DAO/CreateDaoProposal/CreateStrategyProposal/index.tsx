@@ -38,11 +38,12 @@ const CreateStrategyProposal: FunctionComponent<{
 				args,
 				provider
 			)
-			await submitProposal(usulAddress, strategyAddress, [tx], signer)
+			const proposalId = await submitProposal(usulAddress, strategyAddress, [tx], signer)
 			await addStrategyProposal({
 				gnosisAddress,
 				strategyAddress,
 				strategyType,
+				id: proposalId,
 				contractAddress: address,
 				contractAbi: contractMethods,
 				contractMethod: contractMethods[selectedMethodIndex].name,

@@ -1,6 +1,7 @@
 import {FunctionComponent} from "react"
 import {Link} from "react-router-dom"
 import {SafeProposal} from "../../../../types/safeProposal"
+import {StrategyProposal} from "../../../../types/strategyProposal"
 import {capitalize, formatReadableAddress} from "../../../../utlls"
 import Tag from "../../../UI/Tag"
 import "./styles.scss"
@@ -8,7 +9,7 @@ import "./styles.scss"
 const MOCK_VOTING_STRATEGY = "admin"
 
 const ProposalHeader: FunctionComponent<{
-	proposal: SafeProposal
+	proposal: SafeProposal | StrategyProposal
 	id: string
 	showLinks?: boolean
 }> = ({proposal, id, children, showLinks}) => {

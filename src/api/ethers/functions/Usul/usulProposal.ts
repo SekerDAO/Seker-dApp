@@ -1,5 +1,7 @@
+import {BigNumberish} from "@ethersproject/bignumber"
 import {Contract, ContractInterface} from "@ethersproject/contracts"
 import {JsonRpcProvider, JsonRpcSigner} from "@ethersproject/providers"
+import {StrategyProposalState, strategyProposalStates} from "../../../../types/strategyProposal"
 import Usul from "../../abis/Usul.json"
 import {buildContractCall, SafeTransaction} from "../gnosisSafe/safeUtils"
 
@@ -23,11 +25,41 @@ export const submitProposal = async (
 	transactions: SafeTransaction[],
 	signer: JsonRpcSigner,
 	extraData = "0x"
-): Promise<void> => {
-	const usulProxy = new Contract(usulAddress, Usul.abi, signer)
-	const hashes = await generateTxHashes(usulAddress, transactions, signer)
-	await usulProxy.submitProposal(hashes, strategyAddress, extraData)
-}
+): Promise<number> =>
+	new Promise(async (resolve, reject) => {
+		try {
+			const usulProxy = new Contract(usulAddress, Usul.abi, signer)
+			const hashes = await generateTxHashes(usulAddress, transactions, signer)
+			const userAddress = await signer.getAddress()
+
+			const eventListener = async (
+				strategy: string,
+				proposalId: BigNumberish,
+				proposer: string
+			) => {
+				try {
+					if (
+						!(
+							strategy.toLowerCase() === strategyAddress.toLowerCase() &&
+							proposer.toLowerCase() === userAddress.toLowerCase()
+						)
+					) {
+						return
+					}
+					usulProxy.off("ProposalCreated", eventListener)
+					resolve(Number(proposalId.toString()))
+				} catch (e) {
+					reject(e)
+				}
+			}
+
+			usulProxy.on("ProposalCreated", eventListener)
+
+			await usulProxy.submitProposal(hashes, strategyAddress, extraData)
+		} catch (err) {
+			reject(err)
+		}
+	})
 
 export const buildProposalTx = async (
 	contractAddress: string,
@@ -64,4 +96,14 @@ export const executeProposalBatch = async (
 ): Promise<void> => {
 	const usul = new Contract(usulAddress, Usul.abi, provider)
 	await usul.executeProposalBatch(proposalId, targets, values, txDatas, operations)
+}
+
+export const getProposalState = async (
+	usulAddress: string,
+	proposalId: number,
+	provider: JsonRpcProvider
+): Promise<StrategyProposalState> => {
+	const usul = new Contract(usulAddress, Usul.abi, provider)
+	const state = await usul.state(proposalId)
+	return strategyProposalStates[state]
 }
