@@ -1,8 +1,8 @@
 import {Contract} from "@ethersproject/contracts"
 import {JsonRpcProvider} from "@ethersproject/providers"
-import {VotingStrategy} from "../../../../types/DAO"
-import OZLinearVoting from "../../abis/OZLinearVoting.json"
-import Usul from "../../abis/Usul.json"
+import {VotingStrategy} from "../../../../../types/DAO"
+import OZLinearVoting from "../../../abis/OZLinearVoting.json"
+import Usul from "../../../abis/Usul.json"
 
 export const getStrategies = async (
 	usulAddress: string,

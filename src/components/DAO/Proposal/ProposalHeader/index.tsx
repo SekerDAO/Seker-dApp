@@ -1,20 +1,18 @@
 import {FunctionComponent} from "react"
 import {Link} from "react-router-dom"
 import {SafeProposal} from "../../../../types/safeProposal"
+import {StrategyProposal} from "../../../../types/strategyProposal"
 import {capitalize, formatReadableAddress} from "../../../../utlls"
 import Tag from "../../../UI/Tag"
 import "./styles.scss"
 
-const MOCK_VOTING_STRATEGY = "admin"
-
 const ProposalHeader: FunctionComponent<{
-	proposal: SafeProposal
+	proposal: (SafeProposal | StrategyProposal) & {proposalType: string}
 	id: string
 	showLinks?: boolean
 }> = ({proposal, id, children, showLinks}) => {
 	const isExecuted = proposal.state === "executed"
-	// TODO: get actual voting strategy from proposal
-	const isAdminProposal = MOCK_VOTING_STRATEGY === "admin"
+	const isAdminProposal = proposal.proposalType === "admin"
 
 	return (
 		<div className="proposal__header">

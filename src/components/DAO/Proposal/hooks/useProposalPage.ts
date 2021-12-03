@@ -4,7 +4,7 @@ import {StrategyProposal} from "../../../../types/strategyProposal"
 import {toastInfo} from "../../../UI/Toast"
 
 const useProposalPage = (
-	proposal: SafeProposal | StrategyProposal | null
+	proposal: ((SafeProposal | StrategyProposal) & {proposalType: "admin" | "strategy"}) | null
 ): {
 	showWrapModal: boolean
 	showDelegateModal: boolean
@@ -24,8 +24,7 @@ const useProposalPage = (
 	isAdminProposal: boolean
 } => {
 	const isExecuted = proposal?.state === "executed"
-	// TODO: get actual voting strategy from proposal
-	const isAdminProposal = true
+	const isAdminProposal = proposal?.proposalType === "admin"
 	// TODO: Identify tokens being wrapped
 	const tokensWrapped = false
 	// TODO: Identify vote being delegated

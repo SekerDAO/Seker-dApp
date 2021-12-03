@@ -4,20 +4,24 @@ import getVotingThreshold from "../../api/ethers/functions/gnosisSafe/getVotingT
 import {getNonce} from "../../api/ethers/functions/gnosisSafe/safeUtils"
 import getDAO from "../../api/firebase/DAO/getDAO"
 import getSafeProposal from "../../api/firebase/safeProposal/getSafeProposal"
+import getStrategyProposal from "../../api/firebase/strategyProposal/getStrategyProposal"
 import {AuthContext} from "../../context/AuthContext"
 import EthersContext from "../../context/EthersContext"
 import {SafeProposal, SafeProposalState} from "../../types/safeProposal"
+import {StrategyProposal} from "../../types/strategyProposal"
 
 const useProposal = (
 	id: string
 ): {
-	proposal: SafeProposal | null
+	proposal: ((SafeProposal | StrategyProposal) & {proposalType: "admin" | "strategy"}) | null
 	gnosisVotingThreshold: number | null
 	loading: boolean
 	error: boolean
 	canSign: boolean
 } => {
-	const [proposal, setProposal] = useState<SafeProposal | null>(null)
+	const [proposal, setProposal] = useState<
+		((SafeProposal | StrategyProposal) & {proposalType: "admin" | "strategy"}) | null
+	>(null)
 	const [gnosisVotingThreshold, setGnosisVotingThreshold] = useState<number | null>(null)
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
@@ -29,34 +33,44 @@ const useProposal = (
 		try {
 			setLoading(true)
 			setError(false)
-			const _proposal = await getSafeProposal(id)
+			let _proposal
+			// TODO: Refactor to get proposal from single function
+			_proposal = await getStrategyProposal(id)
 			if (!_proposal) {
-				throw new Error("Proposal not found")
-			}
-			let trueState: SafeProposalState = _proposal.state
-			if (trueState === "active") {
-				const nonce = await getNonce(_proposal.gnosisAddress, provider)
-				if (_proposal.nonce < nonce) {
-					trueState = "outdated"
+				_proposal = await getSafeProposal(id)
+				if (!_proposal) {
+					throw new Error("Proposal not found")
 				}
-			}
-			// We don't need DAO, but it will throw an error if it's not found, so we check for it
-			const [votingThreshold, , owners] = await Promise.all([
-				getVotingThreshold(_proposal.gnosisAddress, provider),
-				getDAO(_proposal.gnosisAddress),
-				getOwners(_proposal.gnosisAddress, provider)
-			])
-			setProposal({..._proposal, state: trueState})
-			setGnosisVotingThreshold(votingThreshold)
-			setCanSign(
-				!!(
-					account &&
-					connected &&
-					owners.includes(account) &&
-					trueState === "active" &&
-					!_proposal.signatures?.find(s => s.signer.toLowerCase() === account)
+				let trueState: SafeProposalState = _proposal.state
+				if (trueState === "active") {
+					const nonce = await getNonce(_proposal.gnosisAddress, provider)
+					if (_proposal.nonce < nonce) {
+						trueState = "outdated"
+					}
+				}
+				const [votingThreshold, , owners] = await Promise.all([
+					getVotingThreshold(_proposal.gnosisAddress, provider),
+					getDAO(_proposal.gnosisAddress),
+					getOwners(_proposal.gnosisAddress, provider)
+				])
+				setProposal({..._proposal, proposalType: "admin", state: trueState})
+				setGnosisVotingThreshold(votingThreshold)
+				setCanSign(
+					!!(
+						account &&
+						connected &&
+						owners.includes(account) &&
+						trueState === "active" &&
+						!_proposal.signatures?.find(s => s.signer.toLowerCase() === account)
+					)
 				)
-			)
+			} else {
+				const [votingThreshold] = await Promise.all([
+					getVotingThreshold(_proposal.gnosisAddress, provider)
+				])
+				setProposal({..._proposal, proposalType: "strategy"})
+				setGnosisVotingThreshold(votingThreshold)
+			}
 		} catch (e) {
 			console.error(e)
 			setError(true)

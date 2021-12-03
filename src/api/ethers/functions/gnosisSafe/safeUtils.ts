@@ -7,9 +7,9 @@ import {JsonRpcProvider, JsonRpcSigner, TransactionResponse} from "@ethersprojec
 import {pack} from "@ethersproject/solidity"
 import {BuiltVotingStrategy} from "../../../../types/DAO"
 import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
-import getOZLinearSetUsul from "../Usul/getOZLinearSetUsul"
 import getRegisterUsulTx from "../Usul/getRegisterUsulTx"
 import getUsulDeploy from "../Usul/getUsulDeploy"
+import getOZLinearSetUsul from "../Usul/voting/OzLinearVoting/getOZLinearSetUsul"
 
 const EIP712_SAFE_TX_TYPE = {
 	SafeTx: [
