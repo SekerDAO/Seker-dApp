@@ -63,7 +63,7 @@
       &-left {
         display: flex;
         flex-wrap: wrap;
-        flex-grow: 1;
+        width: calc(100% - 280px);
         margin-right: 20px;
 
         h2 {
@@ -94,12 +94,43 @@
       display: flex;
       flex-wrap: wrap;
 
+      &-warning {
+        display: flex;
+        margin-top: 20px;
+
+        svg {
+          margin-right: 10px;
+        }
+      }
+
+      &-container {
+        display: flex;
+
+        svg {
+          &:hover {
+            cursor: pointer;
+          }
+        }
+      }
+
+      & &-icon {
+        &--disabled {
+          path {
+            fill: $dark-grey75;
+          }
+
+          &:hover {
+            cursor: not-allowed;
+          }
+        }
+      }
+
       &-step {
         flex-grow: 1;
         margin-left: 10px;
 
         h3 {
-          margin: 10px 0;
+          margin-bottom: 10px;
         }
 
         .btn {
@@ -110,15 +141,6 @@
       .divider {
         margin: 20px 0;
         width: 100%;
-      }
-
-      &-warning {
-        display: flex;
-        margin-top: 20px;
-
-        svg {
-          margin-right: 10px;
-        }
       }
     }
 
