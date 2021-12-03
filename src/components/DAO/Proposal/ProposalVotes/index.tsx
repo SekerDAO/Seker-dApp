@@ -1,5 +1,4 @@
 import {FunctionComponent, useState} from "react"
-import {VotingStrategy} from "../../../../types/DAO"
 import {capitalize, formatNumber, formatReadableAddress} from "../../../../utlls"
 import Button from "../../../Controls/Button"
 import Modal from "../../../Modals/Modal"
