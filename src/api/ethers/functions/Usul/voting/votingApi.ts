@@ -6,14 +6,14 @@ export const vote = async (
 	strategyAddress: string,
 	proposalId: number,
 	contractAbi: ContractInterface,
-	support: boolean,
+	support: boolean, // 0 - against, 1 - for, 2 - abstain
 	signer: JsonRpcSigner
 ): Promise<void> => {
 	const voting = new Contract(strategyAddress, contractAbi, signer)
 	await voting.vote(proposalId, support)
 }
 
-export const finalizeVote = async (
+export const finalizeVoting = async (
 	strategyAddress: string,
 	proposalId: number,
 	contractAbi: ContractInterface,

@@ -1,6 +1,6 @@
 import {JsonRpcSigner} from "@ethersproject/providers"
 import OZLinearVoting from "../../../../abis/OZLinearVoting.json"
-import {finalizeVote, vote} from "../votingApi"
+import {finalizeVoting, vote} from "../votingApi"
 
 export const voteLinear = async (
 	strategyAddress: string,
@@ -9,8 +9,8 @@ export const voteLinear = async (
 	signer: JsonRpcSigner
 ): Promise<void> => vote(strategyAddress, proposalId, OZLinearVoting.abi, support, signer)
 
-export const finalizeVoteLinear = async (
+export const finalizeVotingLinear = async (
 	strategyAddress: string,
 	proposalId: number,
 	signer: JsonRpcSigner
-): Promise<void> => finalizeVote(strategyAddress, proposalId, OZLinearVoting.abi, signer)
+): Promise<void> => finalizeVoting(strategyAddress, proposalId, OZLinearVoting.abi, signer)
