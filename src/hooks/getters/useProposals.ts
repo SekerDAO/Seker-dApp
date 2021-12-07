@@ -1,5 +1,6 @@
 import {useContext, useEffect, useState} from "react"
 import {getProposalState} from "../../api/ethers/functions/Usul/usulProposal"
+import {getStrategyGovTokenAddress} from "../../api/ethers/functions/Usul/voting/usulStrategies"
 import {getNonce} from "../../api/ethers/functions/gnosisSafe/safeUtils"
 import getDAO from "../../api/firebase/DAO/getDAO"
 import getSafeProposals from "../../api/firebase/safeProposal/getSafeProposals"
@@ -50,7 +51,8 @@ const useProposals = (
 		return Promise.all(
 			firebaseData.map(async p => ({
 				...p,
-				state: await getProposalState(usulAddress, p.id, provider)
+				state: await getProposalState(usulAddress, p.id, provider),
+				govTokenAddress: await getStrategyGovTokenAddress(p.strategyAddress, provider)
 			}))
 		)
 	}

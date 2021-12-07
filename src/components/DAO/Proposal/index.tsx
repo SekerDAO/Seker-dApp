@@ -1,22 +1,25 @@
-import {FunctionComponent, useMemo, useState} from "react"
+import {FunctionComponent, useContext, useEffect, useMemo, useState} from "react"
 import {useLocation} from "react-router-dom"
+import {checkDelegatee} from "../../../api/ethers/functions/Usul/voting/votingApi"
 import {ReactComponent as DelegateTokenDefault} from "../../../assets/icons/delegate-token-default.svg"
 import {ReactComponent as DelegateTokenDone} from "../../../assets/icons/delegate-token-done.svg"
 import {ReactComponent as WarningIcon} from "../../../assets/icons/warning.svg"
 import {ReactComponent as WrapTokenDefault} from "../../../assets/icons/wrap-token-default.svg"
 import {ReactComponent as WrapTokenDone} from "../../../assets/icons/wrap-token-done.svg"
+import {AuthContext} from "../../../context/AuthContext"
+import EthersContext from "../../../context/EthersContext"
 import useSafeProposal from "../../../hooks/getters/useSafeProposal"
 import useStrategyProposal from "../../../hooks/getters/useStrategyProposal"
 import {formatReadableAddress} from "../../../utlls"
 import Button from "../../Controls/Button"
 import DelegateTokenModal from "../../Modals/DelegateTokenModal"
+import VotingModal from "../../Modals/VotingModal"
 import WrapTokenModal from "../../Modals/WrapTokenModal"
 import useSignSafeProposal from "../../Proposal/hooks/useSignSafeProposal"
 import Copy from "../../UI/Copy"
 import Divider from "../../UI/Divider"
 import ErrorPlaceholder from "../../UI/ErrorPlaceholder"
 import Loader from "../../UI/Loader"
-import {toastWarning} from "../../UI/Toast"
 import ProposalLayout from "./ProposalLayout"
 import "./styles.scss"
 
@@ -56,11 +59,21 @@ const SafeProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 }
 
 const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
+	const {account, connected} = useContext(AuthContext)
+	const {provider} = useContext(EthersContext)
 	const {proposal, loading, error} = useStrategyProposal(id)
 	const [showWrapModal, setShowWrapModal] = useState(false)
 	const [showDelegateModal, setShowDelegateModal] = useState(false)
-	const [tokensWrapped, setTokensWrapped] = useState(false)
-	const [voteDelegated, setVoteDelegated] = useState(false)
+	const [showVotingModal, setShowVotingModal] = useState(false)
+	const [tokensWrapped, setTokensWrapped] = useState(false) // TODO: temporary doesn't make sense
+	const [delegatee, setDelegatee] = useState<string | null>(null)
+	useEffect(() => {
+		if (proposal?.govTokenAddress && account) {
+			checkDelegatee(proposal.govTokenAddress, account, provider).then(res => {
+				setDelegatee(res)
+			})
+		}
+	}, [proposal, account])
 
 	if (loading || !proposal) return <Loader />
 	if (error) return <ErrorPlaceholder />
@@ -71,14 +84,29 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 		setShowWrapModal(false)
 	}
 
-	const handleDelegateVote = () => {
-		console.log("TODO")
-		setVoteDelegated(true)
+	const handleDelegateVote = (newDelegatee: string) => {
+		setDelegatee(newDelegatee)
 		setShowDelegateModal(false)
 	}
 
+	// TODO: add case when user has already voted
+	const voteDisabled =
+		!(connected && proposal.state === "active") || (!!proposal.govTokenAddress && !delegatee)
+
 	return (
 		<>
+			<VotingModal
+				show={showVotingModal}
+				strategyAddress={proposal.strategyAddress}
+				strategyName={proposal.strategyType}
+				proposalId={proposal.id}
+				afterSubmit={() => {
+					setShowVotingModal(false)
+				}}
+				onClose={() => {
+					setShowVotingModal(false)
+				}}
+			/>
 			<WrapTokenModal
 				tokensHeld={100}
 				mode={tokensWrapped ? "unwrap" : "wrap"}
@@ -88,120 +116,131 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 					setShowWrapModal(false)
 				}}
 			/>
-			<DelegateTokenModal
-				show={showDelegateModal}
-				onClose={() => {
-					setShowDelegateModal(false)
-				}}
-				onSubmit={handleDelegateVote}
-			/>
+			{showDelegateModal && proposal.govTokenAddress && account && (
+				<DelegateTokenModal
+					tokenAddress={proposal.govTokenAddress}
+					onClose={() => {
+						setShowDelegateModal(false)
+					}}
+					afterSubmit={handleDelegateVote}
+					initialDelegatee={delegatee ?? account}
+				/>
+			)}
 			<ProposalLayout
 				proposal={proposal}
 				votesThreshold={100}
 				votingStrategy={proposal.strategyType}
 			>
-				<div className="proposal__content-participate-container">
-					<div>
-						{tokensWrapped ? (
-							<WrapTokenDone
-								width="50px"
-								height="50px"
+				{proposal.state === "active" ? (
+					account && connected ? (
+						<>
+							{proposal.govTokenAddress && (
+								<>
+									<div className="proposal__content-participate-container">
+										<div>
+											{tokensWrapped ? (
+												<WrapTokenDone
+													width="50px"
+													height="50px"
+													onClick={() => {
+														setShowWrapModal(true)
+													}}
+												/>
+											) : (
+												<WrapTokenDefault
+													width="50px"
+													height="50px"
+													onClick={() => {
+														setShowWrapModal(true)
+													}}
+												/>
+											)}
+										</div>
+										<div className="proposal__content-participate-step">
+											<h3>Step 1: Wrap Tokens</h3>
+											{tokensWrapped ? (
+												<>
+													<p>Wrapped Token Address</p>
+													<Copy value="TODO: Add real token address here">
+														{formatReadableAddress(MOCK_ADDRESS)}
+													</Copy>
+													<Button
+														buttonType="link"
+														onClick={() => {
+															setShowWrapModal(true)
+														}}
+													>
+														Unwrap Tokens
+													</Button>
+												</>
+											) : (
+												<p>
+													Ensure your ERC-20 tokens follow the OpenZeppelin ERC-20 Voting Token
+													Standard in order to vote.
+												</p>
+											)}
+										</div>
+									</div>
+									<Divider />
+									<div className="proposal__content-participate-container">
+										<div>
+											{delegatee ? (
+												<DelegateTokenDone
+													width="50px"
+													height="50px"
+													onClick={() => {
+														setShowDelegateModal(true)
+													}}
+												/>
+											) : (
+												<DelegateTokenDefault
+													width="50px"
+													height="50px"
+													onClick={() => {
+														setShowDelegateModal(true)
+													}}
+												/>
+											)}
+										</div>
+										<div className="proposal__content-participate-step">
+											<h3>Step 2: Delegate</h3>
+											{delegatee ? (
+												<>
+													<p>Currently Delegated to</p>
+													<Copy value={delegatee}>{formatReadableAddress(delegatee)}</Copy>
+													<Button
+														buttonType="link"
+														onClick={() => {
+															setShowDelegateModal(true)
+														}}
+													>
+														Change Delegation
+													</Button>
+												</>
+											) : (
+												<p>Choose to delegate to yourself or another address.</p>
+											)}
+										</div>
+									</div>
+									<Divider />
+								</>
+							)}
+							<Button
+								disabled={voteDisabled}
+								extraClassName="proposal__content-vote-button"
 								onClick={() => {
-									setShowWrapModal(true)
+									setShowVotingModal(true)
 								}}
-							/>
-						) : (
-							<WrapTokenDefault
-								width="50px"
-								height="50px"
-								onClick={() => {
-									setShowWrapModal(true)
-								}}
-							/>
-						)}
-					</div>
-					<div className="proposal__content-participate-step">
-						<h3>Step 1: Wrap Tokens</h3>
-						{tokensWrapped ? (
-							<>
-								<p>Wrapped Token Address</p>
-								<Copy value="TODO: Add real token address here">
-									{formatReadableAddress(MOCK_ADDRESS)}
-								</Copy>
-								<Button
-									buttonType="link"
-									onClick={() => {
-										setShowWrapModal(true)
-									}}
-								>
-									Unwrap Tokens
-								</Button>
-							</>
-						) : (
-							<p>
-								Ensure your ERC-20 tokens follow the OpenZeppelin ERC-20 Voting Token Standard in
-								order to vote.
-							</p>
-						)}
-					</div>
-				</div>
-				<Divider />
-				<div className="proposal__content-participate-container">
-					<div>
-						{voteDelegated ? (
-							<DelegateTokenDone
-								width="50px"
-								height="50px"
-								onClick={() => {
-									setShowDelegateModal(true)
-								}}
-							/>
-						) : (
-							<DelegateTokenDefault
-								width="50px"
-								height="50px"
-								onClick={
-									tokensWrapped
-										? () => {
-												setShowDelegateModal(true)
-										  }
-										: () => toastWarning("First - you need to wrap your tokens. Follow step above.")
-								}
-								className={
-									tokensWrapped ? undefined : "proposal__content-participate-icon--disabled"
-								}
-							/>
-						)}
-					</div>
-					<div className="proposal__content-participate-step">
-						<h3>Step 2: Delegate</h3>
-						{voteDelegated ? (
-							<>
-								<p>Currently Delegated to</p>
-								<Copy value="TODO: Add delegated user address here">
-									{formatReadableAddress(MOCK_ADDRESS)}
-								</Copy>
-								<Button
-									buttonType="link"
-									onClick={() => {
-										setShowDelegateModal(true)
-									}}
-								>
-									Change Delegation
-								</Button>
-							</>
-						) : (
-							<p>Choose to delegate to yourself or another address.</p>
-						)}
-					</div>
-				</div>
-				<Divider />
-				<Button
-					disabled={!tokensWrapped || !voteDelegated}
-					extraClassName="proposal__content-vote-button"
-				>
-					Vote
-				</Button>
+							>
+								Vote
+							</Button>
+						</>
+					) : (
+						<p>Please connect account</p>
+					)
+				) : (
+					<p>TODO: add different texts for different non-active proposal states</p>
+				)}
 			</ProposalLayout>
 		</>
 	)

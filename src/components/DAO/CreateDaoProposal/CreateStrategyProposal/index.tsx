@@ -49,8 +49,7 @@ const CreateStrategyProposal: FunctionComponent<{
 				contractMethod: contractMethods[selectedMethodIndex].name,
 				title,
 				description,
-				args,
-				state: "active"
+				args
 			})
 			setTitle("")
 			setDescription("")

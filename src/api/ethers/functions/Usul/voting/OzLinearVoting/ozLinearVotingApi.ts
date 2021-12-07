@@ -5,7 +5,7 @@ import {finalizeVoting, vote} from "../votingApi"
 export const voteLinear = async (
 	strategyAddress: string,
 	proposalId: number,
-	support: boolean,
+	support: number,
 	signer: JsonRpcSigner
 ): Promise<void> => vote(strategyAddress, proposalId, OZLinearVoting.abi, support, signer)
 

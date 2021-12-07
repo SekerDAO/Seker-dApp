@@ -1,16 +1,18 @@
+import {AddressZero} from "@ethersproject/constants"
 import {Contract, ContractInterface} from "@ethersproject/contracts"
-import {JsonRpcSigner} from "@ethersproject/providers"
+import {JsonRpcProvider, JsonRpcSigner} from "@ethersproject/providers"
 import GovToken from "../../../abis/GovToken.json"
 
 export const vote = async (
 	strategyAddress: string,
 	proposalId: number,
 	contractAbi: ContractInterface,
-	support: boolean, // 0 - against, 1 - for, 2 - abstain
+	support: number, // 0 - against, 1 - for, 2 - abstain
 	signer: JsonRpcSigner
 ): Promise<void> => {
 	const voting = new Contract(strategyAddress, contractAbi, signer)
-	await voting.vote(proposalId, support)
+	const tx = await voting.vote(proposalId, support)
+	await tx.wait()
 }
 
 export const finalizeVoting = async (
@@ -30,4 +32,17 @@ export const delegateVote = async (
 ): Promise<void> => {
 	const govToken = new Contract(govTokenAddress, GovToken.abi, signer)
 	await govToken.delegate(delegatee)
+}
+
+export const checkDelegatee = async (
+	govTokenAddress: string,
+	delegatorAddress: string,
+	provider: JsonRpcProvider
+): Promise<string | null> => {
+	const govToken = new Contract(govTokenAddress, GovToken.abi, provider)
+	const delegatee = await govToken.delegates(delegatorAddress)
+	if (delegatee.toLowerCase() === AddressZero.toLowerCase()) {
+		return null
+	}
+	return delegatee
 }

@@ -1,5 +1,6 @@
 import {useContext, useEffect, useState} from "react"
 import {getProposalState} from "../../api/ethers/functions/Usul/usulProposal"
+import {getStrategyGovTokenAddress} from "../../api/ethers/functions/Usul/voting/usulStrategies"
 import getDAO from "../../api/firebase/DAO/getDAO"
 import getStrategyProposal from "../../api/firebase/strategyProposal/getStrategyProposal"
 import {AuthContext} from "../../context/AuthContext"
@@ -32,9 +33,14 @@ const useStrategyProposal = (
 				throw new Error("Unexpected strategy proposal on DAO without usul address")
 			}
 			const state = await getProposalState(dao.usulAddress, proposalData.id, provider)
+			const govTokenAddress = await getStrategyGovTokenAddress(
+				proposalData.strategyAddress,
+				provider
+			)
 			setProposal({
 				...proposalData,
 				state,
+				govTokenAddress,
 				proposalId: id
 			})
 		} catch (e) {

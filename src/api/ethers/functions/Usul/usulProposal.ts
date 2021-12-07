@@ -2,6 +2,7 @@ import {BigNumberish} from "@ethersproject/bignumber"
 import {Contract, ContractInterface} from "@ethersproject/contracts"
 import {JsonRpcProvider, JsonRpcSigner} from "@ethersproject/providers"
 import {StrategyProposalState, strategyProposalStates} from "../../../../types/strategyProposal"
+import OZLinearVoting from "../../abis/OZLinearVoting.json"
 import Usul from "../../abis/Usul.json"
 import {buildContractCall, SafeTransaction} from "../gnosisSafe/safeUtils"
 
@@ -105,5 +106,25 @@ export const getProposalState = async (
 ): Promise<StrategyProposalState> => {
 	const usul = new Contract(usulAddress, Usul.abi, provider)
 	const state = await usul.state(proposalId)
+	if (state === 0) {
+		// Usul says proposal is active, but we need to get more info in this case
+		const {strategy: strategyAddress} = await usul.proposals(proposalId)
+		const strategy = new Contract(strategyAddress, OZLinearVoting.abi, provider)
+		const {deadline} = await strategy.proposals(proposalId)
+		if (Number(deadline.toString()) * 1000 < new Date().getTime()) {
+			// Deadline has passed: we have to determine if proposal is passed or failed
+			// Dirty hack: isPassed will fail if the proposal is not passed
+			try {
+				const passed = await strategy.isPassed(proposalId)
+				return passed ? "pending" : "failed" // Not sure this will ever become false
+			} catch (e) {
+				if (e.message.match("majority yesVotes not reached")) {
+					return "failed"
+				}
+				throw e
+			}
+		}
+		// Deadline has not passed, so state "active" is truthful
+	}
 	return strategyProposalStates[state]
 }

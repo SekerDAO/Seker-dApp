@@ -1,3 +1,4 @@
+import {AddressZero} from "@ethersproject/constants"
 import {Contract} from "@ethersproject/contracts"
 import {JsonRpcProvider} from "@ethersproject/providers"
 import {VotingStrategy} from "../../../../../types/DAO"
@@ -15,16 +16,28 @@ export const getStrategies = async (
 	)
 	return Promise.all(
 		addresses[0].map(async (address: string) => ({
-			name: await inspectStrategy(address, provider),
+			name: await getStrategyName(address, provider),
 			address
 		}))
 	)
 }
 
-export const inspectStrategy = async (
+export const getStrategyName = async (
 	strategyAddress: string,
 	provider: JsonRpcProvider
 ): Promise<string> => {
 	const strategy = new Contract(strategyAddress, OZLinearVoting.abi, provider)
 	return strategy.name()
+}
+
+export const getStrategyGovTokenAddress = async (
+	strategyAddress: string,
+	provider: JsonRpcProvider
+): Promise<string | null> => {
+	const strategy = new Contract(strategyAddress, OZLinearVoting.abi, provider)
+	const govTokenAddress = await strategy.governanceToken()
+	if (govTokenAddress.toLowerCase() === AddressZero.toLowerCase()) {
+		return null
+	}
+	return govTokenAddress
 }

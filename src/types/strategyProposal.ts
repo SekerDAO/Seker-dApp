@@ -18,6 +18,8 @@ export type StrategyProposalState =
 	| "executed"
 	| "executing"
 	| "uninitialized"
+	| "pending"
+	| "failed"
 
 export type StrategyProposalFirebaseData = {
 	id: number
@@ -35,4 +37,5 @@ export type StrategyProposalFirebaseData = {
 
 export type StrategyProposal = StrategyProposalFirebaseData & {
 	state: StrategyProposalState
+	govTokenAddress: string | null
 }

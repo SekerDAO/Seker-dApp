@@ -131,13 +131,7 @@ const ProposalLayout: FunctionComponent<{
 						</div>
 						<div className="proposal__content-details-right">
 							<h2>Participate</h2>
-							<Paper className="proposal__content-participate">
-								{proposal.state === "executed" ? (
-									<p>This proposal has been confirmed and executed.</p>
-								) : (
-									children
-								)}
-							</Paper>
+							<Paper className="proposal__content-participate">{children}</Paper>
 						</div>
 					</div>
 				</div>

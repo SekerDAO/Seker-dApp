@@ -1,10 +1,10 @@
 import firebase from "firebase"
-import {StrategyProposal} from "../../../types/strategyProposal"
+import {StrategyProposalFirebaseData} from "../../../types/strategyProposal"
 
 const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
 const addStrategyProposal = async (
-	proposal: Omit<StrategyProposal, "userAddress">
+	proposal: Omit<StrategyProposalFirebaseData, "userAddress">
 ): Promise<void> => {
 	const token = await firebase.auth().currentUser?.getIdToken(true)
 	if (!token) {
