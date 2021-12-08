@@ -103,7 +103,7 @@ const CreateGnosisSafeModal: FunctionComponent<{
 			: "Start a DAO"
 
 	const submitButtonText = processing
-		? "Submit"
+		? "Processing..."
 		: stage === "create" || stage === "import"
 		? "Submit"
 		: "Continue"
