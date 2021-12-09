@@ -1,5 +1,6 @@
 import {Contract} from "@ethersproject/contracts"
 import {JsonRpcSigner} from "@ethersproject/providers"
+import config from "../../../../config"
 import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
 import MultiSend from "../../abis/MultiSend.json"
 import {
@@ -10,8 +11,6 @@ import {
 	SafeTransaction
 } from "../gnosisSafe/safeUtils"
 
-const {REACT_APP_MULTI_SEND_ADDRESS} = process.env
-
 export const buildMultiSendTx = async (
 	multiSendTxs: SafeTransaction[],
 	safeAddress: string,
@@ -19,7 +18,7 @@ export const buildMultiSendTx = async (
 ): Promise<SafeTransaction> => {
 	const safeContract = new Contract(safeAddress, GnosisSafeL2.abi, signer)
 	const nonce = await safeContract.nonce()
-	const multiSendContract = new Contract(REACT_APP_MULTI_SEND_ADDRESS!, MultiSend.abi, signer)
+	const multiSendContract = new Contract(config.MULTI_SEND_ADDRESS, MultiSend.abi, signer)
 	return buildMultiSendSafeTx(multiSendContract, multiSendTxs, nonce)
 }
 

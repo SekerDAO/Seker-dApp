@@ -1,7 +1,6 @@
 import firebase from "firebase"
+import config from "../../../config"
 import {User} from "../../../types/user"
-
-const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
 const editUser = async (user: Omit<User, "myDaos" | "myDomains">): Promise<void> => {
 	const token = await firebase.auth().currentUser?.getIdToken(true)
@@ -9,7 +8,7 @@ const editUser = async (user: Omit<User, "myDaos" | "myDomains">): Promise<void>
 		throw new Error("Not authorized in firebase")
 	}
 
-	const res = await fetch(`${REACT_APP_CLOUD_FUNCTIONS_URL}/editUser`, {
+	const res = await fetch(`${config.CLOUD_FUNCTIONS_URL}/editUser`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",

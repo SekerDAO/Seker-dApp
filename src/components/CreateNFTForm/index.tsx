@@ -6,6 +6,7 @@ import transferNFT from "../../api/ethers/functions/NFT/transferNFT"
 import addDaoNft from "../../api/firebase/NFT/addDaoNft"
 import addNft from "../../api/firebase/NFT/addNft"
 import uploadMedia from "../../api/ipfs/uploadMedia"
+import config from "../../config"
 import {AuthContext} from "../../context/AuthContext"
 import EthersContext from "../../context/EthersContext"
 import {Domain} from "../../types/user"
@@ -17,8 +18,6 @@ import Select from "../Controls/Select"
 import Textarea from "../Controls/Textarea"
 import {toastError} from "../UI/Toast"
 import "./styles.scss"
-
-const {REACT_APP_DOMAIN_ADDRESS} = process.env
 
 type CreateNFTStage = "chooseOption" | "chooseDomain" | "uploadFile" | "loadExisting" | "success"
 
@@ -68,7 +67,7 @@ const CreateNFTForm: FunctionComponent<{
 					customDomainAddress || undefined
 				)
 				const nft = {
-					address: customDomain ? customDomainAddress : REACT_APP_DOMAIN_ADDRESS!,
+					address: customDomain ? customDomainAddress : config.DOMAIN_ADDRESS,
 					createdDate: new Date().toISOString(),
 					name: metadata.name,
 					desc: metadata.description,

@@ -1,10 +1,9 @@
 import {AddressZero} from "@ethersproject/constants"
 import {Contract, ContractFactory} from "@ethersproject/contracts"
 import {JsonRpcSigner} from "@ethersproject/providers"
+import config from "../../../../config"
 import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
 import GnosisSafeProxyFactory from "../../abis/GnosisSafeProxyFactory.json"
-
-const {REACT_APP_PROXY_ADDRESS} = process.env
 
 const createGnosisSafe = async (
 	admins: string[],
@@ -13,7 +12,7 @@ const createGnosisSafe = async (
 ): Promise<string> => {
 	const GnosisSafeL2Factory = new ContractFactory(GnosisSafeL2.abi, GnosisSafeL2.bytecode, signer)
 	const singleton = await GnosisSafeL2Factory.deploy()
-	const factory = new Contract(REACT_APP_PROXY_ADDRESS!, GnosisSafeProxyFactory.abi, signer)
+	const factory = new Contract(config.PROXY_ADDRESS, GnosisSafeProxyFactory.abi, signer)
 	const template = await factory.callStatic.createProxy(singleton.address, "0x")
 	const tx1 = await factory.createProxy(singleton.address, "0x")
 	await tx1.wait()

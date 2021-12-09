@@ -1,9 +1,8 @@
 import {Contract} from "@ethersproject/contracts"
 import {JsonRpcSigner} from "@ethersproject/providers"
+import config from "../../../../config"
 import MultiArtToken from "../../abis/MultiArtToken.json"
 import TWDomainToken from "../../abis/TWDomainToken.json"
-
-const {REACT_APP_DOMAIN_ADDRESS} = process.env
 
 const transferNFT = async (
 	from: string,
@@ -13,7 +12,7 @@ const transferNFT = async (
 	customDomain?: string
 ): Promise<void> => {
 	const nft = new Contract(
-		customDomain ?? REACT_APP_DOMAIN_ADDRESS!,
+		customDomain ?? config.DOMAIN_ADDRESS,
 		customDomain ? MultiArtToken.abi : TWDomainToken.abi,
 		signer
 	)

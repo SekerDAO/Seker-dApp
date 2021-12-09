@@ -1,7 +1,6 @@
 import firebase from "firebase"
+import config from "../../../config"
 import {DAOFirebaseData} from "../../../types/DAO"
-
-const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
 const editDAO = async (
 	dao: Omit<DAOFirebaseData, "estimated" | "name"> & {
@@ -21,7 +20,7 @@ const editDAO = async (
 		throw new Error("DAO not found")
 	}
 
-	const res = await fetch(`${REACT_APP_CLOUD_FUNCTIONS_URL}/editDao`, {
+	const res = await fetch(`${config.CLOUD_FUNCTIONS_URL}/editDao`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",

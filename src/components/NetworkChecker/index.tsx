@@ -1,12 +1,11 @@
 import {FunctionComponent, useContext} from "react"
+import config from "../../config"
 import EthersContext from "../../context/EthersContext"
-
-const {REACT_APP_CHAIN_ID} = process.env
 
 const NetworkChecker: FunctionComponent = () => {
 	const {chainId} = useContext(EthersContext)
 
-	if (chainId && chainId !== REACT_APP_CHAIN_ID) {
+	if (chainId && chainId !== config.CHAIN_ID) {
 		return (
 			<div
 				style={{

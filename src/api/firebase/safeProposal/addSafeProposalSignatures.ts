@@ -1,8 +1,7 @@
 import firebase from "firebase"
+import config from "../../../config"
 import {SafeProposalState} from "../../../types/safeProposal"
 import {SafeSignature} from "../../ethers/functions/gnosisSafe/safeUtils"
-
-const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
 const addSafeProposalSignatures = async ({
 	proposalId,
@@ -19,7 +18,7 @@ const addSafeProposalSignatures = async ({
 	if (!token) {
 		throw new Error("Not authorized in firebase")
 	}
-	const res = await fetch(`${REACT_APP_CLOUD_FUNCTIONS_URL}/addSafeProposalSignatures`, {
+	const res = await fetch(`${config.CLOUD_FUNCTIONS_URL}/addSafeProposalSignatures`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",

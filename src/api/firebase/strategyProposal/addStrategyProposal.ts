@@ -1,7 +1,6 @@
 import firebase from "firebase"
+import config from "../../../config"
 import {StrategyProposalFirebaseData} from "../../../types/strategyProposal"
-
-const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
 const addStrategyProposal = async (
 	proposal: Omit<StrategyProposalFirebaseData, "userAddress">
@@ -10,7 +9,7 @@ const addStrategyProposal = async (
 	if (!token) {
 		throw new Error("Not authorized in firebase")
 	}
-	const res = await fetch(`${REACT_APP_CLOUD_FUNCTIONS_URL}/addStrategyProposal`, {
+	const res = await fetch(`${config.CLOUD_FUNCTIONS_URL}/addStrategyProposal`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",

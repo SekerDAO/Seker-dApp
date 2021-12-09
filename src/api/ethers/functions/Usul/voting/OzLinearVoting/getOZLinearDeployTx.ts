@@ -3,11 +3,10 @@ import {getCreate2Address} from "@ethersproject/address"
 import {Contract} from "@ethersproject/contracts"
 import {JsonRpcSigner} from "@ethersproject/providers"
 import {keccak256} from "@ethersproject/solidity"
+import config from "../../../../../../config"
 import ModuleFactory from "../../../../abis/ModuleFactory.json"
 import OZLinearVoting from "../../../../abis/OZLinearVoting.json"
 import {buildContractCall, SafeTransaction} from "../../../gnosisSafe/safeUtils"
-
-const {REACT_APP_MODULE_FACTORY_ADDRESS, REACT_APP_OZ_LINEAR_MASTER_ADDRESS} = process.env
 
 const getOZLinearDeployTx = (
 	safeAddress: string,
@@ -18,11 +17,11 @@ const getOZLinearDeployTx = (
 	signer: JsonRpcSigner
 ): {tx: SafeTransaction; expectedAddress: string} => {
 	const linearVotingMaster = new Contract(
-		REACT_APP_OZ_LINEAR_MASTER_ADDRESS!,
+		config.OZ_LINEAR_MASTER_ADDRESS,
 		OZLinearVoting.abi,
 		signer
 	)
-	const factory = new Contract(REACT_APP_MODULE_FACTORY_ADDRESS!, ModuleFactory.abi, signer)
+	const factory = new Contract(config.MODULE_FACTORY_ADDRESS, ModuleFactory.abi, signer)
 	const encodedLinearInitParams = defaultAbiCoder.encode(
 		["address", "address", "address", "uint256", "uint256", "uint256", "string"],
 		[

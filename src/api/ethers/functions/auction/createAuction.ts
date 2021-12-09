@@ -1,11 +1,10 @@
 import {Contract} from "@ethersproject/contracts"
 import {JsonRpcSigner} from "@ethersproject/providers"
 import {parseEther} from "@ethersproject/units"
+import config from "../../../../config"
 import Auction from "../../abis/Auction.json"
 import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
 import {buildContractCall, executeTx, SafeSignature, safeSignMessage} from "../gnosisSafe/safeUtils"
-
-const {REACT_APP_ZORA_ADDRESS} = process.env
 
 export const signCreateAuction = async (
 	safeAddress: string,
@@ -19,7 +18,7 @@ export const signCreateAuction = async (
 	signer: JsonRpcSigner
 ): Promise<SafeSignature> => {
 	const safeContract = new Contract(safeAddress, GnosisSafeL2.abi, signer)
-	const auction = new Contract(REACT_APP_ZORA_ADDRESS!, Auction.abi, signer)
+	const auction = new Contract(config.AUCTION_ADDRESS, Auction.abi, signer)
 	const nonce = await safeContract.nonce()
 	const call = buildContractCall(
 		auction,
@@ -53,7 +52,7 @@ export const executeCreateAuction = async (
 	new Promise(async (resolve, reject) => {
 		try {
 			const safeContract = new Contract(safeAddress, GnosisSafeL2.abi, signer)
-			const auction = new Contract(REACT_APP_ZORA_ADDRESS!, Auction.abi, signer)
+			const auction = new Contract(config.AUCTION_ADDRESS, Auction.abi, signer)
 			const nonce = await safeContract.nonce()
 			const call = buildContractCall(
 				auction,

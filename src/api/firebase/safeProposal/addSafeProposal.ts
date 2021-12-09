@@ -1,14 +1,13 @@
 import firebase from "firebase"
+import config from "../../../config"
 import {SafeProposal} from "../../../types/safeProposal"
-
-const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
 const addSafeProposal = async (proposal: Omit<SafeProposal, "userAddress">): Promise<void> => {
 	const token = await firebase.auth().currentUser?.getIdToken(true)
 	if (!token) {
 		throw new Error("Not authorized in firebase")
 	}
-	const res = await fetch(`${REACT_APP_CLOUD_FUNCTIONS_URL}/addSafeProposal`, {
+	const res = await fetch(`${config.CLOUD_FUNCTIONS_URL}/addSafeProposal`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",

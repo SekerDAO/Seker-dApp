@@ -1,6 +1,5 @@
 import firebase from "firebase"
-
-const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
+import config from "../../../config"
 
 const addDAO = async (gnosisAddress: string): Promise<void> => {
 	const token = await firebase.auth().currentUser?.getIdToken(true)
@@ -16,7 +15,7 @@ const addDAO = async (gnosisAddress: string): Promise<void> => {
 		throw new Error("DAO already added")
 	}
 
-	const res = await fetch(`${REACT_APP_CLOUD_FUNCTIONS_URL}/addDao`, {
+	const res = await fetch(`${config.CLOUD_FUNCTIONS_URL}/addDao`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",

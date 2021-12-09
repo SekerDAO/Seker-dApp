@@ -1,6 +1,5 @@
 import firebase from "firebase"
-
-const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
+import config from "../../../config"
 
 const updateUserImage = async (
 	file: File,
@@ -14,7 +13,7 @@ const updateUserImage = async (
 	if (!token) {
 		throw new Error("Not authorized in firebase")
 	}
-	const res = await fetch(`${REACT_APP_CLOUD_FUNCTIONS_URL}/editUser`, {
+	const res = await fetch(`${config.CLOUD_FUNCTIONS_URL}/editUser`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",

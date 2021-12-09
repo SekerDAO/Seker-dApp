@@ -4,9 +4,8 @@ import firebase from "firebase"
 import decode from "jwt-decode"
 import {createContext, useContext, useEffect, useState} from "react"
 import getUser from "../api/firebase/user/getUser"
+import config from "../config"
 import EthersContext from "./EthersContext"
-
-const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
 type AuthContext = {
 	account: string | null
@@ -68,7 +67,7 @@ export const useAuth = (): AuthContext => {
 			const signature = await signer.signMessage(
 				JSON.stringify({account: currentAccount, token: "tokenwalk"})
 			)
-			const res = await fetch(`${REACT_APP_CLOUD_FUNCTIONS_URL}/auth`, {
+			const res = await fetch(`${config.CLOUD_FUNCTIONS_URL}/auth`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json"

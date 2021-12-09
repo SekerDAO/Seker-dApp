@@ -1,7 +1,6 @@
 import firebase from "firebase"
+import config from "../../../config"
 import {Domain} from "../../../types/user"
-
-const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
 const addDomain = async (domain: Domain): Promise<void> => {
 	const token = await firebase.auth().currentUser?.getIdToken(true)
@@ -9,7 +8,7 @@ const addDomain = async (domain: Domain): Promise<void> => {
 		throw new Error("Not authorized in firebase")
 	}
 
-	const res = await fetch(`${REACT_APP_CLOUD_FUNCTIONS_URL}/addMyDomain`, {
+	const res = await fetch(`${config.CLOUD_FUNCTIONS_URL}/addMyDomain`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",

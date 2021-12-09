@@ -1,6 +1,5 @@
 import firebase from "firebase"
-
-const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
+import config from "../../../config"
 
 const updateDAOImage = async (
 	file: File,
@@ -15,7 +14,7 @@ const updateDAOImage = async (
 	const snapshot = await imageRef.put(file)
 	const url = await snapshot.ref.getDownloadURL()
 
-	const res = await fetch(`${REACT_APP_CLOUD_FUNCTIONS_URL}/editDao`, {
+	const res = await fetch(`${config.CLOUD_FUNCTIONS_URL}/editDao`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",

@@ -1,13 +1,12 @@
 import firebase from "firebase"
-
-const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
+import config from "../../../config"
 
 const deleteDaoNft = async (nftId: string, daoAddress: string): Promise<void> => {
 	const token = await firebase.auth().currentUser?.getIdToken(true)
 	if (!token) {
 		throw new Error("Not authorized in firebase")
 	}
-	const res = await fetch(`${REACT_APP_CLOUD_FUNCTIONS_URL}/deleteDaoNft`, {
+	const res = await fetch(`${config.CLOUD_FUNCTIONS_URL}/deleteDaoNft`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",

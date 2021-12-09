@@ -1,8 +1,7 @@
 import {JsonRpcSigner} from "@ethersproject/providers"
+import config from "../../../../config"
 import TWDomainToken from "../../abis/TWDomainToken.json"
 import {createSafeSignature, executeSafeTx, SafeSignature} from "../gnosisSafe/safeUtils"
-
-const {REACT_APP_ZORA_ADDRESS} = process.env
 
 export const signApproveNFTForAuction = async (
 	safeAddress: string,
@@ -20,7 +19,7 @@ export const signApproveNFTForAuction = async (
 		nftAddress,
 		TWDomainToken.abi,
 		"approve",
-		[REACT_APP_ZORA_ADDRESS, nftID],
+		[config.AUCTION_ADDRESS, nftID],
 		signer
 	)
 
@@ -36,7 +35,7 @@ export const executeApproveNFTForAuction = async (
 		nftAddress,
 		TWDomainToken.abi,
 		"approve",
-		[REACT_APP_ZORA_ADDRESS, nftID],
+		[config.AUCTION_ADDRESS, nftID],
 		signer,
 		signatures
 	)

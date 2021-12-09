@@ -5,8 +5,7 @@ import {
 	JsonRpcProvider
 } from "@ethersproject/providers"
 import {createContext, useEffect, useRef, useState} from "react"
-
-const {REACT_APP_INFURA_NETWORK, REACT_APP_INFURA_ID} = process.env
+import config from "../config"
 
 type EthersContext = {
 	chainId: string | null
@@ -18,8 +17,8 @@ export const useEthers = (): EthersContext => {
 	const [chainId, setChainId] = useState<string | null>(null)
 	const [signer, setSigner] = useState<JsonRpcSigner | null>(null)
 	const provider = useRef(
-		new InfuraProvider(REACT_APP_INFURA_NETWORK, {
-			projectId: REACT_APP_INFURA_ID
+		new InfuraProvider(config.INFURA_NETWORK, {
+			projectId: config.INFURA_ID
 		})
 	)
 

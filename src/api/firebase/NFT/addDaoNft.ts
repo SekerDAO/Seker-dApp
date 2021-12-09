@@ -1,14 +1,13 @@
 import firebase from "firebase"
+import config from "../../../config"
 import {NFT} from "../../../types/NFT"
-
-const {REACT_APP_CLOUD_FUNCTIONS_URL} = process.env
 
 const addDaoNft = async (nft: Omit<NFT, "owner" | "ownerType">, address: string): Promise<void> => {
 	const token = await firebase.auth().currentUser?.getIdToken(true)
 	if (!token) {
 		throw new Error("Not authorized in firebase")
 	}
-	const res = await fetch(`${REACT_APP_CLOUD_FUNCTIONS_URL}/addDaoNft`, {
+	const res = await fetch(`${config.CLOUD_FUNCTIONS_URL}/addDaoNft`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",

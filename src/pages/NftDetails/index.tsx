@@ -7,13 +7,12 @@ import ErrorPlaceholder from "../../components/UI/ErrorPlaceholder"
 import Loader from "../../components/UI/Loader"
 import Table from "../../components/UI/Table"
 import {toastError, toastSuccess} from "../../components/UI/Toast"
+import config from "../../config"
 import EthersContext from "../../context/EthersContext"
 import useNFT from "../../hooks/getters/useNFT"
 import {Auction} from "../../types/auction"
 import {formatReadableAddress, formatTimeDifference} from "../../utlls"
 import "./styles.scss"
-
-const {REACT_APP_CHAIN_ID} = process.env
 
 const columns = [
 	{
@@ -114,7 +113,7 @@ const NftDetails: FunctionComponent = () => {
 					<a
 						target="_blank"
 						rel="noopener noreferrer"
-						href={`https://${REACT_APP_CHAIN_ID === "0x4" ? "rinkeby." : ""}etherscan.io/token/${
+						href={`https://${config.CHAIN_ID === "0x4" ? "rinkeby." : ""}etherscan.io/token/${
 							nft.address
 						}?a=${nft.id}`}
 					>

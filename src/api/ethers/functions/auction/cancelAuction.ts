@@ -1,8 +1,7 @@
 import {JsonRpcSigner} from "@ethersproject/providers"
+import config from "../../../../config"
 import Auction from "../../abis/Auction.json"
 import {createSafeSignature, executeSafeTx, SafeSignature} from "../gnosisSafe/safeUtils"
-
-const {REACT_APP_ZORA_ADDRESS} = process.env
 
 export const signCancelAuction = async (
 	safeAddress: string,
@@ -11,7 +10,7 @@ export const signCancelAuction = async (
 ): Promise<[SafeSignature, number]> =>
 	createSafeSignature(
 		safeAddress,
-		REACT_APP_ZORA_ADDRESS!,
+		config.AUCTION_ADDRESS!,
 		Auction.abi,
 		"cancelAuction",
 		[auctionID],
@@ -26,7 +25,7 @@ export const executeCancelAuction = async (
 ): Promise<void> =>
 	executeSafeTx(
 		safeAddress,
-		REACT_APP_ZORA_ADDRESS!,
+		config.AUCTION_ADDRESS,
 		Auction.abi,
 		"cancelAuction",
 		[auctionID],
