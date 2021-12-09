@@ -1,7 +1,9 @@
 import {FunctionComponent} from "react"
+import {ReactComponent as UsulSmall} from "../../../assets/icons/usul-deployed.svg"
 import {DAO} from "../../../types/DAO"
 import {formatReadableAddress} from "../../../utlls"
 import Button from "../../Controls/Button"
+import Expandable from "../../UI/Expandable"
 import Paper from "../../UI/Paper"
 import "./styles.scss"
 
@@ -32,15 +34,26 @@ const AboutDAO: FunctionComponent<{
 					<h3>DAO Contract</h3>
 					<span>{formatReadableAddress(dao.gnosisAddress)}</span>
 				</Paper>
-				{dao.tokenSymbol && (
-					<Paper>
-						<h3>ERC-20 Token</h3>
-						<span>{dao.tokenSymbol}</span>
-					</Paper>
-				)}
 			</div>
-			{/* TODO: Add Enabled Modules */}
 		</div>
+		{dao.usulAddress && (
+			<div className="about-dao__enabled-modules">
+				<h2>Enabled Modules</h2>
+				<Expandable
+					title={
+						<div className="about-dao__enabled-module">
+							<div className="about-dao__enabled-module-icon">
+								<UsulSmall width="60px" height="60px" />
+							</div>
+							<div className="about-dao__enabled-module-name">
+								<h2>Usul</h2>
+								<h3>Proposal Module</h3>
+							</div>
+						</div>
+					}
+				></Expandable>
+			</div>
+		)}
 	</section>
 )
 
