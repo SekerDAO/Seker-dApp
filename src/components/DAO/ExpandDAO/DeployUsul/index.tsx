@@ -36,7 +36,8 @@ const STAGE_HEADERS: {[key in ExpandDaoStage]: {title?: string; description?: st
 const DeployUsul: FunctionComponent<{
 	gnosisAddress: string
 	gnosisVotingThreshold: number
-}> = ({gnosisAddress, gnosisVotingThreshold}) => {
+	afterDeploy: () => void
+}> = ({gnosisAddress, gnosisVotingThreshold, afterDeploy}) => {
 	const {signer} = useContext(EthersContext)
 	const [stage, setStage] = useState<ExpandDaoStage>("chooseStrategies")
 	const [strategies, setStrategies] = useState<BuiltVotingStrategy[]>([])
@@ -44,7 +45,10 @@ const DeployUsul: FunctionComponent<{
 	const [multiTx, setMultiTx] = useState<SafeTransaction>()
 	const [expectedUsulAddress, setExpectedUsulAddress] = useState("")
 	const {proposals, error, refetch} = useProposals(gnosisAddress)
-	const {push} = useHistory()
+	const {
+		push,
+		location: {pathname}
+	} = useHistory()
 
 	useEffect(() => {
 		if (signer) {
@@ -58,14 +62,18 @@ const DeployUsul: FunctionComponent<{
 	useEffect(() => {
 		if (proposals) {
 			const expandProposal = proposals.find(
-				proposal =>
-					(proposal as SafeProposal).type === "decentralizeDAO" && proposal.state === "active"
+				proposal => (proposal as SafeProposal).type === "decentralizeDAO"
 			)
-			if (expandProposal) {
-				push(`/dao/${gnosisAddress}?page=proposal&proposalId=${expandProposal.id}`)
+			if (expandProposal?.state === "active") {
+				push(`${pathname}?page=proposal&type=safe&id=${expandProposal.proposalId}`)
+			} else if (expandProposal?.state === "executed") {
+				afterDeploy()
+				push(`${pathname}?page=collection`)
 			}
 		}
 	}, [proposals])
+
+	if (error) return <ErrorPlaceholder />
 
 	const handleProceedToConfirm = async () => {
 		if (signer) {
@@ -79,7 +87,6 @@ const DeployUsul: FunctionComponent<{
 			setStage("confirm")
 		}
 	}
-	if (error) return <ErrorPlaceholder />
 
 	return (
 		<ExpandDaoLayout

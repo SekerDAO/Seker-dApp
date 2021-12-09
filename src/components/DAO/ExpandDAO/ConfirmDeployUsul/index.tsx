@@ -13,7 +13,7 @@ import Button from "../../../Controls/Button"
 import TransactionDetailsModal from "../../../Modals/TransactionDetailsModal"
 import Copy from "../../../UI/Copy"
 import Paper from "../../../UI/Paper"
-import {toastError} from "../../../UI/Toast"
+import {toastError, toastSuccess} from "../../../UI/Toast"
 import "./styles.scss"
 
 const ConfirmDeployUsul: FunctionComponent<{
@@ -65,6 +65,11 @@ const ConfirmDeployUsul: FunctionComponent<{
 					state: gnosisVotingThreshold === 1 ? "executed" : "active",
 					signatures: [signature]
 				})
+				toastSuccess(
+					gnosisVotingThreshold === 1
+						? "Usul module successfully deployed"
+						: "Expand DAO proposal successfully deployed"
+				)
 				afterSubmit()
 			}
 		} catch (e) {
@@ -149,7 +154,7 @@ const ConfirmDeployUsul: FunctionComponent<{
 			>
 				{loading
 					? "Submitting..."
-					: gnosisVotingThreshold
+					: gnosisVotingThreshold === 1
 					? "Confirm and Deploy Usul"
 					: "Confirm and Create Proposal"}
 			</Button>

@@ -1,4 +1,5 @@
-import {FunctionComponent, useContext, useEffect, useMemo, useState} from "react"
+import {parse} from "query-string"
+import {FunctionComponent, useContext, useEffect, useState} from "react"
 import {useLocation} from "react-router-dom"
 import {checkDelegatee} from "../../../api/ethers/functions/Usul/voting/votingApi"
 import {ReactComponent as DelegateTokenDefault} from "../../../assets/icons/delegate-token-default.svg"
@@ -29,8 +30,8 @@ const SafeProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 	const {proposal, loading, error, canSign} = useSafeProposal(id)
 	const {sign, processing} = useSignSafeProposal({proposal, canSign, id})
 
-	if (loading || !proposal) return <Loader />
 	if (error) return <ErrorPlaceholder />
+	if (loading || !proposal) return <Loader />
 
 	return (
 		<ProposalLayout
@@ -248,16 +249,7 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 
 const Proposal: FunctionComponent = () => {
 	const {search} = useLocation()
-	const {id, type} = useMemo(() => {
-		const params = new URLSearchParams(search)
-		return {
-			id: params.get("id"),
-			type: params.get("type")
-		}
-	}, [search]) as {
-		id: string
-		type: string
-	}
+	const {id, type} = parse(search) as {id: string; type: string}
 
 	return type === "safe" ? <SafeProposalContent id={id} /> : <StrategyProposalContent id={id} />
 }
