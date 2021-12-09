@@ -44,4 +44,35 @@
       margin-bottom: 20px;
     }
   }
+
+  &__enabled-modules {
+    margin-top: 20px;
+
+    .expandable-container {
+      margin-top: 10px;
+
+      &__header {
+        position: relative;
+        height: 60px;
+        justify-content: flex-end;
+      }
+    }
+  }
+
+  &__enabled-module {
+    display: flex;
+    position: absolute;
+    left: -20px;
+
+    &-name {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column;
+      justify-content: center;
+
+      h2 {
+        width: 100%;
+      }
+    }
+  }
 }

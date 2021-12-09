@@ -50,5 +50,13 @@
       justify-content: flex-end;
       align-items: center;
     }
+
+    &__no-data {
+      color: $dark-grey50;
+
+      td {
+        text-align: center;
+      }
+    }
   }
 }

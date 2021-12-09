@@ -18,6 +18,7 @@ const Expandable: FunctionComponent<{
 			>
 				{title}
 				<ArrowDown
+					className="expandable-container__arrow-down"
 					width="14px"
 					height="20px"
 					onClick={() => setExpanded(prevState => !prevState)}

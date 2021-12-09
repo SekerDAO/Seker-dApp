@@ -60,19 +60,19 @@ const ProfileDAOs: FunctionComponent = () => {
 			</div>
 			<div className="profile-daos__table">
 				<Table
-					data={DAOs.map(dao => {
-						const {name, owners} = dao
-						const isAdmin = account && owners.indexOf(account) !== -1 ? "Admin" : ""
+					data={DAOs.map(({name, owners, gnosisAddress, gnosisVotingThreshold}) => {
+						const membershipInfo = account && owners.indexOf(account) !== -1 ? "Admin" : ""
 						return {
 							name,
-							membershipInfo: isAdmin,
-							votingThreshold: `${dao.gnosisVotingThreshold * 100}%`,
-							gnosisAddress: dao.gnosisAddress
+							membershipInfo,
+							gnosisAddress,
+							votingThreshold: `${(gnosisVotingThreshold / owners.length) * 100}%`
 						}
 					})}
 					columns={columns}
 					idCol="gnosisAddress"
 					onItemDelete={handleDeleteDAO}
+					noDataText="No DAOs in your list yet. Start a DAO or bookmark one."
 				/>
 			</div>
 		</>

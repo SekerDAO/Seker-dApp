@@ -1,5 +1,5 @@
 import {FunctionComponent} from "react"
-import {ReactComponent as UsulSmall} from "../../../assets/icons/usul-deployed.svg"
+import {ReactComponent as UsulSmall} from "../../../assets/icons/usul-small.svg"
 import {DAO} from "../../../types/DAO"
 import {formatReadableAddress} from "../../../utlls"
 import Button from "../../Controls/Button"
@@ -43,11 +43,11 @@ const AboutDAO: FunctionComponent<{
 					title={
 						<div className="about-dao__enabled-module">
 							<div className="about-dao__enabled-module-icon">
-								<UsulSmall width="60px" height="60px" />
+								<UsulSmall width="100px" height="100px" />
 							</div>
 							<div className="about-dao__enabled-module-name">
 								<h2>Usul</h2>
-								<h3>Proposal Module</h3>
+								<p>Proposal Module</p>
 							</div>
 						</div>
 					}

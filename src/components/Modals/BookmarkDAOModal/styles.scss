@@ -1,7 +1,11 @@
 .bookmark-dao {
   margin: 20px 0;
 
-  .input > input {
+  .input .input__wrapper {
     width: 100%;
+
+    input {
+      width: 100%;
+    }
   }
 }
