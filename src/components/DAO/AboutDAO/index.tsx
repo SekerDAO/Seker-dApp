@@ -1,5 +1,6 @@
 import {FunctionComponent} from "react"
 import {ReactComponent as UsulSmall} from "../../../assets/icons/usul-small.svg"
+import {VOTING_STRATEGIES} from "../../../constants/votingStrategies"
 import {DAO} from "../../../types/DAO"
 import {formatReadableAddress} from "../../../utlls"
 import Button from "../../Controls/Button"
@@ -51,7 +52,27 @@ const AboutDAO: FunctionComponent<{
 							</div>
 						</div>
 					}
-				></Expandable>
+				>
+					<ul className="about-dao__enabled-module-details">
+						<li className="about-dao__enabled-module-details-header">
+							<h3>Strategy Name</h3>
+							<h3>Voting Period</h3>
+							<h3>Quorum Threshold</h3>
+							<h3>Membership Type</h3>
+						</li>
+						{dao.strategies.map(({address, name, votingPeriod, quorumThreshold}) => {
+							const content = VOTING_STRATEGIES.find(strategy => strategy.strategy === name)
+							return (
+								<li key={address} className="about-dao__enabled-module-details-item">
+									<span>{content?.title}</span>
+									<span>{votingPeriod.toString()} hours</span>
+									<span>{quorumThreshold.toString()}% tokens</span>
+									<span>Simple Membership</span>
+								</li>
+							)
+						})}
+					</ul>
+				</Expandable>
 			</div>
 		)}
 	</section>

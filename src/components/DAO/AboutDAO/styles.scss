@@ -1,3 +1,5 @@
+@import "src/variables";
+
 .about-dao {
   margin-top: 45px;
 
@@ -46,7 +48,7 @@
   }
 
   &__enabled-modules {
-    margin-top: 20px;
+    margin-top: 40px;
 
     .expandable-container {
       margin-top: 10px;
@@ -72,6 +74,30 @@
 
       h2 {
         width: 100%;
+      }
+    }
+
+    &-details {
+      list-style: none;
+      padding-left: 0;
+
+      &-header {
+        margin-bottom: 20px;
+
+        h3 {
+          width: 25%;
+          display: inline-flex;
+        }
+      }
+
+      &-item {
+        border-bottom: 1px solid $dark-grey25;
+        padding-bottom: 10px;
+
+        span {
+          width: 25%;
+          display: inline-flex;
+        }
       }
     }
   }
