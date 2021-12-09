@@ -19,7 +19,8 @@
   }
 
   &--queued,
-  &--executing {
+  &--executing,
+  &--timeLocked {
     color: $success;
     border: 1px solid $success;
   }

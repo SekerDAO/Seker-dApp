@@ -12,7 +12,8 @@ const ExpandDAO: FunctionComponent<{
 	gnosisAddress: string
 	usulAddress?: string
 	gnosisVotingThreshold: number
-}> = ({gnosisAddress, usulAddress, gnosisVotingThreshold}) => {
+	afterDeployUsul: () => void
+}> = ({gnosisAddress, usulAddress, gnosisVotingThreshold, afterDeployUsul}) => {
 	const [stage, setStage] = useState<"choose" | "usul" | "bridge">("choose")
 
 	const handleSelectUsul = () => {
@@ -44,7 +45,11 @@ const ExpandDAO: FunctionComponent<{
 				</ExpandDaoLayout>
 			)}
 			{stage === "usul" && (
-				<DeployUsul gnosisAddress={gnosisAddress} gnosisVotingThreshold={gnosisVotingThreshold} />
+				<DeployUsul
+					gnosisAddress={gnosisAddress}
+					gnosisVotingThreshold={gnosisVotingThreshold}
+					afterDeploy={afterDeployUsul}
+				/>
 			)}
 		</section>
 	)

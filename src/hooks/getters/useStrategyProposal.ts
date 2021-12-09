@@ -13,6 +13,7 @@ const useStrategyProposal = (
 	proposal: (StrategyProposal & {proposalId: string}) | null
 	loading: boolean
 	error: boolean
+	refetch: () => Promise<void>
 } => {
 	const [proposal, setProposal] = useState<(StrategyProposal & {proposalId: string}) | null>(null)
 	const [loading, setLoading] = useState(false)
@@ -59,7 +60,8 @@ const useStrategyProposal = (
 	return {
 		proposal,
 		loading,
-		error
+		error,
+		refetch: getData
 	}
 }
 

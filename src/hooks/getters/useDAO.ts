@@ -30,14 +30,6 @@ const useDAO = (
 			const tokenSymbol = ""
 			const balance = 0
 			const fundedProjects = 0
-			// TODO
-			// if (_dao.tokenAddress && _dao.daoAddress) {
-			// 	;[tokenSymbol, balance, fundedProjects] = await Promise.all([
-			// 		getERC20Symbol(_dao.tokenAddress, provider),
-			// 		getERC20HouseDAOBalance(_dao.daoAddress, provider),
-			// 		getERC20HouseDAOFundedProjects(_dao.daoAddress, provider)
-			// 	])
-			// }
 			setDao({
 				..._dao,
 				tokenSymbol,

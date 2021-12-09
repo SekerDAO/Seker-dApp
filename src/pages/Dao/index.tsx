@@ -210,6 +210,7 @@ const Dao: FunctionComponent = () => {
 								gnosisAddress={dao.gnosisAddress}
 								gnosisVotingThreshold={dao.gnosisVotingThreshold}
 								usulAddress={dao.usulAddress}
+								afterDeployUsul={refetch}
 							/>
 						)}
 					</div>
