@@ -59,5 +59,7 @@ export type BuiltVotingStrategy = {
 
 export type VotingStrategy = {
 	name: VotingStrategyName
+	votingPeriod: number
+	quorumThreshold: number
 	address: string
 }

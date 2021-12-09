@@ -13,13 +13,15 @@ type TableProps<T extends Record<string, string | number>> = {
 	}[]
 	idCol: keyof T
 	onItemDelete?: (itemId: string | number) => void
+	noDataText?: string
 }
 
 const Table: <T extends {[key: string]: string | number}>(props: TableProps<T>) => JSX.Element = ({
 	data,
 	columns,
 	idCol,
-	onItemDelete
+	onItemDelete,
+	noDataText = "No data available"
 }) => (
 	<Paper className="table-wrapper">
 		<table className="table">
@@ -33,23 +35,29 @@ const Table: <T extends {[key: string]: string | number}>(props: TableProps<T>) 
 				</tr>
 			</thead>
 			<tbody>
-				{data.map((row, rowIndex) => (
-					<tr key={data[rowIndex][idCol]}>
-						{columns.map((col, colIndex) => (
-							<td key={colIndex} className={col.rowClassName}>
-								{col.render ? col.render(data[rowIndex]) : data[rowIndex][col.id]}
-							</td>
-						))}
-						{onItemDelete && (
-							<td
-								onClick={() => onItemDelete(data[rowIndex][idCol])}
-								className="table__remove-icon"
-							>
-								<DeleteIcon />
-							</td>
-						)}
+				{data.length ? (
+					data.map((row, rowIndex) => (
+						<tr key={data[rowIndex][idCol]}>
+							{columns.map((col, colIndex) => (
+								<td key={colIndex} className={col.rowClassName}>
+									{col.render ? col.render(data[rowIndex]) : data[rowIndex][col.id]}
+								</td>
+							))}
+							{onItemDelete && (
+								<td
+									onClick={() => onItemDelete(data[rowIndex][idCol])}
+									className="table__remove-icon"
+								>
+									<DeleteIcon />
+								</td>
+							)}
+						</tr>
+					))
+				) : (
+					<tr className="table__no-data">
+						<td colSpan={columns.length}>{noDataText}</td>
 					</tr>
-				))}
+				)}
 			</tbody>
 		</table>
 	</Paper>

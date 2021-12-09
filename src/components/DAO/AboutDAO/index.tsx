@@ -1,7 +1,10 @@
 import {FunctionComponent} from "react"
+import {ReactComponent as UsulSmall} from "../../../assets/icons/usul-small.svg"
+import {VOTING_STRATEGIES} from "../../../constants/votingStrategies"
 import {DAO} from "../../../types/DAO"
 import {formatReadableAddress} from "../../../utlls"
 import Button from "../../Controls/Button"
+import Expandable from "../../UI/Expandable"
 import Paper from "../../UI/Paper"
 import "./styles.scss"
 
@@ -32,15 +35,46 @@ const AboutDAO: FunctionComponent<{
 					<h3>DAO Contract</h3>
 					<span>{formatReadableAddress(dao.gnosisAddress)}</span>
 				</Paper>
-				{dao.tokenSymbol && (
-					<Paper>
-						<h3>ERC-20 Token</h3>
-						<span>{dao.tokenSymbol}</span>
-					</Paper>
-				)}
 			</div>
-			{/* TODO: Add Enabled Modules */}
 		</div>
+		{dao.usulAddress && (
+			<div className="about-dao__enabled-modules">
+				<h2>Enabled Modules</h2>
+				<Expandable
+					title={
+						<div className="about-dao__enabled-module">
+							<div className="about-dao__enabled-module-icon">
+								<UsulSmall width="100px" height="100px" />
+							</div>
+							<div className="about-dao__enabled-module-name">
+								<h2>Usul</h2>
+								<p>Proposal Module</p>
+							</div>
+						</div>
+					}
+				>
+					<ul className="about-dao__enabled-module-details">
+						<li className="about-dao__enabled-module-details-header">
+							<h3>Strategy Name</h3>
+							<h3>Voting Period</h3>
+							<h3>Quorum Threshold</h3>
+							<h3>Membership Type</h3>
+						</li>
+						{dao.strategies.map(({address, name, votingPeriod, quorumThreshold}) => {
+							const content = VOTING_STRATEGIES.find(strategy => strategy.strategy === name)
+							return (
+								<li key={address} className="about-dao__enabled-module-details-item">
+									<span>{content?.title}</span>
+									<span>{votingPeriod} hours</span>
+									<span>{quorumThreshold}% tokens</span>
+									<span>Simple Membership</span>
+								</li>
+							)
+						})}
+					</ul>
+				</Expandable>
+			</div>
+		)}
 	</section>
 )
 

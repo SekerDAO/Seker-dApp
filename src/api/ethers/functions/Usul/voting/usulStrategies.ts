@@ -15,19 +15,17 @@ export const getStrategies = async (
 		10
 	)
 	return Promise.all(
-		addresses[0].map(async (address: string) => ({
-			name: await getStrategyName(address, provider),
-			address
-		}))
-	)
-}
+		addresses[0].map(async (address: string) => {
+			const strategy = new Contract(address, OZLinearVoting.abi, provider)
 
-export const getStrategyName = async (
-	strategyAddress: string,
-	provider: JsonRpcProvider
-): Promise<string> => {
-	const strategy = new Contract(strategyAddress, OZLinearVoting.abi, provider)
-	return strategy.name()
+			return {
+				name: await strategy.name(),
+				votingPeriod: Number((await strategy.votingPeriod()).toString()),
+				quorumThreshold: Number((await strategy.quorumNumerator()).toString()),
+				address
+			}
+		})
+	)
 }
 
 export const getStrategyGovTokenAddress = async (

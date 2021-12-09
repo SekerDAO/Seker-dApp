@@ -1,9 +1,12 @@
-import {FunctionComponent, useState} from "react"
+import {FunctionComponent, ReactElement, useState} from "react"
 import {ReactComponent as ArrowDown} from "../../../assets/icons/arrow-down.svg"
 import Paper from "../Paper"
 import "./styles.scss"
 
-const Expandable: FunctionComponent<{title: string}> = ({children, title}) => {
+const Expandable: FunctionComponent<{
+	title: ReactElement | string
+	subTitle?: string
+}> = ({children, title}) => {
 	const [expanded, setExpanded] = useState(false)
 
 	return (
@@ -13,9 +16,10 @@ const Expandable: FunctionComponent<{title: string}> = ({children, title}) => {
 					expanded ? " expandable-container__header--expanded" : ""
 				}`}
 			>
-				<span>{title}</span>
+				{title}
 				<ArrowDown
-					width="10px"
+					className="expandable-container__arrow-down"
+					width="14px"
 					height="20px"
 					onClick={() => setExpanded(prevState => !prevState)}
 				/>
