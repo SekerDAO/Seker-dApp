@@ -1,4 +1,3 @@
-import {BigNumber} from "@ethersproject/bignumber"
 import firebase from "firebase"
 import {SafeTransaction} from "../api/ethers/functions/gnosisSafe/safeUtils"
 
@@ -60,7 +59,7 @@ export type BuiltVotingStrategy = {
 
 export type VotingStrategy = {
 	name: VotingStrategyName
-	votingPeriod: BigNumber
-	quorumThreshold: BigNumber
+	votingPeriod: number
+	quorumThreshold: number
 	address: string
 }

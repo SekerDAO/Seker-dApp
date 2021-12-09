@@ -65,8 +65,8 @@ const AboutDAO: FunctionComponent<{
 							return (
 								<li key={address} className="about-dao__enabled-module-details-item">
 									<span>{content?.title}</span>
-									<span>{votingPeriod.toString()} hours</span>
-									<span>{quorumThreshold.toString()}% tokens</span>
+									<span>{votingPeriod} hours</span>
+									<span>{quorumThreshold}% tokens</span>
 									<span>Simple Membership</span>
 								</li>
 							)
