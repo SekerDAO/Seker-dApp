@@ -1,6 +1,7 @@
 import {parse} from "query-string"
 import {FunctionComponent, useContext, useEffect, useState} from "react"
 import {useLocation} from "react-router-dom"
+import {finalizeVotingLinear} from "../../../api/ethers/functions/Usul/voting/OzLinearVoting/ozLinearVotingApi"
 import {checkDelegatee} from "../../../api/ethers/functions/Usul/voting/votingApi"
 import {ReactComponent as DelegateTokenDefault} from "../../../assets/icons/delegate-token-default.svg"
 import {ReactComponent as DelegateTokenDone} from "../../../assets/icons/delegate-token-done.svg"
@@ -21,6 +22,7 @@ import Copy from "../../UI/Copy"
 import Divider from "../../UI/Divider"
 import ErrorPlaceholder from "../../UI/ErrorPlaceholder"
 import Loader from "../../UI/Loader"
+import {toastError, toastSuccess} from "../../UI/Toast"
 import ProposalLayout from "./ProposalLayout"
 import "./styles.scss"
 
@@ -61,13 +63,14 @@ const SafeProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 
 const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 	const {account, connected} = useContext(AuthContext)
-	const {provider} = useContext(EthersContext)
-	const {proposal, loading, error} = useStrategyProposal(id)
+	const {provider, signer} = useContext(EthersContext)
+	const {proposal, loading, error, refetch} = useStrategyProposal(id)
 	const [showWrapModal, setShowWrapModal] = useState(false)
 	const [showDelegateModal, setShowDelegateModal] = useState(false)
 	const [showVotingModal, setShowVotingModal] = useState(false)
 	const [tokensWrapped, setTokensWrapped] = useState(false) // TODO: temporary doesn't make sense
 	const [delegatee, setDelegatee] = useState<string | null>(null)
+	const [processing, setProcessing] = useState(false)
 	useEffect(() => {
 		if (proposal?.govTokenAddress && account) {
 			checkDelegatee(proposal.govTokenAddress, account, provider).then(res => {
@@ -90,6 +93,31 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 		setShowDelegateModal(false)
 	}
 
+	const handleFinalizeVoting = async () => {
+		if (!signer) return
+		try {
+			setProcessing(true)
+			switch (proposal.strategyType) {
+				case "linearVoting":
+					await finalizeVotingLinear(proposal.strategyAddress, proposal.id, signer)
+					break
+				default:
+					throw new Error("Strategy not supported yet")
+			}
+			toastSuccess("Proposal successfully finalized")
+			refetch()
+		} catch (e) {
+			console.error(e)
+			toastError("Failed to finalize vote")
+		}
+		setProcessing(false)
+	}
+
+	const afterVote = () => {
+		setShowVotingModal(false)
+		refetch()
+	}
+
 	// TODO: add case when user has already voted
 	const voteDisabled =
 		!(connected && proposal.state === "active") || (!!proposal.govTokenAddress && !delegatee)
@@ -101,9 +129,7 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 				strategyAddress={proposal.strategyAddress}
 				strategyName={proposal.strategyType}
 				proposalId={proposal.id}
-				afterSubmit={() => {
-					setShowVotingModal(false)
-				}}
+				afterSubmit={afterVote}
 				onClose={() => {
 					setShowVotingModal(false)
 				}}
@@ -236,6 +262,14 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 								Vote
 							</Button>
 						</>
+					) : (
+						<p>Please connect account</p>
+					)
+				) : proposal.state === "pending" ? (
+					account && connected && signer ? (
+						<Button disabled={processing} onClick={handleFinalizeVoting}>
+							Finalize Voting
+						</Button>
 					) : (
 						<p>Please connect account</p>
 					)

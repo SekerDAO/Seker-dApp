@@ -22,7 +22,8 @@ export const finalizeVoting = async (
 	signer: JsonRpcSigner
 ): Promise<void> => {
 	const voting = new Contract(strategyAddress, contractAbi, signer)
-	await voting.finalizeStrategy(proposalId)
+	const tx = await voting.finalizeStrategy(proposalId)
+	await tx.wait()
 }
 
 export const delegateVote = async (
@@ -31,7 +32,8 @@ export const delegateVote = async (
 	signer: JsonRpcSigner
 ): Promise<void> => {
 	const govToken = new Contract(govTokenAddress, GovToken.abi, signer)
-	await govToken.delegate(delegatee)
+	const tx = await govToken.delegate(delegatee)
+	await tx.wait()
 }
 
 export const checkDelegatee = async (
