@@ -6,7 +6,6 @@ export const strategyProposalStates: StrategyProposalState[] = [
 	"canceled",
 	"timeLocked",
 	"executed",
-	"executed",
 	"executing",
 	"uninitialized"
 ]
