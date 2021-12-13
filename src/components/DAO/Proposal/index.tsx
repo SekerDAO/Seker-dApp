@@ -132,6 +132,8 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 				proposal.args,
 				signer
 			)
+			toastSuccess("Proposal successfully executed")
+			refetch()
 		} catch (e) {
 			console.error(e)
 			toastError("Failed to finalize vote")

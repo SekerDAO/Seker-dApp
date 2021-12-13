@@ -115,11 +115,17 @@ export const getProposalState = async (
 			// Deadline has passed: we have to determine if proposal is passed or failed
 			// Dirty hack: isPassed will fail if the proposal is not passed
 			try {
-				const passed = await strategy.isPassed(proposalId)
-				return passed ? "pending" : "failed" // Not sure this will ever become false
+				// This function never returns false, it either returns true or throws an error
+				await strategy.isPassed(proposalId)
+				return "pending"
 			} catch (e) {
 				if (e.message.match("majority yesVotes not reached")) {
 					return "failed"
+				} else if (e.message.match("a quorum has not been reached for the proposal")) {
+					return "failed"
+				} else if (e.message.match("voting period has not passed yet")) {
+					// TODO: I don't know, why we sometimes can get here despite the deadline check above
+					return "active"
 				}
 				throw e
 			}
