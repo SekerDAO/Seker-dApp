@@ -67,9 +67,9 @@ export const buildProposalTx = async (
 	contractAbi: ContractInterface,
 	method: string,
 	args: unknown[],
-	provider: JsonRpcProvider
+	providerOrSigner: JsonRpcProvider | JsonRpcSigner
 ): Promise<SafeTransaction> => {
-	const contract = new Contract(contractAddress, contractAbi, provider)
+	const contract = new Contract(contractAddress, contractAbi, providerOrSigner)
 	return buildContractCall(contract, method, args, 0)
 }
 

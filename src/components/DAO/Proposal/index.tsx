@@ -1,6 +1,7 @@
 import {parse} from "query-string"
 import {FunctionComponent, useContext, useEffect, useState} from "react"
 import {useLocation} from "react-router-dom"
+import executeProposal from "../../../api/ethers/functions/Usul/executeProposal"
 import {finalizeVotingLinear} from "../../../api/ethers/functions/Usul/voting/OzLinearVoting/ozLinearVotingApi"
 import {checkDelegatee} from "../../../api/ethers/functions/Usul/voting/votingApi"
 import {ReactComponent as DelegateTokenDefault} from "../../../assets/icons/delegate-token-default.svg"
@@ -116,6 +117,26 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 	const afterVote = () => {
 		setShowVotingModal(false)
 		refetch()
+	}
+
+	const handleExecute = async () => {
+		if (!signer) return
+		setProcessing(true)
+		try {
+			await executeProposal(
+				proposal.usulAddress,
+				proposal.id,
+				proposal.contractAddress,
+				proposal.contractAbi,
+				proposal.contractMethod,
+				proposal.args,
+				signer
+			)
+		} catch (e) {
+			console.error(e)
+			toastError("Failed to finalize vote")
+		}
+		setProcessing(false)
 	}
 
 	// TODO: add case when user has already voted
@@ -269,6 +290,14 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 					account && connected && signer ? (
 						<Button disabled={processing} onClick={handleFinalizeVoting}>
 							Finalize Voting
+						</Button>
+					) : (
+						<p>Please connect account</p>
+					)
+				) : proposal.state === "executing" ? (
+					account && connected && signer ? (
+						<Button disabled={processing} onClick={handleExecute}>
+							Execute
 						</Button>
 					) : (
 						<p>Please connect account</p>

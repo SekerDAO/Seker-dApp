@@ -10,12 +10,14 @@ import {StrategyProposal} from "../../types/strategyProposal"
 const useStrategyProposal = (
 	id: string
 ): {
-	proposal: (StrategyProposal & {proposalId: string}) | null
+	proposal: (StrategyProposal & {proposalId: string; usulAddress: string}) | null
 	loading: boolean
 	error: boolean
 	refetch: () => Promise<void>
 } => {
-	const [proposal, setProposal] = useState<(StrategyProposal & {proposalId: string}) | null>(null)
+	const [proposal, setProposal] = useState<
+		(StrategyProposal & {proposalId: string; usulAddress: string}) | null
+	>(null)
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
 	const {connected, account} = useContext(AuthContext)
@@ -42,7 +44,8 @@ const useStrategyProposal = (
 				...proposalData,
 				state,
 				govTokenAddress,
-				proposalId: id
+				proposalId: id,
+				usulAddress: dao.usulAddress
 			})
 		} catch (e) {
 			console.error(e)
