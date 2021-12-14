@@ -1,5 +1,9 @@
 import {useState, useContext} from "react"
-import {executeMultiSend, signMultiSend} from "../../../api/ethers/functions/Usul/multiSend"
+import {
+	executeMultiSend,
+	getMultiSendTxBuild,
+	signMultiSend
+} from "../../../api/ethers/functions/Usul/multiSend"
 import {
 	executeApproveNFTForAuction,
 	signApproveNFTForAuction
@@ -164,6 +168,26 @@ const useSignSafeProposal = ({
 							gnosisAddress: proposal.gnosisAddress,
 							usulAddress: proposal.usulAddress
 						})
+						executed = true
+					}
+					break
+				case "generalEVM":
+					if (!proposal.transactions) {
+						throw new Error("Unexpected empty transactions for general EVM proposal")
+					}
+					const multiTx = await getMultiSendTxBuild(
+						proposal.gnosisAddress,
+						proposal.transactions,
+						signer
+					)
+					;[signature] = await signMultiSend(multiTx, proposal.gnosisAddress, signer)
+					if (proposal.signatures?.length === proposal.gnosisVotingThreshold - 1) {
+						await executeMultiSend(
+							multiTx,
+							proposal.gnosisAddress,
+							[signature, ...proposal.signatures],
+							signer
+						)
 						executed = true
 					}
 					break

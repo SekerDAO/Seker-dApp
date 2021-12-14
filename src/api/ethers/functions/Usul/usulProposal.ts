@@ -1,7 +1,9 @@
 import {BigNumberish} from "@ethersproject/bignumber"
-import {Contract, ContractInterface} from "@ethersproject/contracts"
+import {Contract} from "@ethersproject/contracts"
 import {JsonRpcProvider, JsonRpcSigner} from "@ethersproject/providers"
+import {AbiFunction} from "../../../../types/abi"
 import {StrategyProposalState, strategyProposalStates} from "../../../../types/strategyProposal"
+import {prepareArguments} from "../../../../utlls"
 import OZLinearVoting from "../../abis/OZLinearVoting.json"
 import Usul from "../../abis/Usul.json"
 import {buildContractCall, SafeTransaction} from "../gnosisSafe/safeUtils"
@@ -64,13 +66,21 @@ export const submitProposal = async (
 
 export const buildProposalTx = (
 	contractAddress: string,
-	contractAbi: ContractInterface,
-	method: string,
-	args: unknown[],
+	contractAbi: AbiFunction[],
+	selectedMethodIndex: number,
+	args: (string | string[])[],
 	providerOrSigner: JsonRpcProvider | JsonRpcSigner
 ): SafeTransaction => {
 	const contract = new Contract(contractAddress, contractAbi, providerOrSigner)
-	return buildContractCall(contract, method, args, 0)
+	return buildContractCall(
+		contract,
+		contractAbi[selectedMethodIndex].name,
+		prepareArguments(
+			args,
+			contractAbi[selectedMethodIndex].inputs.map(i => i.type)
+		),
+		0
+	)
 }
 
 export const executeProposalSingle = async (

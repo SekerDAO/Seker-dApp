@@ -1,5 +1,5 @@
 import {SafeSignature, SafeTransaction} from "../api/ethers/functions/gnosisSafe/safeUtils"
-import {Abi} from "./abi"
+import {PrebuiltTx} from "./common"
 import {StrategyProposal} from "./strategyProposal"
 
 export type SafeProposalType =
@@ -49,10 +49,7 @@ export type SafeProposal = {
 	auctionCurrencySymbol?: string
 	auctionCurrencyAddress?: string
 	// For general EVM
-	contractAddress?: string
-	contractAbi?: Abi
-	contractMethod?: string
-	callArgs?: Record<string, string | boolean>
+	transactions?: PrebuiltTx[]
 	// for decentralize DAO
 	daoVotingThreshold?: number
 	gracePeriod?: number

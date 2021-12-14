@@ -80,7 +80,10 @@ export const validateArgument = (
 	}
 }
 
-const prepareScalarArgument = (arg: string, dataType: AbiScalar): string | boolean | BigNumber => {
+const prepareScalarArgument = (
+	arg: string | boolean,
+	dataType: AbiScalar
+): string | boolean | BigNumber => {
 	if (
 		dataType.startsWith("uint") ||
 		dataType.startsWith("int") ||
@@ -90,7 +93,7 @@ const prepareScalarArgument = (arg: string, dataType: AbiScalar): string | boole
 		return BigNumber.from(arg)
 	}
 	if (dataType === "bool") {
-		return arg === "true"
+		return arg === "true" || arg === true
 	}
 	return arg
 }

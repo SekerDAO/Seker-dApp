@@ -1,10 +1,8 @@
 import {FunctionComponent, useContext, useEffect, useState} from "react"
 import {useHistory} from "react-router-dom"
+import buildUsulDeployTxSequence from "../../../../api/ethers/functions/Usul/buildUsulDeployTxSequence"
 import {buildMultiSendTx} from "../../../../api/ethers/functions/Usul/multiSend"
-import {
-	buildUsulDeployTxSequence,
-	SafeTransaction
-} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
+import {SafeTransaction} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
 import EthersContext from "../../../../context/EthersContext"
 import useProposals from "../../../../hooks/getters/useProposals"
 import {BuiltVotingStrategy} from "../../../../types/DAO"

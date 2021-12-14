@@ -4,12 +4,7 @@ import {AddressZero} from "@ethersproject/constants"
 import {Contract, ContractInterface} from "@ethersproject/contracts"
 import {_TypedDataEncoder} from "@ethersproject/hash"
 import {JsonRpcProvider, JsonRpcSigner, TransactionResponse} from "@ethersproject/providers"
-import {pack} from "@ethersproject/solidity"
-import {BuiltVotingStrategy} from "../../../../types/DAO"
 import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
-import getRegisterUsulTx from "../Usul/getRegisterUsulTx"
-import getUsulDeploy from "../Usul/getUsulDeploy"
-import getOZLinearSetUsul from "../Usul/voting/OzLinearVoting/getOZLinearSetUsul"
 
 const EIP712_SAFE_TX_TYPE = {
 	SafeTx: [
@@ -26,14 +21,14 @@ const EIP712_SAFE_TX_TYPE = {
 	]
 }
 
-interface MetaTransaction {
+export type MetaTransaction = {
 	to: string
 	value: string | number | BigNumber
 	data: string
 	operation: number
 }
 
-export interface SafeTransaction extends MetaTransaction {
+export type SafeTransaction = MetaTransaction & {
 	safeTxGas: string | number
 	baseGas: string | number
 	gasPrice: string | number
@@ -205,88 +200,6 @@ export const executeSafeTx = async (
 	const call = buildContractCall(targetContract, method, args, nonce)
 	const tx = await executeTx(safeContract, call, signatures)
 	await tx.wait()
-}
-
-const encodeMetaTransaction = (tx: MetaTransaction): string => {
-	const data = arrayify(tx.data)
-	const encoded = pack(
-		["uint8", "address", "uint256", "uint256", "bytes"],
-		[tx.operation, tx.to, tx.value, data.length, data]
-	)
-	return encoded.slice(2)
-}
-
-export const encodeMultiSend = (txs: MetaTransaction[]): string =>
-	"0x" + txs.map(tx => encodeMetaTransaction(tx)).join("")
-
-export const buildMultiSendSafeTx = (
-	multiSend: Contract,
-	txs: MetaTransaction[],
-	nonce: number,
-	overrides?: Partial<SafeTransaction>
-): SafeTransaction =>
-	buildContractCall(multiSend, "multiSend", [encodeMultiSend(txs)], nonce, true, overrides)
-
-export const safeApproveHash = async (
-	signer: JsonRpcSigner,
-	safe: Contract,
-	safeTx: SafeTransaction,
-	skipOnChainApproval?: boolean
-): Promise<SafeSignature> => {
-	if (!skipOnChainApproval) {
-		if (!signer.provider) throw Error("Provider required for on-chain approval")
-		const chainId = (await signer.provider.getNetwork()).chainId
-		const typedDataHash = arrayify(calculateSafeTransactionHash(safe, safeTx, chainId))
-		const signerSafe = safe.connect(signer)
-		await signerSafe.approveHash(typedDataHash)
-	}
-	const signerAddress = await signer.getAddress()
-	return {
-		signer: signerAddress,
-		data:
-			"0x000000000000000000000000" +
-			signerAddress.slice(2) +
-			"0000000000000000000000000000000000000000000000000000000000000000" +
-			"01"
-	}
-}
-
-export const buildUsulDeployTxSequence = async (
-	strategies: BuiltVotingStrategy[],
-	gnosisAddress: string,
-	signer: JsonRpcSigner
-): Promise<{transactions: {tx: SafeTransaction; name: string}[]; expectedUsulAddress: string}> => {
-	if (strategies.length === 0)
-		return {
-			transactions: [],
-			expectedUsulAddress: ""
-		}
-	const {tx: deployUsulTx, expectedAddress: expectedUsulAddress} = getUsulDeploy(
-		gnosisAddress,
-		strategies.map(strategy => strategy.expectedAddress),
-		signer
-	)
-	const setUsulTransactions = strategies.map(strategy => {
-		switch (strategy.strategy) {
-			case "linearVoting":
-				return {
-					tx: getOZLinearSetUsul(expectedUsulAddress, strategy.expectedAddress, signer),
-					name: "OzLinearSetUsul"
-				}
-			default:
-				throw new Error("This strategy is not supported yet")
-		}
-	})
-	const registerUsulTx = await getRegisterUsulTx(gnosisAddress, expectedUsulAddress, signer)
-	return {
-		transactions: [
-			...strategies.map(strategy => ({tx: strategy.tx, name: strategy.strategy})),
-			{tx: deployUsulTx, name: "deployUsul"},
-			...setUsulTransactions,
-			{tx: registerUsulTx, name: "registerUsul"}
-		],
-		expectedUsulAddress
-	}
 }
 
 export const getNonce = async (address: string, provider: JsonRpcProvider): Promise<number> => {

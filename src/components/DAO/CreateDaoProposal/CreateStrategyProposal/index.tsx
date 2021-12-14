@@ -27,13 +27,7 @@ const CreateStrategyProposal: FunctionComponent<{
 		setProcessing(true)
 		try {
 			const txHashes = transactions.map(tx =>
-				buildProposalTx(
-					tx.address,
-					tx.contractMethods,
-					tx.contractMethods[tx.selectedMethodIndex].name,
-					tx.args,
-					provider
-				)
+				buildProposalTx(tx.address, tx.contractMethods, tx.selectedMethodIndex, tx.args, provider)
 			)
 			const proposalId = await submitProposal(usulAddress, strategyAddress, txHashes, signer)
 			await addStrategyProposal({
