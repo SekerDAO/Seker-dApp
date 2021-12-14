@@ -6,7 +6,7 @@ import {
 import addSafeProposal from "../../../../api/firebase/safeProposal/addSafeProposal"
 import {AuthContext} from "../../../../context/AuthContext"
 import EthersContext from "../../../../context/EthersContext"
-import {AbiFunction} from "../../../../types/abi"
+import {PrebuiltTx} from "../../../../types/common"
 import {prepareArguments} from "../../../../utlls"
 import {toastError, toastSuccess} from "../../../UI/Toast"
 import GeneralEvm from "../GeneralEvm"
@@ -22,12 +22,13 @@ const GeneralEvmAdminProposal: FunctionComponent<{
 	const {signer} = useContext(EthersContext)
 	const [processing, setProcessing] = useState(false)
 
-	const handleSubmit = async (
-		address: string,
-		contractMethods: AbiFunction[],
-		selectedMethodIndex: number,
-		args: (string | string[])[]
-	) => {
+	const handleSubmit = async (txs: PrebuiltTx[]) => {
+		// TODO
+		const address = txs[0].address
+		const contractMethods = txs[0].contractMethods
+		const selectedMethodIndex = txs[0].selectedMethodIndex
+		const args = txs[0].args
+
 		if (!(title && signer && account)) return
 		setProcessing(true)
 		try {

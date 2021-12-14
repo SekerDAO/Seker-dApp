@@ -2,7 +2,8 @@
 
 .input {
   display: flex;
-  align-items: center;
+  align-items: stretch;
+  flex-direction: column;
 
   &__wrapper {
     display: flex;

@@ -1,4 +1,4 @@
-@import "src/variables";
+@import "../../../variables";
 
 .create-dao-proposal {
   display: flex;
@@ -41,7 +41,7 @@
     }
   }
 
-  h2 {
+  > h2 {
     margin: 40px 0 20px 0;
   }
 
@@ -57,5 +57,34 @@
   &__note {
     margin: 20px 0 0 0;
     font-size: 12px;
+  }
+
+  &__delete {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+  }
+
+  &__add-button {
+    align-self: flex-end;
+  }
+
+  .paper {
+    padding: 20px;
+    margin: 20px 0;
+    position: relative;
+
+    label {
+      margin-top: 20px;
+      display: block;
+    }
+
+    textarea {
+      width: 100%;
+      margin-top: 10px;
+    }
   }
 }

@@ -7,7 +7,6 @@ import CancelAuction from "./CancelAuction"
 import ChangeRole from "./ChangeRole"
 import CreateAuction from "./CreateAuction"
 import GeneralEvmAdminProposal from "./GeneralEvmAdminProposal"
-import "./styles.scss"
 
 const CreateAdminProposal: FunctionComponent<{
 	gnosisAddress: string

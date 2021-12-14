@@ -63,8 +63,8 @@ const Input: FunctionComponent<
 						</div>
 					</div>
 				)}
-				{validation && <span className="input__validation">{validation}</span>}
 			</div>
+			{validation && <span className="input__validation">{validation}</span>}
 		</div>
 	)
 }

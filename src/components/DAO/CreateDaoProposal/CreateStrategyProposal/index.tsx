@@ -4,7 +4,7 @@ import addStrategyProposal from "../../../../api/firebase/strategyProposal/addSt
 import {AuthContext} from "../../../../context/AuthContext"
 import EthersContext from "../../../../context/EthersContext"
 import {VotingStrategyName} from "../../../../types/DAO"
-import {AbiFunction} from "../../../../types/abi"
+import {PrebuiltTx} from "../../../../types/common"
 import Input from "../../../Controls/Input"
 import Divider from "../../../UI/Divider"
 import {toastError, toastSuccess} from "../../../UI/Toast"
@@ -22,12 +22,13 @@ const CreateStrategyProposal: FunctionComponent<{
 	const [title, setTitle] = useState("")
 	const [description, setDescription] = useState("")
 
-	const handleSubmit = async (
-		address: string,
-		contractMethods: AbiFunction[],
-		selectedMethodIndex: number,
-		args: (string | string[])[]
-	) => {
+	const handleSubmit = async (txs: PrebuiltTx[]) => {
+		// TODO
+		const address = txs[0].address
+		const contractMethods = txs[0].contractMethods
+		const selectedMethodIndex = txs[0].selectedMethodIndex
+		const args = txs[0].args
+
 		if (!(title && signer && account)) return
 		setProcessing(true)
 		try {

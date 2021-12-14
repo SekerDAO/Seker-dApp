@@ -4,6 +4,7 @@ import {VotingStrategy} from "../../../types/DAO"
 import Select from "../../Controls/Select"
 import CreateAdminProposal from "./CreateAdminProposal"
 import CreateStrategyProposal from "./CreateStrategyProposal"
+import "./styles.scss"
 
 const CreateDaoProposal: FunctionComponent<{
 	gnosisAddress: string
