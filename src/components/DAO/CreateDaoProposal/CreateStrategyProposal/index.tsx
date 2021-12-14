@@ -22,35 +22,28 @@ const CreateStrategyProposal: FunctionComponent<{
 	const [title, setTitle] = useState("")
 	const [description, setDescription] = useState("")
 
-	const handleSubmit = async (txs: PrebuiltTx[]) => {
-		// TODO
-		const address = txs[0].address
-		const contractMethods = txs[0].contractMethods
-		const selectedMethodIndex = txs[0].selectedMethodIndex
-		const args = txs[0].args
-
+	const handleSubmit = async (transactions: PrebuiltTx[]) => {
 		if (!(title && signer && account)) return
 		setProcessing(true)
 		try {
-			const tx = await buildProposalTx(
-				address,
-				contractMethods,
-				contractMethods[selectedMethodIndex].name,
-				args,
-				provider
+			const txHashes = transactions.map(tx =>
+				buildProposalTx(
+					tx.address,
+					tx.contractMethods,
+					tx.contractMethods[tx.selectedMethodIndex].name,
+					tx.args,
+					provider
+				)
 			)
-			const proposalId = await submitProposal(usulAddress, strategyAddress, [tx], signer)
+			const proposalId = await submitProposal(usulAddress, strategyAddress, txHashes, signer)
 			await addStrategyProposal({
 				gnosisAddress,
 				strategyAddress,
 				strategyType,
 				id: proposalId,
-				contractAddress: address,
-				contractAbi: contractMethods,
-				contractMethod: contractMethods[selectedMethodIndex].name,
+				transactions,
 				title,
-				description,
-				args
+				description
 			})
 			setTitle("")
 			setDescription("")

@@ -1,5 +1,5 @@
 import {VotingStrategyName} from "./DAO"
-import {AbiFunction} from "./abi"
+import {PrebuiltTx} from "./common"
 
 export const strategyProposalStates: StrategyProposalState[] = [
 	"active",
@@ -26,10 +26,7 @@ export type StrategyProposalFirebaseData = {
 	userAddress: string
 	strategyAddress: string
 	strategyType: VotingStrategyName
-	contractAddress: string
-	contractAbi: AbiFunction[]
-	contractMethod: string
-	args: (string | string[])[] // TODO
+	transactions: PrebuiltTx[]
 	title: string
 	description?: string
 }

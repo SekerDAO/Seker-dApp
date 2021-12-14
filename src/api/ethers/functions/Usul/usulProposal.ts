@@ -62,13 +62,13 @@ export const submitProposal = async (
 		}
 	})
 
-export const buildProposalTx = async (
+export const buildProposalTx = (
 	contractAddress: string,
 	contractAbi: ContractInterface,
 	method: string,
 	args: unknown[],
 	providerOrSigner: JsonRpcProvider | JsonRpcSigner
-): Promise<SafeTransaction> => {
+): SafeTransaction => {
 	const contract = new Contract(contractAddress, contractAbi, providerOrSigner)
 	return buildContractCall(contract, method, args, 0)
 }

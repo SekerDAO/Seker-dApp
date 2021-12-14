@@ -1,7 +1,7 @@
 import {parse} from "query-string"
 import {FunctionComponent, useContext, useEffect, useState} from "react"
 import {useLocation} from "react-router-dom"
-import executeProposal from "../../../api/ethers/functions/Usul/executeProposal"
+import {executeProposalBatch} from "../../../api/ethers/functions/Usul/executeProposal"
 import {finalizeVotingLinear} from "../../../api/ethers/functions/Usul/voting/OzLinearVoting/ozLinearVotingApi"
 import {checkDelegatee} from "../../../api/ethers/functions/Usul/voting/votingApi"
 import {ReactComponent as DelegateTokenDefault} from "../../../assets/icons/delegate-token-default.svg"
@@ -123,15 +123,7 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 		if (!signer) return
 		setProcessing(true)
 		try {
-			await executeProposal(
-				proposal.usulAddress,
-				proposal.id,
-				proposal.contractAddress,
-				proposal.contractAbi,
-				proposal.contractMethod,
-				proposal.args,
-				signer
-			)
+			await executeProposalBatch(proposal.usulAddress, proposal.id, proposal.transactions, signer)
 			toastSuccess("Proposal successfully executed")
 			refetch()
 		} catch (e) {
