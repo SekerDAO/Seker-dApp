@@ -21,9 +21,9 @@ import {
 import {SafeSignature} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
 import editDAO from "../../../api/firebase/DAO/editDAO"
 import addSafeProposalSignature from "../../../api/firebase/safeProposal/addSafeProposalSignatures"
-import {toastError, toastSuccess} from "../../../components/UI/Toast"
 import EthersContext from "../../../context/EthersContext"
 import {SafeProposal} from "../../../types/safeProposal"
+import {toastError, toastSuccess} from "../../UI/Toast"
 
 const useSignSafeProposal = ({
 	proposal,
