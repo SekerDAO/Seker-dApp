@@ -11,19 +11,18 @@ const getAuctionDetails = async (
 	provider: JsonRpcProvider
 ): Promise<AuctionEthersData> => {
 	const auction = new Contract(config.AUCTION_ADDRESS, Auction.abi, provider)
-	const {amount, approved, firstBidTime, duration, reservePrice, tokenOwner} =
-		await auction.auctions(auctionId)
+	const {amount, firstBidTime, duration, reservePrice, tokenOwner} = await auction.auctions(
+		auctionId
+	)
 	const endTime = (Number(firstBidTime.toString()) + Number(duration.toString())) * 1000
 	const state =
 		tokenOwner === AddressZero
 			? "finalized"
-			: approved
-			? Number(firstBidTime.toString()) > 0
-				? endTime < new Date().getTime()
-					? "ended"
-					: "live"
-				: "approved"
-			: "waitingApproval"
+			: Number(firstBidTime.toString()) > 0
+			? endTime < new Date().getTime()
+				? "ended"
+				: "live"
+			: "waitingForBids"
 
 	return {
 		price: Math.max(

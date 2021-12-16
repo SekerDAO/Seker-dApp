@@ -139,7 +139,7 @@ const NftDetails: FunctionComponent = () => {
 										</Button>
 									) : (
 										<BidAuctionModal
-											disabled={auction.state !== "approved" && auction.state !== "live"}
+											disabled={auction.state !== "waitingForBids" && auction.state !== "live"}
 											auctionId={auction.id}
 											minBid={auction.price}
 											auctionTokenAddress={

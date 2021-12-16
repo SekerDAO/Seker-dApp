@@ -46,7 +46,7 @@ const CancelAuction: FunctionComponent<{
 				placeholder="Choose one"
 				value={selectedAuction?.id}
 				options={auctions
-					.filter(a => a.state === "approved")
+					.filter(a => a.state === "waitingForBids")
 					.map(a => ({name: String(a.nftName), value: a.id}))}
 				onChange={handleAuctionChange}
 				id="cancel-auction-id"
