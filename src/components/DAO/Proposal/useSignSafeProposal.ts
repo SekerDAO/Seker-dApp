@@ -53,19 +53,21 @@ const useSignSafeProposal = ({
 			let signatureAdded = false
 			switch (proposal.type) {
 				case "createAuction":
-					const signingArgs = [
+					;[signature] = await signApproveNFTForAuction(
+						proposal.gnosisAddress,
+						Number(proposal.nftId),
+						proposal.nftAddress!,
+						signer
+					)
+					;[signatureStep2] = await signCreateAuction(
 						proposal.gnosisAddress,
 						Number(proposal.nftId),
 						proposal.nftAddress!,
 						proposal.duration!,
 						proposal.reservePrice!,
-						proposal.curatorAddress!,
-						proposal.curatorFeePercentage!,
 						proposal.auctionCurrencyAddress!,
 						signer
-					] as const
-					;[signature] = await signApproveNFTForAuction(...signingArgs)
-					signatureStep2 = await signCreateAuction(...signingArgs)
+					)
 					if (proposal.signatures?.length === proposal.gnosisVotingThreshold - 1) {
 						await executeApproveNFTForAuction(
 							proposal.gnosisAddress,
@@ -80,8 +82,6 @@ const useSignSafeProposal = ({
 							proposal.nftAddress!,
 							proposal.duration!,
 							proposal.reservePrice!,
-							proposal.curatorAddress!,
-							proposal.curatorFeePercentage!,
 							proposal.auctionCurrencyAddress!,
 							[...proposal.signaturesStep2!, signatureStep2],
 							signer

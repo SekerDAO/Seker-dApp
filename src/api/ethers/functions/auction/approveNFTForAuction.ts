@@ -7,11 +7,6 @@ export const signApproveNFTForAuction = async (
 	safeAddress: string,
 	nftID: number,
 	nftAddress: string,
-	duration: number,
-	reservePrice: number,
-	curator: string,
-	curatorFeePercentage: number,
-	auctionCurrency: string,
 	signer: JsonRpcSigner
 ): Promise<[SafeSignature, number]> =>
 	createSafeSignature(

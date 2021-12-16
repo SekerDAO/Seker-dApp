@@ -44,8 +44,6 @@ export type SafeProposal = {
 	nftAddress?: string
 	duration?: number
 	reservePrice?: number
-	curatorAddress?: string
-	curatorFeePercentage?: number
 	auctionCurrencySymbol?: string
 	auctionCurrencyAddress?: string
 	// For general EVM

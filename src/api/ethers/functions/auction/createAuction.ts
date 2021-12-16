@@ -12,29 +12,19 @@ export const signCreateAuction = async (
 	nftAddress: string,
 	duration: number,
 	reservePrice: number,
-	curator: string,
-	curatorFeePercentage: number,
 	auctionCurrency: string,
 	signer: JsonRpcSigner
-): Promise<SafeSignature> => {
+): Promise<[SafeSignature, number]> => {
 	const safeContract = new Contract(safeAddress, GnosisSafeL2.abi, signer)
 	const auction = new Contract(config.AUCTION_ADDRESS, Auction.abi, signer)
 	const nonce = await safeContract.nonce()
 	const call = buildContractCall(
 		auction,
 		"createAuction",
-		[
-			nftID,
-			nftAddress,
-			duration * 3600,
-			parseEther(String(reservePrice)),
-			curator,
-			curatorFeePercentage,
-			auctionCurrency
-		],
+		[nftID, nftAddress, duration * 3600, parseEther(String(reservePrice)), auctionCurrency],
 		nonce.add(1)
 	)
-	return safeSignMessage(signer, safeContract, call)
+	return [await safeSignMessage(signer, safeContract, call), nonce.toNumber()]
 }
 
 export const executeCreateAuction = async (
@@ -43,8 +33,6 @@ export const executeCreateAuction = async (
 	nftAddress: string,
 	duration: number,
 	reservePrice: number,
-	curator: string,
-	curatorFeePercentage: number,
 	auctionCurrency: string,
 	signatures: SafeSignature[],
 	signer: JsonRpcSigner
@@ -57,15 +45,7 @@ export const executeCreateAuction = async (
 			const call = buildContractCall(
 				auction,
 				"createAuction",
-				[
-					nftID,
-					nftAddress,
-					duration * 3600,
-					parseEther(String(reservePrice)),
-					curator,
-					curatorFeePercentage,
-					auctionCurrency
-				],
+				[nftID, nftAddress, duration * 3600, parseEther(String(reservePrice)), auctionCurrency],
 				nonce
 			)
 

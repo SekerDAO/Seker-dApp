@@ -15,7 +15,7 @@ export type AuctionFirebaseData = {
 
 export type AuctionEthersData = {
 	price: number
-	state: "waitingApproval" | "approved" | "live" | "ended" | "finalized"
+	state: "waitingForBids" | "live" | "ended" | "finalized"
 	endTime?: number
 }
 

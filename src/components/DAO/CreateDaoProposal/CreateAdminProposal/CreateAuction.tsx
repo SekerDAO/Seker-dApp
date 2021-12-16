@@ -1,4 +1,13 @@
 import {ChangeEvent, FunctionComponent, useContext, useState} from "react"
+import {
+	executeApproveNFTForAuction,
+	signApproveNFTForAuction
+} from "../../../../api/ethers/functions/auction/approveNFTForAuction"
+import {
+	executeCreateAuction,
+	signCreateAuction
+} from "../../../../api/ethers/functions/auction/createAuction"
+import addSafeProposal from "../../../../api/firebase/safeProposal/addSafeProposal"
 import currencies from "../../../../constants/currencies"
 import {AuthContext} from "../../../../context/AuthContext"
 import EthersContext from "../../../../context/EthersContext"
@@ -31,8 +40,6 @@ const CreateAuction: FunctionComponent<{
 	const [reservePrice, setReservePrice] = useState("")
 	const [currencySymbol, setCurrencySymbol] = useState("")
 	const [currencyAddress, setCurrencyAddress] = useState("")
-	const [curatorAddress, setCuratorAddress] = useState(gnosisAddress)
-	const [curatorFeePercentage, setCuratorFeePercentage] = useState("")
 	const [duration, setDuration] = useState("")
 
 	if (error) return <ErrorPlaceholder />
@@ -43,14 +50,6 @@ const CreateAuction: FunctionComponent<{
 			setReservePrice("0")
 		} else {
 			setReservePrice(e.target.value)
-		}
-	}
-
-	const handleFeeChange = (e: ChangeEvent<HTMLInputElement>) => {
-		if (Number(e.target.value) < 0) {
-			setCuratorFeePercentage("0")
-		} else {
-			setCuratorFeePercentage(e.target.value)
 		}
 	}
 
@@ -80,31 +79,59 @@ const CreateAuction: FunctionComponent<{
 		if (!(account && nft && signer && currencySymbol)) return
 		setProcessing(true)
 		try {
-			console.log("TODO")
-			// await addProposal({
-			// 	type: "createAuction",
-			// 	module: "gnosis",
-			// 	userAddress: account,
-			// 	gnosisAddress,
-			// 	state,
-			// 	title,
-			// 	...(description ? {description} : {}),
-			// 	nftId: nft.id,
-			// 	nftAddress: nft.address,
-			// 	duration: Number(duration),
-			// 	reservePrice: Number(reservePrice),
-			// 	curatorAddress,
-			// 	curatorFeePercentage: Number(curatorFeePercentage),
-			// 	auctionCurrencySymbol: currencySymbol,
-			// 	auctionCurrencyAddress: currencyAddress,
-			// 	signatures: approveSignatures,
-			// 	signaturesStep2: createSignatures
-			// })
+			const [approveSignature, nonce] = await signApproveNFTForAuction(
+				gnosisAddress,
+				nft.id,
+				nft.address,
+				signer
+			)
+			const [createSignature] = await signCreateAuction(
+				gnosisAddress,
+				nft.id,
+				nft.address,
+				Number(duration),
+				Number(reservePrice),
+				currencyAddress,
+				signer
+			)
+			if (gnosisVotingThreshold === 1) {
+				await executeApproveNFTForAuction(
+					gnosisAddress,
+					nft.id,
+					nft.address,
+					[approveSignature],
+					signer
+				)
+				await executeCreateAuction(
+					gnosisAddress,
+					nft.id,
+					nft.address,
+					Number(duration),
+					Number(reservePrice),
+					currencyAddress,
+					[createSignature],
+					signer
+				)
+			}
+			await addSafeProposal({
+				type: "createAuction",
+				gnosisAddress,
+				state: gnosisVotingThreshold === 1 ? "executed" : "active",
+				title,
+				...(description ? {description} : {}),
+				nftId: nft.id,
+				nftAddress: nft.address,
+				duration: Number(duration),
+				reservePrice: Number(reservePrice),
+				auctionCurrencySymbol: currencySymbol,
+				auctionCurrencyAddress: currencyAddress,
+				signatures: [approveSignature],
+				signaturesStep2: [createSignature],
+				nonce
+			})
 			setReservePrice("")
 			setCurrencySymbol("")
 			setCurrencyAddress("")
-			setCuratorAddress(gnosisAddress)
-			setCuratorFeePercentage("")
 			setDuration("")
 			afterSubmit()
 			toastSuccess("Proposal successfully created")
@@ -121,12 +148,9 @@ const CreateAuction: FunctionComponent<{
 			nft &&
 			reservePrice &&
 			(currencySymbol === "custom" ? currencyAddress : currencySymbol) &&
-			curatorAddress &&
-			curatorFeePercentage &&
 			duration
 		) ||
 		isNaN(Number(reservePrice)) ||
-		isNaN(Number(curatorFeePercentage)) ||
 		isNaN(Number(duration))
 
 	return (
@@ -179,28 +203,6 @@ const CreateAuction: FunctionComponent<{
 					/>
 				</>
 			)}
-			<div className="create-dao-proposal__row">
-				<div className="create-dao-proposal__col">
-					<label htmlFor="create-auction-curator-address">Curator&apos;s Address</label>
-					<Input
-						id="create-auction-curator-address"
-						value={curatorAddress}
-						onChange={e => {
-							setCuratorAddress(e.target.value)
-						}}
-					/>
-				</div>
-				<div className="create-dao-proposal__col">
-					<label htmlFor="create-auction-curator-fee">Curator&apos;s Fee (%)</label>
-					<Input
-						number
-						min={0}
-						id="create-auction-curator-fee"
-						value={curatorFeePercentage}
-						onChange={handleFeeChange}
-					/>
-				</div>
-			</div>
 			<label htmlFor="create-auction-curator-duration">Duration (Hours)</label>
 			<Input
 				number
