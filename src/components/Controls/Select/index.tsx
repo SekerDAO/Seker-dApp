@@ -34,7 +34,7 @@ const Select = <ValueType extends string | number>({
 
 	const triggerText = isOpened
 		? placeholder
-		: value && options.find(option => option.value === value)?.name
+		: value != undefined && options.find(option => option.value === value)?.name
 
 	return (
 		<Dropdown<ValueType>

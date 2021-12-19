@@ -137,29 +137,37 @@ const Dao: FunctionComponent = () => {
 								</div>
 							)}
 						</Paper>
-						{isAdmin && (
+						{(isAdmin || dao.usulAddress) && (
 							<DashboardMenu
 								items={[
-									{
-										title: "Create / Load NFTs",
-										to: `${pathname}?page=createNFT`,
-										page: "createNFT"
-									},
-									{
-										title: "Edit DAO Profile",
-										to: `${pathname}?page=edit`,
-										page: "edit"
-									},
+									...(isAdmin
+										? [
+												{
+													title: "Create / Load NFTs",
+													to: `${pathname}?page=createNFT`,
+													page: "createNFT"
+												},
+												{
+													title: "Edit DAO Profile",
+													to: `${pathname}?page=edit`,
+													page: "edit"
+												}
+										  ]
+										: []),
 									{
 										title: "Create Proposal",
 										to: `${pathname}?page=createProposal`,
 										page: "createProposal"
 									},
-									{
-										title: "Expand Dao",
-										to: `${pathname}?page=expand`,
-										page: "expand"
-									}
+									...(isAdmin
+										? [
+												{
+													title: "Expand Dao",
+													to: `${pathname}?page=expand`,
+													page: "expand"
+												}
+										  ]
+										: [])
 								]}
 								currentPage={page}
 							/>
@@ -189,8 +197,9 @@ const Dao: FunctionComponent = () => {
 								}}
 							/>
 						)}
-						{isAdmin && page === "createProposal" && (
+						{page === "createProposal" && (
 							<CreateDaoProposal
+								isAdmin={isAdmin}
 								gnosisAddress={dao.gnosisAddress}
 								usulAddress={dao.usulAddress}
 								gnosisVotingThreshold={dao.gnosisVotingThreshold}

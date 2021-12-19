@@ -62,14 +62,14 @@ const CreateERC20TokenModal: FunctionComponent<{
 						setSymbol(e.target.value)
 					}}
 				/>
-				<label htmlFor="create-erc20-ts">Total Supply</label>
+				<label htmlFor="create-erc20-ts">Total Supply (18 decimal token)</label>
 				<Input
 					min={0}
-					max={100}
 					number
 					id="create-erc20-ts"
 					value={totalSupply}
 					onChange={handleTotalSupplyChange}
+					placeholder="Value in Ethers"
 				/>
 				<Button disabled={!(name && symbol && totalSupply) || loading} onClick={handleSubmit}>
 					{loading ? "Processing..." : "Submit"}

@@ -46,7 +46,10 @@ const DeployVotingStrategyModal: FunctionComponent<{
 	}
 
 	const handleChange = ({target: {name, value}}: ChangeEvent<HTMLInputElement>) => {
-		setFormValues(prevState => ({...prevState, [name]: value}))
+		setFormValues(prevState => ({
+			...prevState,
+			[name]: name === "quorumThreshold" && Number(value) > 100 ? "100" : value
+		}))
 	}
 
 	const submitButtonDisabled = !(

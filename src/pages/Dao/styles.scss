@@ -112,4 +112,17 @@
       font-size: 18px;
     }
   }
+
+  .create-nft {
+    max-width: 880px;
+
+    > h2 {
+      margin: 40px 0;
+    }
+
+    input[type="text"],
+    input[type="number"], {
+      width: 100%;
+    }
+  }
 }

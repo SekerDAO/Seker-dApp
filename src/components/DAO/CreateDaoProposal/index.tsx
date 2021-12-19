@@ -12,9 +12,10 @@ const CreateDaoProposal: FunctionComponent<{
 	gnosisVotingThreshold: number
 	ownersCount: number
 	strategies: VotingStrategy[]
-}> = ({gnosisAddress, usulAddress, gnosisVotingThreshold, ownersCount, strategies}) => {
+	isAdmin: boolean
+}> = ({gnosisAddress, usulAddress, gnosisVotingThreshold, ownersCount, strategies, isAdmin}) => {
 	const {connected} = useContext(AuthContext)
-	const [module, setModule] = useState(-1)
+	const [module, setModule] = useState(isAdmin ? -1 : 0)
 
 	if (!connected) return <div>TODO: Please connect wallet</div>
 
@@ -24,10 +25,14 @@ const CreateDaoProposal: FunctionComponent<{
 			<label>Proposal module</label>
 			<Select
 				options={[
-					{
-						name: "Admin",
-						value: -1
-					},
+					...(isAdmin
+						? [
+								{
+									name: "Admin",
+									value: -1
+								}
+						  ]
+						: []),
 					...strategies.map((strategy, index) => ({
 						name: strategy.name,
 						value: index

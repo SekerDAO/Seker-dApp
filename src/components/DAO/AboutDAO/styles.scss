@@ -2,6 +2,7 @@
 
 .about-dao {
   margin-top: 45px;
+  max-width: 880px;
 
   &__balance {
     min-height: 260px;
@@ -39,7 +40,6 @@
 
   &__parameters {
     width: 280px;
-    margin-left: 20px;
 
     .paper {
       padding: 20px;

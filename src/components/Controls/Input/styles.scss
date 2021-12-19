@@ -102,11 +102,11 @@
 
   /* stylelint-disable -- Stylelint wants this svg selector to come before custom number arrows
   * which then conflicts with order of input and search-input
-  * the solution could be extracting those styles to separate file, but desabling seems more reasonable
+  * the solution could be extracting those styles to separate file, but disabling seems more reasonable
   */
   svg {
     position: absolute;
-    top: 5px;
+    top: 10px;
     left: 0;
   }
   /* stylelint-enable */
