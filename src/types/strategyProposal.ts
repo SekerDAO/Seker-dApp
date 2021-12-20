@@ -1,3 +1,4 @@
+import {BigNumber} from "@ethersproject/bignumber"
 import {VotingStrategyName} from "./DAO"
 import {PrebuiltTx} from "./common"
 
@@ -20,6 +21,13 @@ export type StrategyProposalState =
 	| "pending"
 	| "failed"
 
+export type StrategyVotes = {
+	yes: BigNumber
+	no: BigNumber
+	abstain: BigNumber
+	quorum: BigNumber
+}
+
 export type StrategyProposalFirebaseData = {
 	id: number
 	gnosisAddress: string
@@ -31,7 +39,11 @@ export type StrategyProposalFirebaseData = {
 	description?: string
 }
 
-export type StrategyProposal = StrategyProposalFirebaseData & {
+type StrategyProposalEthersData = {
 	state: StrategyProposalState
 	govTokenAddress: string | null
+	usulAddress: string
+	votes: StrategyVotes
 }
+
+export type StrategyProposal = StrategyProposalFirebaseData & StrategyProposalEthersData

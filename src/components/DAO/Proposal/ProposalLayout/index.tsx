@@ -9,7 +9,8 @@ import Expandable from "../../../UI/Expandable"
 import Paper from "../../../UI/Paper"
 import Tag from "../../../UI/Tag"
 import ProposalHeader from "../ProposalHeader"
-import ProposalVotes from "../ProposalVotes"
+import AdminProposalVotes from "../ProposalVotes/AdminProposalVotes"
+import StrategyProposalVotes from "../ProposalVotes/StrategyProposalVotes"
 
 // TODO: Get votes from proposal info
 const MOCK_VOTES = [
@@ -41,8 +42,7 @@ const MOCK_TRANSACTIONS: Array<typeof MOCK_TRANSACTION> = [MOCK_TRANSACTION, MOC
 const ProposalLayout: FunctionComponent<{
 	proposal: (SafeProposal | StrategyProposal) & {proposalId: string}
 	votesThreshold: number
-	votingStrategy: "admin" | VotingStrategyName
-}> = ({proposal, votesThreshold, votingStrategy, children}) => {
+}> = ({proposal, votesThreshold, children}) => {
 	const {push} = useHistory()
 
 	const isAdminProposal = isSafeProposal(proposal)
@@ -55,45 +55,54 @@ const ProposalLayout: FunctionComponent<{
 			<div className="proposal__content">
 				{!isAdminProposal && (
 					<div className="proposal__content-heading">
-						<span>Quorum Status</span> <Tag variant="canceled">75%</Tag>
+						<span>Quorum Status</span>{" "}
+						<Tag variant="canceled">
+							{proposal.votes.quorum.isZero()
+								? 0
+								: Math.min(
+										100,
+										Math.round(
+											proposal.votes.yes
+												.add(proposal.votes.abstain)
+												.div(proposal.votes.quorum)
+												.toNumber() * 100
+										)
+								  )}
+							%
+						</Tag>
 					</div>
 				)}
 				<div className="proposal__content-body">
 					<div className="proposal__content-votes-cards">
 						{isAdminProposal ? (
-							<ProposalVotes
+							<AdminProposalVotes
 								fullWidth
-								type="for"
 								value={proposal.signatures.length}
 								totalValue={votesThreshold}
 								votes={proposal.signatures.map(signature => ({
 									address: signature.signer,
 									tokens: 1
 								}))}
-								votingStrategy="admin"
 							/>
 						) : (
 							<>
-								<ProposalVotes
+								<StrategyProposalVotes
 									type="for"
-									value={500000}
-									totalValue={1000000}
+									value={proposal.votes.yes}
+									totalValue={proposal.votes.yes.add(proposal.votes.no).add(proposal.votes.abstain)}
 									votes={MOCK_VOTES}
-									votingStrategy={votingStrategy}
 								/>
-								<ProposalVotes
+								<StrategyProposalVotes
 									type="against"
-									value={250000}
-									totalValue={1000000}
+									value={proposal.votes.no}
+									totalValue={proposal.votes.yes.add(proposal.votes.no).add(proposal.votes.abstain)}
 									votes={MOCK_VOTES}
-									votingStrategy={votingStrategy}
 								/>
-								<ProposalVotes
+								<StrategyProposalVotes
 									type="abstain"
-									value={250000}
-									totalValue={1000000}
+									value={proposal.votes.abstain}
+									totalValue={proposal.votes.yes.add(proposal.votes.no).add(proposal.votes.abstain)}
 									votes={MOCK_VOTES}
-									votingStrategy={votingStrategy}
 								/>
 							</>
 						)}

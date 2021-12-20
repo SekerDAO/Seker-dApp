@@ -37,11 +37,7 @@ const SafeProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 	if (loading || !proposal) return <Loader />
 
 	return (
-		<ProposalLayout
-			proposal={proposal}
-			votingStrategy="admin"
-			votesThreshold={proposal.gnosisVotingThreshold}
-		>
+		<ProposalLayout proposal={proposal} votesThreshold={proposal.gnosisVotingThreshold}>
 			<Button
 				disabled={!canSign || processing}
 				onClick={sign}
@@ -168,11 +164,7 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 					initialDelegatee={delegatee ?? account}
 				/>
 			)}
-			<ProposalLayout
-				proposal={proposal}
-				votesThreshold={100}
-				votingStrategy={proposal.strategyType}
-			>
+			<ProposalLayout proposal={proposal} votesThreshold={100}>
 				{proposal.state === "active" ? (
 					account && connected ? (
 						<>

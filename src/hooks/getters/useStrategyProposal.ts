@@ -1,5 +1,5 @@
 import {useContext, useEffect, useState} from "react"
-import {getProposalState} from "../../api/ethers/functions/Usul/usulProposal"
+import {getProposalState, getProposalVotes} from "../../api/ethers/functions/Usul/usulProposal"
 import {getStrategyGovTokenAddress} from "../../api/ethers/functions/Usul/voting/usulStrategies"
 import getDAO from "../../api/firebase/DAO/getDAO"
 import getStrategyProposal from "../../api/firebase/strategyProposal/getStrategyProposal"
@@ -15,9 +15,7 @@ const useStrategyProposal = (
 	error: boolean
 	refetch: () => Promise<void>
 } => {
-	const [proposal, setProposal] = useState<
-		(StrategyProposal & {proposalId: string; usulAddress: string}) | null
-	>(null)
+	const [proposal, setProposal] = useState<(StrategyProposal & {proposalId: string}) | null>(null)
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
 	const {connected, account} = useContext(AuthContext)
@@ -36,16 +34,13 @@ const useStrategyProposal = (
 				throw new Error("Unexpected strategy proposal on DAO without usul address")
 			}
 			const state = await getProposalState(dao.usulAddress, proposalData.id, provider)
-			const govTokenAddress = await getStrategyGovTokenAddress(
-				proposalData.strategyAddress,
-				provider
-			)
 			setProposal({
 				...proposalData,
 				state,
-				govTokenAddress,
+				govTokenAddress: await getStrategyGovTokenAddress(proposalData.strategyAddress, provider),
 				proposalId: id,
-				usulAddress: dao.usulAddress
+				usulAddress: dao.usulAddress,
+				votes: await getProposalVotes(dao.usulAddress, proposalData.id, provider)
 			})
 		} catch (e) {
 			console.error(e)

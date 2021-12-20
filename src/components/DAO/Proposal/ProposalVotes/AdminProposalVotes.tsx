@@ -1,52 +1,41 @@
 import {FunctionComponent, useState} from "react"
-import {VotingStrategyName} from "../../../../types/DAO"
-import {capitalize, formatNumber, formatReadableAddress} from "../../../../utlls"
+import {formatReadableAddress} from "../../../../utlls"
 import Button from "../../../Controls/Button"
 import Modal from "../../../Modals/Modal"
 import Paper from "../../../UI/Paper"
 import ProgressBar from "../../../UI/ProgressBar"
 import "./styles.scss"
 
-type VotesCardProps = {
-	votingStrategy: "admin" | VotingStrategyName
-	type: "for" | "against" | "abstain"
+type AdminVotesCardProps = {
 	totalValue: number
 	value: number
 	votes: {address: string; tokens: number}[]
 }
 
-const VotesCard: FunctionComponent<VotesCardProps> = ({
+const AdminVotesCard: FunctionComponent<AdminVotesCardProps> = ({
 	children,
-	type,
 	value,
 	totalValue,
-	votes,
-	votingStrategy
+	votes
 }) => {
-	const isAdminProposal = votingStrategy === "admin"
 	const percentageValue = (value / totalValue) * 100
 
 	return (
 		<>
 			<div className="votes-card__header">
 				<h2>
-					<span>{isAdminProposal ? "Confirmed" : capitalize(type)}</span>
-					<span>{isAdminProposal ? value : `${percentageValue}%`}</span>
+					<span>Confirmed</span>
+					<span>{value}</span>
 				</h2>
-				<ProgressBar
-					color={type === "for" ? "green" : type === "against" ? "red" : "grey"}
-					value={percentageValue}
-				/>
+				<ProgressBar color="green" value={percentageValue} />
 				<span className="votes-card__value">
-					{isAdminProposal
-						? `Confirmations Needed to Pass: ${totalValue - value}`
-						: formatNumber(value)}
+					{`Confirmations Needed to Pass: ${totalValue - value}`}
 				</span>
 			</div>
 			<div className="votes-card__body">
 				<h3>
 					<span>Addresses</span>
-					<span>{isAdminProposal ? "Confirmations" : "Votes"}</span>
+					<span>Confirmations</span>
 				</h3>
 				<ul>
 					{votes.map(({address, tokens}, index) => (
@@ -58,7 +47,7 @@ const VotesCard: FunctionComponent<VotesCardProps> = ({
 							>
 								{formatReadableAddress(address)}
 							</a>
-							<span>{isAdminProposal ? tokens : formatNumber(tokens)}</span>
+							<span>{tokens}</span>
 						</li>
 					))}
 				</ul>
@@ -68,43 +57,29 @@ const VotesCard: FunctionComponent<VotesCardProps> = ({
 	)
 }
 
-const ProposalVotes: FunctionComponent<VotesCardProps & {fullWidth?: boolean}> = ({
-	type,
+const AdminProposalVotes: FunctionComponent<AdminVotesCardProps & {fullWidth?: boolean}> = ({
 	value,
 	totalValue,
 	votes,
-	fullWidth,
-	votingStrategy
+	fullWidth
 }) => {
 	const [showModal, setShowModal] = useState(false)
 	return (
 		<Paper className={`votes-card${fullWidth ? " votes-card--full-width" : ""}`}>
-			<VotesCard
-				votes={votes.slice(0, 3)}
-				type={type}
-				value={value}
-				totalValue={totalValue}
-				votingStrategy={votingStrategy}
-			>
+			<AdminVotesCard votes={votes.slice(0, 3)} value={value} totalValue={totalValue}>
 				{votes.length > 3 && (
 					<Button buttonType="link" onClick={() => setShowModal(true)}>
 						View More
 					</Button>
 				)}
-			</VotesCard>
+			</AdminVotesCard>
 			{votes.length > 3 && (
 				<Modal show={showModal} onClose={() => setShowModal(false)}>
-					<VotesCard
-						votes={votes}
-						type={type}
-						value={value}
-						totalValue={totalValue}
-						votingStrategy={votingStrategy}
-					/>
+					<AdminVotesCard votes={votes} value={value} totalValue={totalValue} />
 				</Modal>
 			)}
 		</Paper>
 	)
 }
 
-export default ProposalVotes
+export default AdminProposalVotes

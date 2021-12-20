@@ -2,7 +2,11 @@ import {BigNumberish} from "@ethersproject/bignumber"
 import {Contract} from "@ethersproject/contracts"
 import {JsonRpcProvider, JsonRpcSigner} from "@ethersproject/providers"
 import {AbiFunction} from "../../../../types/abi"
-import {StrategyProposalState, strategyProposalStates} from "../../../../types/strategyProposal"
+import {
+	StrategyProposalState,
+	strategyProposalStates,
+	StrategyVotes
+} from "../../../../types/strategyProposal"
 import {prepareArguments} from "../../../../utlls"
 import OZLinearVoting from "../../abis/OZLinearVoting.json"
 import Usul from "../../abis/Usul.json"
@@ -143,4 +147,21 @@ export const getProposalState = async (
 		// Deadline has not passed, so state "active" is truthful
 	}
 	return strategyProposalStates[state]
+}
+
+export const getProposalVotes = async (
+	usulAddress: string,
+	proposalId: number,
+	provider: JsonRpcProvider
+): Promise<StrategyVotes> => {
+	const usul = new Contract(usulAddress, Usul.abi, provider)
+	const {strategy: strategyAddress} = await usul.proposals(proposalId)
+	const strategy = new Contract(strategyAddress, OZLinearVoting.abi, provider)
+	const {yesVotes, noVotes, abstainVotes, startBlock} = await strategy.proposals(proposalId)
+	return {
+		yes: yesVotes,
+		no: noVotes,
+		abstain: abstainVotes,
+		quorum: await strategy.quorum(startBlock)
+	}
 }

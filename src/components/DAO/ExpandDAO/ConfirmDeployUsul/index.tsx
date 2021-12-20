@@ -68,7 +68,7 @@ const ConfirmDeployUsul: FunctionComponent<{
 				toastSuccess(
 					gnosisVotingThreshold === 1
 						? "Usul module successfully deployed"
-						: "Expand DAO proposal successfully deployed"
+						: "Expand DAO proposal successfully created"
 				)
 				afterSubmit()
 			}
