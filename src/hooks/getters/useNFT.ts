@@ -1,7 +1,7 @@
 import {JsonRpcProvider} from "@ethersproject/providers"
 import {useContext, useEffect, useState} from "react"
 import getNFT from "../../api/firebase/NFT/getNFT"
-import EthersContext from "../../context/EthersContext"
+import ProviderContext from "../../context/ProviderContext"
 import {NFT} from "../../types/NFT"
 import {Auction} from "../../types/auction"
 
@@ -13,7 +13,7 @@ const useNFT = (
 	loading: boolean
 	error: boolean
 } => {
-	const {provider} = useContext(EthersContext)
+	const {provider} = useContext(ProviderContext)
 	const [nft, setNft] = useState<NFT | null>(null)
 	const [auctions, setAuctions] = useState<Auction[]>([])
 	const [loading, setLoading] = useState(false)

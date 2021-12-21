@@ -7,7 +7,6 @@ import addSafeProposal from "../../../../api/firebase/safeProposal/addSafePropos
 import {ReactComponent as ArrowDown} from "../../../../assets/icons/arrow-down.svg"
 import {ReactComponent as WarningIcon} from "../../../../assets/icons/warning.svg"
 import {AuthContext} from "../../../../context/AuthContext"
-import EthersContext from "../../../../context/EthersContext"
 import {formatReadableAddress} from "../../../../utlls"
 import Button from "../../../Controls/Button"
 import TransactionDetailsModal from "../../../Modals/TransactionDetailsModal"
@@ -31,8 +30,7 @@ const ConfirmDeployUsul: FunctionComponent<{
 	afterSubmit,
 	expectedUsulAddress
 }) => {
-	const {signer} = useContext(EthersContext)
-	const {account, balance} = useContext(AuthContext)
+	const {account, balance, signer} = useContext(AuthContext)
 	const [openedTxDetails, setOpenedTxDetails] = useState<
 		{tx: SafeTransaction; name: string} | undefined
 	>()

@@ -3,7 +3,7 @@ import {getStrategies} from "../../api/ethers/functions/Usul/voting/usulStrategi
 import getOwners from "../../api/ethers/functions/gnosisSafe/getOwners"
 import getVotingThreshold from "../../api/ethers/functions/gnosisSafe/getVotingThreshold"
 import getDAO from "../../api/firebase/DAO/getDAO"
-import EthersContext from "../../context/EthersContext"
+import ProviderContext from "../../context/ProviderContext"
 import {DAO} from "../../types/DAO"
 
 const useDAO = (
@@ -17,7 +17,7 @@ const useDAO = (
 	const [dao, setDao] = useState<DAO | null>(null)
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
-	const {provider} = useContext(EthersContext)
+	const {provider} = useContext(ProviderContext)
 
 	const getInfo = async () => {
 		setLoading(true)

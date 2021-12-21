@@ -5,7 +5,7 @@ import {getNonce} from "../../api/ethers/functions/gnosisSafe/safeUtils"
 import getDAO from "../../api/firebase/DAO/getDAO"
 import getSafeProposals from "../../api/firebase/safeProposal/getSafeProposals"
 import getStrategyProposals from "../../api/firebase/strategyProposal/getStrategyProposals"
-import EthersContext from "../../context/EthersContext"
+import ProviderContext from "../../context/ProviderContext"
 import {SafeProposal} from "../../types/safeProposal"
 import {StrategyProposal} from "../../types/strategyProposal"
 
@@ -22,7 +22,7 @@ const useProposals = (
 	>([])
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
-	const {provider} = useContext(EthersContext)
+	const {provider} = useContext(ProviderContext)
 
 	const fetchSafeProposals = async () => {
 		const [proposalsSnapshots, nonce] = await Promise.all([

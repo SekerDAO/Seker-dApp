@@ -1,6 +1,6 @@
 import {ChangeEvent, FunctionComponent, useContext, useState} from "react"
 import {AuthContext} from "../../../../context/AuthContext"
-import EthersContext from "../../../../context/EthersContext"
+import ProviderContext from "../../../../context/ProviderContext"
 import Button from "../../../Controls/Button"
 import Input from "../../../Controls/Input"
 import {toastError, toastSuccess} from "../../../UI/Toast"
@@ -9,8 +9,8 @@ const RequestFunding: FunctionComponent<{
 	gnosisAddress: string
 	daoAddress: string
 }> = () => {
-	const {account} = useContext(AuthContext)
-	const {provider, signer} = useContext(EthersContext)
+	const {account, signer} = useContext(AuthContext)
+	const {provider} = useContext(ProviderContext)
 	const [loading, setLoading] = useState(false)
 	const [title, setTitle] = useState("")
 	const [description, setDescription] = useState("")

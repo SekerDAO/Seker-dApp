@@ -1,9 +1,10 @@
 import {FunctionComponent, useContext} from "react"
 import config from "../../config"
-import EthersContext from "../../context/EthersContext"
+import networks from "../../constants/networks"
+import {AuthContext} from "../../context/AuthContext"
 
 const NetworkChecker: FunctionComponent = () => {
-	const {chainId} = useContext(EthersContext)
+	const {chainId} = useContext(AuthContext)
 
 	if (chainId && chainId !== config.CHAIN_ID) {
 		return (
@@ -19,8 +20,7 @@ const NetworkChecker: FunctionComponent = () => {
 					alignItems: "center"
 				}}
 			>
-				{/* TODO: not forget to remove this hard-code */}
-				Wrong network: Please switch to Rinkeby
+				Wrong network: Please switch to {networks[config.CHAIN_ID]}
 			</div>
 		)
 	}

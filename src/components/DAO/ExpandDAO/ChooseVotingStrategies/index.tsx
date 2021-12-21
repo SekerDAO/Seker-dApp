@@ -4,7 +4,7 @@ import {SafeTransaction} from "../../../../api/ethers/functions/gnosisSafe/safeU
 import {ReactComponent as DeleteIcon} from "../../../../assets/icons/delete.svg"
 import {ReactComponent as StepDotDoneIcon} from "../../../../assets/icons/step-dot-done.svg"
 import {VOTING_STRATEGIES} from "../../../../constants/votingStrategies"
-import EthersContext from "../../../../context/EthersContext"
+import {AuthContext} from "../../../../context/AuthContext"
 import {VotingStrategyName, BuiltVotingStrategy} from "../../../../types/DAO"
 import Button from "../../../Controls/Button"
 import DeployVotingStrategyModal, {
@@ -23,7 +23,7 @@ const ChooseVotingStrategies: FunctionComponent<{
 	onStrategyRemove: (index: number) => void
 	onSubmit: () => void
 }> = ({gnosisAddress, strategies, onStrategyAdd, onStrategyRemove, onSubmit}) => {
-	const {signer} = useContext(EthersContext)
+	const {signer} = useContext(AuthContext)
 	const [addStrategyModalOpened, setAddStrategyModalOpened] = useState<VotingStrategyName | null>(
 		null
 	)

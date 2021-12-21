@@ -3,7 +3,7 @@ import {useHistory} from "react-router-dom"
 import buildUsulDeployTxSequence from "../../../../api/ethers/functions/Usul/buildUsulDeployTxSequence"
 import {buildMultiSendTx} from "../../../../api/ethers/functions/Usul/multiSend"
 import {SafeTransaction} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
-import EthersContext from "../../../../context/EthersContext"
+import {AuthContext} from "../../../../context/AuthContext"
 import useProposals from "../../../../hooks/getters/useProposals"
 import {BuiltVotingStrategy} from "../../../../types/DAO"
 import {SafeProposal} from "../../../../types/safeProposal"
@@ -36,7 +36,7 @@ const DeployUsul: FunctionComponent<{
 	gnosisVotingThreshold: number
 	afterDeploy: () => void
 }> = ({gnosisAddress, gnosisVotingThreshold, afterDeploy}) => {
-	const {signer} = useContext(EthersContext)
+	const {signer} = useContext(AuthContext)
 	const [stage, setStage] = useState<ExpandDaoStage>("chooseStrategies")
 	const [strategies, setStrategies] = useState<BuiltVotingStrategy[]>([])
 	const [transactions, setTransactions] = useState<{tx: SafeTransaction; name: string}[]>([])

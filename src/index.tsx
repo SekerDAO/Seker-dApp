@@ -6,11 +6,12 @@ import {firebaseConfig} from "./api/firebase/config"
 
 // import reportWebVitals from './reportWebVitals';
 
-// TODO
 declare global {
 	interface Window {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		/* eslint-disable @typescript-eslint/no-explicit-any */
 		ethereum: any
+		BinanceChain: any
+		/* eslint-enable @typescript-eslint/no-explicit-any */
 	}
 }
 

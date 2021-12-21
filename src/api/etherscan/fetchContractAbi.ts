@@ -3,7 +3,7 @@ import config from "../../config"
 const fetchContractAbi = async (address: string): Promise<string> => {
 	const res = await fetch(
 		`https://api${
-			config.CHAIN_ID === "0x4" ? "-rinkeby" : ""
+			config.CHAIN_ID === 4 ? "-rinkeby" : ""
 		}.etherscan.io/api?module=contract&action=getabi&address=${address}`
 	)
 	const contentType = res.headers.get("content-type")

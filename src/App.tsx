@@ -8,7 +8,7 @@ import NetworkChecker from "./components/NetworkChecker"
 import ErrorPlaceholder from "./components/UI/ErrorPlaceholder"
 import "./components/UI/Toast/styles.scss"
 import {AuthContext, useAuth} from "./context/AuthContext"
-import EthersContext, {useEthers} from "./context/EthersContext"
+import ProviderContext, {useProvider} from "./context/ProviderContext"
 import "./default.scss"
 import Dao from "./pages/Dao"
 import Daos from "./pages/Daos"
@@ -23,6 +23,7 @@ const AppPure: FunctionComponent = () => {
 	return (
 		<BrowserRouter>
 			<AuthContext.Provider value={auth}>
+				<NetworkChecker />
 				<div className="main">
 					<Header />
 					<ToastContainer />
@@ -42,13 +43,12 @@ const AppPure: FunctionComponent = () => {
 }
 
 const AppWithEthers: FunctionComponent = () => {
-	const ethers = useEthers()
+	const ethers = useProvider()
 
 	return (
-		<EthersContext.Provider value={ethers}>
-			<NetworkChecker />
+		<ProviderContext.Provider value={ethers}>
 			<AppPure />
-		</EthersContext.Provider>
+		</ProviderContext.Provider>
 	)
 }
 

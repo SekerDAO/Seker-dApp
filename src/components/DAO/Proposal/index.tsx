@@ -10,7 +10,7 @@ import {ReactComponent as WarningIcon} from "../../../assets/icons/warning.svg"
 import {ReactComponent as WrapTokenDefault} from "../../../assets/icons/wrap-token-default.svg"
 import {ReactComponent as WrapTokenDone} from "../../../assets/icons/wrap-token-done.svg"
 import {AuthContext} from "../../../context/AuthContext"
-import EthersContext from "../../../context/EthersContext"
+import ProviderContext from "../../../context/ProviderContext"
 import useSafeProposal from "../../../hooks/getters/useSafeProposal"
 import useStrategyProposal from "../../../hooks/getters/useStrategyProposal"
 import {formatReadableAddress} from "../../../utlls"
@@ -59,8 +59,8 @@ const SafeProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 }
 
 const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
-	const {account, connected} = useContext(AuthContext)
-	const {provider, signer} = useContext(EthersContext)
+	const {account, connected, signer} = useContext(AuthContext)
+	const {provider} = useContext(ProviderContext)
 	const {proposal, loading, error, refetch} = useStrategyProposal(id)
 	const [showWrapModal, setShowWrapModal] = useState(false)
 	const [showDelegateModal, setShowDelegateModal] = useState(false)

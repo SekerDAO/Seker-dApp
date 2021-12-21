@@ -2,7 +2,8 @@ import {ChangeEvent, FunctionComponent, useContext, useState} from "react"
 import approveERC20 from "../../../api/ethers/functions/ERC20Token/approveERC20"
 import bidAuction from "../../../api/ethers/functions/auction/bidAuction"
 import config from "../../../config"
-import EthersContext from "../../../context/EthersContext"
+import {AuthContext} from "../../../context/AuthContext"
+import ProviderContext from "../../../context/ProviderContext"
 import Button from "../../Controls/Button"
 import Input from "../../Controls/Input"
 import {toastError, toastSuccess} from "../../UI/Toast"
@@ -17,7 +18,8 @@ const BidAuctionModal: FunctionComponent<{
 }> = ({disabled, auctionId, minBid, auctionTokenAddress}) => {
 	const [isOpened, setIsOpened] = useState(false)
 	const [processing, setProcessing] = useState(false)
-	const {provider, signer} = useContext(EthersContext)
+	const {provider} = useContext(ProviderContext)
+	const {signer} = useContext(AuthContext)
 	const [bid, setBid] = useState("")
 
 	const handleSubmit = async () => {

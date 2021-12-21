@@ -1,6 +1,5 @@
 import {Fragment, FunctionComponent} from "react"
 import {useHistory} from "react-router-dom"
-import {VotingStrategyName} from "../../../../types/DAO"
 import {isSafeProposal, SafeProposal} from "../../../../types/safeProposal"
 import {StrategyProposal} from "../../../../types/strategyProposal"
 import BackButton from "../../../Controls/Button/BackButton"

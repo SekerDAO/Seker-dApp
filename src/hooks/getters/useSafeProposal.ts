@@ -5,7 +5,7 @@ import {getNonce} from "../../api/ethers/functions/gnosisSafe/safeUtils"
 import getDAO from "../../api/firebase/DAO/getDAO"
 import getSafeProposal from "../../api/firebase/safeProposal/getSafeProposal"
 import {AuthContext} from "../../context/AuthContext"
-import EthersContext from "../../context/EthersContext"
+import ProviderContext from "../../context/ProviderContext"
 import {SafeProposal, SafeProposalState} from "../../types/safeProposal"
 
 const useSafeProposal = (
@@ -23,7 +23,7 @@ const useSafeProposal = (
 	const [error, setError] = useState(false)
 	const [canSign, setCanSign] = useState(false)
 	const {connected, account} = useContext(AuthContext)
-	const {provider} = useContext(EthersContext)
+	const {provider} = useContext(ProviderContext)
 
 	const getData = async () => {
 		try {

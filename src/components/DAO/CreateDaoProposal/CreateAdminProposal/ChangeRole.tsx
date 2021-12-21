@@ -8,7 +8,7 @@ import {
 import {SafeSignature} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
 import addSafeProposal from "../../../../api/firebase/safeProposal/addSafeProposal"
 import {AuthContext} from "../../../../context/AuthContext"
-import EthersContext from "../../../../context/EthersContext"
+import ProviderContext from "../../../../context/ProviderContext"
 import useDAO from "../../../../hooks/getters/useDAO"
 import Button from "../../../Controls/Button"
 import Input from "../../../Controls/Input"
@@ -26,8 +26,8 @@ const ChangeRole: FunctionComponent<{
 	afterSubmit: () => void
 }> = ({gnosisAddress, gnosisVotingThreshold, ownersCount, title, description, afterSubmit}) => {
 	const {dao, loading, error} = useDAO(gnosisAddress)
-	const {account} = useContext(AuthContext)
-	const {provider, signer} = useContext(EthersContext)
+	const {account, signer} = useContext(AuthContext)
+	const {provider} = useContext(ProviderContext)
 	const [processing, setProcessing] = useState(false)
 	const [address, setAddress] = useState("")
 	const [newRole, setNewRole] = useState<"admin" | "kick">("admin")

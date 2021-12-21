@@ -8,7 +8,7 @@ import Loader from "../../components/UI/Loader"
 import Table from "../../components/UI/Table"
 import {toastError, toastSuccess} from "../../components/UI/Toast"
 import config from "../../config"
-import EthersContext from "../../context/EthersContext"
+import {AuthContext} from "../../context/AuthContext"
 import useNFT from "../../hooks/getters/useNFT"
 import {Auction} from "../../types/auction"
 import {formatReadableAddress, formatTimeDifference} from "../../utlls"
@@ -48,7 +48,7 @@ const NftDetails: FunctionComponent = () => {
 	const {id} = useParams<{id: string}>()
 	const {nft, auctions, loading, error} = useNFT(id)
 	const [processing, setProcessing] = useState(false)
-	const {signer} = useContext(EthersContext)
+	const {signer} = useContext(AuthContext)
 
 	if (loading) return <Loader />
 	if (error || !nft) return <ErrorPlaceholder />
@@ -113,7 +113,7 @@ const NftDetails: FunctionComponent = () => {
 					<a
 						target="_blank"
 						rel="noopener noreferrer"
-						href={`https://${config.CHAIN_ID === "0x4" ? "rinkeby." : ""}etherscan.io/token/${
+						href={`https://${config.CHAIN_ID === 4 ? "rinkeby." : ""}etherscan.io/token/${
 							nft.address
 						}?a=${nft.id}`}
 					>

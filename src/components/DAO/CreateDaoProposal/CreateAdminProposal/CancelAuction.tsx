@@ -1,6 +1,5 @@
 import {FunctionComponent, useContext, useState} from "react"
 import {AuthContext} from "../../../../context/AuthContext"
-import EthersContext from "../../../../context/EthersContext"
 import {Auction} from "../../../../types/auction"
 import Button from "../../../Controls/Button"
 import Select from "../../../Controls/Select"
@@ -13,8 +12,7 @@ const CancelAuction: FunctionComponent<{
 	description: string
 	afterSubmit: () => void
 }> = ({gnosisAddress, gnosisVotingThreshold, title, description, afterSubmit}) => {
-	const {signer} = useContext(EthersContext)
-	const {account} = useContext(AuthContext)
+	const {account, signer} = useContext(AuthContext)
 	// TODO
 	const auctions: Auction[] = []
 	const [selectedAuction, setSelectedAuction] = useState<Auction | null>(null)

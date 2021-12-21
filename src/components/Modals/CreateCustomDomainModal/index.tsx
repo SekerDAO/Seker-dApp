@@ -1,7 +1,7 @@
 import {FunctionComponent, useContext, useState} from "react"
 import deployCustomDomain from "../../../api/ethers/functions/customDomain/deployCustomDomain"
 import addDomain from "../../../api/firebase/user/addDomain"
-import EthersContext from "../../../context/EthersContext"
+import {AuthContext} from "../../../context/AuthContext"
 import Button from "../../Controls/Button"
 import Input from "../../Controls/Input"
 import {toastError} from "../../UI/Toast"
@@ -16,7 +16,7 @@ const CreateCustomDomainModal: FunctionComponent<{
 	const [symbol, setSymbol] = useState("")
 	const [loading, setLoading] = useState(false)
 	const [success, setSuccess] = useState(false)
-	const {signer} = useContext(EthersContext)
+	const {signer} = useContext(AuthContext)
 
 	const handleSubmit = async () => {
 		if (!(name && symbol && signer) || loading) return

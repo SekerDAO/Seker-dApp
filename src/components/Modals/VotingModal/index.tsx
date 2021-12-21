@@ -1,6 +1,6 @@
 import {FunctionComponent, useContext, useState} from "react"
 import {voteLinear} from "../../../api/ethers/functions/Usul/voting/OzLinearVoting/ozLinearVotingApi"
-import EthersContext from "../../../context/EthersContext"
+import {AuthContext} from "../../../context/AuthContext"
 import {VotingStrategyName} from "../../../types/DAO"
 import RadioButton from "../../Controls/RadioButton"
 import {toastError} from "../../UI/Toast"
@@ -14,7 +14,7 @@ const VotingModal: FunctionComponent<{
 	afterSubmit: () => void
 	onClose: () => void
 }> = ({show, afterSubmit, onClose, strategyAddress, strategyName, proposalId}) => {
-	const {signer} = useContext(EthersContext)
+	const {signer} = useContext(AuthContext)
 	const [processing, setProcessing] = useState(false)
 	const [vote, setVote] = useState<0 | 1 | 2 | null>(null)
 

@@ -5,7 +5,7 @@ import getVotingThreshold from "../../api/ethers/functions/gnosisSafe/getVotingT
 import getDAO from "../../api/firebase/DAO/getDAO"
 import getUser from "../../api/firebase/user/getUser"
 import {AuthContext} from "../../context/AuthContext"
-import EthersContext from "../../context/EthersContext"
+import ProviderContext from "../../context/ProviderContext"
 import {DAO} from "../../types/DAO"
 
 const useMyDAOs = (): {
@@ -18,7 +18,7 @@ const useMyDAOs = (): {
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
 	const {account} = useContext(AuthContext)
-	const {provider} = useContext(EthersContext)
+	const {provider} = useContext(ProviderContext)
 
 	const getData = async () => {
 		if (account) {

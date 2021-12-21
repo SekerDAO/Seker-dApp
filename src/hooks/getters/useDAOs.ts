@@ -1,6 +1,6 @@
 import {useContext, useEffect, useState} from "react"
 import getDAOs from "../../api/firebase/DAO/getDAOs"
-import EthersContext from "../../context/EthersContext"
+import ProviderContext from "../../context/ProviderContext"
 import {DAOQueryParams, DAOSnapshot} from "../../types/DAO"
 
 const useDAOs = ({
@@ -17,7 +17,7 @@ const useDAOs = ({
 	loading: boolean
 	error: boolean
 } => {
-	const {provider} = useContext(EthersContext)
+	const {provider} = useContext(ProviderContext)
 	const [DAOs, setDAOs] = useState<{
 		totalCount: number
 		data: {

@@ -1,7 +1,6 @@
 import {ChangeEvent, FunctionComponent, useContext, useState} from "react"
 import deployERC20Token from "../../../api/ethers/functions/ERC20Token/deployERC20Token"
 import {AuthContext} from "../../../context/AuthContext"
-import EthersContext from "../../../context/EthersContext"
 import {ERC20Token} from "../../../types/ERC20Token"
 import Button from "../../Controls/Button"
 import Input from "../../Controls/Input"
@@ -17,8 +16,7 @@ const CreateERC20TokenModal: FunctionComponent<{
 	const [symbol, setSymbol] = useState("")
 	const [totalSupply, setTotalSupply] = useState("")
 	const [loading, setLoading] = useState(false)
-	const {signer} = useContext(EthersContext)
-	const {account} = useContext(AuthContext)
+	const {account, signer} = useContext(AuthContext)
 
 	const handleTotalSupplyChange = (e: ChangeEvent<HTMLInputElement>) => {
 		if (Number(e.target.value) < 0) {

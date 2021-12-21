@@ -6,7 +6,6 @@ import {
 } from "../../../../api/ethers/functions/Usul/multiSend"
 import addSafeProposal from "../../../../api/firebase/safeProposal/addSafeProposal"
 import {AuthContext} from "../../../../context/AuthContext"
-import EthersContext from "../../../../context/EthersContext"
 import {PrebuiltTx} from "../../../../types/common"
 import {toastError, toastSuccess} from "../../../UI/Toast"
 import GeneralEvm from "../GeneralEvm"
@@ -18,8 +17,7 @@ const GeneralEvmAdminProposal: FunctionComponent<{
 	description: string
 	afterSubmit: () => void
 }> = ({gnosisAddress, gnosisVotingThreshold, title, description, afterSubmit}) => {
-	const {account} = useContext(AuthContext)
-	const {signer} = useContext(EthersContext)
+	const {account, signer} = useContext(AuthContext)
 	const [processing, setProcessing] = useState(false)
 
 	const handleSubmit = async (txs: PrebuiltTx[]) => {

@@ -1,7 +1,7 @@
 import {ChangeEvent, FunctionComponent, useContext, useState} from "react"
 import {ReactComponent as WarningIcon} from "../../../assets/icons/warning.svg"
 import {VOTING_STRATEGIES} from "../../../constants/votingStrategies"
-import EthersContext from "../../../context/EthersContext"
+import {AuthContext} from "../../../context/AuthContext"
 import {VotingStrategyName} from "../../../types/DAO"
 import {ERC20Token} from "../../../types/ERC20Token"
 import Button from "../../Controls/Button"
@@ -28,7 +28,7 @@ const DeployVotingStrategyModal: FunctionComponent<{
 	onClose: () => void
 }> = ({strategy, onSubmit, onClose}) => {
 	const [createTokenModalOpened, setCreateTokenModalOpened] = useState(false)
-	const {signer} = useContext(EthersContext)
+	const {signer} = useContext(AuthContext)
 	const [formValues, setFormValues] = useState<VotingStrategyFormValues>(EMPTY_STATE)
 
 	const {votingPeriod, delay, quorumThreshold} = formValues

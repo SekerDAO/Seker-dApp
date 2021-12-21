@@ -1,6 +1,6 @@
 import {FunctionComponent, useContext, useState} from "react"
 import {delegateVote} from "../../../api/ethers/functions/Usul/voting/votingApi"
-import EthersContext from "../../../context/EthersContext"
+import {AuthContext} from "../../../context/AuthContext"
 import Input from "../../Controls/Input"
 import {toastError, toastSuccess} from "../../UI/Toast"
 import Modal from "../Modal"
@@ -12,7 +12,7 @@ const DelegateTokenModal: FunctionComponent<{
 	afterSubmit: (delegateeAddress: string) => void
 	initialDelegatee: string
 }> = ({tokenAddress, onClose, afterSubmit, initialDelegatee}) => {
-	const {signer} = useContext(EthersContext)
+	const {signer} = useContext(AuthContext)
 	const [processing, setProcessing] = useState(false)
 	const [delegateeAddress, setDelegateeAddress] = useState(initialDelegatee)
 

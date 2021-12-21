@@ -4,7 +4,7 @@ import {getStrategyGovTokenAddress} from "../../api/ethers/functions/Usul/voting
 import getDAO from "../../api/firebase/DAO/getDAO"
 import getStrategyProposal from "../../api/firebase/strategyProposal/getStrategyProposal"
 import {AuthContext} from "../../context/AuthContext"
-import EthersContext from "../../context/EthersContext"
+import ProviderContext from "../../context/ProviderContext"
 import {StrategyProposal} from "../../types/strategyProposal"
 
 const useStrategyProposal = (
@@ -19,7 +19,7 @@ const useStrategyProposal = (
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
 	const {connected, account} = useContext(AuthContext)
-	const {provider} = useContext(EthersContext)
+	const {provider} = useContext(ProviderContext)
 
 	const getData = async () => {
 		try {

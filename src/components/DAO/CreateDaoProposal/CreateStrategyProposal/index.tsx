@@ -2,7 +2,7 @@ import {FunctionComponent, useContext, useState} from "react"
 import {buildProposalTx, submitProposal} from "../../../../api/ethers/functions/Usul/usulProposal"
 import addStrategyProposal from "../../../../api/firebase/strategyProposal/addStrategyProposal"
 import {AuthContext} from "../../../../context/AuthContext"
-import EthersContext from "../../../../context/EthersContext"
+import ProviderContext from "../../../../context/ProviderContext"
 import {VotingStrategyName} from "../../../../types/DAO"
 import {PrebuiltTx} from "../../../../types/common"
 import Input from "../../../Controls/Input"
@@ -16,8 +16,8 @@ const CreateStrategyProposal: FunctionComponent<{
 	strategyAddress: string
 	strategyType: VotingStrategyName
 }> = ({gnosisAddress, usulAddress, strategyAddress, strategyType}) => {
-	const {account} = useContext(AuthContext)
-	const {signer, provider} = useContext(EthersContext)
+	const {account, signer} = useContext(AuthContext)
+	const {provider} = useContext(ProviderContext)
 	const [processing, setProcessing] = useState(false)
 	const [title, setTitle] = useState("")
 	const [description, setDescription] = useState("")

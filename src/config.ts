@@ -50,8 +50,8 @@ if (!REACT_APP_CLOUD_FUNCTIONS_URL || !REACT_APP_CLOUD_FUNCTIONS_URL.match(urlRe
 if (!REACT_APP_IPFS_ENDPOINT || !REACT_APP_IPFS_ENDPOINT.match(urlRegex)) {
 	throw new Error("Required env variable REACT_APP_IPFS_ENDPOINT not set or malformed")
 }
-if (!REACT_APP_CHAIN_ID) {
-	throw new Error("Required env variable REACT_APP_CHAIN_ID not set")
+if (!REACT_APP_CHAIN_ID || isNaN(Number(REACT_APP_CHAIN_ID))) {
+	throw new Error("Required env variable REACT_APP_CHAIN_ID not set or malformed")
 }
 if (!REACT_APP_INFURA_NETWORK) {
 	throw new Error("Required env variable REACT_APP_INFURA_NETWORK not set")
@@ -96,7 +96,7 @@ const config = {
 	},
 	CLOUD_FUNCTIONS_URL: REACT_APP_CLOUD_FUNCTIONS_URL,
 	IPFS_ENDPOINT: REACT_APP_IPFS_ENDPOINT,
-	CHAIN_ID: REACT_APP_CHAIN_ID,
+	CHAIN_ID: Number(REACT_APP_CHAIN_ID),
 	INFURA_NETWORK: REACT_APP_INFURA_NETWORK,
 	INFURA_ID: REACT_APP_INFURA_ID,
 	DOMAIN_ADDRESS: REACT_APP_DOMAIN_ADDRESS,

@@ -4,7 +4,6 @@ import createGnosisSafe from "../../../api/ethers/functions/gnosisSafe/createGno
 import addDAO from "../../../api/firebase/DAO/addDAO"
 import editDAO from "../../../api/firebase/DAO/editDAO"
 import {AuthContext} from "../../../context/AuthContext"
-import EthersContext from "../../../context/EthersContext"
 import ArrayInput from "../../Controls/ArrayInput"
 import Button from "../../Controls/Button"
 import Input from "../../Controls/Input"
@@ -20,8 +19,7 @@ const CreateGnosisSafeModal: FunctionComponent<{
 }> = ({afterCreate}) => {
 	const [isOpened, setIsOpened] = useState(false)
 
-	const {account} = useContext(AuthContext)
-	const {signer} = useContext(EthersContext)
+	const {account, signer} = useContext(AuthContext)
 	const [processing, setProcessing] = useState(false)
 	const [stage, setStage] = useState<CreateGnosisSafeStage>("chooseOption")
 	const [newGnosis, setNewGnosis] = useState(true)

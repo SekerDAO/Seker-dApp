@@ -25,7 +25,7 @@ import {
 import {SafeSignature} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
 import editDAO from "../../../api/firebase/DAO/editDAO"
 import addSafeProposalSignature from "../../../api/firebase/safeProposal/addSafeProposalSignatures"
-import EthersContext from "../../../context/EthersContext"
+import {AuthContext} from "../../../context/AuthContext"
 import {SafeProposal} from "../../../types/safeProposal"
 import {toastError, toastSuccess} from "../../UI/Toast"
 
@@ -39,7 +39,7 @@ const useSignSafeProposal = ({
 	id: string
 }): {processing: boolean; sign: () => Promise<void>} => {
 	const [processing, setProcessing] = useState(false)
-	const {signer} = useContext(EthersContext)
+	const {signer} = useContext(AuthContext)
 	const sign = async () => {
 		if (!(signer && proposal && canSign)) return
 		setProcessing(true)

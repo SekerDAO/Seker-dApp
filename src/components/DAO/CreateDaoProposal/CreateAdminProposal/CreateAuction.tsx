@@ -10,7 +10,6 @@ import {
 import addSafeProposal from "../../../../api/firebase/safeProposal/addSafeProposal"
 import currencies from "../../../../constants/currencies"
 import {AuthContext} from "../../../../context/AuthContext"
-import EthersContext from "../../../../context/EthersContext"
 import useNFTs from "../../../../hooks/getters/useNFTs"
 import {NFT} from "../../../../types/NFT"
 import Button from "../../../Controls/Button"
@@ -27,8 +26,7 @@ const CreateAuction: FunctionComponent<{
 	description: string
 	afterSubmit: () => void
 }> = ({gnosisAddress, gnosisVotingThreshold, title, description, afterSubmit}) => {
-	const {account} = useContext(AuthContext)
-	const {signer} = useContext(EthersContext)
+	const {account, signer} = useContext(AuthContext)
 	const {NFTs, loading, error} = useNFTs({
 		user: gnosisAddress,
 		limit: 0,
