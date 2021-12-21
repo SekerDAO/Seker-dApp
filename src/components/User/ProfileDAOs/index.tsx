@@ -35,11 +35,11 @@ const ProfileDAOs: FunctionComponent = () => {
 	const {account} = useContext(AuthContext)
 
 	const handleDeleteDAO = (gnosisAddress: string | number) => {
-		console.log("TODO: Implement me!")
+		console.log(`TODO: delete DAO ${gnosisAddress}`)
 	}
 
-	const handleBookmarkDAO = (daoAddress: string) => {
-		console.log("TODO: Implement me!")
+	const handleBookmarkDAO = (gnosisAddress: string) => {
+		console.log(`TODO: bookmark DAO ${gnosisAddress}`)
 	}
 
 	if (error) return <ErrorPlaceholder />

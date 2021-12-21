@@ -11,7 +11,7 @@ const CancelAuction: FunctionComponent<{
 	title: string
 	description: string
 	afterSubmit: () => void
-}> = ({gnosisAddress, gnosisVotingThreshold, title, description, afterSubmit}) => {
+}> = ({afterSubmit}) => {
 	const {account, signer} = useContext(AuthContext)
 	// TODO
 	const auctions: Auction[] = []
