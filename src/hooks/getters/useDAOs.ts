@@ -35,7 +35,7 @@ const useDAOs = ({
 			.then(res => {
 				setDAOs(prevState => ({
 					totalCount: res.totalCount,
-					data: [...prevState.data, ...res.data]
+					data: after ? [...prevState.data, ...res.data] : res.data
 				}))
 				setLoading(false)
 			})
@@ -44,24 +44,7 @@ const useDAOs = ({
 				setError(true)
 				setLoading(false)
 			})
-	}, [after])
-	useEffect(() => {
-		setLoading(true)
-		setError(false)
-		getDAOs({limit, after}, provider)
-			.then(res => {
-				setDAOs({
-					totalCount: res.totalCount,
-					data: res.data
-				})
-				setLoading(false)
-			})
-			.catch(e => {
-				console.error(e)
-				setError(true)
-				setLoading(false)
-			})
-	}, [limit])
+	}, [limit, after])
 
 	return {
 		DAOs,
