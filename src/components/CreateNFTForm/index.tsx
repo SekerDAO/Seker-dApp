@@ -38,7 +38,11 @@ const CreateNFTForm: FunctionComponent<{
 	const [tokenAddress, setTokenAddress] = useState("")
 	const [existingNFTId, setExistingNFTId] = useState("")
 	const {provider} = useContext(ProviderContext)
-	const {account, signer} = useContext(AuthContext)
+	const {account, signer, connected} = useContext(AuthContext)
+
+	if (!connected) {
+		return <div>TODO: please connect wallet</div>
+	}
 
 	const handleSubmit = async () => {
 		if (stage === "chooseOption") {

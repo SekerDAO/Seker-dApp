@@ -1,5 +1,6 @@
-import {FunctionComponent, useState} from "react"
+import {FunctionComponent, useContext, useState} from "react"
 import {ReactComponent as GnosisSafeIcon} from "../../../assets/icons/gnosis-safe.svg"
+import {AuthContext} from "../../../context/AuthContext"
 import {toastWarning} from "../../UI/Toast"
 import DeployUsul from "./DeployUsul"
 import ExpandDaoLayout from "./ExpandDaoLayout"
@@ -13,8 +14,14 @@ const ExpandDAO: FunctionComponent<{
 	usulAddress?: string
 	gnosisVotingThreshold: number
 	afterDeployUsul: () => void
-}> = ({gnosisAddress, usulAddress, gnosisVotingThreshold, afterDeployUsul}) => {
+	isAdmin: boolean
+}> = ({isAdmin, gnosisAddress, usulAddress, gnosisVotingThreshold, afterDeployUsul}) => {
 	const [stage, setStage] = useState<"choose" | "usul" | "bridge">("choose")
+	const {connected} = useContext(AuthContext)
+
+	if (!connected) {
+		return <div>TODO: please connect wallet</div>
+	}
 
 	const handleSelectUsul = () => {
 		if (usulAddress) {
@@ -46,6 +53,7 @@ const ExpandDAO: FunctionComponent<{
 			)}
 			{stage === "usul" && (
 				<DeployUsul
+					isAdmin={isAdmin}
 					gnosisAddress={gnosisAddress}
 					gnosisVotingThreshold={gnosisVotingThreshold}
 					afterDeploy={afterDeployUsul}

@@ -202,8 +202,11 @@ export const executeSafeTx = async (
 	await tx.wait()
 }
 
-export const getNonce = async (address: string, provider: JsonRpcProvider): Promise<number> => {
-	const safeContract = new Contract(address, GnosisSafeL2.abi, provider)
+export const getNonce = async (
+	address: string,
+	providerOrSigner: JsonRpcProvider | JsonRpcSigner
+): Promise<number> => {
+	const safeContract = new Contract(address, GnosisSafeL2.abi, providerOrSigner)
 	const nonce = await safeContract.nonce()
 	return nonce.toNumber()
 }

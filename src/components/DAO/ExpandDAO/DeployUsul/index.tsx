@@ -35,7 +35,8 @@ const DeployUsul: FunctionComponent<{
 	gnosisAddress: string
 	gnosisVotingThreshold: number
 	afterDeploy: () => void
-}> = ({gnosisAddress, gnosisVotingThreshold, afterDeploy}) => {
+	isAdmin: boolean
+}> = ({isAdmin, gnosisAddress, gnosisVotingThreshold, afterDeploy}) => {
 	const {signer} = useContext(AuthContext)
 	const [stage, setStage] = useState<ExpandDaoStage>("chooseStrategies")
 	const [strategies, setStrategies] = useState<BuiltVotingStrategy[]>([])
@@ -62,9 +63,7 @@ const DeployUsul: FunctionComponent<{
 			const expandProposal = proposals.find(
 				proposal => (proposal as SafeProposal).type === "decentralizeDAO"
 			)
-			if (expandProposal?.state === "active") {
-				push(`${pathname}?page=proposal&type=safe&id=${expandProposal.proposalId}`)
-			} else if (expandProposal?.state === "executed") {
+			if (expandProposal?.state === "executed") {
 				afterDeploy()
 				push(`${pathname}?page=collection`)
 			}
@@ -108,6 +107,7 @@ const DeployUsul: FunctionComponent<{
 			)}
 			{stage === "confirm" && (
 				<ConfirmDeployUsul
+					isAdmin={isAdmin}
 					multiTx={multiTx}
 					transactions={transactions}
 					gnosisAddress={gnosisAddress}

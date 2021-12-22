@@ -137,41 +137,35 @@ const Dao: FunctionComponent = () => {
 								</div>
 							)}
 						</Paper>
-						{(isAdmin || dao.usulAddress) && (
-							<DashboardMenu
-								items={[
-									...(isAdmin
-										? [
-												{
-													title: "Create / Load NFTs",
-													to: `${pathname}?page=createNFT`,
-													page: "createNFT"
-												},
-												{
-													title: "Edit DAO Profile",
-													to: `${pathname}?page=edit`,
-													page: "edit"
-												}
-										  ]
-										: []),
-									{
-										title: "Create Proposal",
-										to: `${pathname}?page=createProposal`,
-										page: "createProposal"
-									},
-									...(isAdmin
-										? [
-												{
-													title: "Expand Dao",
-													to: `${pathname}?page=expand`,
-													page: "expand"
-												}
-										  ]
-										: [])
-								]}
-								currentPage={page}
-							/>
-						)}
+						<DashboardMenu
+							items={[
+								{
+									title: "Create / Load NFTs",
+									to: `${pathname}?page=createNFT`,
+									page: "createNFT"
+								},
+								...(isAdmin
+									? [
+											{
+												title: "Edit DAO Profile",
+												to: `${pathname}?page=edit`,
+												page: "edit"
+											}
+									  ]
+									: []),
+								{
+									title: "Create Proposal",
+									to: `${pathname}?page=createProposal`,
+									page: "createProposal"
+								},
+								{
+									title: "Expand Dao",
+									to: `${pathname}?page=expand`,
+									page: "expand"
+								}
+							]}
+							currentPage={page}
+						/>
 					</div>
 					<div className="dao__main">
 						<HorizontalMenu
@@ -181,7 +175,7 @@ const Dao: FunctionComponent = () => {
 								push(`${pathname}?page=${nextPage}`)
 							}}
 						/>
-						{isAdmin && page === "createNFT" && user && (
+						{page === "createNFT" && user && (
 							<CreateNFTForm
 								gnosisAddress={dao.gnosisAddress}
 								domains={user.myDomains}
@@ -214,12 +208,13 @@ const Dao: FunctionComponent = () => {
 						{page === "members" && <DAOOwners owners={dao.owners} />}
 						{page === "proposals" && <DAOProposals gnosisAddress={dao.gnosisAddress} />}
 						{page === "proposal" && <Proposal />}
-						{page === "expand" && isAdmin && (
+						{page === "expand" && (
 							<ExpandDAO
 								gnosisAddress={dao.gnosisAddress}
 								gnosisVotingThreshold={dao.gnosisVotingThreshold}
 								usulAddress={dao.usulAddress}
 								afterDeployUsul={refetch}
+								isAdmin={isAdmin}
 							/>
 						)}
 					</div>

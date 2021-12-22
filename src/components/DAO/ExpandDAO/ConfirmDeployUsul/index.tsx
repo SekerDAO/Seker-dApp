@@ -1,7 +1,11 @@
 import {formatEther} from "@ethersproject/units"
 import {FunctionComponent, useContext, useState} from "react"
 import {executeMultiSend, signMultiSend} from "../../../../api/ethers/functions/Usul/multiSend"
-import {SafeTransaction} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
+import {
+	getNonce,
+	SafeSignature,
+	SafeTransaction
+} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
 import editDAO from "../../../../api/firebase/DAO/editDAO"
 import addSafeProposal from "../../../../api/firebase/safeProposal/addSafeProposal"
 import {ReactComponent as ArrowDown} from "../../../../assets/icons/arrow-down.svg"
@@ -22,13 +26,15 @@ const ConfirmDeployUsul: FunctionComponent<{
 	gnosisVotingThreshold: number
 	afterSubmit: () => void
 	expectedUsulAddress: string
+	isAdmin: boolean
 }> = ({
 	multiTx,
 	transactions,
 	gnosisAddress,
 	gnosisVotingThreshold,
 	afterSubmit,
-	expectedUsulAddress
+	expectedUsulAddress,
+	isAdmin
 }) => {
 	const {account, balance, signer} = useContext(AuthContext)
 	const [openedTxDetails, setOpenedTxDetails] = useState<
@@ -45,13 +51,17 @@ const ConfirmDeployUsul: FunctionComponent<{
 		setLoading(true)
 		try {
 			if (multiTx) {
-				const [signature, nonce] = await signMultiSend(multiTx, gnosisAddress, signer)
-				if (gnosisVotingThreshold === 1) {
-					await executeMultiSend(multiTx, gnosisAddress, [signature], signer)
-					await editDAO({
-						gnosisAddress,
-						usulAddress: expectedUsulAddress
-					})
+				const nonce = await getNonce(gnosisAddress, signer)
+				let signature: SafeSignature
+				if (isAdmin) {
+					;[signature] = await signMultiSend(multiTx, gnosisAddress, signer)
+					if (gnosisVotingThreshold === 1) {
+						await executeMultiSend(multiTx, gnosisAddress, [signature], signer)
+						await editDAO({
+							gnosisAddress,
+							usulAddress: expectedUsulAddress
+						})
+					}
 				}
 				await addSafeProposal({
 					type: "decentralizeDAO",
@@ -60,8 +70,8 @@ const ConfirmDeployUsul: FunctionComponent<{
 					multiTx,
 					usulAddress: expectedUsulAddress,
 					title: "Decentralize DAO",
-					state: gnosisVotingThreshold === 1 ? "executed" : "active",
-					signatures: [signature]
+					state: gnosisVotingThreshold === 1 && isAdmin ? "executed" : "active",
+					signatures: isAdmin ? [signature!] : []
 				})
 				toastSuccess(
 					gnosisVotingThreshold === 1
@@ -152,7 +162,7 @@ const ConfirmDeployUsul: FunctionComponent<{
 			>
 				{loading
 					? "Submitting..."
-					: gnosisVotingThreshold === 1
+					: gnosisVotingThreshold === 1 && isAdmin
 					? "Confirm and Deploy Usul"
 					: "Confirm and Create Proposal"}
 			</Button>
