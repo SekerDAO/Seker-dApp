@@ -17,7 +17,7 @@ const useProposalVotes = (
 	const getData = async (_proposal: StrategyProposal) => {
 		setLoading(true)
 		try {
-			const res = await getProposalVotesList(_proposal.usulAddress, _proposal.id, provider)
+			const res = await getProposalVotesList(_proposal.strategyAddress, _proposal.id, provider)
 			setVotes(res)
 		} catch (e) {
 			console.error(e)

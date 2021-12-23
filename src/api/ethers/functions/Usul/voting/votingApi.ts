@@ -2,6 +2,7 @@ import {defaultAbiCoder} from "@ethersproject/abi"
 import {BigNumber} from "@ethersproject/bignumber"
 import {AddressZero} from "@ethersproject/constants"
 import {Contract, ContractInterface} from "@ethersproject/contracts"
+import {id} from "@ethersproject/hash"
 import {JsonRpcProvider, JsonRpcSigner} from "@ethersproject/providers"
 import {StrategyProposalVote, VOTE_CHOICES} from "../../../../../types/strategyProposal"
 import GovToken from "../../../abis/GovToken.json"
@@ -59,20 +60,29 @@ export const getProposalVotesList = async (
 	provider: JsonRpcProvider
 ): Promise<StrategyProposalVote[]> => {
 	const voting = new Contract(strategyAddress, OZLinearVoting.abi, provider)
-	const filter = voting.filters.Voted()
-	console.log(filter)
-	const events = await voting.queryFilter(filter, 0, "latest")
-	console.log(events)
+	// const filter = voting.filters.Voted()
+	const events = await voting.queryFilter(
+		{
+			// TODO: should be filter instead of this manually created hash, but
+			// for some reason it looks like the contract still emitting events without weight
+			address: strategyAddress,
+			topics: [id("Voted(address,uint256,uint8)")]
+		},
+		0,
+		"latest"
+	)
 	return events
 		.map(e => {
-			const [voter, id, choice] = defaultAbiCoder.decode(
-				["address", "uint256", "uint8", "uint256"],
+			// TODO: add weight here
+			const [voter, _proposalId, choice /*, weight*/] = defaultAbiCoder.decode(
+				["address", "uint256", "uint8" /*, "uint256"*/],
 				e.data
 			)
 			return {
 				voter,
-				proposalId: id.toNumber(),
+				proposalId: _proposalId.toNumber(),
 				choice: VOTE_CHOICES[choice],
+				// weight
 				weight: BigNumber.from(0)
 			}
 		})
