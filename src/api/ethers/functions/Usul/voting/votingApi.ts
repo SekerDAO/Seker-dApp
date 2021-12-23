@@ -1,7 +1,13 @@
+// import {defaultAbiCoder} from "@ethersproject/abi"
+// import {BigNumber} from "@ethersproject/bignumber"
 import {AddressZero} from "@ethersproject/constants"
 import {Contract, ContractInterface} from "@ethersproject/contracts"
+// import {id} from "@ethersproject/hash"
 import {JsonRpcProvider, JsonRpcSigner} from "@ethersproject/providers"
+// import {StrategyProposalVote, VOTE_CHOICES} from "../../../../../types/strategyProposal"
+import {StrategyProposalVote} from "../../../../../types/strategyProposal"
 import GovToken from "../../../abis/GovToken.json"
+import OZLinearVoting from "../../../abis/OZLinearVoting.json"
 
 export const vote = async (
 	strategyAddress: string,
@@ -47,4 +53,40 @@ export const checkDelegatee = async (
 		return null
 	}
 	return delegatee
+}
+
+export const getProposalVotesList = async (
+	strategyAddress: string,
+	proposalId: number,
+	provider: JsonRpcProvider
+): Promise<StrategyProposalVote[]> => {
+	const voting = new Contract(strategyAddress, OZLinearVoting.abi, provider)
+	// One of this should be the topic of the Voted event
+	// console.log(id("Voted(address,uint256,uint8)"))
+	// console.log(id("Voted(address,uint256,uint8,uint256)"))
+
+	// Previously, Voted events were triggered with some other topic, unfortunately,
+	// I've lost the value. But now they are not triggered at all.
+	const events = await voting.queryFilter({})
+	console.log(events)
+	return []
+
+	// This fails if we don't filter events
+	// return events
+	// 	.map(e => {
+	// 		// TODO: add weight
+	// 		const [voter, id, choice] = defaultAbiCoder.decode(
+	// 			["address", "uint256", "uint8" /*, "uint256"*/],
+	// 			e.data
+	// 		)
+	// 		console.log(voter, id, choice)
+	// 		return {
+	// 			voter,
+	// 			proposalId: id.toNumber(),
+	// 			choice: VOTE_CHOICES[choice],
+	// 			weight: BigNumber.from(0)
+	// 		}
+	// 	})
+	// 	.filter(e => e.proposalId === proposalId)
+	// 	.map(({voter, choice, weight}) => ({voter, choice, weight}))
 }

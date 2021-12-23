@@ -11,6 +11,7 @@ import {ReactComponent as WrapTokenDefault} from "../../../assets/icons/wrap-tok
 import {ReactComponent as WrapTokenDone} from "../../../assets/icons/wrap-token-done.svg"
 import {AuthContext} from "../../../context/AuthContext"
 import ProviderContext from "../../../context/ProviderContext"
+import useProposalVotes from "../../../hooks/getters/useProposalVotes"
 import useSafeProposal from "../../../hooks/getters/useSafeProposal"
 import useStrategyProposal from "../../../hooks/getters/useStrategyProposal"
 import {formatReadableAddress} from "../../../utlls"
@@ -75,6 +76,8 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 			})
 		}
 	}, [proposal, account])
+	const {votes, loading: votesLoading} = useProposalVotes(proposal)
+	console.log(votes, votesLoading)
 
 	if (loading || !proposal) return <Loader />
 	if (error) return <ErrorPlaceholder />
@@ -164,7 +167,12 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 					initialDelegatee={delegatee ?? account}
 				/>
 			)}
-			<ProposalLayout proposal={proposal} votesThreshold={100}>
+			<ProposalLayout
+				proposal={proposal}
+				votesThreshold={100}
+				votes={votes}
+				votesLoading={votesLoading}
+			>
 				{proposal.state === "active" ? (
 					account && connected ? (
 						<>

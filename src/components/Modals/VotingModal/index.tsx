@@ -56,7 +56,7 @@ const VotingModal: FunctionComponent<{
 			/>
 			<RadioButton
 				label="Against"
-				id="vote__for"
+				id="vote__against"
 				checked={vote === 0}
 				onChange={() => {
 					setVote(0)
@@ -64,7 +64,7 @@ const VotingModal: FunctionComponent<{
 			/>
 			<RadioButton
 				label="Abstain"
-				id="vote__for"
+				id="vote__abstain"
 				checked={vote === 2}
 				onChange={() => {
 					setVote(2)

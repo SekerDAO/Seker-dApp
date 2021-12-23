@@ -1,25 +1,16 @@
 import {Fragment, FunctionComponent} from "react"
 import {useHistory} from "react-router-dom"
 import {isSafeProposal, SafeProposal} from "../../../../types/safeProposal"
-import {StrategyProposal} from "../../../../types/strategyProposal"
+import {StrategyProposal, StrategyProposalVote} from "../../../../types/strategyProposal"
 import BackButton from "../../../Controls/Button/BackButton"
 import Divider from "../../../UI/Divider"
 import Expandable from "../../../UI/Expandable"
+import Loader from "../../../UI/Loader"
 import Paper from "../../../UI/Paper"
 import Tag from "../../../UI/Tag"
 import ProposalHeader from "../ProposalHeader"
 import AdminProposalVotes from "../ProposalVotes/AdminProposalVotes"
 import StrategyProposalVotes from "../ProposalVotes/StrategyProposalVotes"
-
-// TODO: Get votes from proposal info
-const MOCK_VOTES = [
-	{address: "0xF6690149C78D0254EF65FDAA6B23EC6A342f6d8D", tokens: 100250},
-	{address: "0xF6690149C78D0254EF65FDAA6B23EC6A342f6d8D", tokens: 100250},
-	{address: "0xF6690149C78D0254EF65FDAA6B23EC6A342f6d8D", tokens: 50250},
-	{address: "0xF6690149C78D0254EF65FDAA6B23EC6A342f6d8D", tokens: 50250},
-	{address: "0xF6690149C78D0254EF65FDAA6B23EC6A342f6d8D", tokens: 49250},
-	{address: "0xF6690149C78D0254EF65FDAA6B23EC6A342f6d8D", tokens: 39250}
-]
 
 // TODO: Decode proposal.multiTx, get list of transactions from there
 const MOCK_TRANSACTION: {
@@ -41,7 +32,9 @@ const MOCK_TRANSACTIONS: Array<typeof MOCK_TRANSACTION> = [MOCK_TRANSACTION, MOC
 const ProposalLayout: FunctionComponent<{
 	proposal: (SafeProposal | StrategyProposal) & {proposalId: string}
 	votesThreshold: number
-}> = ({proposal, votesThreshold, children}) => {
+	votes?: StrategyProposalVote[]
+	votesLoading?: boolean
+}> = ({proposal, votesLoading, votesThreshold, children, votes}) => {
 	const {push} = useHistory()
 
 	const isAdminProposal = isSafeProposal(proposal)
@@ -83,25 +76,27 @@ const ProposalLayout: FunctionComponent<{
 									tokens: 1
 								}))}
 							/>
+						) : votesLoading ? (
+							<Loader />
 						) : (
 							<>
 								<StrategyProposalVotes
 									type="for"
 									value={proposal.votes.yes}
 									totalValue={proposal.votes.yes.add(proposal.votes.no).add(proposal.votes.abstain)}
-									votes={MOCK_VOTES}
+									votes={votes!.filter(v => v.choice === "yes")}
 								/>
 								<StrategyProposalVotes
 									type="against"
 									value={proposal.votes.no}
 									totalValue={proposal.votes.yes.add(proposal.votes.no).add(proposal.votes.abstain)}
-									votes={MOCK_VOTES}
+									votes={votes!.filter(v => v.choice === "no")}
 								/>
 								<StrategyProposalVotes
 									type="abstain"
 									value={proposal.votes.abstain}
 									totalValue={proposal.votes.yes.add(proposal.votes.no).add(proposal.votes.abstain)}
-									votes={MOCK_VOTES}
+									votes={votes!.filter(v => v.choice === "abstain")}
 								/>
 							</>
 						)}

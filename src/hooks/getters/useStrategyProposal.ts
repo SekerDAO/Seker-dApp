@@ -1,5 +1,8 @@
 import {useContext, useEffect, useState} from "react"
-import {getProposalState, getProposalVotes} from "../../api/ethers/functions/Usul/usulProposal"
+import {
+	getProposalState,
+	getProposalVotesSummary
+} from "../../api/ethers/functions/Usul/usulProposal"
 import {getStrategyGovTokenAddress} from "../../api/ethers/functions/Usul/voting/usulStrategies"
 import getDAO from "../../api/firebase/DAO/getDAO"
 import getStrategyProposal from "../../api/firebase/strategyProposal/getStrategyProposal"
@@ -40,7 +43,7 @@ const useStrategyProposal = (
 				govTokenAddress: await getStrategyGovTokenAddress(proposalData.strategyAddress, provider),
 				proposalId: id,
 				usulAddress: dao.usulAddress,
-				votes: await getProposalVotes(dao.usulAddress, proposalData.id, provider)
+				votes: await getProposalVotesSummary(dao.usulAddress, proposalData.id, provider)
 			})
 		} catch (e) {
 			console.error(e)

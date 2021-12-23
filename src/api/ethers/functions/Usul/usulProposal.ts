@@ -5,7 +5,7 @@ import {AbiFunction} from "../../../../types/abi"
 import {
 	StrategyProposalState,
 	strategyProposalStates,
-	StrategyVotes
+	StrategyProposalVotesSummary
 } from "../../../../types/strategyProposal"
 import {prepareArguments} from "../../../../utlls"
 import OZLinearVoting from "../../abis/OZLinearVoting.json"
@@ -149,11 +149,11 @@ export const getProposalState = async (
 	return strategyProposalStates[state]
 }
 
-export const getProposalVotes = async (
+export const getProposalVotesSummary = async (
 	usulAddress: string,
 	proposalId: number,
 	provider: JsonRpcProvider
-): Promise<StrategyVotes> => {
+): Promise<StrategyProposalVotesSummary> => {
 	const usul = new Contract(usulAddress, Usul.abi, provider)
 	const {strategy: strategyAddress} = await usul.proposals(proposalId)
 	const strategy = new Contract(strategyAddress, OZLinearVoting.abi, provider)

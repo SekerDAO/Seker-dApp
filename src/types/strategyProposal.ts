@@ -21,11 +21,19 @@ export type StrategyProposalState =
 	| "pending"
 	| "failed"
 
-export type StrategyVotes = {
+export const VOTE_CHOICES = ["no", "yes", "abstain"] as const
+
+export type StrategyProposalVotesSummary = {
 	yes: BigNumber
 	no: BigNumber
 	abstain: BigNumber
 	quorum: BigNumber
+}
+
+export type StrategyProposalVote = {
+	voter: string
+	choice: typeof VOTE_CHOICES[number]
+	weight: BigNumber
 }
 
 export type StrategyProposalFirebaseData = {
@@ -43,7 +51,7 @@ type StrategyProposalEthersData = {
 	state: StrategyProposalState
 	govTokenAddress: string | null
 	usulAddress: string
-	votes: StrategyVotes
+	votes: StrategyProposalVotesSummary
 }
 
 export type StrategyProposal = StrategyProposalFirebaseData & StrategyProposalEthersData

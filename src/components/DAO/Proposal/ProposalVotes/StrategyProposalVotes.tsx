@@ -1,5 +1,6 @@
 import {BigNumber} from "@ethersproject/bignumber"
 import {FunctionComponent, useState} from "react"
+import {StrategyProposalVote} from "../../../../types/strategyProposal"
 import {capitalize, formatNumber, formatReadableAddress} from "../../../../utlls"
 import Button from "../../../Controls/Button"
 import Modal from "../../../Modals/Modal"
@@ -11,7 +12,7 @@ type StrategyVotesCardProps = {
 	type: "for" | "against" | "abstain"
 	totalValue: BigNumber
 	value: BigNumber
-	votes: {address: string; tokens: number}[]
+	votes: StrategyProposalVote[]
 }
 
 const StrategyVotesCard: FunctionComponent<StrategyVotesCardProps> = ({
@@ -46,16 +47,16 @@ const StrategyVotesCard: FunctionComponent<StrategyVotesCardProps> = ({
 					<span>Votes</span>
 				</h3>
 				<ul>
-					{votes.map(({address, tokens}, index) => (
+					{votes.map(({voter, weight}, index) => (
 						<li key={index}>
 							<a
-								href={`https://rinkeby.etherscan.io/address/${address}`}
+								href={`https://rinkeby.etherscan.io/address/${voter}`}
 								target="_blank"
 								rel="noreferrer"
 							>
-								{formatReadableAddress(address)}
+								{formatReadableAddress(voter)}
 							</a>
-							<span>{formatNumber(tokens)}</span>
+							<span>{`${weight.div(1000).toString()}k`}</span>
 						</li>
 					))}
 				</ul>
