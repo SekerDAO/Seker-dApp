@@ -77,7 +77,6 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 		}
 	}, [proposal, account])
 	const {votes, loading: votesLoading} = useProposalVotes(proposal)
-	console.log(votes, votesLoading)
 
 	if (loading || !proposal) return <Loader />
 	if (error) return <ErrorPlaceholder />
