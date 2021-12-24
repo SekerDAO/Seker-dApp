@@ -2,6 +2,7 @@ import {FunctionComponent, useContext, useState} from "react"
 import {AuthContext} from "../../../context/AuthContext"
 import {VotingStrategy} from "../../../types/DAO"
 import Select from "../../Controls/Select"
+import ConnectWalletPlaceholder from "../../UI/ConnectWalletPlaceholder"
 import CreateAdminProposal from "./CreateAdminProposal"
 import CreateStrategyProposal from "./CreateStrategyProposal"
 import "./styles.scss"
@@ -17,7 +18,7 @@ const CreateDaoProposal: FunctionComponent<{
 	const {connected} = useContext(AuthContext)
 	const [module, setModule] = useState(isAdmin ? -1 : 0)
 
-	if (!connected) return <div>TODO: Please connect wallet</div>
+	if (!connected) return <ConnectWalletPlaceholder />
 
 	return (
 		<div className="create-dao-proposal">

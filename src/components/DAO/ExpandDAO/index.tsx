@@ -1,6 +1,7 @@
 import {FunctionComponent, useContext, useState} from "react"
 import {ReactComponent as GnosisSafeIcon} from "../../../assets/icons/gnosis-safe.svg"
 import {AuthContext} from "../../../context/AuthContext"
+import ConnectWalletPlaceholder from "../../UI/ConnectWalletPlaceholder"
 import {toastWarning} from "../../UI/Toast"
 import DeployUsul from "./DeployUsul"
 import ExpandDaoLayout from "./ExpandDaoLayout"
@@ -20,7 +21,7 @@ const ExpandDAO: FunctionComponent<{
 	const {connected} = useContext(AuthContext)
 
 	if (!connected) {
-		return <div>TODO: please connect wallet</div>
+		return <ConnectWalletPlaceholder />
 	}
 
 	const handleSelectUsul = () => {

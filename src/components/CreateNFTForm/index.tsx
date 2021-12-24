@@ -16,6 +16,7 @@ import MediaUpload from "../Controls/MediaUpload"
 import RadioButton from "../Controls/RadioButton"
 import Select from "../Controls/Select"
 import Textarea from "../Controls/Textarea"
+import ConnectWalletPlaceholder from "../UI/ConnectWalletPlaceholder"
 import {toastError} from "../UI/Toast"
 import "./styles.scss"
 
@@ -41,7 +42,7 @@ const CreateNFTForm: FunctionComponent<{
 	const {account, signer, connected} = useContext(AuthContext)
 
 	if (!connected) {
-		return <div>TODO: please connect wallet</div>
+		return <ConnectWalletPlaceholder />
 	}
 
 	const handleSubmit = async () => {
