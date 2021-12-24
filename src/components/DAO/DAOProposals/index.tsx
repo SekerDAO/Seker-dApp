@@ -1,8 +1,8 @@
 import {FunctionComponent, useState} from "react"
 import {Link, useLocation} from "react-router-dom"
 import useProposals from "../../../hooks/getters/useProposals"
-import {SafeProposal} from "../../../types/safeProposal"
-import {StrategyProposal} from "../../../types/strategyProposal"
+import {SafeProposal, SafeProposalState} from "../../../types/safeProposal"
+import {StrategyProposal, StrategyProposalState} from "../../../types/strategyProposal"
 import Select from "../../Controls/Select"
 import ErrorPlaceholder from "../../UI/ErrorPlaceholder"
 import Loader from "../../UI/Loader"
@@ -32,11 +32,12 @@ const DAOProposals: FunctionComponent<{
 	gnosisAddress: string
 }> = ({gnosisAddress}) => {
 	const {proposals, loading, error} = useProposals(gnosisAddress)
-	const [filterStatus, setFilterStatus] = useState("all")
+	const [filterStatus, setFilterStatus] = useState<
+		SafeProposalState | StrategyProposalState | "all"
+	>("all")
 
-	const handleFilterChange = (newValue: string) => {
+	const handleFilterChange = (newValue: SafeProposalState | StrategyProposalState | "all") => {
 		setFilterStatus(newValue)
-		console.log("TODO: Implement filtering")
 	}
 
 	if (error) return <ErrorPlaceholder />
@@ -51,20 +52,24 @@ const DAOProposals: FunctionComponent<{
 					options={[
 						{name: "View All", value: "all"},
 						{name: "Active", value: "active"},
-						{name: "Pending", value: "pending"},
-						{name: "Queued", value: "queued"},
-						{name: "Executing", value: "executing"},
 						{name: "Executed", value: "executed"},
+						{name: "Queued", value: "outdated"},
+						{name: "Canceled", value: "canceled"},
+						{name: "Time Locked", value: "timeLocked"},
+						{name: "Executing", value: "executing"},
+						{name: "Pending", value: "pending"},
 						{name: "Failed", value: "failed"},
-						{name: "Canceled", value: "canceled"}
+						{name: "Uninitialized", value: "uninitialized"}
 					]}
 					value={filterStatus}
 					onChange={handleFilterChange}
 				/>
 			</div>
-			{proposals.map((proposal, index) => (
-				<DAOProposalCard proposal={proposal} key={index} />
-			))}
+			{proposals
+				.filter(proposal => (filterStatus === "all" ? true : proposal.state === filterStatus))
+				.map((proposal, index) => (
+					<DAOProposalCard proposal={proposal} key={index} />
+				))}
 		</div>
 	)
 }
