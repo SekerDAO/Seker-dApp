@@ -117,7 +117,7 @@ export const getProposalState = async (
 	usulAddress: string,
 	proposalId: number,
 	provider: JsonRpcProvider
-): Promise<StrategyProposalState> => {
+): Promise<{state: StrategyProposalState; deadline?: number}> => {
 	const usul = new Contract(usulAddress, Usul.abi, provider)
 	const state = await usul.state(proposalId)
 	if (state === 0) {
@@ -131,22 +131,22 @@ export const getProposalState = async (
 			try {
 				// This function never returns false, it either returns true or throws an error
 				await strategy.isPassed(proposalId)
-				return "pending"
+				return {state: "pending"}
 			} catch (e) {
 				if (e.message.match("majority yesVotes not reached")) {
-					return "failed"
+					return {state: "failed"}
 				} else if (e.message.match("a quorum has not been reached for the proposal")) {
-					return "failed"
+					return {state: "failed"}
 				} else if (e.message.match("voting period has not passed yet")) {
 					// TODO: I don't know, why we sometimes can get here despite the deadline check above
-					return "active"
+					return {state: "active", deadline: deadline.toNumber()}
 				}
 				throw e
 			}
 		}
-		// Deadline has not passed, so state "active" is truthful
+		return {state: "active", deadline: deadline.toNumber()}
 	}
-	return strategyProposalStates[state]
+	return {state: strategyProposalStates[state]}
 }
 
 export const getProposalVotesSummary = async (

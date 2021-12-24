@@ -52,6 +52,7 @@ type StrategyProposalEthersData = {
 	govTokenAddress: string | null
 	usulAddress: string
 	votes: StrategyProposalVotesSummary
+	deadline?: number
 }
 
 export type StrategyProposal = StrategyProposalFirebaseData & StrategyProposalEthersData

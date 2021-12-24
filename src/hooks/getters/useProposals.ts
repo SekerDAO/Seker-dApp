@@ -55,7 +55,7 @@ const useProposals = (
 			firebaseData.map(async p => ({
 				...p,
 				usulAddress,
-				state: await getProposalState(usulAddress, p.id, provider),
+				state: (await getProposalState(usulAddress, p.id, provider)).state,
 				govTokenAddress: await getStrategyGovTokenAddress(p.strategyAddress, provider),
 				votes: await getProposalVotesSummary(usulAddress, p.id, provider)
 			}))

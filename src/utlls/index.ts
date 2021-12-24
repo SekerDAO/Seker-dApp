@@ -6,6 +6,20 @@ export const capitalize = (str: string): string => `${str[0].toUpperCase()}${str
 
 export const formatNumber = (num: number): string => `${(num / 1000).toFixed(2)}k`
 
+export const formatTime = (
+	ms: number
+): {
+	days: number
+	hours: number
+	minutes: number
+	seconds: number
+} => ({
+	days: Math.floor(ms / 86400000),
+	hours: Math.floor((ms % 86400000) / 3600000),
+	minutes: Math.floor((ms % 3600000) / 60000),
+	seconds: Math.floor((ms % 60000) / 1000)
+})
+
 export const formatReadableAddress = (address?: string | null): string =>
 	address ? `${address.slice(0, 7)}...${address.slice(-4)}` : ""
 

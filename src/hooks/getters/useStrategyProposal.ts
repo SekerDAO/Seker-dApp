@@ -36,10 +36,11 @@ const useStrategyProposal = (
 			if (!dao.usulAddress) {
 				throw new Error("Unexpected strategy proposal on DAO without usul address")
 			}
-			const state = await getProposalState(dao.usulAddress, proposalData.id, provider)
+			const {state, deadline} = await getProposalState(dao.usulAddress, proposalData.id, provider)
 			setProposal({
 				...proposalData,
 				state,
+				deadline,
 				govTokenAddress: await getStrategyGovTokenAddress(proposalData.strategyAddress, provider),
 				proposalId: id,
 				usulAddress: dao.usulAddress,
