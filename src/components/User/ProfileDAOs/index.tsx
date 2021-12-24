@@ -1,13 +1,16 @@
-import {FunctionComponent, useContext} from "react"
+import {FunctionComponent, useContext, useState} from "react"
 import {Link} from "react-router-dom"
+import removeMyDao from "../../../api/firebase/DAO/removeMyDao"
 import {AuthContext} from "../../../context/AuthContext"
 import useMyDAOs from "../../../hooks/getters/useMyDAOs"
 import SearchInput from "../../Controls/Input/SearchInput"
 import BookmarkDAOModal from "../../Modals/BookmarkDAOModal"
+import ConfirmationModal from "../../Modals/ConfirmationModal"
 import CreateGnosisSafeModal from "../../Modals/CreateGnosisSafeModal"
 import ErrorPlaceholder from "../../UI/ErrorPlaceholder"
 import Loader from "../../UI/Loader"
 import Table from "../../UI/Table"
+import {toastError, toastSuccess} from "../../UI/Toast"
 import "./styles.scss"
 
 const columns = [
@@ -33,13 +36,18 @@ const columns = [
 const ProfileDAOs: FunctionComponent = () => {
 	const {DAOs, loading, error, refetch} = useMyDAOs()
 	const {account} = useContext(AuthContext)
+	const [removeDaoModalOpened, setRemoveDaoModalOpened] = useState<string | null>(null)
 
-	const handleDeleteDAO = (gnosisAddress: string | number) => {
-		console.log(`TODO: delete DAO ${gnosisAddress}`)
-	}
-
-	const handleBookmarkDAO = (gnosisAddress: string) => {
-		console.log(`TODO: bookmark DAO ${gnosisAddress}`)
+	const handleDeleteDAO = async () => {
+		if (removeDaoModalOpened === null) return
+		try {
+			await removeMyDao(removeDaoModalOpened)
+			toastSuccess("DAO successfully removed")
+			refetch()
+		} catch (e) {
+			console.error(e)
+			toastError("Failed to delete DAO")
+		}
 	}
 
 	if (error) return <ErrorPlaceholder />
@@ -47,6 +55,16 @@ const ProfileDAOs: FunctionComponent = () => {
 
 	return (
 		<>
+			<ConfirmationModal
+				title="Remove DAO"
+				text={`Are you sure you want to remove dao ${removeDaoModalOpened} from your DAOs list?`}
+				onSubmit={handleDeleteDAO}
+				submitText="Remove"
+				isOpened={removeDaoModalOpened !== null}
+				handleClose={() => {
+					setRemoveDaoModalOpened(null)
+				}}
+			/>
 			<div className="profile__edit-buttons">
 				<CreateGnosisSafeModal afterCreate={refetch} />
 			</div>
@@ -55,7 +73,7 @@ const ProfileDAOs: FunctionComponent = () => {
 					<SearchInput />
 				</div>
 				<div>
-					<BookmarkDAOModal onSubmit={handleBookmarkDAO} />
+					<BookmarkDAOModal afterSubmit={refetch} />
 				</div>
 			</div>
 			<div className="profile-daos__table">
@@ -68,7 +86,9 @@ const ProfileDAOs: FunctionComponent = () => {
 					}))}
 					columns={columns}
 					idCol="gnosisAddress"
-					onItemDelete={handleDeleteDAO}
+					onItemDelete={address => {
+						setRemoveDaoModalOpened(address as string)
+					}}
 					noDataText="No DAOs in your list yet. Start a DAO or bookmark one."
 				/>
 			</div>

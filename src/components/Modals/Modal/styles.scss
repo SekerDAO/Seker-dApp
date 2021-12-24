@@ -38,12 +38,15 @@
   }
 
   &__warning-message {
-    margin-bottom: 20px;
     display: flex;
 
     svg {
       margin-right: 10px;
     }
+  }
+
+  &__footer {
+    margin-top: 20px;
   }
 }
 

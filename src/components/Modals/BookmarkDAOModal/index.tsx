@@ -1,20 +1,32 @@
 import {FunctionComponent, useState} from "react"
+import addMyDao from "../../../api/firebase/DAO/addMyDao"
 import {ReactComponent as BookmarkIcon} from "../../../assets/icons/bookmark.svg"
 import Button from "../../Controls/Button"
 import Input from "../../Controls/Input"
 import Divider from "../../UI/Divider"
+import {toastError, toastSuccess} from "../../UI/Toast"
 import Modal from "../Modal"
 import "./styles.scss"
 
 const BookmarkDAOModal: FunctionComponent<{
-	onSubmit: (daoAddress: string) => void
-	submitButtonDisabled?: boolean
-}> = ({onSubmit, submitButtonDisabled}) => {
+	afterSubmit: () => void
+}> = ({afterSubmit}) => {
 	const [isOpen, setIsOpen] = useState(false)
 	const [daoAddress, setDaoAddress] = useState("")
+	const [processing, setProcessing] = useState(false)
 
-	const handleSubmit = () => {
-		onSubmit(daoAddress)
+	const handleSubmit = async () => {
+		setProcessing(true)
+		try {
+			await addMyDao(daoAddress)
+			toastSuccess("DAO successfully bookmarked")
+			setIsOpen(false)
+			afterSubmit()
+		} catch (e) {
+			console.error(e)
+			toastError("Failed to bookmark DAO")
+		}
+		setProcessing(false)
 	}
 
 	return (
@@ -27,8 +39,8 @@ const BookmarkDAOModal: FunctionComponent<{
 				show={isOpen}
 				title="Add a DAO"
 				onSubmit={handleSubmit}
-				submitButtonText="Submit"
-				submitButtonDisabled={!daoAddress || submitButtonDisabled}
+				submitButtonText={processing ? "Processing..." : "Submit"}
+				submitButtonDisabled={!daoAddress || processing}
 				onClose={() => setIsOpen(false)}
 			>
 				<div className="bookmark-dao">

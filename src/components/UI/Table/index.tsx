@@ -45,7 +45,9 @@ const Table: <T extends {[key: string]: string | number}>(props: TableProps<T>) 
 							))}
 							{onItemDelete && (
 								<td
-									onClick={() => onItemDelete(data[rowIndex][idCol])}
+									onClick={() => {
+										onItemDelete(data[rowIndex][idCol])
+									}}
 									className="table__remove-icon"
 								>
 									<DeleteIcon />
