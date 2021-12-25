@@ -1,7 +1,6 @@
 import {FunctionComponent} from "react"
 import "./styles.scss"
 
-// TODO: From new UI it pretty much looks like Tabs and not really Menu, makes sense to refactor that
 const HorizontalMenu: FunctionComponent<{
 	pages: {id: string; name: string}[]
 	currentPage: string

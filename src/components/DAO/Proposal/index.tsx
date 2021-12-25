@@ -62,7 +62,7 @@ const SafeProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 	const {account, connected, signer} = useContext(AuthContext)
 	const {provider} = useContext(ProviderContext)
-	const {proposal, loading, error, refetch} = useStrategyProposal(id)
+	const {proposal, loading, error, refetch, userHasVoted} = useStrategyProposal(id)
 	const [showWrapModal, setShowWrapModal] = useState(false)
 	const [showDelegateModal, setShowDelegateModal] = useState(false)
 	const [showVotingModal, setShowVotingModal] = useState(false)
@@ -131,9 +131,10 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 		setProcessing(false)
 	}
 
-	// TODO: add case when user has already voted
 	const voteDisabled =
-		!(connected && proposal.state === "active") || (!!proposal.govTokenAddress && !delegatee)
+		!(connected && proposal.state === "active") ||
+		(!!proposal.govTokenAddress && !delegatee) ||
+		userHasVoted
 
 	return (
 		<>
@@ -273,7 +274,7 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 									setShowVotingModal(true)
 								}}
 							>
-								Vote
+								{userHasVoted ? "Already voted" : "Vote"}
 							</Button>
 						</>
 					) : (

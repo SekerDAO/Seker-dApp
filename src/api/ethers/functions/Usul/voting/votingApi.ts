@@ -89,3 +89,13 @@ export const getProposalVotesList = async (
 		.filter(e => e.proposalId === proposalId)
 		.map(({voter, choice, weight}) => ({voter, choice, weight}))
 }
+
+export const hasVoted = async (
+	strategyAddress: string,
+	proposalId: number,
+	userAddress: string,
+	provider: JsonRpcProvider
+): Promise<boolean> => {
+	const voting = new Contract(strategyAddress, OZLinearVoting.abi, provider)
+	return voting.hasVoted(proposalId, userAddress)
+}
