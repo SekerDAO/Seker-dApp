@@ -10,7 +10,7 @@ const checkNFTOwner = async (
 ): Promise<boolean> => {
 	const nftContract = new Contract(address, MultiArtToken.abi, provider)
 	const owner = await nftContract.ownerOf(id)
-	return owner === account
+	return owner.toLowerCase() === account.toLowerCase()
 }
 
 export default checkNFTOwner
