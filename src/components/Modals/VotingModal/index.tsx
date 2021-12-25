@@ -5,6 +5,7 @@ import {VotingStrategyName} from "../../../types/DAO"
 import RadioButton from "../../Controls/RadioButton"
 import {toastError} from "../../UI/Toast"
 import Modal from "../Modal"
+import "./styles.scss"
 
 const VotingModal: FunctionComponent<{
 	show: boolean
@@ -39,6 +40,7 @@ const VotingModal: FunctionComponent<{
 
 	return (
 		<Modal
+			title="Vote"
 			show={show}
 			onClose={onClose}
 			submitButtonText={processing ? "Processing" : "Submit"}
@@ -46,30 +48,38 @@ const VotingModal: FunctionComponent<{
 			onSubmit={handleVote}
 			warningMessage={`This request will incur a gas fee. If you would like to proceed, please click "Submit" below.`}
 		>
-			<RadioButton
-				label="For"
-				id="vote__for"
-				checked={vote === 1}
-				onChange={() => {
-					setVote(1)
-				}}
-			/>
-			<RadioButton
-				label="Against"
-				id="vote__against"
-				checked={vote === 0}
-				onChange={() => {
-					setVote(0)
-				}}
-			/>
-			<RadioButton
-				label="Abstain"
-				id="vote__abstain"
-				checked={vote === 2}
-				onChange={() => {
-					setVote(2)
-				}}
-			/>
+			<div className="vote-modal">
+				<div className="vote-modal__input">
+					<RadioButton
+						label="For"
+						id="vote__for"
+						checked={vote === 1}
+						onChange={() => {
+							setVote(1)
+						}}
+					/>
+				</div>
+				<div className="vote-modal__input">
+					<RadioButton
+						label="Against"
+						id="vote__against"
+						checked={vote === 0}
+						onChange={() => {
+							setVote(0)
+						}}
+					/>
+				</div>
+				<div className="vote-modal__input">
+					<RadioButton
+						label="Abstain"
+						id="vote__abstain"
+						checked={vote === 2}
+						onChange={() => {
+							setVote(2)
+						}}
+					/>
+				</div>
+			</div>
 		</Modal>
 	)
 }

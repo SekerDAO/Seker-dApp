@@ -1,0 +1,12 @@
+.vote-modal {
+  display: flex;
+  flex-direction: column;
+
+  &__input {
+    margin-top: 20px;
+
+    label {
+      margin-left: 15px;
+    }
+  }
+}
