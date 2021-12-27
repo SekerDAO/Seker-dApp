@@ -1,0 +1,26 @@
+.dao-members {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  max-width: 880px;
+  margin-top: 40px;
+
+  &__header {
+    &-strategy-selector {
+      margin-top: 20px;
+
+      .dropdown {
+        margin-top: 10px;
+      }
+    }
+  }
+
+  &__body {
+    margin-top: 40px;
+
+    &-heading {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+}
