@@ -1,4 +1,25 @@
 .delegate-token-modal {
+  &__heading {
+    margin-top: 40px;
+
+    &-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    &-col {
+      display: flex;
+      flex-wrap: wrap;
+      width: calc(50% - 10px);
+    }
+
+    .copy-field {
+      margin-top: 10px;
+    }
+  }
+
   &__form {
     margin-top: 40px;
 

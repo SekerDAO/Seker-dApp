@@ -1,61 +1,35 @@
-import {FunctionComponent, useContext, useState, useEffect} from "react"
-import {getStrategyGovTokenAddress} from "../../../api/ethers/functions/Usul/voting/usulStrategies"
-import {checkDelegatee, delegateVote} from "../../../api/ethers/functions/Usul/voting/votingApi"
-import {AuthContext} from "../../../context/AuthContext"
-import ProviderContext from "../../../context/ProviderContext"
-import {VotingStrategy} from "../../../types/DAO"
+import {FunctionComponent} from "react"
+import {VotingStrategy, VotingStrategyName} from "../../../types/DAO"
+import {formatReadableAddress} from "../../../utlls"
 import Input from "../../Controls/Input"
 import RadioButton from "../../Controls/RadioButton"
-import {toastError, toastSuccess} from "../../UI/Toast"
+import Copy from "../../UI/Copy"
 import Modal from "../Modal"
 import "./styles.scss"
+import useDelegateTokenModal from "./useDelegateTokenModal"
 
 const DelegateTokenModal: FunctionComponent<{
 	strategy: VotingStrategy
-	onClose: () => void
-}> = ({strategy, onClose}) => {
-	const {signer, account} = useContext(AuthContext)
-	const {provider} = useContext(ProviderContext)
-	const [processing, setProcessing] = useState(false)
-	const [delegateTo, setDelegateTo] = useState<"self" | "address">("self")
-	const [delegateeAddress, setDelegateeAddress] = useState<string>()
-	const [govTokenAddress, setGovTokenAddress] = useState<string>()
-
-	useEffect(() => {
-		getStrategyGovTokenAddress(strategy.address, provider).then(tokenAddress => {
-			if (tokenAddress) {
-				setGovTokenAddress(tokenAddress)
-			}
-		})
-	}, [strategy.address])
-	useEffect(() => {
-		if (govTokenAddress && account) {
-			checkDelegatee(govTokenAddress, account, provider).then(delegatee => {
-				if (delegatee) {
-					setDelegateeAddress(delegatee)
-				}
-			})
-		}
-	}, [strategy, account])
-	const handleSubmit = async () => {
-		if (!signer || !govTokenAddress || !account) return
-		try {
-			if (delegateTo === "self") {
-				await delegateVote(govTokenAddress, account, signer)
-			} else {
-				if (delegateeAddress) {
-					await delegateVote(govTokenAddress, delegateeAddress, signer)
-				}
-			}
-			toastSuccess("Tokens successfully delegated")
-		} catch (e) {
-			console.error(e)
-			toastError("Failed to delegate tokens")
-		}
-		setProcessing(false)
+	strategyContent?: {
+		strategy: VotingStrategyName
+		title: string
+		description: string
+		cardImage: string
+		active: boolean
 	}
+	onClose: () => void
+}> = ({strategy, strategyContent, onClose}) => {
+	const {
+		processing,
+		handleSubmit,
+		handleDelegateToChange,
+		handleDelegateeAddressChange,
+		submitButtonDisabled,
+		delegateTo,
+		delegateeAddress,
+		initialDelegateeAddress
+	} = useDelegateTokenModal(strategy)
 
-	const submitButtonDisabled = processing || !signer || (delegateTo === "self" && !delegateeAddress)
 	return (
 		<Modal
 			onSubmit={handleSubmit}
@@ -70,6 +44,26 @@ const DelegateTokenModal: FunctionComponent<{
 			]}
 		>
 			<div className="delegate-token-modal">
+				<div className="delegate-token-modal__heading">
+					<div className="delegate-token-modal__heading-row">
+						<p>Voting Strategy</p>
+						<Copy>{strategyContent?.title}</Copy>
+					</div>
+					<div className="delegate-token-modal__heading-row">
+						<div className="delegate-token-modal__heading-col">
+							<p>Currently Delegated to</p>
+							<Copy value={initialDelegateeAddress}>
+								{initialDelegateeAddress
+									? formatReadableAddress(initialDelegateeAddress)
+									: "Not Delegated yet"}
+							</Copy>
+						</div>
+						<div className="delegate-token-modal__heading-col">
+							<p>Amount of Voting Tokens</p>
+							<Copy>100</Copy>
+						</div>
+					</div>
+				</div>
 				<div className="delegate-token-modal__form">
 					<div className="delegate-token-modal__form-field">
 						<RadioButton
@@ -77,7 +71,7 @@ const DelegateTokenModal: FunctionComponent<{
 							id="delegate-to-self"
 							name="delegate-to"
 							checked={delegateTo === "self"}
-							onChange={() => setDelegateTo("self")}
+							onChange={() => handleDelegateToChange("self")}
 						/>
 					</div>
 					<div className="delegate-token-modal__form-field">
@@ -86,12 +80,12 @@ const DelegateTokenModal: FunctionComponent<{
 							id="delegate-to-address"
 							name="delegate-to"
 							checked={delegateTo === "address"}
-							onChange={() => setDelegateTo("address")}
+							onChange={() => handleDelegateToChange("address")}
 						/>
 					</div>
 					<Input
 						value={delegateeAddress}
-						onChange={e => setDelegateeAddress(e.target.value)}
+						onChange={e => handleDelegateeAddressChange(e.target.value)}
 						id="delegatees-address"
 					/>
 				</div>

@@ -51,6 +51,7 @@ const DAOMembers: FunctionComponent<{
 						<DelegateTokenModal
 							onClose={() => setDelegateModalOpen(false)}
 							strategy={selectedStrategy}
+							strategyContent={selectedVotingStrategyContent}
 						/>
 					)}
 					<div className="dao-members__body-heading">
