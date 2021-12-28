@@ -1,48 +1,38 @@
-import {FunctionComponent, useState, useContext, useEffect} from "react"
-import {getStrategyGovTokenAddress} from "../../../api/ethers/functions/Usul/voting/usulStrategies"
+import {FunctionComponent, useState} from "react"
 import {VOTING_STRATEGIES} from "../../../constants/votingStrategies"
-import {AuthContext} from "../../../context/AuthContext"
-import ProviderContext from "../../../context/ProviderContext"
-import {DAO} from "../../../types/DAO"
+import {DAO, VotingStrategy} from "../../../types/DAO"
 import {formatReadableAddress} from "../../../utlls"
 import Button from "../../Controls/Button"
 import Select from "../../Controls/Select"
 import DelegateTokenModal from "../../Modals/DelegateTokenModal"
-import ConnectWalletPlaceholder from "../../UI/ConnectWalletPlaceholder"
 import Table from "../../UI/Table"
 import "./styles.scss"
 
 const columns = [
-	{id: "address" as const, name: "Addresses"},
+	{id: "address" as const, name: "Address"},
 	{id: "proposalsVoted" as const, name: "Proposals Voted"},
 	{id: "totalVotes" as const, name: "Total Votes"},
 	{id: "votingWeight" as const, name: "Voting Weight"}
 ]
 
-// TODO: Get members data from strategy
 const DAOMembers: FunctionComponent<{
 	dao: DAO
 }> = ({dao}) => {
-	const {connected} = useContext(AuthContext)
-	const {provider} = useContext(ProviderContext)
 	const [delegateModalOpen, setDelegateModalOpen] = useState(false)
-	const [selectedStrategyAddress, setSelectedStrategyAddress] = useState<string>()
-	const [govTokenAddress, setGovTokenAddress] = useState<string>()
-	const selectedStrategy = dao.strategies.find(
-		strategy => strategy.address === selectedStrategyAddress
-	)
-	useEffect(() => {
-		if (selectedStrategy) {
-			getStrategyGovTokenAddress(selectedStrategy.address, provider).then(tokenAddress => {
-				if (tokenAddress) {
-					setGovTokenAddress(tokenAddress)
-				}
-			})
+	const [selectedStrategy, setSelectedStrategy] = useState<VotingStrategy | "admin">("admin")
+
+	const handleStrategySelect = (value: string) => {
+		if (value === "admin") {
+			setSelectedStrategy("admin")
+		} else {
+			const strategy = dao.strategies.find(s => s.address === value)
+			if (!strategy) {
+				throw new Error("Unexpected strategy")
+			}
+			setSelectedStrategy(strategy)
 		}
-	}, [selectedStrategy?.address])
-	const findVotingStrategyContent = (strategyName?: string) =>
-		VOTING_STRATEGIES.find(strategy => strategy.strategy === strategyName)
-	const selectedVotingStrategyContent = findVotingStrategyContent(selectedStrategy?.name)
+	}
+
 	return (
 		<div className="dao-members">
 			<div className="dao-members__header">
@@ -51,52 +41,69 @@ const DAOMembers: FunctionComponent<{
 					<label>Voting Strategy</label>
 					<Select
 						fullWidth
-						onChange={newValue => setSelectedStrategyAddress(newValue)}
+						onChange={handleStrategySelect}
 						placeholder="Choose One"
-						options={dao.strategies.map(strategy => ({
-							name: findVotingStrategyContent(strategy.name)?.title as string,
-							value: strategy.address
-						}))}
-						value={selectedStrategyAddress}
+						options={[
+							{
+								name: "Safe Admins",
+								value: "admin"
+							}
+						].concat(
+							dao.strategies.map(strategy => ({
+								name:
+									VOTING_STRATEGIES.find(s => s.strategy === strategy.name)?.title ?? strategy.name,
+								value: strategy.address
+							}))
+						)}
+						value={selectedStrategy === "admin" ? "admin" : selectedStrategy.address}
 					/>
 				</div>
 			</div>
-			{selectedStrategy && (
-				<div className="dao-members__body">
-					{delegateModalOpen && selectedStrategy.name === "linearVoting" && (
+			<div className="dao-members__body">
+				{delegateModalOpen &&
+					selectedStrategy !== "admin" &&
+					selectedStrategy.name === "linearVoting" && (
 						<DelegateTokenModal
 							onClose={() => setDelegateModalOpen(false)}
 							strategy={selectedStrategy}
-							strategyContent={selectedVotingStrategyContent}
-							govTokenAddress={govTokenAddress}
 						/>
 					)}
-					<div className="dao-members__body-heading">
-						<div className="dao-members__body-heading-left">
-							<h2>{selectedVotingStrategyContent?.title}</h2>
+				<div className="dao-members__body-heading">
+					<div className="dao-members__body-heading-left">
+						<h2>
+							{selectedStrategy === "admin"
+								? "Safe Admins"
+								: VOTING_STRATEGIES.find(s => s.strategy === selectedStrategy.name)?.title ??
+								  selectedStrategy.name}
+						</h2>
+						{selectedStrategy !== "admin" && (
 							<p>
 								Voting Token:
 								<Button
 									buttonType="link"
 									onClick={() =>
-										window.open(`https://rinkeby.etherscan.io/token/${govTokenAddress}`, "_blank")
+										window.open(
+											`https://rinkeby.etherscan.io/token/${selectedStrategy.address}`,
+											"_blank"
+										)
 									}
 								>
-									[{formatReadableAddress(govTokenAddress)}]
+									[{formatReadableAddress(selectedStrategy.address)}]
 								</Button>
 							</p>
-						</div>
-						<div className="dao-members__body-heading-right">
-							{connected ? (
-								<Button onClick={() => setDelegateModalOpen(true)}>Delegate Vote</Button>
-							) : (
-								<ConnectWalletPlaceholder />
-							)}
-						</div>
+						)}
 					</div>
+					<div className="dao-members__body-heading-right">
+						{selectedStrategy !== "admin" && selectedStrategy.name === "linearVoting" && (
+							<Button onClick={() => setDelegateModalOpen(true)}>Delegate Vote</Button>
+						)}
+					</div>
+				</div>
+				{selectedStrategy === "admin" ? (
 					<Table
 						columns={columns}
 						idCol="address"
+						// TODO: real data
 						data={dao.owners.map(owner => ({
 							address: formatReadableAddress(owner),
 							proposalsVoted: "100",
@@ -104,8 +111,10 @@ const DAOMembers: FunctionComponent<{
 							votingWeight: "1000"
 						}))}
 					/>
-				</div>
-			)}
+				) : (
+					<div>TODO: strategy members</div>
+				)}
+			</div>
 		</div>
 	)
 }

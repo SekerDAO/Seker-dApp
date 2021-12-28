@@ -27,6 +27,11 @@
       color: $dark-grey25;
     }
 
+    &:disabled {
+      background-color: $light-grey;
+      cursor: not-allowed;
+    }
+
     &--bordered {
       border: 1px solid $dark-grey25;
       border-radius: 5px;
