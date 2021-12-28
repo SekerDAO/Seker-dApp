@@ -8,7 +8,7 @@ import {ReactComponent as TwitterIcon} from "../../assets/icons/twitter.svg"
 import CreateNFTForm from "../../components/CreateNFTForm"
 import AboutDAO from "../../components/DAO/AboutDAO"
 import CreateDaoProposal from "../../components/DAO/CreateDaoProposal"
-import DAOOwners from "../../components/DAO/DAOOwners"
+import DAOMembers from "../../components/DAO/DAOMembers"
 import DAOProposals from "../../components/DAO/DAOProposals"
 import EditDAO from "../../components/DAO/EditDAO"
 import ExpandDAO from "../../components/DAO/ExpandDAO"
@@ -205,7 +205,7 @@ const Dao: FunctionComponent = () => {
 							<NFTGallery account={dao.gnosisAddress} isDao canDelete={isAdmin} />
 						)}
 						{page === "about" && <AboutDAO dao={dao} />}
-						{page === "members" && <DAOOwners owners={dao.owners} />}
+						{page === "members" && <DAOMembers dao={dao} />}
 						{page === "proposals" && <DAOProposals gnosisAddress={dao.gnosisAddress} />}
 						{page === "proposal" && <Proposal />}
 						{page === "expand" && (

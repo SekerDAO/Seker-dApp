@@ -14,7 +14,7 @@ const Modal: FunctionComponent<{
 	submitButtonText?: string
 	submitButtonDisabled?: boolean
 	onSubmit?: () => void
-	warningMessage?: string
+	warningMessages?: string[]
 }> = ({
 	zIndex,
 	width,
@@ -23,7 +23,7 @@ const Modal: FunctionComponent<{
 	submitButtonText,
 	title,
 	onSubmit,
-	warningMessage,
+	warningMessages,
 	children,
 	submitButtonDisabled
 }) => {
@@ -48,15 +48,17 @@ const Modal: FunctionComponent<{
 				</div>
 				{title && <h2>{title}</h2>}
 				{children}
-				{warningMessage && (
+				{warningMessages && (
 					<>
 						<Divider />
-						<div className="modal__warning-message">
-							<div>
-								<WarningIcon width="20px" height="20px" />
+						{warningMessages.map((warningMessage, index) => (
+							<div className="modal__warning-message" key={warningMessage + index}>
+								<div>
+									<WarningIcon width="20px" height="20px" />
+								</div>
+								<p>{warningMessage}</p>
 							</div>
-							<p>{warningMessage}</p>
-						</div>
+						))}
 					</>
 				)}
 				{submitButtonText && (

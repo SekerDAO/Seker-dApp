@@ -1,4 +1,5 @@
 import {FunctionComponent, useContext, useState} from "react"
+import {VOTING_STRATEGIES} from "../../../constants/votingStrategies"
 import {AuthContext} from "../../../context/AuthContext"
 import {VotingStrategy} from "../../../types/DAO"
 import Select from "../../Controls/Select"
@@ -35,7 +36,7 @@ const CreateDaoProposal: FunctionComponent<{
 						  ]
 						: []),
 					...strategies.map((strategy, index) => ({
-						name: strategy.name,
+						name: VOTING_STRATEGIES.find(s => s.strategy === strategy.name)?.title ?? strategy.name,
 						value: index
 					}))
 				]}

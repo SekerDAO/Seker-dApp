@@ -4,12 +4,14 @@ import Button from "../../Controls/Button"
 import "./styles.scss"
 
 const ConnectWalletPlaceholder: FunctionComponent = () => {
-	const {connectWallet} = useContext(AuthContext)
+	const {connectWallet, connecting} = useContext(AuthContext)
 
 	return (
 		<div className="connect-wallet">
 			<h2>Please connect wallet to proceed</h2>
-			<Button onClick={connectWallet}>Connect wallet</Button>
+			<Button disabled={connecting} onClick={connectWallet}>
+				{connecting ? "Connecting..." : "Connect wallet"}
+			</Button>
 		</div>
 	)
 }

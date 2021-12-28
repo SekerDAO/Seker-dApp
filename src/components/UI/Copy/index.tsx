@@ -13,7 +13,7 @@ const Copy: FunctionComponent<{value?: string | null}> = ({children, value}) => 
 	return (
 		<div className="copy-field" onClick={handleCopy}>
 			{children}
-			<CopyIcon width="18px" height="20px" />
+			{value && <CopyIcon width="18px" height="20px" />}
 		</div>
 	)
 }
