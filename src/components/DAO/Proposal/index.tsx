@@ -30,6 +30,8 @@ const SafeProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 	return (
 		<ProposalLayout proposal={proposal} votesThreshold={proposal.gnosisVotingThreshold}>
 			{proposal.state === "executed" ? (
+				<p>This proposal has been confirmed and executed.</p>
+			) : (
 				<>
 					<Button
 						disabled={!canSign || processing}
@@ -48,8 +50,6 @@ const SafeProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 						</p>
 					</div>
 				</>
-			) : (
-				<p>This proposal has been confirmed and executed.</p>
 			)}
 		</ProposalLayout>
 	)
