@@ -10,6 +10,7 @@ import useDelegateTokenModal from "./useDelegateTokenModal"
 
 const DelegateTokenModal: FunctionComponent<{
 	strategy: VotingStrategy
+	govTokenAddress?: string
 	strategyContent?: {
 		strategy: VotingStrategyName
 		title: string
@@ -18,7 +19,7 @@ const DelegateTokenModal: FunctionComponent<{
 		active: boolean
 	}
 	onClose: () => void
-}> = ({strategy, strategyContent, onClose}) => {
+}> = ({strategy, strategyContent, govTokenAddress, onClose}) => {
 	const {
 		processing,
 		handleSubmit,
@@ -27,8 +28,9 @@ const DelegateTokenModal: FunctionComponent<{
 		submitButtonDisabled,
 		delegateTo,
 		delegateeAddress,
-		initialDelegateeAddress
-	} = useDelegateTokenModal(strategy)
+		initialDelegateeAddress,
+		tokensAmount
+	} = useDelegateTokenModal({strategy, govTokenAddress, onClose})
 
 	return (
 		<Modal
@@ -60,7 +62,7 @@ const DelegateTokenModal: FunctionComponent<{
 						</div>
 						<div className="delegate-token-modal__heading-col">
 							<p>Amount of Voting Tokens</p>
-							<Copy>100</Copy>
+							<Copy>{tokensAmount}</Copy>
 						</div>
 					</div>
 				</div>

@@ -1,10 +1,14 @@
-import {FunctionComponent, useState} from "react"
+import {FunctionComponent, useState, useContext, useEffect} from "react"
+import {getStrategyGovTokenAddress} from "../../../api/ethers/functions/Usul/voting/usulStrategies"
 import {VOTING_STRATEGIES} from "../../../constants/votingStrategies"
+import {AuthContext} from "../../../context/AuthContext"
+import ProviderContext from "../../../context/ProviderContext"
 import {DAO} from "../../../types/DAO"
 import {formatReadableAddress} from "../../../utlls"
 import Button from "../../Controls/Button"
 import Select from "../../Controls/Select"
 import DelegateTokenModal from "../../Modals/DelegateTokenModal"
+import ConnectWalletPlaceholder from "../../UI/ConnectWalletPlaceholder"
 import Table from "../../UI/Table"
 import "./styles.scss"
 
@@ -19,11 +23,23 @@ const columns = [
 const DAOMembers: FunctionComponent<{
 	dao: DAO
 }> = ({dao}) => {
+	const {connected} = useContext(AuthContext)
+	const {provider} = useContext(ProviderContext)
 	const [delegateModalOpen, setDelegateModalOpen] = useState(false)
 	const [selectedStrategyAddress, setSelectedStrategyAddress] = useState<string>()
+	const [govTokenAddress, setGovTokenAddress] = useState<string>()
 	const selectedStrategy = dao.strategies.find(
 		strategy => strategy.address === selectedStrategyAddress
 	)
+	useEffect(() => {
+		if (selectedStrategy) {
+			getStrategyGovTokenAddress(selectedStrategy.address, provider).then(tokenAddress => {
+				if (tokenAddress) {
+					setGovTokenAddress(tokenAddress)
+				}
+			})
+		}
+	}, [selectedStrategy?.address])
 	const findVotingStrategyContent = (strategyName?: string) =>
 		VOTING_STRATEGIES.find(strategy => strategy.strategy === strategyName)
 	const selectedVotingStrategyContent = findVotingStrategyContent(selectedStrategy?.name)
@@ -52,6 +68,7 @@ const DAOMembers: FunctionComponent<{
 							onClose={() => setDelegateModalOpen(false)}
 							strategy={selectedStrategy}
 							strategyContent={selectedVotingStrategyContent}
+							govTokenAddress={govTokenAddress}
 						/>
 					)}
 					<div className="dao-members__body-heading">
@@ -61,14 +78,20 @@ const DAOMembers: FunctionComponent<{
 								Voting Token:
 								<Button
 									buttonType="link"
-									onClick={() => console.log("TODO: Get token address and navigate to etherscan")}
+									onClick={() =>
+										window.open(`https://rinkeby.etherscan.io/token/${govTokenAddress}`, "_blank")
+									}
 								>
-									[{formatReadableAddress(selectedStrategy.address)}]
+									[{formatReadableAddress(govTokenAddress)}]
 								</Button>
 							</p>
 						</div>
 						<div className="dao-members__body-heading-right">
-							<Button onClick={() => setDelegateModalOpen(true)}>Delegate Vote</Button>
+							{connected ? (
+								<Button onClick={() => setDelegateModalOpen(true)}>Delegate Vote</Button>
+							) : (
+								<ConnectWalletPlaceholder />
+							)}
 						</div>
 					</div>
 					<Table

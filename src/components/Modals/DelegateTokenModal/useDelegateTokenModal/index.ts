@@ -1,5 +1,5 @@
 import {useState, useEffect, useContext} from "react"
-import {getStrategyGovTokenAddress} from "../../../../api/ethers/functions/Usul/voting/usulStrategies"
+import getERC20Balance from "../../../../api/ethers/functions/ERC20Token/getERC20Balance"
 import {checkDelegatee, delegateVote} from "../../../../api/ethers/functions/Usul/voting/votingApi"
 import {AuthContext} from "../../../../context/AuthContext"
 import ProviderContext from "../../../../context/ProviderContext"
@@ -7,9 +7,15 @@ import {VotingStrategy} from "../../../../types/DAO"
 import {toastError, toastSuccess} from "../../../UI/Toast"
 
 type DelegateTo = "self" | "address"
-const useDelegateTokenModal = (
+const useDelegateTokenModal = ({
+	strategy,
+	govTokenAddress,
+	onClose
+}: {
 	strategy: VotingStrategy
-): {
+	govTokenAddress?: string
+	onClose: () => void
+}): {
 	processing: boolean
 	submitButtonDisabled: boolean
 	handleSubmit: () => Promise<void>
@@ -18,6 +24,7 @@ const useDelegateTokenModal = (
 	delegateTo: DelegateTo
 	delegateeAddress?: string
 	initialDelegateeAddress?: string
+	tokensAmount?: number
 } => {
 	const {signer, account} = useContext(AuthContext)
 	const {provider} = useContext(ProviderContext)
@@ -25,16 +32,10 @@ const useDelegateTokenModal = (
 	const [delegateTo, setDelegateTo] = useState<DelegateTo>("self")
 	const [initialDelegateeAddress, setInitialDelegateeAddress] = useState<string>()
 	const [delegateeAddress, setDelegateeAddress] = useState<string>()
-	const [govTokenAddress, setGovTokenAddress] = useState<string>()
-	const submitButtonDisabled = processing || !signer || (delegateTo === "self" && !delegateeAddress)
+	const [tokensAmount, setTokensAmount] = useState<number>()
+	const submitButtonDisabled =
+		processing || !signer || (delegateTo === "address" && !delegateeAddress)
 
-	useEffect(() => {
-		getStrategyGovTokenAddress(strategy.address, provider).then(tokenAddress => {
-			if (tokenAddress) {
-				setGovTokenAddress(tokenAddress)
-			}
-		})
-	}, [strategy.address])
 	useEffect(() => {
 		if (govTokenAddress && account) {
 			checkDelegatee(govTokenAddress, account, provider).then(delegatee => {
@@ -42,10 +43,16 @@ const useDelegateTokenModal = (
 					setInitialDelegateeAddress(delegatee)
 				}
 			})
+			getERC20Balance(govTokenAddress, account, provider).then(balance => {
+				if (balance) {
+					setTokensAmount(balance)
+				}
+			})
 		}
 	}, [strategy, account])
 	const handleSubmit = async () => {
 		if (!signer || !govTokenAddress || !account) return
+		setProcessing(true)
 		try {
 			if (delegateTo === "self") {
 				await delegateVote(govTokenAddress, account, signer)
@@ -55,11 +62,13 @@ const useDelegateTokenModal = (
 				}
 			}
 			toastSuccess("Tokens successfully delegated")
+			setProcessing(false)
+			onClose()
 		} catch (e) {
 			console.error(e)
 			toastError("Failed to delegate tokens")
+			setProcessing(false)
 		}
-		setProcessing(false)
 	}
 	const handleDelegateToChange = (newValue: DelegateTo) => {
 		setDelegateTo(newValue)
@@ -76,7 +85,8 @@ const useDelegateTokenModal = (
 		delegateeAddress,
 		initialDelegateeAddress,
 		handleDelegateToChange,
-		handleDelegateeAddressChange
+		handleDelegateeAddressChange,
+		tokensAmount
 	}
 }
 
