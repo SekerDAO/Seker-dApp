@@ -104,10 +104,8 @@ const ProposalLayout: FunctionComponent<{
 														{contractMethod.name}(
 														{contractMethod.inputs.map(
 															(input, index) =>
-																`${
-																	index + 1 !== contractMethod.inputs.length
-																		? input.type + ", "
-																		: input.type
+																`${input.type}${
+																	index === contractMethod.inputs.length - 1 ? "" : ", "
 																}`
 														)}
 														)
@@ -124,7 +122,7 @@ const ProposalLayout: FunctionComponent<{
 													<span>{transaction?.value || "0"}</span>
 												</div>
 											</div>
-											{idx + 1 !== proposal.transactions?.length && <Divider />}
+											{idx !== proposal.transactions!.length - 1 && <Divider />}
 										</Fragment>
 									)
 								})}

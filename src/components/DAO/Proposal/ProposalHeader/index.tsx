@@ -64,7 +64,7 @@ const ProposalHeader: FunctionComponent<{
 							{formatReadableAddress(proposal.userAddress)}
 						</Link>
 					</p>
-					{!isAdminProposal && (
+					{!isAdminProposal && proposal.govTokenAddress && (
 						<p>
 							Voting Token:
 							<Link
