@@ -64,10 +64,15 @@ const ProposalHeader: FunctionComponent<{
 							{formatReadableAddress(proposal.userAddress)}
 						</Link>
 					</p>
-					{!isAdminProposal && (
+					{!isAdminProposal && proposal.govTokenAddress && (
 						<p>
 							Voting Token:
-							<Link to={`TODO`}>{formatReadableAddress(proposal.userAddress)}</Link>
+							<Link
+								to={{pathname: `https://rinkeby.etherscan.io/token/${proposal.govTokenAddress}`}}
+								target="_blank"
+							>
+								{formatReadableAddress(proposal.govTokenAddress)}
+							</Link>
 						</p>
 					)}
 				</div>

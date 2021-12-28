@@ -12,6 +12,7 @@ import useSafeProposal from "../../../hooks/getters/useSafeProposal"
 import useStrategyProposal from "../../../hooks/getters/useStrategyProposal"
 import Button from "../../Controls/Button"
 import VotingModal from "../../Modals/VotingModal"
+import ConnectWalletPlaceholder from "../../UI/ConnectWalletPlaceholder"
 import ErrorPlaceholder from "../../UI/ErrorPlaceholder"
 import Loader from "../../UI/Loader"
 import {toastError, toastSuccess} from "../../UI/Toast"
@@ -28,22 +29,28 @@ const SafeProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 
 	return (
 		<ProposalLayout proposal={proposal} votesThreshold={proposal.gnosisVotingThreshold}>
-			<Button
-				disabled={!canSign || processing}
-				onClick={sign}
-				extraClassName="proposal__content-vote-button"
-			>
-				Sign
-			</Button>
-			<div className="proposal__content-participate-warning">
-				<div>
-					<WarningIcon width="20px" height="20px" />
-				</div>
-				<p>
-					{`This request will incur a gas fee. If you would like to proceed, please
+			{proposal.state === "executed" ? (
+				<p>This proposal has been confirmed and executed.</p>
+			) : (
+				<>
+					<Button
+						disabled={!canSign || processing}
+						onClick={sign}
+						extraClassName="proposal__content-vote-button"
+					>
+						Confirm
+					</Button>
+					<div className="proposal__content-participate-warning">
+						<div>
+							<WarningIcon width="20px" height="20px" />
+						</div>
+						<p>
+							{`This request will incur a gas fee. If you would like to proceed, please
 												click "Confirm".`}
-				</p>
-			</div>
+						</p>
+					</div>
+				</>
+			)}
 		</ProposalLayout>
 	)
 }
@@ -141,7 +148,7 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 							{userHasVoted ? "Already voted" : "Vote"}
 						</Button>
 					) : (
-						<p>Please connect account</p>
+						<ConnectWalletPlaceholder />
 					)
 				) : proposal.state === "pending" ? (
 					account && connected && signer ? (
@@ -149,7 +156,7 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 							Finalize Voting
 						</Button>
 					) : (
-						<p>Please connect account</p>
+						<ConnectWalletPlaceholder />
 					)
 				) : proposal.state === "executing" ? (
 					account && connected && signer ? (
@@ -157,8 +164,10 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 							Execute
 						</Button>
 					) : (
-						<p>Please connect account</p>
+						<ConnectWalletPlaceholder />
 					)
+				) : proposal.state === "executed" ? (
+					<p>This proposal has been passed and executed.</p>
 				) : (
 					<p>TODO: add different texts for different non-active proposal states</p>
 				)}

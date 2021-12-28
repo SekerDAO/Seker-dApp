@@ -38,7 +38,7 @@ const StrategyVotesCard: FunctionComponent<StrategyVotesCardProps> = ({
 					value={percentageValue}
 				/>
 				<span className="votes-card__value">
-					{formatNumber(value.div(Math.pow(10, 15)).toNumber())}
+					{formatNumber(value.div(Math.pow(10, 15)).toNumber() / 1000)}
 				</span>
 			</div>
 			<div className="votes-card__body">

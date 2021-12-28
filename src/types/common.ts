@@ -5,4 +5,5 @@ export type PrebuiltTx = {
 	contractMethods: AbiFunction[]
 	selectedMethodIndex: number
 	args: (string | string[])[]
+	value?: number // TODO: Store transaction value
 }

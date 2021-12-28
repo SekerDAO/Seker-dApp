@@ -12,23 +12,6 @@ import ProposalHeader from "../ProposalHeader"
 import AdminProposalVotes from "../ProposalVotes/AdminProposalVotes"
 import StrategyProposalVotes from "../ProposalVotes/StrategyProposalVotes"
 
-// TODO: Decode proposal.multiTx, get list of transactions from there
-const MOCK_TRANSACTION: {
-	signature: string
-	inputs: {name: string; value: string | null}[]
-	to: string | null
-	value: number
-} = {
-	signature: "_setContributorCompSpeed(address,uint256)",
-	inputs: [
-		{name: "address", value: "0xF6690149C78D0254EF65FDAA6B23EC6A342f6d8D"},
-		{name: "uint256", value: "6496575342465753"}
-	],
-	to: "0xF6690149C78D0254EF65FDAA6B23EC6A342f6d8D",
-	value: 0
-}
-const MOCK_TRANSACTIONS: Array<typeof MOCK_TRANSACTION> = [MOCK_TRANSACTION, MOCK_TRANSACTION]
-
 const ProposalLayout: FunctionComponent<{
 	proposal: (SafeProposal | StrategyProposal) & {proposalId: string}
 	votesThreshold: number
@@ -108,28 +91,41 @@ const ProposalLayout: FunctionComponent<{
 								<Expandable title="Description">{proposal.description}</Expandable>
 							)}
 							<Expandable title="Executable Code">
-								{MOCK_TRANSACTIONS.map((transaction, idx) => (
-									<Fragment key={idx}>
-										<div className="proposal__transaction">
-											<h3>Function {idx + 1}</h3>
-											<div className="proposal__transaction-details">
-												<p>Signature:</p>
-												<span>{transaction.signature}</span>
-												<p>Calldatas:</p>
-												{transaction.inputs.map(input => (
-													<p key={input.name} className="proposal__transaction-input">
-														{input.name}: <span>{input.value}</span>
-													</p>
-												))}
-												<p>Target:</p>
-												<span>{transaction.to}</span>
-												<p>Value:</p>
-												<span>{transaction.value}</span>
+								{proposal.transactions?.map((transaction, idx) => {
+									const contractMethod =
+										transaction.contractMethods[transaction.selectedMethodIndex]
+									return (
+										<Fragment key={idx}>
+											<div className="proposal__transaction">
+												<h3>Function {idx + 1}</h3>
+												<div className="proposal__transaction-details">
+													<p>Signature:</p>
+													<span>
+														{contractMethod.name}(
+														{contractMethod.inputs.map(
+															(input, index) =>
+																`${input.type}${
+																	index === contractMethod.inputs.length - 1 ? "" : ", "
+																}`
+														)}
+														)
+													</span>
+													<p>Calldatas:</p>
+													{contractMethod.inputs.map((input, index) => (
+														<p key={input.name} className="proposal__transaction-input">
+															{input.name}: <span>{transaction.args[index]}</span>
+														</p>
+													))}
+													<p>Target:</p>
+													<span>{transaction.address}</span>
+													<p>Value:</p>
+													<span>{transaction?.value || "0"}</span>
+												</div>
 											</div>
-										</div>
-										{idx + 1 !== MOCK_TRANSACTIONS.length && <Divider />}
-									</Fragment>
-								))}
+											{idx !== proposal.transactions!.length - 1 && <Divider />}
+										</Fragment>
+									)
+								})}
 							</Expandable>
 						</div>
 						<div className="proposal__content-details-right">
