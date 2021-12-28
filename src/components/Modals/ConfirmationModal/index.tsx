@@ -25,7 +25,7 @@ const ConfirmationModal: FunctionComponent<{
 			show={isOpened}
 			onClose={handleClose}
 			title={title}
-			warningMessage={warningText}
+			warningMessages={warningText ? [warningText] : undefined}
 			submitButtonText={processing ? "Processing..." : submitText}
 			submitButtonDisabled={processing}
 			onSubmit={handleSubmit}

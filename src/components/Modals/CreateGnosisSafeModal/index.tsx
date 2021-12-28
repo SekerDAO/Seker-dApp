@@ -123,9 +123,11 @@ const CreateGnosisSafeModal: FunctionComponent<{
 				submitButtonText={submitButtonText}
 				onSubmit={handleSubmit}
 				submitButtonDisabled={submitButtonDisabled}
-				warningMessage={
+				warningMessages={
 					stage === "create"
-						? `This request will incur a gas fee. If you would like to proceed, please click "Submit" below.`
+						? [
+								`This request will incur a gas fee. If you would like to proceed, please click "Submit" below.`
+						  ]
 						: undefined
 				}
 			>

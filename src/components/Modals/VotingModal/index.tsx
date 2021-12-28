@@ -46,7 +46,9 @@ const VotingModal: FunctionComponent<{
 			submitButtonText={processing ? "Processing" : "Submit"}
 			submitButtonDisabled={!signer || vote === null || processing}
 			onSubmit={handleVote}
-			warningMessage={`This request will incur a gas fee. If you would like to proceed, please click "Submit" below.`}
+			warningMessages={[
+				`This request will incur a gas fee. If you would like to proceed, please click "Submit" below.`
+			]}
 		>
 			<div className="vote-modal">
 				<div className="vote-modal__input">

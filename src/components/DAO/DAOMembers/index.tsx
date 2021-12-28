@@ -4,6 +4,7 @@ import {DAO} from "../../../types/DAO"
 import {formatReadableAddress} from "../../../utlls"
 import Button from "../../Controls/Button"
 import Select from "../../Controls/Select"
+import DelegateTokenModal from "../../Modals/DelegateTokenModal"
 import Table from "../../UI/Table"
 import "./styles.scss"
 
@@ -18,6 +19,7 @@ const columns = [
 const DAOMembers: FunctionComponent<{
 	dao: DAO
 }> = ({dao}) => {
+	const [delegateModalOpen, setDelegateModalOpen] = useState(false)
 	const [selectedStrategyAddress, setSelectedStrategyAddress] = useState<string>()
 	const selectedStrategy = dao.strategies.find(
 		strategy => strategy.address === selectedStrategyAddress
@@ -45,6 +47,12 @@ const DAOMembers: FunctionComponent<{
 			</div>
 			{selectedStrategy && (
 				<div className="dao-members__body">
+					{delegateModalOpen && selectedStrategy.name === "linearVoting" && (
+						<DelegateTokenModal
+							onClose={() => setDelegateModalOpen(false)}
+							strategy={selectedStrategy}
+						/>
+					)}
 					<div className="dao-members__body-heading">
 						<div className="dao-members__body-heading-left">
 							<h2>{selectedVotingStrategyContent?.title}</h2>
@@ -59,7 +67,7 @@ const DAOMembers: FunctionComponent<{
 							</p>
 						</div>
 						<div className="dao-members__body-heading-right">
-							<Button>Delegate Vote</Button>
+							<Button onClick={() => setDelegateModalOpen(true)}>Delegate Vote</Button>
 						</div>
 					</div>
 					<Table
