@@ -1,25 +1,22 @@
-import {ChangeEvent, FunctionComponent, useContext, useState} from "react"
-import {ReactComponent as WarningIcon} from "../../../assets/icons/warning.svg"
+import {isAddress} from "@ethersproject/address"
+import {ChangeEvent, FunctionComponent, useContext, useEffect, useState} from "react"
+import checkErc20Wrapped from "../../../api/ethers/functions/ERC20Token/checkErc20Wrapped"
 import {VOTING_STRATEGIES} from "../../../constants/votingStrategies"
 import {AuthContext} from "../../../context/AuthContext"
+import ProviderContext from "../../../context/ProviderContext"
 import {VotingStrategyName} from "../../../types/DAO"
 import {ERC20Token} from "../../../types/ERC20Token"
 import Button from "../../Controls/Button"
 import Input from "../../Controls/Input"
-import Divider from "../../UI/Divider"
 import CreateERC20TokenModal from "../CreateERC20TokenModal"
 import Modal from "../Modal"
 import "./styles.scss"
 
-export type VotingStrategyFormValues = {[key: string]: string}
-
-const EMPTY_STATE = {
-	erc20TokenAddress: "",
-	votingPeriod: "",
-	delay: "",
-	quorumThreshold: "",
-	designatedERC20TokenAddress: "",
-	designatedERC20TokemCirculatingSupply: ""
+export type VotingStrategyFormValues = {
+	tokenAddress: string
+	votingPeriod: number
+	delay: number
+	quorumThreshold: number
 }
 
 const DeployVotingStrategyModal: FunctionComponent<{
@@ -29,27 +26,51 @@ const DeployVotingStrategyModal: FunctionComponent<{
 }> = ({strategy, onSubmit, onClose}) => {
 	const [createTokenModalOpened, setCreateTokenModalOpened] = useState(false)
 	const {signer} = useContext(AuthContext)
-	const [formValues, setFormValues] = useState<VotingStrategyFormValues>(EMPTY_STATE)
+	const {provider} = useContext(ProviderContext)
 
-	const {votingPeriod, delay, quorumThreshold} = formValues
-	const subTitle = VOTING_STRATEGIES.find(
-		votingStrategy => votingStrategy.strategy === strategy
-	)?.title
+	const [tokenAddress, setTokenAddress] = useState("")
+	const [tokenAddressValidation, setTokenAddressValidation] = useState<string | null>(null)
+	useEffect(() => {
+		if (tokenAddress) {
+			if (isAddress(tokenAddress)) {
+				checkErc20Wrapped(tokenAddress, provider).then(res => {
+					if (!res) {
+						setTokenAddressValidation("Token not wrapped")
+					}
+				})
+			} else {
+				setTokenAddressValidation("Not a valid address")
+			}
+		} else {
+			setTokenAddressValidation(null)
+		}
+	}, [tokenAddress])
+	const [votingPeriod, setVotingPeriod] = useState("")
+	const [delay, setDelay] = useState("")
+	const [quorumThreshold, setQuorumThreshold] = useState("")
+
 	const handleTokenCreate = (token: ERC20Token) => {
-		setFormValues(prevState => ({...prevState, erc20TokenAddress: token.address}))
+		setTokenAddress(token.address)
 		setCreateTokenModalOpened(false)
 	}
+
 	const handleSubmit = () => {
 		if (!submitButtonDisabled) {
-			onSubmit(strategy, formValues)
+			onSubmit(strategy, {
+				tokenAddress,
+				delay: Number(delay),
+				votingPeriod: Number(votingPeriod),
+				quorumThreshold: Number(quorumThreshold)
+			})
 		}
 	}
 
-	const handleChange = ({target: {name, value}}: ChangeEvent<HTMLInputElement>) => {
-		setFormValues(prevState => ({
-			...prevState,
-			[name]: name === "quorumThreshold" && Number(value) > 100 ? "100" : value
-		}))
+	const handleQuorumThresholdChange = (e: ChangeEvent<HTMLInputElement>) => {
+		if (Number(e.target.value) > 100) {
+			setQuorumThreshold("100")
+		} else {
+			setQuorumThreshold(e.target.value)
+		}
 	}
 
 	const submitButtonDisabled = !(
@@ -76,15 +97,20 @@ const DeployVotingStrategyModal: FunctionComponent<{
 			)}
 			<Modal show onClose={onClose} title="Deploy Strategy">
 				<form className="voting-strategy-form" onSubmit={handleSubmit}>
-					<h3>{subTitle}</h3>
-					{strategy !== "singleVotingSimpleMembership" && (
+					<h3>
+						{VOTING_STRATEGIES.find(votingStrategy => votingStrategy.strategy === strategy)?.title}
+					</h3>
+					{strategy === "linearVoting" && (
 						<div className="voting-strategy-form__row">
 							<label>ERC-20 Token Address</label>
 							<Input
 								required
 								name="erc20TokenAddress"
-								value={formValues.erc20TokenAddress}
-								onChange={handleChange}
+								value={tokenAddress}
+								onChange={e => {
+									setTokenAddress(e.target.value)
+								}}
+								validation={tokenAddressValidation}
 							/>
 							<div className="voting-strategy-form__create-token">
 								<span>{`Don't have ERC-20 token yet?`}</span>
@@ -109,8 +135,10 @@ const DeployVotingStrategyModal: FunctionComponent<{
 								min={2}
 								placeholder="# of hours"
 								name="votingPeriod"
-								value={formValues.votingPeriod}
-								onChange={handleChange}
+								value={votingPeriod}
+								onChange={e => {
+									setVotingPeriod(e.target.value)
+								}}
 							/>
 						</div>
 						<div className="voting-strategy-form__col">
@@ -121,8 +149,10 @@ const DeployVotingStrategyModal: FunctionComponent<{
 								min={0}
 								placeholder="# of hours"
 								name="delay"
-								value={formValues.delay}
-								onChange={handleChange}
+								value={delay}
+								onChange={e => {
+									setDelay(e.target.value)
+								}}
 							/>
 						</div>
 					</div>
@@ -135,37 +165,10 @@ const DeployVotingStrategyModal: FunctionComponent<{
 							max={100}
 							placeholder="% of tokens"
 							name="quorumThreshold"
-							value={formValues.quorumThreshold}
-							onChange={handleChange}
+							value={quorumThreshold}
+							onChange={handleQuorumThresholdChange}
 						/>
 					</div>
-					{strategy === "linearVotingSimpleMembershipZodiacExitModule" && (
-						<>
-							<Divider />
-							<div className="voting-strategy-form__row">
-								<label>Designated ERC-20 Token Address to Define Shares</label>
-								<Input
-									name="designatedERC20TokenAddress"
-									value={formValues.designatedERC20TokenAddress}
-									onChange={handleChange}
-								/>
-							</div>
-							<div className="voting-strategy-form__row voting-strategy-form__warning-message">
-								<div className="voting-strategy-form__warning-icon">
-									<WarningIcon width="22px" height="22px" />
-								</div>
-								<p>Please note that the designated token address can not be zero.</p>
-							</div>
-							<div className="voting-strategy-form__row">
-								<label>Designated ERC-20 Token Circulating Supply</label>
-								<Input
-									name="designatedERC20TokemCirculatingSupply"
-									value={formValues.designatedERC20TokemCirculatingSupply}
-									onChange={handleChange}
-								/>
-							</div>
-						</>
-					)}
 					<Button type="submit" disabled={submitButtonDisabled} onClick={handleSubmit}>
 						Submit
 					</Button>

@@ -30,26 +30,26 @@ const ChooseVotingStrategies: FunctionComponent<{
 
 	const handleSubmitVotingStrategy = async (
 		strategy: VotingStrategyName,
-		{erc20TokenAddress, quorumThreshold, delay, votingPeriod}: VotingStrategyFormValues
+		{tokenAddress, quorumThreshold, delay, votingPeriod}: VotingStrategyFormValues
 	) => {
 		if (strategy === "linearVoting") {
 			if (
 				delay &&
 				!isNaN(Number(delay)) &&
 				quorumThreshold &&
-				!isNaN(Number(quorumThreshold)) &&
-				Number(quorumThreshold) > 0 && // TODO: validation
+				!isNaN(quorumThreshold) &&
+				quorumThreshold > 0 && // TODO: validation
 				votingPeriod &&
-				!isNaN(Number(votingPeriod)) &&
-				Number(votingPeriod) > 1 &&
+				!isNaN(votingPeriod) &&
+				votingPeriod > 1 &&
 				signer
 			) {
 				const {tx, expectedAddress} = getOZLinearDeployTx(
 					gnosisAddress,
-					erc20TokenAddress,
-					Number(quorumThreshold),
-					Number(delay),
-					Number(votingPeriod),
+					tokenAddress,
+					quorumThreshold,
+					delay,
+					votingPeriod,
 					signer
 				)
 				onStrategyAdd({strategy, tx, expectedAddress})
