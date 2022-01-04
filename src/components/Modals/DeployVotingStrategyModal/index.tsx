@@ -34,7 +34,9 @@ const DeployVotingStrategyModal: FunctionComponent<{
 		if (tokenAddress) {
 			if (isAddress(tokenAddress)) {
 				checkErc20Wrapped(tokenAddress, provider).then(res => {
-					if (!res) {
+					if (res) {
+						setTokenAddressValidation(null)
+					} else {
 						setTokenAddressValidation("Token not wrapped")
 					}
 				})
@@ -82,7 +84,9 @@ const DeployVotingStrategyModal: FunctionComponent<{
 		votingPeriod &&
 		!isNaN(Number(votingPeriod)) &&
 		Number(votingPeriod) > 1 &&
-		signer
+		signer &&
+		tokenAddress &&
+		!tokenAddressValidation
 	)
 
 	return (
