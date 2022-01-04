@@ -1,4 +1,5 @@
 import {FunctionComponent, useState} from "react"
+import config from "../../../config"
 import {VOTING_STRATEGIES} from "../../../constants/votingStrategies"
 import {DAO, VotingStrategy} from "../../../types/DAO"
 import {formatReadableAddress} from "../../../utlls"
@@ -8,12 +9,7 @@ import DelegateTokenModal from "../../Modals/DelegateTokenModal"
 import Table from "../../UI/Table"
 import "./styles.scss"
 
-const columns = [
-	{id: "address" as const, name: "Address"},
-	{id: "proposalsVoted" as const, name: "Proposals Voted"},
-	{id: "totalVotes" as const, name: "Total Votes"},
-	{id: "votingWeight" as const, name: "Voting Weight"}
-]
+const columns = [{id: "address" as const, name: "Address"}]
 
 const DAOMembers: FunctionComponent<{
 	dao: DAO
@@ -103,16 +99,24 @@ const DAOMembers: FunctionComponent<{
 					<Table
 						columns={columns}
 						idCol="address"
-						// TODO: real data
 						data={dao.owners.map(owner => ({
-							address: formatReadableAddress(owner),
-							proposalsVoted: "100",
-							totalVotes: "1000",
-							votingWeight: "1000"
+							address: formatReadableAddress(owner)
 						}))}
 					/>
+				) : selectedStrategy.govTokenAddress ? (
+					<>
+						<a
+							target="_blank"
+							rel="noopener noreferrer"
+							href={`https://${config.CHAIN_ID === 4 ? "rinkeby." : ""}etherscan.io/token/${
+								selectedStrategy.govTokenAddress
+							}#balances`}
+						>
+							View holders on Etherscan
+						</a>
+					</>
 				) : (
-					<div>TODO: strategy members</div>
+					<div>TODO: non-token strategy members</div>
 				)}
 			</div>
 		</div>

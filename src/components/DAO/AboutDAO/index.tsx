@@ -15,7 +15,7 @@ const AboutDAO: FunctionComponent<{
 		<div className="about-dao__balance">
 			<div className="about-dao__balance-summary">
 				<h3>DAO Treasury</h3>
-				<p>$ {dao.balance}</p>
+				<p>$ TODO</p>
 			</div>
 			<Button buttonType="primary" onClick={() => console.log("TODO: Implement me")}>
 				View Assets

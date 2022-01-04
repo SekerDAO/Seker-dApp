@@ -22,7 +22,8 @@ export const getStrategies = async (
 				name: await strategy.name(),
 				votingPeriod: Number((await strategy.votingPeriod()).toString()),
 				quorumThreshold: Number((await strategy.quorumNumerator()).toString()),
-				address
+				address,
+				govTokenAddress: await getStrategyGovTokenAddress(address, provider)
 			}
 		})
 	)

@@ -20,9 +20,6 @@ export type DAOFirebaseData = {
 
 type DAOEthersData = {
 	gnosisVotingThreshold: number
-	tokenSymbol: string
-	balance: number
-	fundedProjects: number
 	owners: string[]
 	strategies: VotingStrategy[]
 }
@@ -62,4 +59,5 @@ export type VotingStrategy = {
 	votingPeriod: number
 	quorumThreshold: number
 	address: string
+	govTokenAddress: string | null
 }

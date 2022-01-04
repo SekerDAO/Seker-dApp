@@ -27,14 +27,8 @@ const useDAO = (
 			const gnosisVotingThreshold = await getVotingThreshold(gnosisAddress, provider)
 			const owners = await getOwners(gnosisAddress, provider)
 			const strategies = _dao.usulAddress ? await getStrategies(_dao.usulAddress, provider) : []
-			const tokenSymbol = ""
-			const balance = 0
-			const fundedProjects = 0
 			setDao({
 				..._dao,
-				tokenSymbol,
-				balance,
-				fundedProjects,
 				gnosisVotingThreshold,
 				owners,
 				strategies
