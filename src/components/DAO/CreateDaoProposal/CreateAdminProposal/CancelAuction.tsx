@@ -26,7 +26,7 @@ const CancelAuction: FunctionComponent<{
 		if (!(account && signer && selectedAuction)) return
 		setProcessing(true)
 		try {
-			console.log("TODO")
+			// TODO
 			setSelectedAuction(null)
 			afterSubmit()
 			toastSuccess("Proposal successfully created")

@@ -3,9 +3,7 @@ import {SafeProposalsTypeNames, SafeProposalType} from "../../../../types/safePr
 import Input from "../../../Controls/Input"
 import Select from "../../../Controls/Select"
 import Divider from "../../../UI/Divider"
-import CancelAuction from "./CancelAuction"
 import ChangeRole from "./ChangeRole"
-import CreateAuction from "./CreateAuction"
 import GeneralEvmAdminProposal from "./GeneralEvmAdminProposal"
 
 const CreateAdminProposal: FunctionComponent<{
@@ -30,9 +28,6 @@ const CreateAdminProposal: FunctionComponent<{
 				value={type}
 				options={[
 					{name: SafeProposalsTypeNames.changeRole, value: "changeRole"},
-					{name: SafeProposalsTypeNames.createAuction, value: "createAuction"},
-					{name: SafeProposalsTypeNames.cancelAuction, value: "cancelAuction"},
-					{name: SafeProposalsTypeNames.endAuction, value: "endAuction"},
 					{name: SafeProposalsTypeNames.generalEVM, value: "generalEVM"}
 				]}
 				onChange={newSafeProposalType => {
@@ -56,24 +51,6 @@ const CreateAdminProposal: FunctionComponent<{
 				value={description}
 			/>
 			<Divider />
-			{type === "createAuction" && (
-				<CreateAuction
-					gnosisAddress={gnosisAddress}
-					gnosisVotingThreshold={gnosisVotingThreshold}
-					title={title}
-					description={description}
-					afterSubmit={afterSubmit}
-				/>
-			)}
-			{type === "cancelAuction" && (
-				<CancelAuction
-					gnosisAddress={gnosisAddress}
-					gnosisVotingThreshold={gnosisVotingThreshold}
-					title={title}
-					description={description}
-					afterSubmit={afterSubmit}
-				/>
-			)}
 			{type === "changeRole" && (
 				<ChangeRole
 					gnosisVotingThreshold={gnosisVotingThreshold}
