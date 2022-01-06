@@ -47,10 +47,10 @@ const Footer: FunctionComponent = () => (
 					<a target="_blank" rel="noopener noreferrer">
 						<TelegramGrayscale width="24px" height="20px" />
 					</a>
-					<a target="_blank" rel="noopener noreferrer" href="https://github.com/HyphalDAO">
+					<a target="_blank" rel="noopener noreferrer" href="https://github.com/SekerDAO">
 						<GitHubGrayscale width="24px" height="20px" />
 					</a>
-					<a target="_blank" rel="noopener noreferrer" href="https://hyphal.medium.com/">
+					<a target="_blank" rel="noopener noreferrer" href="https://sekerdao.medium.com/">
 						<MediumGrayscale width="24px" height="20px" />
 					</a>
 				</div>

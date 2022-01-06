@@ -10,13 +10,13 @@ const createGnosisSafe = async (
 	votingThreshold: number,
 	signer: JsonRpcSigner
 ): Promise<string> => {
-	const GnosisSafeL2Factory = new ContractFactory(GnosisSafeL2.abi, GnosisSafeL2.bytecode, signer)
-	const singleton = await GnosisSafeL2Factory.deploy()
-	const factory = new Contract(config.PROXY_ADDRESS, GnosisSafeProxyFactory.abi, signer)
-	const template = await factory.callStatic.createProxy(singleton.address, "0x")
-	const tx1 = await factory.createProxy(singleton.address, "0x")
+	const factory = new ContractFactory(GnosisSafeL2.abi, GnosisSafeL2.bytecode, signer)
+	const singleton = await factory.deploy()
+	const proxy = new Contract(config.PROXY_ADDRESS, GnosisSafeProxyFactory.abi, signer)
+	const template = await proxy.callStatic.createProxy(singleton.address, "0x")
+	const tx1 = await proxy.createProxy(singleton.address, "0x")
 	await tx1.wait()
-	const safe = GnosisSafeL2Factory.attach(template)
+	const safe = factory.attach(template)
 	const tx2 = await safe.setup(
 		admins,
 		votingThreshold,

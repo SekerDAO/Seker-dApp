@@ -10,7 +10,7 @@ const LEARN_ARTICLES: Learn = [
 			`For step-by-step guides, jump to Getting Started.`,
 
 			`For developers interested in using our tools to create their own dApps or build upon Zodiac or Seker, Jump to the developers sections and you can find all of our code here:`,
-			`<a href="https://github.com/HyphalDAO" target="_blank" rel="noopener noreferrer">https://github.com/HyphalDAO</a>`
+			`<a href="https://github.com/SekerDAO" target="_blank" rel="noopener noreferrer">https://github.com/SekerDAO</a>`
 		],
 		childArticles: []
 	},
