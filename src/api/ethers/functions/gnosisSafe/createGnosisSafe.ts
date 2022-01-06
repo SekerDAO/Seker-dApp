@@ -1,5 +1,5 @@
 import {AddressZero} from "@ethersproject/constants"
-import {Contract, ContractFactory} from "@ethersproject/contracts"
+import {Contract} from "@ethersproject/contracts"
 import {JsonRpcSigner} from "@ethersproject/providers"
 import config from "../../../../config"
 import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
@@ -10,14 +10,19 @@ const createGnosisSafe = async (
 	votingThreshold: number,
 	signer: JsonRpcSigner
 ): Promise<string> => {
-	const factory = new ContractFactory(GnosisSafeL2.abi, GnosisSafeL2.bytecode, signer)
-	const singleton = await factory.deploy()
-	const proxy = new Contract(config.PROXY_ADDRESS, GnosisSafeProxyFactory.abi, signer)
-	const template = await proxy.callStatic.createProxy(singleton.address, "0x")
-	const tx1 = await proxy.createProxy(singleton.address, "0x")
-	await tx1.wait()
-	const safe = factory.attach(template)
-	const tx2 = await safe.setup(
+	const factory = new Contract(
+		config.GNOSIS_SAFE_PROXY_FACTORY_ADDRESS,
+		GnosisSafeProxyFactory.abi,
+		signer
+	)
+	const safeAddress = await factory.callStatic.createProxy(
+		config.GNOSIS_SAFE_SINGLETON_ADDRESS,
+		"0x"
+	)
+	const createProxyTx = await factory.createProxy(config.GNOSIS_SAFE_SINGLETON_ADDRESS, "0x")
+	await createProxyTx.wait()
+	const safe = new Contract(safeAddress, GnosisSafeL2.abi, signer)
+	const safeSetupTx = await safe.setup(
 		admins,
 		votingThreshold,
 		AddressZero,
@@ -27,8 +32,8 @@ const createGnosisSafe = async (
 		0,
 		AddressZero
 	)
-	await tx2.wait()
-	return template
+	await safeSetupTx.wait()
+	return safeAddress
 }
 
 export default createGnosisSafe
