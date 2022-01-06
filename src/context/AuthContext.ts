@@ -108,7 +108,7 @@ export const useAuth = (): AuthContext => {
 	}
 
 	const checkToken = async () => {
-		const token = localStorage.getItem("hyphal_at")
+		const token = localStorage.getItem("seker_at")
 		if (token) {
 			try {
 				const {exp} = decode<{exp: number}>(token)
@@ -197,7 +197,7 @@ export const useAuth = (): AuthContext => {
 			}
 
 			const signature = await newSigner.signMessage(
-				JSON.stringify({account: newAccount, token: "hyphal"})
+				JSON.stringify({account: newAccount, token: "seker"})
 			)
 			const res = await fetch(`${config.CLOUD_FUNCTIONS_URL}/auth`, {
 				method: "POST",
@@ -206,12 +206,12 @@ export const useAuth = (): AuthContext => {
 				},
 				body: JSON.stringify({
 					account: newAccount,
-					token: "hyphal",
+					token: "seker",
 					signature
 				})
 			})
 			const json = await res.json()
-			localStorage.setItem("hyphal_at", json.token)
+			localStorage.setItem("seker_at", json.token)
 			await firebase.auth().signInWithCustomToken(json.token)
 			setConnected(true)
 		} catch (e) {
@@ -221,7 +221,7 @@ export const useAuth = (): AuthContext => {
 	}
 
 	const disconnect = () => {
-		localStorage.removeItem("hyphal_at")
+		localStorage.removeItem("seker_at")
 		localStorage.removeItem("WEB3_CONNECT_CACHED_PROVIDER")
 		setConnected(false)
 	}

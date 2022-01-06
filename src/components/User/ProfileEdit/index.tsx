@@ -70,7 +70,7 @@ const ProfileEdit: FunctionComponent<{
 			<label htmlFor="profile-edit-url">Custom URL</label>
 			<Input
 				validation={urlValidation}
-				staticPlaceholder="hyphal.hyz/"
+				staticPlaceholder="sekerdao.com/"
 				id="profile-edit-url"
 				value={url}
 				onChange={e => {

@@ -7,7 +7,7 @@ const Homepage: FunctionComponent = () => (
 	<div className="home-page">
 		<video src="/assets/Homepage_Video.mp4" muted autoPlay loop />
 		<h1 className="home-page__title">
-			Welcome to <br /> Hyphal
+			Welcome to <br /> Seker
 		</h1>
 		<div className="home-page__buttons">
 			<Link to="/daos">

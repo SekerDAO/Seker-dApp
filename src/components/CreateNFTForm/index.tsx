@@ -234,7 +234,7 @@ const CreateNFTForm: FunctionComponent<{
 					</div>
 					<div className="create-nft__row">
 						<RadioButton
-							label="Hyphal Domain"
+							label="Seker Domain"
 							id="create-nft-radio-tw-domain"
 							checked={!customDomain}
 							onChange={() => {

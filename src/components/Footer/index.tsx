@@ -19,8 +19,8 @@ const Footer: FunctionComponent = () => (
 			</div>
 			<div className="footer__col">
 				<h3 className="footer__text--dark">Projects</h3>
-				<a>HyphalDAO</a>
-				<a>Hyphal Galleries</a>
+				<a>SekerDAO</a>
+				<a>Seker Galleries</a>
 				<a>Zodiac(Gnosis)</a>
 			</div>
 			<div className="footer__col">
@@ -33,11 +33,11 @@ const Footer: FunctionComponent = () => (
 		<Divider />
 		<div className="footer__wrap">
 			<div className="footer__col">
-				<span className="footer__text--dark">© Hyphal 2021</span>
+				<span className="footer__text--dark">© Seker 2021</span>
 			</div>
 			<div className="footer__col">
 				<div className="footer__socials">
-					<a target="_blank" rel="noopener noreferrer" href="https://twitter.com/hyphaldao">
+					<a target="_blank" rel="noopener noreferrer" href="https://twitter.com/sekerdao">
 						<TwitterGrayscale width="24px" height="20px" />
 					</a>
 					<a target="_blank" rel="noopener noreferrer" href="https://discord.gg/zC5CuFJwqu">
