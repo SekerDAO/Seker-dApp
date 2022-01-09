@@ -4,6 +4,7 @@ import {JsonRpcSigner} from "@ethersproject/providers"
 import config from "../../../../config"
 import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
 import GnosisSafeProxyFactory from "../../abis/GnosisSafeProxyFactory.json"
+import {buildContractCall} from "./safeUtils"
 
 const createGnosisSafe = async (
 	admins: string[],
@@ -19,20 +20,18 @@ const createGnosisSafe = async (
 		config.GNOSIS_SAFE_SINGLETON_ADDRESS,
 		"0x"
 	)
-	const createProxyTx = await factory.createProxy(config.GNOSIS_SAFE_SINGLETON_ADDRESS, "0x")
-	await createProxyTx.wait()
 	const safe = new Contract(safeAddress, GnosisSafeL2.abi, signer)
-	const safeSetupTx = await safe.setup(
-		admins,
-		votingThreshold,
-		AddressZero,
-		"0x",
-		AddressZero,
-		AddressZero,
-		0,
-		AddressZero
+	const safeSetupTx = buildContractCall(
+		safe,
+		"setup",
+		[admins, votingThreshold, AddressZero, "0x", AddressZero, AddressZero, 0, AddressZero],
+		0
 	)
-	await safeSetupTx.wait()
+	const createProxyTx = await factory.createProxy(
+		config.GNOSIS_SAFE_SINGLETON_ADDRESS,
+		safeSetupTx.data
+	)
+	await createProxyTx.wait()
 	return safeAddress
 }
 
