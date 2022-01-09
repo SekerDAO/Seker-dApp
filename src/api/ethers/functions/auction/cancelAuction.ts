@@ -10,7 +10,7 @@ export const signCancelAuction = async (
 ): Promise<[SafeSignature, number]> =>
 	createSafeSignature(
 		safeAddress,
-		config.AUCTION_ADDRESS!,
+		config.AUCTION_ADDRESS,
 		Auction.abi,
 		"cancelAuction",
 		[auctionID],
