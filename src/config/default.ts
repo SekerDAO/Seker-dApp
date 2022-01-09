@@ -1,4 +1,13 @@
-export const DEFAULT_CONFIG = {
+// eslint-disable-next-line filenames/match-exported
+const DEFAULT_CONFIG = {
+	firebase: {
+		FIREBASE_API_KEY: "AIzaSyBiHQdFu-X9eib9VKzbtj_N0XAmHhklR_4",
+		FIREBASE_AUTH_DOMAIN: "token-walk.firebaseapp.com",
+		FIREBASE_PROJECT_ID: "token-walk",
+		FIREBASE_STORAGE_BUCKET: "token-walk.appspot.com",
+		FIREBASE_MESSAGING_SENDER_ID: "761590584693",
+		FIREBASE_APP_ID: "1:761590584693:web:bb79592e4d2e103fc2ef3c"
+	},
 	CLOUD_FUNCTIONS_URL: "https://us-central1-token-walk.cloudfunctions.net",
 	IPFS_ENDPOINT: "https://ipfs.infura.io:5001",
 	CHAIN_ID: 4,
@@ -14,11 +23,4 @@ export const DEFAULT_CONFIG = {
 	MULTI_SEND_ADDRESS: "0x2890dd2Cf1E4881b630bd680E50439b9DE00AC02"
 }
 
-export const DEFAULT_FIREBASE_CONFIG = {
-	FIREBASE_API_KEY: "AIzaSyDAcv1KaOiZNpTLri8TNt4IEkS-T17W-2c",
-	FIREBASE_AUTH_DOMAIN: "token-walk.firebaseapp.com",
-	FIREBASE_PROJECT_ID: "token-walk",
-	FIREBASE_STORAGE_BUCKET: "token-walk.appspot.com",
-	FIREBASE_MESSAGING_SENDER_ID: "761590584693",
-	FIREBASE_APP_ID: "1:761590584693:web:bb79592e4d2e103fc2ef3c"
-}
+export default DEFAULT_CONFIG
