@@ -1,6 +1,8 @@
 import {FunctionComponent, useContext, useState} from "react"
 import {ReactComponent as GnosisSafeIcon} from "../../../assets/icons/gnosis-safe.svg"
+import {ReactComponent as UsulIcon} from "../../../assets/icons/usul-default.svg"
 import {AuthContext} from "../../../context/AuthContext"
+import Button from "../../Controls/Button"
 import ConnectWalletPlaceholder from "../../UI/ConnectWalletPlaceholder"
 import {toastWarning} from "../../UI/Toast"
 import DeployUsul from "./DeployUsul"
@@ -9,6 +11,9 @@ import "./styles.scss"
 
 const DESCRIPTION =
 	"Modules are your way of customizing, upgrading, and expanding your DAO. Here you can choose to swap voting strategies, add multiple strategies, or remove a strategy at any time. You can also introduce the Zodiac modules Bridge (for a constellation of voting strategies across chains), Exit (for a Moloch-style rage quit assigned to different asset holders), or Photon (a way to enact governance at the speed of light — coming soon)."
+const USUL_DESCRIPTION = "Enables DAOs to choose from various on-chain voting methods."
+const EXIT_MODULE_DESCRIPTION =
+	"Enables participants to redeem a designated token for a proportional share of this account's digital assets."
 
 const ExpandDAO: FunctionComponent<{
 	gnosisAddress: string
@@ -35,18 +40,29 @@ const ExpandDAO: FunctionComponent<{
 		<section className="expand-dao">
 			{stage === "choose" && (
 				<ExpandDaoLayout title="Expand DAO" description={DESCRIPTION}>
-					<div className="expand-dao__modules">
-						<div className="expand-dao__modules-gnosis-safe">
-							<GnosisSafeIcon width="225px" height="225px" />
+					<div className="expand-dao__main">
+						<div className="expand-dao__title">
+							<GnosisSafeIcon />
+							Gnosis Safe
 						</div>
-						<div className="expand-dao__modules-connectable">
-							<div
-								className={`expand-dao__modules-usul${
-									usulAddress ? " expand-dao__modules-usul--deployed" : ""
-								}`}
-								onClick={handleSelectUsul}
-							>
-								<h2>Usul</h2>
+						<div className="expand-dao__modules">
+							<div className="expand-dao__module">
+								<UsulIcon />
+								<h2>Usul Module</h2>
+								<p>{USUL_DESCRIPTION}</p>
+								<Button onClick={handleSelectUsul}>Get Started</Button>
+							</div>
+							<div className="expand-dao__module">
+								<UsulIcon />
+								<h2>Exit Module</h2>
+								<p>{EXIT_MODULE_DESCRIPTION}</p>
+								<Button
+									onClick={() => {
+										console.log("TODO")
+									}}
+								>
+									Get Started
+								</Button>
 							</div>
 						</div>
 					</div>

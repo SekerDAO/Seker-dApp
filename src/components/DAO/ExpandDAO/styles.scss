@@ -1,6 +1,10 @@
 @import "src/variables";
 
 .expand-dao {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   .back-button {
     margin-bottom: -25px;
     margin-top: 10px;
@@ -21,47 +25,47 @@
     margin-top: 40px;
   }
 
+  &__title {
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
   &__modules {
-    position: relative;
+    display: flex;
+    align-self: stretch;
+  }
 
-    &-gnosis-safe {
-      display: flex;
-      justify-content: center;
+  &__module {
+    background-color: white;
+    width: 280px;
+    height: 340px;
+    box-shadow: 0 3px 5px $dark-grey25;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    margin: 10px;
+
+    svg {
+      width: 100px;
+      height: 100px;
     }
 
-    &-connectable {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      margin-top: -60px;
+    p {
+      margin: 20px 0 auto 0;
     }
 
-    &-usul {
-      display: flex;
-      width: 200px;
-      height: 200px;
-      margin-right: 200px; // TODO: remove this margin once Bridge module is added
-      background-image: url("../../../assets/icons/usul-default.svg");
-
-      h2 {
-        display: flex;
-        align-self: flex-end;
-        margin: 0 auto;
-      }
-
-      &:hover {
-        background-image: url("../../../assets/icons/usul-hover.svg");
-        cursor: pointer;
-      }
-
-      &--deployed {
-        background-image: url("../../../assets/icons/usul-deployed.svg");
-
-        &:hover {
-          cursor: not-allowed;
-          background-image: url("../../../assets/icons/usul-deployed.svg");
-        }
-      }
+    button {
+      align-self: stretch;
     }
   }
 }
