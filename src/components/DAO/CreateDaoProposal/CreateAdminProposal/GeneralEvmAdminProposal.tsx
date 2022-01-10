@@ -14,14 +14,15 @@ const GeneralEvmAdminProposal: FunctionComponent<{
 	gnosisAddress: string
 	gnosisVotingThreshold: number
 	title: string
+	titleValidation: string | null
 	description: string
 	afterSubmit: () => void
-}> = ({gnosisAddress, gnosisVotingThreshold, title, description, afterSubmit}) => {
+}> = ({gnosisAddress, gnosisVotingThreshold, title, titleValidation, description, afterSubmit}) => {
 	const {account, signer} = useContext(AuthContext)
 	const [processing, setProcessing] = useState(false)
 
 	const handleSubmit = async (txs: PrebuiltTx[]) => {
-		if (!(title && signer && account)) return
+		if (!(title && !titleValidation && signer && account)) return
 		setProcessing(true)
 		try {
 			const multiSendTx = await getMultiSendTxBuild(gnosisAddress, txs, signer)
@@ -50,7 +51,13 @@ const GeneralEvmAdminProposal: FunctionComponent<{
 		setProcessing(false)
 	}
 
-	return <GeneralEvm buttonDisabled={!title} processing={processing} onSubmit={handleSubmit} />
+	return (
+		<GeneralEvm
+			buttonDisabled={!title || !!titleValidation}
+			processing={processing}
+			onSubmit={handleSubmit}
+		/>
+	)
 }
 
 export default GeneralEvmAdminProposal

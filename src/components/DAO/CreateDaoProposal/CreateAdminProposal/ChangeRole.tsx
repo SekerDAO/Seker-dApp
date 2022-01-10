@@ -1,3 +1,4 @@
+import {isAddress} from "@ethersproject/address"
 import {ChangeEvent, FunctionComponent, useContext, useState} from "react"
 import {
 	executeAddOwner,
@@ -10,6 +11,7 @@ import addSafeProposal from "../../../../api/firebase/safeProposal/addSafePropos
 import {AuthContext} from "../../../../context/AuthContext"
 import ProviderContext from "../../../../context/ProviderContext"
 import useDAO from "../../../../hooks/getters/useDAO"
+import useValidation from "../../../../hooks/useValidation"
 import Button from "../../../Controls/Button"
 import Input from "../../../Controls/Input"
 import Select from "../../../Controls/Select"
@@ -22,16 +24,32 @@ const ChangeRole: FunctionComponent<{
 	gnosisVotingThreshold: number
 	ownersCount: number
 	title: string
+	titleValidation: string | null
 	description: string
 	afterSubmit: () => void
-}> = ({gnosisAddress, gnosisVotingThreshold, ownersCount, title, description, afterSubmit}) => {
+}> = ({
+	gnosisAddress,
+	gnosisVotingThreshold,
+	ownersCount,
+	title,
+	titleValidation,
+	description,
+	afterSubmit
+}) => {
 	const {dao, loading, error} = useDAO(gnosisAddress)
 	const {account, signer} = useContext(AuthContext)
 	const {provider} = useContext(ProviderContext)
 	const [processing, setProcessing] = useState(false)
 	const [address, setAddress] = useState("")
+	const {validation: addressValidation} = useValidation(address, [
+		async val => (!val || isAddress(val) ? null : "Not a valid address")
+	])
 	const [newRole, setNewRole] = useState<"admin" | "kick">("admin")
 	const [newThreshold, setNewThreshold] = useState("")
+	const {validation: thresholdValidation} = useValidation(newThreshold, [
+		async val => (isNaN(Number(val)) ? "Not a valid number" : null),
+		async val => (Number(val) === Math.round(Number(val)) ? null : "Not an integer")
+	])
 
 	if (error) return <ErrorPlaceholder />
 	if (!dao || loading) return <Loader />
@@ -60,7 +78,9 @@ const ChangeRole: FunctionComponent<{
 		if (
 			!(provider && signer && account && address && newRole) ||
 			!newThreshold ||
-			isNaN(Number(newThreshold))
+			!title ||
+			titleValidation ||
+			thresholdValidation
 		) {
 			return
 		}
@@ -125,7 +145,7 @@ const ChangeRole: FunctionComponent<{
 	}
 
 	const submitButtonDisabled =
-		!(title && address && newRole) || !newThreshold || isNaN(Number(newThreshold))
+		!(title && address && newRole) || !!titleValidation || !newThreshold || !!thresholdValidation
 
 	return (
 		<>
@@ -146,6 +166,7 @@ const ChangeRole: FunctionComponent<{
 					onChange={e => {
 						setAddress(e.target.value)
 					}}
+					validation={addressValidation}
 				/>
 			)}
 			<label>Proposed new role</label>
@@ -164,6 +185,7 @@ const ChangeRole: FunctionComponent<{
 				number
 				value={newThreshold}
 				onChange={handleThresholdChange}
+				validation={thresholdValidation}
 			/>
 			<Button
 				onClick={handleSubmit}

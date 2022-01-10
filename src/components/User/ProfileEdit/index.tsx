@@ -4,6 +4,7 @@ import editUser from "../../../api/firebase/user/editUser"
 import {AuthContext} from "../../../context/AuthContext"
 import useValidation from "../../../hooks/useValidation"
 import {User} from "../../../types/user"
+import {emailRegex, noSpecialCharsRegex, urlRegexWithoutProtocol} from "../../../utlls"
 import Button from "../../Controls/Button"
 import Input from "../../Controls/Input"
 import {toastError, toastSuccess} from "../../UI/Toast"
@@ -15,19 +16,39 @@ const ProfileEdit: FunctionComponent<{
 	onCancel: () => void
 }> = ({user, afterSubmit, onCancel}) => {
 	const [name, setName] = useState(user.name ?? "")
-	const [url, setUrl] = useState(user.url ?? "")
+	const {validation: nameValidation} = useValidation(name, [
+		async val => (!val || noSpecialCharsRegex.test(val) ? null : "Not a valid name")
+	])
 	const [bio, setBio] = useState(user.bio ?? "")
 	const [location, setLocation] = useState(user.location ?? "")
 	const [email, setEmail] = useState(user.email ?? "")
+	const {validation: emailValidation} = useValidation(email, [
+		async val => (!val || emailRegex.test(val) ? null : "Not a valid email")
+	])
 	const [website, setWebsite] = useState(user.website ?? "")
+	const {validation: websiteValidation} = useValidation(website, [
+		async val => (!val || urlRegexWithoutProtocol.test(val) ? null : "Not a valid website")
+	])
 	const [twitter, setTwitter] = useState(user.twitter ?? "")
+	const {validation: twitterValidation} = useValidation(twitter, [
+		async val => (!val || noSpecialCharsRegex.test(val) ? null : "Not a valid twitter")
+	])
 	const [instagram, setInstagram] = useState(user.instagram ?? "")
+	const {validation: instagramValidation} = useValidation(instagram, [
+		async val => (!val || noSpecialCharsRegex.test(val) ? null : "Not a valid instagram")
+	])
+
 	const [processing, setProcessing] = useState(false)
 	const {account} = useContext(AuthContext)
 
+	const [url, setUrl] = useState(user.url ?? "")
 	const validateUrl = async (val: string) => {
 		if (!account) {
 			throw new Error("Account not connected")
+		}
+		if (!val) return null
+		if (!noSpecialCharsRegex.test(val)) {
+			return "Not a valid value for URL"
 		}
 		const res = await checkUserUrl(val, account)
 		return res ? null : "This URL is occupied"
@@ -57,6 +78,14 @@ const ProfileEdit: FunctionComponent<{
 		setProcessing(false)
 	}
 
+	const submitButtonDisabled =
+		!!nameValidation ||
+		!!urlValidation ||
+		!!emailValidation ||
+		!!websiteValidation ||
+		!!twitterValidation ||
+		!!instagramValidation
+
 	return (
 		<div className="profile-edit">
 			<label htmlFor="profile-edit-name">Display Name</label>
@@ -66,16 +95,17 @@ const ProfileEdit: FunctionComponent<{
 				onChange={e => {
 					setName(e.target.value)
 				}}
+				validation={nameValidation}
 			/>
 			<label htmlFor="profile-edit-url">Custom URL</label>
 			<Input
-				validation={urlValidation}
 				staticPlaceholder="sekerdao.com/"
 				id="profile-edit-url"
 				value={url}
 				onChange={e => {
 					setUrl(e.target.value)
 				}}
+				validation={urlValidation}
 			/>
 			<label htmlFor="profile-edit-bio">Biography</label>
 			<Input
@@ -101,6 +131,7 @@ const ProfileEdit: FunctionComponent<{
 				onChange={e => {
 					setEmail(e.target.value)
 				}}
+				validation={emailValidation}
 			/>
 			<label htmlFor="profile-edit-site">Website</label>
 			<Input
@@ -110,6 +141,7 @@ const ProfileEdit: FunctionComponent<{
 				onChange={e => {
 					setWebsite(e.target.value)
 				}}
+				validation={websiteValidation}
 			/>
 			<div className="profile-edit__socials">
 				<div className="profile-edit__social">
@@ -121,6 +153,7 @@ const ProfileEdit: FunctionComponent<{
 						onChange={e => {
 							setTwitter(e.target.value)
 						}}
+						validation={twitterValidation}
 					/>
 				</div>
 				<div className="profile-edit__social">
@@ -132,6 +165,7 @@ const ProfileEdit: FunctionComponent<{
 						onChange={e => {
 							setInstagram(e.target.value)
 						}}
+						validation={instagramValidation}
 					/>
 				</div>
 			</div>
@@ -139,7 +173,7 @@ const ProfileEdit: FunctionComponent<{
 				<Button
 					buttonType="primary"
 					onClick={handleSubmit}
-					disabled={processing || !!urlValidation}
+					disabled={processing || submitButtonDisabled}
 				>
 					{processing ? "Saving..." : "Save Changes"}
 				</Button>

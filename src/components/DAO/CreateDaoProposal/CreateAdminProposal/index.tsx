@@ -1,5 +1,7 @@
 import {FunctionComponent, useState} from "react"
+import useValidation from "../../../../hooks/useValidation"
 import {SafeProposalsTypeNames, SafeProposalType} from "../../../../types/safeProposal"
+import {noSpecialCharsRegex} from "../../../../utlls"
 import Input from "../../../Controls/Input"
 import Select from "../../../Controls/Select"
 import Divider from "../../../UI/Divider"
@@ -13,6 +15,9 @@ const CreateAdminProposal: FunctionComponent<{
 }> = ({gnosisAddress, gnosisVotingThreshold, ownersCount}) => {
 	const [type, setType] = useState<SafeProposalType>("changeRole")
 	const [title, setTitle] = useState("")
+	const {validation} = useValidation(title, [
+		async val => (!val || noSpecialCharsRegex.test(val) ? null : "Not a valid title")
+	])
 	const [description, setDescription] = useState("")
 
 	const afterSubmit = () => {
@@ -41,6 +46,7 @@ const CreateAdminProposal: FunctionComponent<{
 					setTitle(e.target.value)
 				}}
 				value={title}
+				validation={validation}
 			/>
 			<label htmlFor="change-role-desc">Description</label>
 			<Input
@@ -56,6 +62,7 @@ const CreateAdminProposal: FunctionComponent<{
 					gnosisVotingThreshold={gnosisVotingThreshold}
 					gnosisAddress={gnosisAddress}
 					title={title}
+					titleValidation={validation}
 					description={description}
 					afterSubmit={afterSubmit}
 					ownersCount={ownersCount}
@@ -66,6 +73,7 @@ const CreateAdminProposal: FunctionComponent<{
 					gnosisVotingThreshold={gnosisVotingThreshold}
 					gnosisAddress={gnosisAddress}
 					title={title}
+					titleValidation={validation}
 					description={description}
 					afterSubmit={afterSubmit}
 				/>

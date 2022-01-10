@@ -1,4 +1,5 @@
-import {FunctionComponent, useState, useContext} from "react"
+import {isAddress} from "@ethersproject/address"
+import {FunctionComponent, useState, useContext, ChangeEvent} from "react"
 import checkNFTOwner from "../../api/ethers/functions/NFT/checkNFTOwner"
 import createNFT from "../../api/ethers/functions/NFT/createNFT"
 import getNFTMetadata from "../../api/ethers/functions/NFT/getNFTMetadata"
@@ -36,13 +37,53 @@ const CreateNFTForm: FunctionComponent<{
 	const [title, setTitle] = useState("")
 	const [description, setDescription] = useState("")
 	const [numberOfEditions, setNumberOfEditions] = useState("")
+	const [numberOfEditionsValidation, setNumberOfEditionsValidation] = useState<string | null>(null)
 	const [tokenAddress, setTokenAddress] = useState("")
-	const [existingNFTId, setExistingNFTId] = useState("")
+	const [tokenAddressValidation, setTokenAddressValidation] = useState<string | null>(null)
+	const [existingNftId, setExistingNftId] = useState("")
+	const [existingNftIdValidation, setExisingNftIdValidation] = useState<string | null>(null)
 	const {provider} = useContext(ProviderContext)
 	const {account, signer, connected} = useContext(AuthContext)
 
 	if (!connected) {
 		return <ConnectWalletPlaceholder />
+	}
+
+	const handleNumberOfEditionsChange = (e: ChangeEvent<HTMLInputElement>) => {
+		if (Number(e.target.value) > 50) {
+			setNumberOfEditions("50")
+		} else {
+			setNumberOfEditions(e.target.value)
+		}
+		if (isNaN(Number(e.target.value))) {
+			setNumberOfEditionsValidation("Please enter a number")
+		} else if (e.target.value && Number(e.target.value) < 1) {
+			setNumberOfEditionsValidation("Should be 1 or larger")
+		} else if (Number(e.target.value) !== Math.round(Number(e.target.value))) {
+			setNumberOfEditionsValidation("Should be integer")
+		} else {
+			setNumberOfEditionsValidation(null)
+		}
+	}
+
+	const handleTokenAddressChange = (e: ChangeEvent<HTMLInputElement>) => {
+		setTokenAddress(e.target.value)
+		setTokenAddressValidation(
+			!e.target.value || isAddress(e.target.value) ? null : "Not a valid address"
+		)
+	}
+
+	const handleExistingNftIdChange = (e: ChangeEvent<HTMLInputElement>) => {
+		setExistingNftId(e.target.value)
+		if (isNaN(Number(e.target.value))) {
+			setExisingNftIdValidation("Please enter a number")
+		} else if (e.target.value && Number(e.target.value) < 1) {
+			setExisingNftIdValidation("Should be 1 or larger")
+		} else if (Number(e.target.value) !== Math.round(Number(e.target.value))) {
+			setExisingNftIdValidation("Should be integer")
+		} else {
+			setExisingNftIdValidation(null)
+		}
 	}
 
 	const handleSubmit = async () => {
@@ -55,7 +96,15 @@ const CreateNFTForm: FunctionComponent<{
 		} else if (stage === "chooseDomain") {
 			if (customDomain && !customDomainAddress) return
 			setStage("uploadFile")
-		} else if (stage === "uploadFile" && file && title && numberOfEditions && signer && account) {
+		} else if (
+			stage === "uploadFile" &&
+			file &&
+			title &&
+			numberOfEditions &&
+			!numberOfEditionsValidation &&
+			signer &&
+			account
+		) {
 			setLoading(true)
 			try {
 				const [metadata, hashes] = await uploadMedia(
@@ -125,7 +174,7 @@ const CreateNFTForm: FunctionComponent<{
 			setLoading(false)
 		} else if (
 			stage === "loadExisting" &&
-			!isNaN(Number(existingNFTId)) &&
+			!isNaN(Number(existingNftId)) &&
 			tokenAddress &&
 			account &&
 			provider &&
@@ -133,15 +182,15 @@ const CreateNFTForm: FunctionComponent<{
 		) {
 			setLoading(true)
 			try {
-				const isOwner = await checkNFTOwner(account, tokenAddress, existingNFTId, provider)
+				const isOwner = await checkNFTOwner(account, tokenAddress, existingNftId, provider)
 				if (!isOwner) {
 					toastError("You are not the owner!")
 					setLoading(false)
 					return
 				}
-				const metadata = await getNFTMetadata(tokenAddress, existingNFTId, provider)
+				const metadata = await getNFTMetadata(tokenAddress, existingNftId, provider)
 				const nft = {
-					id: Number(existingNFTId),
+					id: Number(existingNftId),
 					address: tokenAddress,
 					createdDate: new Date().toISOString(),
 					name: metadata.name,
@@ -155,7 +204,7 @@ const CreateNFTForm: FunctionComponent<{
 				if (gnosisAddress) {
 					await transferNFT(
 						account,
-						Number(existingNFTId),
+						Number(existingNftId),
 						gnosisAddress,
 						signer,
 						customDomain ? customDomainAddress : undefined
@@ -177,8 +226,10 @@ const CreateNFTForm: FunctionComponent<{
 
 	const submitButtonDisabled =
 		(stage === "chooseDomain" && customDomain && !customDomainAddress) ||
-		(stage === "uploadFile" && !(file && title && numberOfEditions)) ||
-		(stage === "loadExisting" && !(existingNFTId && existingNFTId))
+		(stage === "uploadFile" &&
+			!(file && title && numberOfEditions && !numberOfEditionsValidation)) ||
+		(stage === "loadExisting" &&
+			!(tokenAddress && !tokenAddressValidation && existingNftId && !existingNftIdValidation))
 
 	return (
 		<div className="create-nft">
@@ -271,9 +322,8 @@ const CreateNFTForm: FunctionComponent<{
 								max={50}
 								borders="all"
 								value={numberOfEditions}
-								onChange={e => {
-									setNumberOfEditions(e.target.value)
-								}}
+								onChange={handleNumberOfEditionsChange}
+								validation={numberOfEditionsValidation}
 							/>
 						</div>
 					</div>
@@ -294,17 +344,15 @@ const CreateNFTForm: FunctionComponent<{
 					<Input
 						borders="all"
 						value={tokenAddress}
-						onChange={e => {
-							setTokenAddress(e.target.value)
-						}}
+						onChange={handleTokenAddressChange}
+						validation={tokenAddressValidation}
 					/>
 					<label>NFT ID</label>
 					<Input
 						borders="all"
-						value={existingNFTId}
-						onChange={e => {
-							setExistingNFTId(e.target.value)
-						}}
+						value={existingNftId}
+						onChange={handleExistingNftIdChange}
+						validation={existingNftIdValidation}
 						number
 					/>
 				</>

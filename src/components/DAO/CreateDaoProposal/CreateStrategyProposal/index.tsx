@@ -3,8 +3,10 @@ import {buildProposalTx, submitProposal} from "../../../../api/ethers/functions/
 import addStrategyProposal from "../../../../api/firebase/strategyProposal/addStrategyProposal"
 import {AuthContext} from "../../../../context/AuthContext"
 import ProviderContext from "../../../../context/ProviderContext"
+import useValidation from "../../../../hooks/useValidation"
 import {VotingStrategyName} from "../../../../types/DAO"
 import {PrebuiltTx} from "../../../../types/common"
+import {noSpecialCharsRegex} from "../../../../utlls"
 import Input from "../../../Controls/Input"
 import Divider from "../../../UI/Divider"
 import {toastError, toastSuccess} from "../../../UI/Toast"
@@ -20,10 +22,13 @@ const CreateStrategyProposal: FunctionComponent<{
 	const {provider} = useContext(ProviderContext)
 	const [processing, setProcessing] = useState(false)
 	const [title, setTitle] = useState("")
+	const {validation} = useValidation(title, [
+		async val => (!val || noSpecialCharsRegex.test(val) ? null : "Not a valid title")
+	])
 	const [description, setDescription] = useState("")
 
 	const handleSubmit = async (transactions: PrebuiltTx[]) => {
-		if (!(title && signer && account)) return
+		if (!(title && !validation && signer && account)) return
 		setProcessing(true)
 		try {
 			const txHashes = transactions.map(tx =>
@@ -68,7 +73,11 @@ const CreateStrategyProposal: FunctionComponent<{
 				value={description}
 			/>
 			<Divider />
-			<GeneralEvm buttonDisabled={!title} processing={processing} onSubmit={handleSubmit} />
+			<GeneralEvm
+				buttonDisabled={!title || !!validation}
+				processing={processing}
+				onSubmit={handleSubmit}
+			/>
 		</>
 	)
 }

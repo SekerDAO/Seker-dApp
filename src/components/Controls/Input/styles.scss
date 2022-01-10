@@ -22,6 +22,7 @@
     outline: none;
     border-bottom: 1px solid $dark-grey25;
     background-color: transparent;
+    flex: 1;
 
     &::placeholder {
       color: $dark-grey25;

@@ -127,3 +127,10 @@ export const prepareArguments = (
 
 export const urlRegex =
 	/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/
+
+export const emailRegex = /^\s*[\w.-]+@[\w.-]+\.\w+\s*$/
+
+export const noSpecialCharsRegex = /^[a-zA-Z\d_-]*$/
+
+export const urlRegexWithoutProtocol =
+	/^[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/

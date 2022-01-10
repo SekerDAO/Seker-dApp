@@ -1,6 +1,8 @@
 import {FunctionComponent, useState} from "react"
 import editDAO from "../../../api/firebase/DAO/editDAO"
+import useValidation from "../../../hooks/useValidation"
 import {DAOFirebaseData} from "../../../types/DAO"
+import {noSpecialCharsRegex, urlRegexWithoutProtocol} from "../../../utlls"
 import Button from "../../Controls/Button"
 import Input from "../../Controls/Input"
 import {toastError, toastSuccess} from "../../UI/Toast"
@@ -13,11 +15,26 @@ const EditDAO: FunctionComponent<{
 }> = ({dao, afterEdit, onClose}) => {
 	const [processing, setProcessing] = useState(false)
 	const [name, setName] = useState(dao.name)
+	const {validation: nameValidation} = useValidation(name, [
+		async val => (!val || noSpecialCharsRegex.test(val) ? null : "Not a valid name")
+	])
 	const [description, setDescription] = useState(dao.description ?? "")
 	const [website, setWebsite] = useState(dao.website ?? "")
+	const {validation: websiteValidation} = useValidation(website, [
+		async val => (!val || urlRegexWithoutProtocol.test(val) ? null : "Not a valid website")
+	])
 	const [twitter, setTwitter] = useState(dao.twitter ?? "")
+	const {validation: twitterValidation} = useValidation(twitter, [
+		async val => (!val || noSpecialCharsRegex.test(val) ? null : "Not a valid twitter")
+	])
 	const [telegram, setTelegram] = useState(dao.telegram ?? "")
+	const {validation: telegramValidation} = useValidation(telegram, [
+		async val => (!val || noSpecialCharsRegex.test(val) ? null : "Not a valid telegram")
+	])
 	const [discord, setDiscord] = useState(dao.discord ?? "")
+	const {validation: discordValidation} = useValidation(twitter, [
+		async val => (!val || noSpecialCharsRegex.test(val) ? null : "Not a valid discord")
+	])
 
 	const handleSave = async () => {
 		if (!name) return
@@ -42,6 +59,13 @@ const EditDAO: FunctionComponent<{
 		setProcessing(false)
 	}
 
+	const submitButtonDisabled =
+		!!nameValidation ||
+		!!websiteValidation ||
+		!!twitterValidation ||
+		!!telegramValidation ||
+		!!discordValidation
+
 	return (
 		<div className="edit-dao">
 			<div className="edit-dao__row">
@@ -52,6 +76,7 @@ const EditDAO: FunctionComponent<{
 						setName(e.target.value)
 					}}
 					id="edit-dao-name"
+					validation={nameValidation}
 				/>
 			</div>
 			<div className="edit-dao__row">
@@ -74,6 +99,7 @@ const EditDAO: FunctionComponent<{
 							setWebsite(e.target.value)
 						}}
 						id="edit-dao-website"
+						validation={websiteValidation}
 					/>
 				</div>
 				<div className="edit-dao__half-row">
@@ -85,6 +111,7 @@ const EditDAO: FunctionComponent<{
 							setTwitter(e.target.value)
 						}}
 						id="edit-dao-tw"
+						validation={twitterValidation}
 					/>
 				</div>
 			</div>
@@ -98,6 +125,7 @@ const EditDAO: FunctionComponent<{
 							setTelegram(e.target.value)
 						}}
 						id="edit-dao-tg"
+						validation={telegramValidation}
 					/>
 				</div>
 				<div className="edit-dao__half-row">
@@ -109,12 +137,13 @@ const EditDAO: FunctionComponent<{
 							setDiscord(e.target.value)
 						}}
 						id="edit-dao-discord"
+						validation={discordValidation}
 					/>
 				</div>
 			</div>
 
 			<div className="edit-dao__buttons">
-				<Button disabled={!name || processing} onClick={handleSave}>
+				<Button disabled={submitButtonDisabled || processing} onClick={handleSave}>
 					{processing ? "Saving..." : "Save Changes"}
 				</Button>
 				<Button buttonType="link" onClick={onClose}>

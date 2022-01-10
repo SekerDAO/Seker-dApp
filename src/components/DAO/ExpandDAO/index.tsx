@@ -4,7 +4,6 @@ import {ReactComponent as UsulIcon} from "../../../assets/icons/usul-default.svg
 import {AuthContext} from "../../../context/AuthContext"
 import Button from "../../Controls/Button"
 import ConnectWalletPlaceholder from "../../UI/ConnectWalletPlaceholder"
-import {toastWarning} from "../../UI/Toast"
 import DeployUsul from "./DeployUsul"
 import ExpandDaoLayout from "./ExpandDaoLayout"
 import "./styles.scss"
@@ -29,13 +28,6 @@ const ExpandDAO: FunctionComponent<{
 		return <ConnectWalletPlaceholder />
 	}
 
-	const handleSelectUsul = () => {
-		if (usulAddress) {
-			toastWarning("Usul module already deployed.")
-		} else {
-			setStage("usul")
-		}
-	}
 	return (
 		<section className="expand-dao">
 			{stage === "choose" && (
@@ -50,7 +42,14 @@ const ExpandDAO: FunctionComponent<{
 								<UsulIcon />
 								<h2>Usul Module</h2>
 								<p>{USUL_DESCRIPTION}</p>
-								<Button onClick={handleSelectUsul}>Get Started</Button>
+								<Button
+									disabled={!!usulAddress}
+									onClick={() => {
+										setStage("usul")
+									}}
+								>
+									{usulAddress ? "Already deployed" : "Get Started"}
+								</Button>
 							</div>
 							<div className="expand-dao__module">
 								<UsulIcon />
