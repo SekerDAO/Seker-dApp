@@ -5,7 +5,6 @@ import Button from "../../components/Controls/Button"
 import BidAuctionModal from "../../components/Modals/BidAuctionModal"
 import ErrorPlaceholder from "../../components/UI/ErrorPlaceholder"
 import Loader from "../../components/UI/Loader"
-import Table from "../../components/UI/Table"
 import {toastError, toastSuccess} from "../../components/UI/Toast"
 import config from "../../config"
 import {AuthContext} from "../../context/AuthContext"
@@ -14,35 +13,20 @@ import {Auction} from "../../types/auction"
 import {formatReadableAddress, formatTimeDifference} from "../../utlls"
 import "./styles.scss"
 
-const columns = [
-	{
-		id: "collector",
-		name: "Collector"
-	},
-	{
-		id: "date",
-		name: "Date / Time"
-	},
-	{
-		id: "activity",
-		name: "Activity"
-	}
-] as const
-
-const mockBids = [
-	{
-		id: "123",
-		collector: "Joe",
-		date: "2021-08-02",
-		activity: "Sold for 2 ETH"
-	},
-	{
-		id: "1234",
-		collector: "Jack",
-		date: "2021-08-02",
-		activity: "Placed an offer for 1 ETH"
-	}
-]
+// const columns = [
+// 	{
+// 		id: "collector",
+// 		name: "Collector"
+// 	},
+// 	{
+// 		id: "date",
+// 		name: "Date / Time"
+// 	},
+// 	{
+// 		id: "activity",
+// 		name: "Activity"
+// 	}
+// ] as const
 
 const NftDetails: FunctionComponent = () => {
 	const {id} = useParams<{id: string}>()
@@ -176,10 +160,11 @@ const NftDetails: FunctionComponent = () => {
 							)}
 						</div>
 					</div>
-					<div className="nft__bids">
-						<h2>TODO: Bids History</h2>
-						<Table data={mockBids} columns={columns} idCol="id" />
-					</div>
+					{/* TODO */}
+					{/*<div className="nft__bids">*/}
+					{/*	<h2>Bids History</h2>*/}
+					{/*	<Table data={mockBids} columns={columns} idCol="id" />*/}
+					{/*</div>*/}
 				</div>
 			</div>
 		</div>
