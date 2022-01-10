@@ -31,6 +31,11 @@ const SafeProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 		<ProposalLayout proposal={proposal} votesThreshold={proposal.gnosisVotingThreshold}>
 			{proposal.state === "executed" ? (
 				<p>This proposal has been confirmed and executed.</p>
+			) : proposal.state === "outdated" ? (
+				<p>
+					This proposal is outdated because its signatures&apos; nonce is lower than actual safe
+					nonce.
+				</p>
 			) : (
 				<>
 					<Button
@@ -168,8 +173,14 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 					)
 				) : proposal.state === "executed" ? (
 					<p>This proposal has been passed and executed.</p>
+				) : proposal.state === "timeLocked" ? (
+					<p>This proposal has been passed and now is time locked</p>
+				) : proposal.state === "canceled" ? (
+					<p>This proposal is canceled.</p>
+				) : proposal.state === "failed" ? (
+					<p>This proposal has failed.</p>
 				) : (
-					<p>TODO: add different texts for different non-active proposal states</p>
+					<p>This proposal is not initialized.</p>
 				)}
 			</ProposalLayout>
 		</>
