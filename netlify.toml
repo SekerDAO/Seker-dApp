@@ -10,6 +10,7 @@
   [context.kovan.environment]
     NODE_VERSION = "14.18.1"
     REACT_APP_CHAIN_ID="42"
+    REACT_APP_INFURA_NETWORK="kovan"
     REACT_APP_CLOUD_FUNCTIONS_URL="https://us-central1-kovan-sekerdao.cloudfunctions.net"
     REACT_APP_FIREBASE_API_KEY="AIzaSyBXDL4pBqjo--K5YwlTHZKob_DayMpLIWY"
     REACT_APP_FIREBASE_AUTH_DOMAIN="kovan-sekerdao.firebaseapp.com"
