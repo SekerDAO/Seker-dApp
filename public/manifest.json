@@ -8,12 +8,12 @@
       "type": "image/x-icon"
     },
     {
-      "src": "Hyphal_Logo_512x512.png",
+      "src": "SekerDAO_Logo_Icon_192x192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "Hyphal_Logo_512x512.png",
+      "src": "SekerDAO_Logo_Icon_512x512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
