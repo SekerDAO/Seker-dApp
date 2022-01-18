@@ -4,7 +4,6 @@ import {ToastContainer} from "react-toastify"
 import "react-toastify/dist/ReactToastify.min.css"
 import Footer from "./components/Footer"
 import Header from "./components/Header"
-import NetworkChecker from "./components/NetworkChecker"
 import ErrorPlaceholder from "./components/UI/ErrorPlaceholder"
 import "./components/UI/Toast/styles.scss"
 import {AuthContext, useAuth} from "./context/AuthContext"
@@ -23,7 +22,6 @@ const AppPure: FunctionComponent = () => {
 	return (
 		<BrowserRouter>
 			<AuthContext.Provider value={auth}>
-				<NetworkChecker />
 				<div className="main">
 					<Header />
 					<ToastContainer />

@@ -62,6 +62,7 @@ type AuthContext = {
 	disconnect: () => void
 	connecting: boolean
 	signer: JsonRpcSigner | null
+	externalProvider: ExternalProvider | null
 	chainId: number | null
 }
 
@@ -72,12 +73,14 @@ export const useAuth = (): AuthContext => {
 	const [connecting, setConnecting] = useState(false)
 	const [chainId, setChainId] = useState<number | null>(null)
 	const [signer, setSigner] = useState<JsonRpcSigner | null>(null)
+	const [externalProvider, setExternalProvider] = useState<ExternalProvider | null>(null)
 	const [url, setUrl] = useState<string | null>(null)
 
 	const setAccountData = async (
 		connection: ExternalProvider
 	): Promise<{account: string | null; signer: JsonRpcSigner | null}> => {
-		const provider = new Web3Provider(connection)
+		setExternalProvider(connection)
+		const provider = new Web3Provider(connection, "any")
 
 		const currentChainId = (await provider.detectNetwork()).chainId
 		setChainId(currentChainId)
@@ -235,6 +238,7 @@ export const useAuth = (): AuthContext => {
 		disconnect,
 		connecting,
 		signer,
+		externalProvider,
 		chainId
 	}
 }

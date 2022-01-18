@@ -11,6 +11,7 @@ import addSafeProposal from "../../../../api/firebase/safeProposal/addSafePropos
 import {AuthContext} from "../../../../context/AuthContext"
 import ProviderContext from "../../../../context/ProviderContext"
 import useDAO from "../../../../hooks/getters/useDAO"
+import useCheckNetwork from "../../../../hooks/useCheckNetwork"
 import useValidation from "../../../../hooks/useValidation"
 import Button from "../../../Controls/Button"
 import Input from "../../../Controls/Input"
@@ -51,6 +52,9 @@ const ChangeRole: FunctionComponent<{
 		async val => (Number(val) === Math.round(Number(val)) ? null : "Not an integer")
 	])
 
+	const checkedSignAddOwner = useCheckNetwork(signAddOwner)
+	const checkedExecuteAddOwner = useCheckNetwork(executeAddOwner)
+
 	if (error) return <ErrorPlaceholder />
 	if (!dao || loading) return <Loader />
 
@@ -90,14 +94,20 @@ const ChangeRole: FunctionComponent<{
 		try {
 			if (newRole === "admin") {
 				// processing add owner
-				;[signature, nonce] = await signAddOwner(
+				;[signature, nonce] = await checkedSignAddOwner(
 					gnosisAddress,
 					address,
 					Number(newThreshold),
 					signer
 				)
 				if (gnosisVotingThreshold === 1) {
-					await executeAddOwner(gnosisAddress, address, Number(newThreshold), [signature], signer)
+					await checkedExecuteAddOwner(
+						gnosisAddress,
+						address,
+						Number(newThreshold),
+						[signature],
+						signer
+					)
 				}
 			} else {
 				// processing kick
