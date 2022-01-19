@@ -11,10 +11,18 @@ import {buildContractCall, SafeTransaction} from "../gnosisSafe/safeUtils"
 const getUsulDeploy = (
 	safeAddress: string,
 	strategyAddresses: string[],
-	signer: JsonRpcSigner
+	signer: JsonRpcSigner,
+	sideChain = false
 ): {tx: SafeTransaction; expectedAddress: string} => {
-	const usulMaster = new Contract(config.USUL_MASTERCOPY_ADDRESS, Usul.abi, signer)
-	const factory = new Contract(config.MODULE_FACTORY_ADDRESS, ModuleFactory.abi, signer)
+	const masterAddress = sideChain
+		? config.SIDE_CHAIN_USUL_MASTERCOPY_ADDRESS
+		: config.USUL_MASTERCOPY_ADDRESS
+	const factoryAddress = sideChain
+		? config.SIDE_CHAIN_MODULE_FACTORY_ADDRESS
+		: config.MODULE_FACTORY_ADDRESS
+
+	const usulMaster = new Contract(masterAddress, Usul.abi, signer)
+	const factory = new Contract(factoryAddress, ModuleFactory.abi, signer)
 	const encodedInitParams = defaultAbiCoder.encode(
 		["address", "address", "address", "address[]"],
 		[safeAddress, safeAddress, safeAddress, strategyAddresses]

@@ -3,8 +3,10 @@ import getOZLinearDeployTx from "../../../../api/ethers/functions/Usul/voting/Oz
 import {SafeTransaction} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
 import {ReactComponent as DeleteIcon} from "../../../../assets/icons/delete.svg"
 import {ReactComponent as StepDotDoneIcon} from "../../../../assets/icons/step-dot-done.svg"
+import config from "../../../../config"
 import {VOTING_STRATEGIES} from "../../../../constants/votingStrategies"
 import {AuthContext} from "../../../../context/AuthContext"
+import useCheckNetwork from "../../../../hooks/useCheckNetwork"
 import {VotingStrategyName, BuiltVotingStrategy} from "../../../../types/DAO"
 import Button from "../../../Controls/Button"
 import DeployVotingStrategyModal, {
@@ -22,10 +24,16 @@ const ChooseVotingStrategies: FunctionComponent<{
 	onStrategyAdd: (strategy: BuiltVotingStrategy) => void
 	onStrategyRemove: (index: number) => void
 	onSubmit: () => void
-}> = ({gnosisAddress, strategies, onStrategyAdd, onStrategyRemove, onSubmit}) => {
+	deployType: "usulSingle" | "usulMulti"
+}> = ({gnosisAddress, strategies, onStrategyAdd, onStrategyRemove, onSubmit, deployType}) => {
 	const {signer} = useContext(AuthContext)
 	const [addStrategyModalOpened, setAddStrategyModalOpened] = useState<VotingStrategyName | null>(
 		null
+	)
+
+	const checkedGetOzLinearDeployTx = useCheckNetwork(
+		getOZLinearDeployTx,
+		deployType === "usulSingle" ? config.CHAIN_ID : config.SIDE_CHAIN_ID
 	)
 
 	const handleSubmitVotingStrategy = async (
@@ -44,13 +52,14 @@ const ChooseVotingStrategies: FunctionComponent<{
 				votingPeriod > 1 &&
 				signer
 			) {
-				const {tx, expectedAddress} = getOZLinearDeployTx(
+				const {tx, expectedAddress} = await checkedGetOzLinearDeployTx(
 					gnosisAddress,
 					tokenAddress,
 					quorumThreshold,
 					delay,
 					votingPeriod,
-					signer
+					signer,
+					deployType === "usulMulti"
 				)
 				onStrategyAdd({strategy, tx, expectedAddress})
 				setAddStrategyModalOpened(null)
@@ -71,6 +80,7 @@ const ChooseVotingStrategies: FunctionComponent<{
 					strategy={addStrategyModalOpened}
 					onClose={() => setAddStrategyModalOpened(null)}
 					onSubmit={handleSubmitVotingStrategy}
+					sideChain={deployType === "usulMulti"}
 				/>
 			)}
 			<Paper className="voting-strategies">

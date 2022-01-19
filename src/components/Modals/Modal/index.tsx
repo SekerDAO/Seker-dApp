@@ -61,10 +61,10 @@ const Modal: FunctionComponent<{
 						))}
 					</>
 				)}
-				{submitButtonText && (
+				{onSubmit && (
 					<div className="modal__footer">
 						<Button onClick={onSubmit} disabled={submitButtonDisabled}>
-							{submitButtonText}
+							{submitButtonText ?? "Submit"}
 						</Button>
 					</div>
 				)}

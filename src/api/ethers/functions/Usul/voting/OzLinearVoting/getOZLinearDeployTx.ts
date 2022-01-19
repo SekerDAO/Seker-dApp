@@ -8,20 +8,25 @@ import ModuleFactory from "../../../../abis/ModuleFactory.json"
 import OZLinearVoting from "../../../../abis/OZLinearVoting.json"
 import {buildContractCall, SafeTransaction} from "../../../gnosisSafe/safeUtils"
 
-const getOZLinearDeployTx = (
+const getOZLinearDeployTx = async (
 	safeAddress: string,
 	governanceToken: string,
 	quorumThreshold: number,
 	delay: number,
 	votingPeriod: number,
-	signer: JsonRpcSigner
-): {tx: SafeTransaction; expectedAddress: string} => {
+	signer: JsonRpcSigner,
+	sideChain = false
+): Promise<{tx: SafeTransaction; expectedAddress: string}> => {
 	const linearVotingMaster = new Contract(
-		config.OZ_LINEAR_MASTER_ADDRESS,
+		sideChain ? config.SIDE_CHAIN_OZ_LINEAR_MASTER_ADDRESS : config.OZ_LINEAR_MASTER_ADDRESS,
 		OZLinearVoting.abi,
 		signer
 	)
-	const factory = new Contract(config.MODULE_FACTORY_ADDRESS, ModuleFactory.abi, signer)
+	const factory = new Contract(
+		sideChain ? config.SIDE_CHAIN_MODULE_FACTORY_ADDRESS : config.MODULE_FACTORY_ADDRESS,
+		ModuleFactory.abi,
+		signer
+	)
 	const encodedLinearInitParams = defaultAbiCoder.encode(
 		["address", "address", "address", "uint256", "uint256", "uint256", "string"],
 		[

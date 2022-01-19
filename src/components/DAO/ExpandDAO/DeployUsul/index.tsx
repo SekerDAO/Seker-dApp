@@ -2,9 +2,12 @@ import {FunctionComponent, useContext, useEffect, useState} from "react"
 import {useHistory} from "react-router-dom"
 import buildUsulDeployTxSequence from "../../../../api/ethers/functions/Usul/buildUsulDeployTxSequence"
 import {buildMultiSendTx} from "../../../../api/ethers/functions/Usul/multiSend"
+import createGnosisSafe from "../../../../api/ethers/functions/gnosisSafe/createGnosisSafe"
 import {SafeTransaction} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
+import config from "../../../../config"
 import {AuthContext} from "../../../../context/AuthContext"
 import useProposals from "../../../../hooks/getters/useProposals"
+import useCheckNetwork from "../../../../hooks/useCheckNetwork"
 import {BuiltVotingStrategy} from "../../../../types/DAO"
 import {SafeProposal} from "../../../../types/safeProposal"
 import ErrorPlaceholder from "../../../UI/ErrorPlaceholder"
@@ -36,27 +39,71 @@ const DeployUsul: FunctionComponent<{
 	gnosisVotingThreshold: number
 	afterDeploy: () => void
 	isAdmin: boolean
-}> = ({isAdmin, gnosisAddress, gnosisVotingThreshold, afterDeploy}) => {
-	const {signer} = useContext(AuthContext)
+	deployType: "usulSingle" | "usulMulti"
+}> = ({isAdmin, gnosisAddress, gnosisVotingThreshold, afterDeploy, deployType}) => {
+	const {signer, account} = useContext(AuthContext)
 	const [stage, setStage] = useState<ExpandDaoStage>("chooseStrategies")
 	const [strategies, setStrategies] = useState<BuiltVotingStrategy[]>([])
 	const [transactions, setTransactions] = useState<{tx: SafeTransaction; name: string}[]>([])
 	const [multiTx, setMultiTx] = useState<SafeTransaction>()
 	const [expectedUsulAddress, setExpectedUsulAddress] = useState("")
+	const [expectedSideChainSafeAddress, setExpectedSideChainSafeAddress] = useState("")
 	const {proposals, error, refetch} = useProposals(gnosisAddress)
 	const {
 		push,
 		location: {pathname}
 	} = useHistory()
 
-	useEffect(() => {
-		if (signer) {
-			buildUsulDeployTxSequence(strategies, gnosisAddress, signer).then(res => {
-				setTransactions(res.transactions)
-				setExpectedUsulAddress(res.expectedUsulAddress)
-			})
+	const checkedGetSideChainSafeAddress = useCheckNetwork(createGnosisSafe, config.SIDE_CHAIN_ID)
+	const checkedBuildUsulDeployTxSequence = useCheckNetwork(
+		buildUsulDeployTxSequence,
+		deployType === "usulSingle" ? config.CHAIN_ID : config.SIDE_CHAIN_ID
+	)
+	const checkedBuildMultiSendTx = useCheckNetwork(
+		buildMultiSendTx,
+		deployType === "usulSingle" ? config.CHAIN_ID : config.SIDE_CHAIN_ID
+	)
+
+	const updateTransactions = async () => {
+		if (!(account && signer)) return
+		if (deployType === "usulSingle") {
+			const {transactions: newTransactions, expectedUsulAddress: newExpectedUsulAddress} =
+				await checkedBuildUsulDeployTxSequence(strategies, gnosisAddress, signer)
+			const newMultiTx = await checkedBuildMultiSendTx(
+				transactions.map(t => t.tx),
+				gnosisAddress,
+				signer
+			)
+			setTransactions(newTransactions)
+			setExpectedUsulAddress(newExpectedUsulAddress)
+			setMultiTx(newMultiTx)
+		} else {
+			let sideChainSafeAddress = expectedSideChainSafeAddress
+			if (!sideChainSafeAddress) {
+				const newAddress = await checkedGetSideChainSafeAddress([account], 1, signer, true, true)
+				setExpectedSideChainSafeAddress(newAddress)
+				sideChainSafeAddress = newAddress
+			}
+			const {transactions: newTransactions} = await checkedBuildUsulDeployTxSequence(
+				strategies,
+				sideChainSafeAddress,
+				signer,
+				true
+			)
+			const newMultiTx = await checkedBuildMultiSendTx(
+				transactions.map(t => t.tx),
+				sideChainSafeAddress,
+				signer,
+				true,
+				true
+			)
+			setTransactions(newTransactions)
+			setMultiTx(newMultiTx)
 		}
-	}, [strategies, gnosisAddress, signer])
+	}
+	useEffect(() => {
+		updateTransactions()
+	}, [strategies, gnosisAddress, account, signer])
 
 	useEffect(() => {
 		if (proposals) {
@@ -71,19 +118,6 @@ const DeployUsul: FunctionComponent<{
 	}, [proposals])
 
 	if (error) return <ErrorPlaceholder />
-
-	const handleProceedToConfirm = async () => {
-		if (signer) {
-			setMultiTx(
-				await buildMultiSendTx(
-					transactions.map(t => t.tx),
-					gnosisAddress,
-					signer
-				)
-			)
-			setStage("confirm")
-		}
-	}
 
 	return (
 		<ExpandDaoLayout
@@ -102,7 +136,10 @@ const DeployUsul: FunctionComponent<{
 					onStrategyRemove={index => {
 						setStrategies(prevState => prevState.filter((_, idx) => idx !== index))
 					}}
-					onSubmit={handleProceedToConfirm}
+					onSubmit={() => {
+						setStage("confirm")
+					}}
+					deployType={deployType}
 				/>
 			)}
 			{stage === "confirm" && (
@@ -114,6 +151,7 @@ const DeployUsul: FunctionComponent<{
 					gnosisVotingThreshold={gnosisVotingThreshold}
 					expectedUsulAddress={expectedUsulAddress}
 					afterSubmit={refetch}
+					deployType={deployType}
 				/>
 			)}
 		</ExpandDaoLayout>

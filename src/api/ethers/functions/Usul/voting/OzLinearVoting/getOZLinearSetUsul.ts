@@ -7,10 +7,11 @@ import {buildContractCallVariable, SafeTransaction} from "../../../gnosisSafe/sa
 const getOZLinearSetUsul = (
 	expectedUsulAddress: string,
 	expectedStrategyAddress: string,
-	signer: JsonRpcSigner
+	signer: JsonRpcSigner,
+	sideChain = false
 ): SafeTransaction => {
 	const linearVotingMaster = new Contract(
-		config.OZ_LINEAR_MASTER_ADDRESS,
+		sideChain ? config.SIDE_CHAIN_OZ_LINEAR_MASTER_ADDRESS : config.OZ_LINEAR_MASTER_ADDRESS,
 		OZLinearVoting.abi,
 		signer
 	)

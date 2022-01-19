@@ -31,11 +31,17 @@ const encodeMultiSend = (txs: MetaTransaction[]): string =>
 export const buildMultiSendTx = async (
 	multiSendTxs: SafeTransaction[],
 	safeAddress: string,
-	signer: JsonRpcSigner
+	signer: JsonRpcSigner,
+	sideChain = false,
+	zeroNonce = false
 ): Promise<SafeTransaction> => {
 	const safeContract = new Contract(safeAddress, GnosisSafeL2.abi, signer)
-	const nonce = await safeContract.nonce()
-	const multiSendContract = new Contract(config.MULTI_SEND_ADDRESS, MultiSend.abi, signer)
+	const nonce = zeroNonce ? 0 : await safeContract.nonce()
+	const multiSendContract = new Contract(
+		sideChain ? config.SIDE_CHAIN_MULTI_SEND_ADDRESS : config.MULTI_SEND_ADDRESS,
+		MultiSend.abi,
+		signer
+	)
 	return buildContractCall(
 		multiSendContract,
 		"multiSend",

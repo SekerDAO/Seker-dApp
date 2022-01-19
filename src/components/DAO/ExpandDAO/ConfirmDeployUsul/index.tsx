@@ -1,6 +1,12 @@
 import {formatEther} from "@ethersproject/units"
 import {FunctionComponent, useContext, useState} from "react"
+import deployBridge from "../../../../api/ethers/functions/AMB/deployBridge"
 import {executeMultiSend, signMultiSend} from "../../../../api/ethers/functions/Usul/multiSend"
+import createGnosisSafe from "../../../../api/ethers/functions/gnosisSafe/createGnosisSafe"
+import {
+	executeRegisterModuleTx,
+	signRegisterModuleTx
+} from "../../../../api/ethers/functions/gnosisSafe/registerModule"
 import {
 	getNonce,
 	SafeSignature,
@@ -10,7 +16,9 @@ import editDAO from "../../../../api/firebase/DAO/editDAO"
 import addSafeProposal from "../../../../api/firebase/safeProposal/addSafeProposal"
 import {ReactComponent as ArrowDown} from "../../../../assets/icons/arrow-down.svg"
 import {ReactComponent as WarningIcon} from "../../../../assets/icons/warning.svg"
+import config from "../../../../config"
 import {AuthContext} from "../../../../context/AuthContext"
+import useCheckNetwork from "../../../../hooks/useCheckNetwork"
 import {formatReadableAddress} from "../../../../utlls"
 import Button from "../../../Controls/Button"
 import TransactionDetailsModal from "../../../Modals/TransactionDetailsModal"
@@ -27,6 +35,7 @@ const ConfirmDeployUsul: FunctionComponent<{
 	afterSubmit: () => void
 	expectedUsulAddress: string
 	isAdmin: boolean
+	deployType: "usulSingle" | "usulMulti"
 }> = ({
 	multiTx,
 	transactions,
@@ -34,7 +43,8 @@ const ConfirmDeployUsul: FunctionComponent<{
 	gnosisVotingThreshold,
 	afterSubmit,
 	expectedUsulAddress,
-	isAdmin
+	isAdmin,
+	deployType
 }) => {
 	const {account, balance, signer} = useContext(AuthContext)
 	const [openedTxDetails, setOpenedTxDetails] = useState<
@@ -42,15 +52,22 @@ const ConfirmDeployUsul: FunctionComponent<{
 	>()
 	const [loading, setLoading] = useState(false)
 
+	const checkedDeploySideNetSafe = useCheckNetwork(createGnosisSafe, config.SIDE_CHAIN_ID)
+	const checkedSignMultiSend = useCheckNetwork(signMultiSend, config.SIDE_CHAIN_ID)
+	const checkedExecuteMultiSend = useCheckNetwork(executeMultiSend, config.SIDE_CHAIN_ID)
+	const checkedDeployBridge = useCheckNetwork(deployBridge)
+	const checkedSignRegisterModule = useCheckNetwork(signRegisterModuleTx)
+	const checkedExecuteRegisterModule = useCheckNetwork(executeRegisterModuleTx)
+
 	const handleTxDetailsClose = () => {
 		setOpenedTxDetails(undefined)
 	}
 
 	const handleSubmit = async () => {
-		if (!signer) return
+		if (!(signer && account && multiTx)) return
 		setLoading(true)
 		try {
-			if (multiTx) {
+			if (deployType === "usulSingle") {
 				const nonce = await getNonce(gnosisAddress, signer)
 				let signature: SafeSignature
 				if (isAdmin) {
@@ -73,13 +90,32 @@ const ConfirmDeployUsul: FunctionComponent<{
 					state: gnosisVotingThreshold === 1 && isAdmin ? "executed" : "active",
 					signatures: isAdmin ? [signature!] : []
 				})
-				toastSuccess(
-					gnosisVotingThreshold === 1
-						? "Usul module successfully deployed"
-						: "Expand DAO proposal successfully created"
+			} else {
+				const sideNetSafe = await checkedDeploySideNetSafe([account], 1, signer, false, true)
+				const [multiSendSignature] = await checkedSignMultiSend(multiTx, sideNetSafe, signer)
+				await checkedExecuteMultiSend(multiTx, sideNetSafe, [multiSendSignature], signer)
+				const bridgeAddress = await checkedDeployBridge(gnosisAddress, sideNetSafe, signer)
+				const [registerBridgeSignature] = await checkedSignRegisterModule(
+					gnosisAddress,
+					bridgeAddress,
+					signer
 				)
-				afterSubmit()
+				// TODO: add firebase stuff
+				if (gnosisVotingThreshold === 1) {
+					await checkedExecuteRegisterModule(
+						gnosisAddress,
+						bridgeAddress,
+						[registerBridgeSignature],
+						signer
+					)
+				}
 			}
+			toastSuccess(
+				gnosisVotingThreshold === 1
+					? "Usul module successfully deployed"
+					: "Expand DAO proposal successfully created"
+			)
+			afterSubmit()
 		} catch (e) {
 			toastError("Failed to expand DAO")
 			console.error(e)

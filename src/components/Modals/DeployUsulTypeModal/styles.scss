@@ -1,0 +1,16 @@
+.deploy-usul-type-modal {
+  display: flex;
+  flex-direction: column;
+
+  p {
+    margin-top: 40px;
+  }
+
+  &__input {
+    margin-top: 20px;
+
+    label {
+      margin-left: 15px;
+    }
+  }
+}

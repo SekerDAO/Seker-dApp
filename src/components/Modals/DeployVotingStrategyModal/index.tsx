@@ -23,7 +23,8 @@ const DeployVotingStrategyModal: FunctionComponent<{
 	strategy: VotingStrategyName
 	onSubmit: (strategy: VotingStrategyName, formValues: VotingStrategyFormValues) => void
 	onClose: () => void
-}> = ({strategy, onSubmit, onClose}) => {
+	sideChain: boolean
+}> = ({strategy, onSubmit, onClose, sideChain}) => {
 	const [createTokenModalOpened, setCreateTokenModalOpened] = useState(false)
 	const {signer} = useContext(AuthContext)
 	const {provider} = useContext(ProviderContext)
@@ -33,13 +34,16 @@ const DeployVotingStrategyModal: FunctionComponent<{
 	useEffect(() => {
 		if (tokenAddress) {
 			if (isAddress(tokenAddress)) {
-				checkErc20Wrapped(tokenAddress, provider).then(res => {
-					if (res) {
-						setTokenAddressValidation(null)
-					} else {
-						setTokenAddressValidation("Token not wrapped")
-					}
-				})
+				// TODO: for some reason check is not working on sokol
+				if (!sideChain) {
+					checkErc20Wrapped(tokenAddress, provider).then(res => {
+						if (res) {
+							setTokenAddressValidation(null)
+						} else {
+							setTokenAddressValidation("Token not wrapped")
+						}
+					})
+				}
 			} else {
 				setTokenAddressValidation("Not a valid address")
 			}
@@ -97,10 +101,11 @@ const DeployVotingStrategyModal: FunctionComponent<{
 					onClose={() => {
 						setCreateTokenModalOpened(false)
 					}}
+					sideChain={sideChain}
 				/>
 			)}
 			<Modal show onClose={onClose} title="Deploy Strategy">
-				<form className="voting-strategy-form" onSubmit={handleSubmit}>
+				<div className="voting-strategy-form">
 					<h3>
 						{VOTING_STRATEGIES.find(votingStrategy => votingStrategy.strategy === strategy)?.title}
 					</h3>
@@ -173,10 +178,10 @@ const DeployVotingStrategyModal: FunctionComponent<{
 							onChange={handleQuorumThresholdChange}
 						/>
 					</div>
-					<Button type="submit" disabled={submitButtonDisabled} onClick={handleSubmit}>
+					<Button disabled={submitButtonDisabled} onClick={handleSubmit}>
 						Submit
 					</Button>
-				</form>
+				</div>
 			</Modal>
 		</>
 	)

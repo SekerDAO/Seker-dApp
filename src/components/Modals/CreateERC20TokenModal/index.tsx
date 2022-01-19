@@ -1,6 +1,8 @@
 import {ChangeEvent, FunctionComponent, useContext, useState} from "react"
 import deployERC20Token from "../../../api/ethers/functions/ERC20Token/deployERC20Token"
+import config from "../../../config"
 import {AuthContext} from "../../../context/AuthContext"
+import useCheckNetwork from "../../../hooks/useCheckNetwork"
 import {ERC20Token} from "../../../types/ERC20Token"
 import Button from "../../Controls/Button"
 import Input from "../../Controls/Input"
@@ -11,12 +13,18 @@ import "./styles.scss"
 const CreateERC20TokenModal: FunctionComponent<{
 	onSubmit: (token: ERC20Token) => void
 	onClose: () => void
-}> = ({onSubmit, onClose}) => {
+	sideChain: boolean
+}> = ({onSubmit, onClose, sideChain}) => {
 	const [name, setName] = useState("")
 	const [symbol, setSymbol] = useState("")
 	const [totalSupply, setTotalSupply] = useState("")
 	const [loading, setLoading] = useState(false)
 	const {account, signer} = useContext(AuthContext)
+
+	const checkedDeployToken = useCheckNetwork(
+		deployERC20Token,
+		sideChain ? config.SIDE_CHAIN_ID : config.CHAIN_ID
+	)
 
 	const handleTotalSupplyChange = (e: ChangeEvent<HTMLInputElement>) => {
 		if (Number(e.target.value) < 0) {
@@ -30,7 +38,7 @@ const CreateERC20TokenModal: FunctionComponent<{
 		if (!(name && symbol && totalSupply && signer && account)) return
 		setLoading(true)
 		try {
-			const address = await deployERC20Token(name, symbol, Number(totalSupply), signer)
+			const address = await checkedDeployToken(name, symbol, Number(totalSupply), signer)
 			onSubmit({name, symbol, address, totalSupply: Number(totalSupply)})
 			setLoading(false)
 		} catch (e) {

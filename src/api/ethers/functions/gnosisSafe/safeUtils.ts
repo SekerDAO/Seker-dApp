@@ -163,10 +163,9 @@ export const executeTx = async (
 export const safeSignMessage = async (
 	signer: JsonRpcSigner,
 	safe: Contract,
-	safeTx: SafeTransaction,
-	chainId?: BigNumberish
+	safeTx: SafeTransaction
 ): Promise<SafeSignature> => {
-	const cid = chainId || (await signer.provider!.getNetwork()).chainId
+	const cid = (await signer.provider!.getNetwork()).chainId
 	return signHash(signer, calculateSafeTransactionHash(safe, safeTx, cid))
 }
 
