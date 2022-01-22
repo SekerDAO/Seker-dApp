@@ -1,4 +1,5 @@
 import {SafeSignature, SafeTransaction} from "../api/ethers/functions/gnosisSafe/safeUtils"
+import {UsulDeployType} from "./DAO"
 import {PrebuiltTx} from "./common"
 import {StrategyProposal} from "./strategyProposal"
 
@@ -49,10 +50,11 @@ export type SafeProposal = {
 	// For general EVM
 	transactions?: PrebuiltTx[]
 	// for decentralize DAO
-	daoVotingThreshold?: number
-	gracePeriod?: number
 	usulAddress?: string
 	multiTx?: SafeTransaction
+	usulDeployType?: UsulDeployType
+	sideNetSafeAddress?: string
+	bridgeAddress?: string
 }
 
 export const isSafeProposal = (

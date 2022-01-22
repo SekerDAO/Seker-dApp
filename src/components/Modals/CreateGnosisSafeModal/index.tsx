@@ -4,6 +4,7 @@ import createGnosisSafe from "../../../api/ethers/functions/gnosisSafe/createGno
 import addDAO from "../../../api/firebase/DAO/addDAO"
 import editDAO from "../../../api/firebase/DAO/editDAO"
 import {AuthContext} from "../../../context/AuthContext"
+import useCheckNetwork from "../../../hooks/useCheckNetwork"
 import ArrayInput from "../../Controls/ArrayInput"
 import Button from "../../Controls/Button"
 import Input from "../../Controls/Input"
@@ -34,6 +35,8 @@ const CreateGnosisSafeModal: FunctionComponent<{
 		}
 	}, [account])
 
+	const checkedCreateGnosisSafe = useCheckNetwork(createGnosisSafe)
+
 	const handleMemberRemove = (index: number) => {
 		setMembers(prevState => prevState.filter((_, idx) => idx !== index))
 	}
@@ -63,7 +66,11 @@ const CreateGnosisSafeModal: FunctionComponent<{
 			if (!(account && signer && votingThreshold)) return
 			setProcessing(true)
 			try {
-				const gnosisAddress = await createGnosisSafe(members, Number(votingThreshold), signer)
+				const gnosisAddress = await checkedCreateGnosisSafe(
+					members,
+					Number(votingThreshold),
+					signer
+				)
 				await addDAO(gnosisAddress)
 				await editDAO({gnosisAddress, name: daoName})
 				toastSuccess("DAO successfully created!")

@@ -16,7 +16,12 @@ export type DAOFirebaseData = {
 	headerImage?: string
 	// Created after deploying Usul module
 	usulAddress?: string
+	usulDeployType?: UsulDeployType
+	bridgeAddress?: string
+	sideNetSafeAddress?: string
 }
+
+export type UsulDeployType = "usulSingle" | "usulMulti"
 
 type DAOEthersData = {
 	gnosisVotingThreshold: number

@@ -9,8 +9,8 @@ export const getStrategies = async (
 	usulAddress: string,
 	provider: JsonRpcProvider
 ): Promise<VotingStrategy[]> => {
-	const usulProxy = new Contract(usulAddress, Usul.abi, provider)
-	const addresses = await usulProxy.getStrategiesPaginated(
+	const usul = new Contract(usulAddress, Usul.abi, provider)
+	const addresses = await usul.getStrategiesPaginated(
 		"0x0000000000000000000000000000000000000001",
 		10
 	)

@@ -1,4 +1,5 @@
 import {FunctionComponent, useState} from "react"
+import {UsulDeployType} from "../../../types/DAO"
 import RadioButton from "../../Controls/RadioButton"
 import Modal from "../Modal"
 import "./styles.scss"
@@ -6,9 +7,9 @@ import "./styles.scss"
 const DeployUsulTypeModal: FunctionComponent<{
 	isOpened: boolean
 	onClose: () => void
-	onSubmit: (type: "usulSingle" | "usulMulti") => void
+	onSubmit: (type: UsulDeployType) => void
 }> = ({isOpened, onClose, onSubmit}) => {
-	const [type, setType] = useState<"usulSingle" | "usulMulti">("usulSingle")
+	const [type, setType] = useState<UsulDeployType>("usulSingle")
 	return (
 		<Modal
 			show={isOpened}

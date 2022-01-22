@@ -8,7 +8,7 @@ import config from "../../../../config"
 import {AuthContext} from "../../../../context/AuthContext"
 import useProposals from "../../../../hooks/getters/useProposals"
 import useCheckNetwork from "../../../../hooks/useCheckNetwork"
-import {BuiltVotingStrategy} from "../../../../types/DAO"
+import {BuiltVotingStrategy, UsulDeployType} from "../../../../types/DAO"
 import {SafeProposal} from "../../../../types/safeProposal"
 import ErrorPlaceholder from "../../../UI/ErrorPlaceholder"
 import ChooseVotingStrategies from "../ChooseVotingStrategies"
@@ -39,7 +39,7 @@ const DeployUsul: FunctionComponent<{
 	gnosisVotingThreshold: number
 	afterDeploy: () => void
 	isAdmin: boolean
-	deployType: "usulSingle" | "usulMulti"
+	deployType: UsulDeployType
 }> = ({isAdmin, gnosisAddress, gnosisVotingThreshold, afterDeploy, deployType}) => {
 	const {signer, account} = useContext(AuthContext)
 	const [stage, setStage] = useState<ExpandDaoStage>("chooseStrategies")
@@ -63,6 +63,13 @@ const DeployUsul: FunctionComponent<{
 		buildMultiSendTx,
 		deployType === "usulSingle" ? config.CHAIN_ID : config.SIDE_CHAIN_ID
 	)
+	useEffect(() => {
+		if (deployType === "usulMulti" && account && signer) {
+			checkedGetSideChainSafeAddress([account], 1, signer, true, true).then(expectedAddress => {
+				setExpectedSideChainSafeAddress(expectedAddress)
+			})
+		}
+	}, [account, signer])
 
 	const updateTransactions = async () => {
 		if (!(account && signer)) return
@@ -70,7 +77,7 @@ const DeployUsul: FunctionComponent<{
 			const {transactions: newTransactions, expectedUsulAddress: newExpectedUsulAddress} =
 				await checkedBuildUsulDeployTxSequence(strategies, gnosisAddress, signer)
 			const newMultiTx = await checkedBuildMultiSendTx(
-				transactions.map(t => t.tx),
+				newTransactions.map(t => t.tx),
 				gnosisAddress,
 				signer
 			)
@@ -78,26 +85,23 @@ const DeployUsul: FunctionComponent<{
 			setExpectedUsulAddress(newExpectedUsulAddress)
 			setMultiTx(newMultiTx)
 		} else {
-			let sideChainSafeAddress = expectedSideChainSafeAddress
-			if (!sideChainSafeAddress) {
-				const newAddress = await checkedGetSideChainSafeAddress([account], 1, signer, true, true)
-				setExpectedSideChainSafeAddress(newAddress)
-				sideChainSafeAddress = newAddress
-			}
-			const {transactions: newTransactions} = await checkedBuildUsulDeployTxSequence(
-				strategies,
-				sideChainSafeAddress,
-				signer,
-				true
-			)
+			if (!expectedSideChainSafeAddress) return
+			const {transactions: newTransactions, expectedUsulAddress: newExpectedUsulAddress} =
+				await checkedBuildUsulDeployTxSequence(
+					strategies,
+					expectedSideChainSafeAddress,
+					signer,
+					true
+				)
 			const newMultiTx = await checkedBuildMultiSendTx(
-				transactions.map(t => t.tx),
-				sideChainSafeAddress,
+				newTransactions.map(t => t.tx),
+				expectedSideChainSafeAddress,
 				signer,
 				true,
 				true
 			)
 			setTransactions(newTransactions)
+			setExpectedUsulAddress(newExpectedUsulAddress)
 			setMultiTx(newMultiTx)
 		}
 	}
@@ -127,7 +131,7 @@ const DeployUsul: FunctionComponent<{
 		>
 			{stage === "chooseStrategies" && (
 				<ChooseVotingStrategies
-					gnosisAddress={gnosisAddress}
+					gnosisAddress={deployType === "usulSingle" ? gnosisAddress : expectedSideChainSafeAddress}
 					strategies={strategies}
 					transactions={transactions}
 					onStrategyAdd={strategy => {

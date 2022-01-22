@@ -7,7 +7,7 @@ import config from "../../../../config"
 import {VOTING_STRATEGIES} from "../../../../constants/votingStrategies"
 import {AuthContext} from "../../../../context/AuthContext"
 import useCheckNetwork from "../../../../hooks/useCheckNetwork"
-import {VotingStrategyName, BuiltVotingStrategy} from "../../../../types/DAO"
+import {VotingStrategyName, BuiltVotingStrategy, UsulDeployType} from "../../../../types/DAO"
 import Button from "../../../Controls/Button"
 import DeployVotingStrategyModal, {
 	VotingStrategyFormValues
@@ -24,7 +24,7 @@ const ChooseVotingStrategies: FunctionComponent<{
 	onStrategyAdd: (strategy: BuiltVotingStrategy) => void
 	onStrategyRemove: (index: number) => void
 	onSubmit: () => void
-	deployType: "usulSingle" | "usulMulti"
+	deployType: UsulDeployType
 }> = ({gnosisAddress, strategies, onStrategyAdd, onStrategyRemove, onSubmit, deployType}) => {
 	const {signer} = useContext(AuthContext)
 	const [addStrategyModalOpened, setAddStrategyModalOpened] = useState<VotingStrategyName | null>(

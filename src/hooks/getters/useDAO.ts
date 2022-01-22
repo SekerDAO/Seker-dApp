@@ -17,7 +17,7 @@ const useDAO = (
 	const [dao, setDao] = useState<DAO | null>(null)
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
-	const {provider} = useContext(ProviderContext)
+	const {provider, sideChainProvider} = useContext(ProviderContext)
 
 	const getInfo = async () => {
 		setLoading(true)
@@ -26,7 +26,12 @@ const useDAO = (
 			const _dao = await getDAO(gnosisAddress)
 			const gnosisVotingThreshold = await getVotingThreshold(gnosisAddress, provider)
 			const owners = await getOwners(gnosisAddress, provider)
-			const strategies = _dao.usulAddress ? await getStrategies(_dao.usulAddress, provider) : []
+			const strategies = _dao.usulAddress
+				? await getStrategies(
+						_dao.usulAddress,
+						_dao.usulDeployType === "usulSingle" ? provider : sideChainProvider
+				  )
+				: []
 			setDao({
 				..._dao,
 				gnosisVotingThreshold,

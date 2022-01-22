@@ -18,7 +18,7 @@ const useMyDAOs = (): {
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
 	const {account} = useContext(AuthContext)
-	const {provider} = useContext(ProviderContext)
+	const {provider, sideChainProvider} = useContext(ProviderContext)
 
 	const getData = async () => {
 		if (account) {
@@ -32,7 +32,10 @@ const useMyDAOs = (): {
 						const gnosisVotingThreshold = await getVotingThreshold(dao, provider)
 						const owners = await getOwners(dao, provider)
 						const strategies = firebaseData.usulAddress
-							? await getStrategies(firebaseData.usulAddress, provider)
+							? await getStrategies(
+									firebaseData.usulAddress,
+									firebaseData.usulDeployType === "usulSingle" ? provider : sideChainProvider
+							  )
 							: []
 						const tokenSymbol = ""
 						const balance = 0

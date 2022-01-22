@@ -22,10 +22,15 @@ import {
 	signAddOwner,
 	signRemoveOwner
 } from "../../../api/ethers/functions/gnosisSafe/addRemoveOwner"
+import {
+	executeRegisterModuleTx,
+	signRegisterModuleTx
+} from "../../../api/ethers/functions/gnosisSafe/registerModule"
 import {SafeSignature} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
 import editDAO from "../../../api/firebase/DAO/editDAO"
 import addSafeProposalSignature from "../../../api/firebase/safeProposal/addSafeProposalSignatures"
 import {AuthContext} from "../../../context/AuthContext"
+import useCheckNetwork from "../../../hooks/useCheckNetwork"
 import {SafeProposal} from "../../../types/safeProposal"
 import {toastError, toastSuccess} from "../../UI/Toast"
 
@@ -40,6 +45,12 @@ const useSignSafeProposal = ({
 }): {processing: boolean; sign: () => Promise<void>} => {
 	const [processing, setProcessing] = useState(false)
 	const {signer} = useContext(AuthContext)
+
+	const checkedSignMultiSend = useCheckNetwork(signMultiSend)
+	const checkedExecuteMultiSend = useCheckNetwork(executeMultiSend)
+	const checkedSignRegisterModule = useCheckNetwork(signRegisterModuleTx)
+	const checkedExecuteRegisterModule = useCheckNetwork(executeRegisterModuleTx)
+
 	const sign = async () => {
 		if (!(signer && proposal && canSign)) return
 		setProcessing(true)
@@ -150,25 +161,59 @@ const useSignSafeProposal = ({
 					}
 					break
 				case "decentralizeDAO":
-					if (!proposal.multiTx) {
-						throw new Error("Unexpected empty mulitTx in proposal")
-					}
 					if (!proposal.usulAddress) {
 						throw new Error("Unexpected empty usulAddress in proposal")
 					}
-					;[signature] = await signMultiSend(proposal.multiTx, proposal.gnosisAddress, signer)
-					if (proposal.signatures?.length === proposal.gnosisVotingThreshold - 1) {
-						await executeMultiSend(
+					if (proposal.usulDeployType === "usulSingle") {
+						if (!proposal.multiTx) {
+							throw new Error("Unexpected empty mulitTx in proposal")
+						}
+						;[signature] = await checkedSignMultiSend(
 							proposal.multiTx,
 							proposal.gnosisAddress,
-							[signature, ...proposal.signatures],
 							signer
 						)
-						await editDAO({
-							gnosisAddress: proposal.gnosisAddress,
-							usulAddress: proposal.usulAddress
-						})
-						executed = true
+						if (proposal.signatures?.length === proposal.gnosisVotingThreshold - 1) {
+							await checkedExecuteMultiSend(
+								proposal.multiTx,
+								proposal.gnosisAddress,
+								[signature, ...proposal.signatures],
+								signer
+							)
+							await editDAO({
+								gnosisAddress: proposal.gnosisAddress,
+								usulAddress: proposal.usulAddress,
+								usulDeployType: "usulSingle"
+							})
+							executed = true
+						}
+					} else {
+						if (!proposal.bridgeAddress) {
+							throw new Error("Unexpected empty bridge address in proposal")
+						}
+						if (!proposal.sideNetSafeAddress) {
+							throw new Error("Unexpected empty side net safe address in proposal")
+						}
+						;[signature] = await checkedSignRegisterModule(
+							proposal.gnosisAddress,
+							proposal.bridgeAddress,
+							signer
+						)
+						if (proposal.signatures?.length === proposal.gnosisVotingThreshold - 1) {
+							await checkedExecuteRegisterModule(
+								proposal.gnosisAddress,
+								proposal.bridgeAddress,
+								[signature, ...proposal.signatures],
+								signer
+							)
+							await editDAO({
+								gnosisAddress: proposal.gnosisAddress,
+								usulAddress: proposal.usulAddress,
+								usulDeployType: "usulMulti",
+								bridgeAddress: proposal.bridgeAddress,
+								sideNetSafeAddress: proposal.sideNetSafeAddress
+							})
+						}
 					}
 					break
 				case "generalEVM":

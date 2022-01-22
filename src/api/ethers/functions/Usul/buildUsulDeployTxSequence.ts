@@ -1,5 +1,4 @@
 import {JsonRpcSigner} from "@ethersproject/providers"
-import config from "../../../../config"
 import {BuiltVotingStrategy} from "../../../../types/DAO"
 import {getRegisterModuleTx} from "../gnosisSafe/registerModule"
 import {SafeTransaction} from "../gnosisSafe/safeUtils"
@@ -36,7 +35,7 @@ const buildUsulDeployTxSequence = async (
 	})
 	const registerUsulTx = await getRegisterModuleTx(
 		gnosisAddress,
-		sideChain ? config.AMB_ADDRESS : expectedUsulAddress,
+		expectedUsulAddress,
 		signer,
 		sideChain
 	)

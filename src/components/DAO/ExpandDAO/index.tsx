@@ -2,6 +2,7 @@ import {FunctionComponent, useContext, useState} from "react"
 import {ReactComponent as GnosisSafeIcon} from "../../../assets/icons/gnosis-safe.svg"
 import {ReactComponent as UsulIcon} from "../../../assets/icons/usul-default.svg"
 import {AuthContext} from "../../../context/AuthContext"
+import {UsulDeployType} from "../../../types/DAO"
 import Button from "../../Controls/Button"
 import DeployUsulTypeModal from "../../Modals/DeployUsulTypeModal"
 import ConnectWalletPlaceholder from "../../UI/ConnectWalletPlaceholder"
@@ -22,7 +23,7 @@ const ExpandDAO: FunctionComponent<{
 	afterDeployUsul: () => void
 	isAdmin: boolean
 }> = ({isAdmin, gnosisAddress, usulAddress, gnosisVotingThreshold, afterDeployUsul}) => {
-	const [stage, setStage] = useState<"choose" | "usulSingle" | "usulMulti" | "bridge">("choose")
+	const [stage, setStage] = useState<"choose" | UsulDeployType | "bridge">("choose")
 	const [deployTypeModalOpened, setDeployTypeModalOpened] = useState(false)
 	const {connected} = useContext(AuthContext)
 
@@ -32,7 +33,7 @@ const ExpandDAO: FunctionComponent<{
 
 	// TODO: if side chain is not added to metamask, the error will be thrown on the next stage.
 	// We should check it and display instruction for the user
-	const handleSelectUsulType = (type: "usulSingle" | "usulMulti") => {
+	const handleSelectUsulType = (type: UsulDeployType) => {
 		setStage(type)
 		setDeployTypeModalOpened(false)
 	}
@@ -90,7 +91,7 @@ const ExpandDAO: FunctionComponent<{
 						gnosisAddress={gnosisAddress}
 						gnosisVotingThreshold={gnosisVotingThreshold}
 						afterDeploy={afterDeployUsul}
-						deployType={stage as "usulSingle"}
+						deployType={stage as UsulDeployType}
 					/>
 				)}
 			</section>

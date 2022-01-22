@@ -19,6 +19,7 @@ import {ReactComponent as WarningIcon} from "../../../../assets/icons/warning.sv
 import config from "../../../../config"
 import {AuthContext} from "../../../../context/AuthContext"
 import useCheckNetwork from "../../../../hooks/useCheckNetwork"
+import {UsulDeployType} from "../../../../types/DAO"
 import {formatReadableAddress} from "../../../../utlls"
 import Button from "../../../Controls/Button"
 import TransactionDetailsModal from "../../../Modals/TransactionDetailsModal"
@@ -35,7 +36,7 @@ const ConfirmDeployUsul: FunctionComponent<{
 	afterSubmit: () => void
 	expectedUsulAddress: string
 	isAdmin: boolean
-	deployType: "usulSingle" | "usulMulti"
+	deployType: UsulDeployType
 }> = ({
 	multiTx,
 	transactions,
@@ -53,11 +54,18 @@ const ConfirmDeployUsul: FunctionComponent<{
 	const [loading, setLoading] = useState(false)
 
 	const checkedDeploySideNetSafe = useCheckNetwork(createGnosisSafe, config.SIDE_CHAIN_ID)
-	const checkedSignMultiSend = useCheckNetwork(signMultiSend, config.SIDE_CHAIN_ID)
-	const checkedExecuteMultiSend = useCheckNetwork(executeMultiSend, config.SIDE_CHAIN_ID)
+	const checkedSignMultiSend = useCheckNetwork(
+		signMultiSend,
+		deployType === "usulMulti" ? config.SIDE_CHAIN_ID : config.CHAIN_ID
+	)
+	const checkedExecuteMultiSend = useCheckNetwork(
+		executeMultiSend,
+		deployType === "usulMulti" ? config.SIDE_CHAIN_ID : config.CHAIN_ID
+	)
 	const checkedDeployBridge = useCheckNetwork(deployBridge)
 	const checkedSignRegisterModule = useCheckNetwork(signRegisterModuleTx)
 	const checkedExecuteRegisterModule = useCheckNetwork(executeRegisterModuleTx)
+	const checkedGetNonce = useCheckNetwork(getNonce)
 
 	const handleTxDetailsClose = () => {
 		setOpenedTxDetails(undefined)
@@ -68,15 +76,16 @@ const ConfirmDeployUsul: FunctionComponent<{
 		setLoading(true)
 		try {
 			if (deployType === "usulSingle") {
-				const nonce = await getNonce(gnosisAddress, signer)
+				const nonce = await checkedGetNonce(gnosisAddress, signer)
 				let signature: SafeSignature
 				if (isAdmin) {
-					;[signature] = await signMultiSend(multiTx, gnosisAddress, signer)
+					;[signature] = await checkedSignMultiSend(multiTx, gnosisAddress, signer)
 					if (gnosisVotingThreshold === 1) {
-						await executeMultiSend(multiTx, gnosisAddress, [signature], signer)
+						await checkedExecuteMultiSend(multiTx, gnosisAddress, [signature], signer)
 						await editDAO({
 							gnosisAddress,
-							usulAddress: expectedUsulAddress
+							usulAddress: expectedUsulAddress,
+							usulDeployType: "usulSingle"
 						})
 					}
 				}
@@ -88,30 +97,54 @@ const ConfirmDeployUsul: FunctionComponent<{
 					usulAddress: expectedUsulAddress,
 					title: "Decentralize DAO",
 					state: gnosisVotingThreshold === 1 && isAdmin ? "executed" : "active",
-					signatures: isAdmin ? [signature!] : []
+					signatures: isAdmin ? [signature!] : [],
+					usulDeployType: "usulSingle"
 				})
 			} else {
-				const sideNetSafe = await checkedDeploySideNetSafe([account], 1, signer, false, true)
-				const [multiSendSignature] = await checkedSignMultiSend(multiTx, sideNetSafe, signer)
-				await checkedExecuteMultiSend(multiTx, sideNetSafe, [multiSendSignature], signer)
-				const bridgeAddress = await checkedDeployBridge(gnosisAddress, sideNetSafe, signer)
-				const [registerBridgeSignature] = await checkedSignRegisterModule(
-					gnosisAddress,
-					bridgeAddress,
-					signer
-				)
-				// TODO: add firebase stuff
-				if (gnosisVotingThreshold === 1) {
-					await checkedExecuteRegisterModule(
+				const sideNetSafeAddress = await checkedDeploySideNetSafe([account], 1, signer, false, true)
+				const [multiSendSignature] = await checkedSignMultiSend(multiTx, sideNetSafeAddress, signer)
+				await checkedExecuteMultiSend(multiTx, sideNetSafeAddress, [multiSendSignature], signer)
+				const nonce = await checkedGetNonce(gnosisAddress, signer)
+				const bridgeAddress = await checkedDeployBridge(gnosisAddress, sideNetSafeAddress, signer)
+				let registerBridgeSignature: SafeSignature
+				if (isAdmin) {
+					;[registerBridgeSignature] = await checkedSignRegisterModule(
 						gnosisAddress,
 						bridgeAddress,
-						[registerBridgeSignature],
 						signer
 					)
+					if (gnosisVotingThreshold === 1) {
+						await checkedExecuteRegisterModule(
+							gnosisAddress,
+							bridgeAddress,
+							[registerBridgeSignature],
+							signer
+						)
+						await editDAO({
+							gnosisAddress,
+							usulAddress: expectedUsulAddress,
+							usulDeployType: "usulMulti",
+							bridgeAddress,
+							sideNetSafeAddress
+						})
+					}
 				}
+				await addSafeProposal({
+					type: "decentralizeDAO",
+					gnosisAddress,
+					nonce,
+					multiTx,
+					usulAddress: expectedUsulAddress,
+					sideNetSafeAddress,
+					bridgeAddress,
+					title: "Decentralize DAO",
+					state: gnosisVotingThreshold === 1 && isAdmin ? "executed" : "active",
+					signatures: isAdmin ? [registerBridgeSignature!] : [],
+					usulDeployType: "usulMulti"
+				})
 			}
 			toastSuccess(
-				gnosisVotingThreshold === 1
+				gnosisVotingThreshold === 1 && isAdmin
 					? "Usul module successfully deployed"
 					: "Expand DAO proposal successfully created"
 			)
