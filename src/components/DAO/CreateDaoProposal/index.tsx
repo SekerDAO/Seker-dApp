@@ -1,7 +1,7 @@
 import {FunctionComponent, useContext, useState} from "react"
 import {VOTING_STRATEGIES} from "../../../constants/votingStrategies"
 import {AuthContext} from "../../../context/AuthContext"
-import {VotingStrategy} from "../../../types/DAO"
+import {UsulDeployType, VotingStrategy} from "../../../types/DAO"
 import Select from "../../Controls/Select"
 import ConnectWalletPlaceholder from "../../UI/ConnectWalletPlaceholder"
 import CreateAdminProposal from "./CreateAdminProposal"
@@ -15,7 +15,18 @@ const CreateDaoProposal: FunctionComponent<{
 	ownersCount: number
 	strategies: VotingStrategy[]
 	isAdmin: boolean
-}> = ({gnosisAddress, usulAddress, gnosisVotingThreshold, ownersCount, strategies, isAdmin}) => {
+	usulDeployType?: UsulDeployType
+	bridgeAddress?: string
+}> = ({
+	gnosisAddress,
+	usulAddress,
+	gnosisVotingThreshold,
+	ownersCount,
+	strategies,
+	isAdmin,
+	usulDeployType,
+	bridgeAddress
+}) => {
 	const {connected} = useContext(AuthContext)
 	const [module, setModule] = useState(isAdmin ? -1 : 0)
 
@@ -51,12 +62,14 @@ const CreateDaoProposal: FunctionComponent<{
 					ownersCount={ownersCount}
 				/>
 			)}{" "}
-			{module > -1 && usulAddress && (
+			{module > -1 && usulAddress && usulDeployType && (
 				<CreateStrategyProposal
 					gnosisAddress={gnosisAddress}
 					usulAddress={usulAddress}
 					strategyAddress={strategies[module].address}
 					strategyType={strategies[module].name}
+					usulDeployType={usulDeployType}
+					bridgeAddress={bridgeAddress}
 				/>
 			)}
 		</div>

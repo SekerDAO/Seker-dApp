@@ -14,14 +14,20 @@ import {StrategyProposal} from "../../types/strategyProposal"
 const useStrategyProposal = (
 	id: string
 ): {
-	proposal: (StrategyProposal & {proposalId: string; usulAddress: string}) | null
+	proposal:
+		| (StrategyProposal & {proposalId: string; usulAddress: string; bridgeAddress?: string})
+		| null
 	userHasVoted: boolean
 	loading: boolean
 	error: boolean
+	multiChain: boolean
 	refetch: () => Promise<void>
 } => {
-	const [proposal, setProposal] = useState<(StrategyProposal & {proposalId: string}) | null>(null)
+	const [proposal, setProposal] = useState<
+		(StrategyProposal & {proposalId: string; usulAddress: string; bridgeAddress?: string}) | null
+	>(null)
 	const [userHasVoted, setUserHasVoted] = useState(false)
+	const [multiChain, setMultiChain] = useState(false)
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
 	const {connected, account} = useContext(AuthContext)
@@ -39,6 +45,7 @@ const useStrategyProposal = (
 			if (!dao.usulAddress) {
 				throw new Error("Unexpected strategy proposal on DAO without usul address")
 			}
+			setMultiChain(dao.usulDeployType === "usulMulti")
 			const {state, deadline} = await getProposalState(
 				dao.usulAddress,
 				proposalData.id,
@@ -54,6 +61,7 @@ const useStrategyProposal = (
 				),
 				proposalId: id,
 				usulAddress: dao.usulAddress,
+				bridgeAddress: dao.bridgeAddress,
 				votes: await getProposalVotesSummary(
 					dao.usulAddress,
 					proposalData.id,
@@ -85,6 +93,7 @@ const useStrategyProposal = (
 	return {
 		proposal,
 		userHasVoted,
+		multiChain,
 		loading,
 		error,
 		refetch: getData

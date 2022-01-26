@@ -1,10 +1,16 @@
 import {FunctionComponent, useContext, useState} from "react"
-import {buildProposalTx, submitProposal} from "../../../../api/ethers/functions/Usul/usulProposal"
+import {buildMultiSendTx} from "../../../../api/ethers/functions/Usul/multiSend"
+import {
+	buildProposalTxMultiChain,
+	submitProposal
+} from "../../../../api/ethers/functions/Usul/usulProposal"
+import {prebuiltTxToSafeTx} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
 import addStrategyProposal from "../../../../api/firebase/strategyProposal/addStrategyProposal"
+import config from "../../../../config"
 import {AuthContext} from "../../../../context/AuthContext"
-import ProviderContext from "../../../../context/ProviderContext"
+import useCheckNetwork from "../../../../hooks/useCheckNetwork"
 import useValidation from "../../../../hooks/useValidation"
-import {VotingStrategyName} from "../../../../types/DAO"
+import {UsulDeployType, VotingStrategyName} from "../../../../types/DAO"
 import {PrebuiltTx} from "../../../../types/common"
 import {noSpecialCharsRegex} from "../../../../utlls"
 import Input from "../../../Controls/Input"
@@ -16,10 +22,18 @@ const CreateStrategyProposal: FunctionComponent<{
 	gnosisAddress: string
 	usulAddress: string
 	strategyAddress: string
+	bridgeAddress?: string
 	strategyType: VotingStrategyName
-}> = ({gnosisAddress, usulAddress, strategyAddress, strategyType}) => {
+	usulDeployType: UsulDeployType
+}> = ({
+	gnosisAddress,
+	usulAddress,
+	bridgeAddress,
+	strategyAddress,
+	strategyType,
+	usulDeployType
+}) => {
 	const {account, signer} = useContext(AuthContext)
-	const {provider} = useContext(ProviderContext)
 	const [processing, setProcessing] = useState(false)
 	const [title, setTitle] = useState("")
 	const {validation} = useValidation(title, [
@@ -27,14 +41,32 @@ const CreateStrategyProposal: FunctionComponent<{
 	])
 	const [description, setDescription] = useState("")
 
+	const checkedSubmitProposal = useCheckNetwork(
+		submitProposal,
+		usulDeployType === "usulMulti" ? config.SIDE_CHAIN_ID : config.CHAIN_ID
+	)
+
 	const handleSubmit = async (transactions: PrebuiltTx[]) => {
 		if (!(title && !validation && signer && account)) return
 		setProcessing(true)
 		try {
-			const txHashes = transactions.map(tx =>
-				buildProposalTx(tx.address, tx.contractMethods, tx.selectedMethodIndex, tx.args, provider)
+			const txs = transactions.map(tx =>
+				prebuiltTxToSafeTx(tx.address, tx.contractMethods, tx.selectedMethodIndex, tx.args)
 			)
-			const proposalId = await submitProposal(usulAddress, strategyAddress, txHashes, signer)
+			const proposalId = await checkedSubmitProposal(
+				usulAddress,
+				strategyAddress,
+				usulDeployType === "usulMulti"
+					? [
+							await buildProposalTxMultiChain(
+								await buildMultiSendTx(txs, gnosisAddress, undefined, false, true),
+								gnosisAddress,
+								bridgeAddress!
+							)
+					  ]
+					: txs,
+				signer
+			)
 			await addStrategyProposal({
 				gnosisAddress,
 				strategyAddress,

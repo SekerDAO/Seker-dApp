@@ -4,6 +4,8 @@ import {AddressZero} from "@ethersproject/constants"
 import {Contract, ContractInterface} from "@ethersproject/contracts"
 import {_TypedDataEncoder} from "@ethersproject/hash"
 import {JsonRpcProvider, JsonRpcSigner, TransactionResponse} from "@ethersproject/providers"
+import {AbiFunction} from "../../../../types/abi"
+import {prepareArguments} from "../../../../utlls"
 import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
 
 const EIP712_SAFE_TX_TYPE = {
@@ -208,4 +210,22 @@ export const getNonce = async (
 	const safeContract = new Contract(address, GnosisSafeL2.abi, providerOrSigner)
 	const nonce = await safeContract.nonce()
 	return nonce.toNumber()
+}
+
+export const prebuiltTxToSafeTx = (
+	contractAddress: string,
+	contractAbi: AbiFunction[],
+	selectedMethodIndex: number,
+	args: (string | string[])[]
+): SafeTransaction => {
+	const contract = new Contract(contractAddress, contractAbi)
+	return buildContractCall(
+		contract,
+		contractAbi[selectedMethodIndex].name,
+		prepareArguments(
+			args,
+			contractAbi[selectedMethodIndex].inputs.map(i => i.type)
+		),
+		0
+	)
 }

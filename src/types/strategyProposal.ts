@@ -50,7 +50,6 @@ export type StrategyProposalFirebaseData = {
 type StrategyProposalEthersData = {
 	state: StrategyProposalState
 	govTokenAddress: string | null
-	usulAddress: string
 	votes: StrategyProposalVotesSummary
 	deadline?: number
 }

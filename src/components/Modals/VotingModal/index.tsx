@@ -1,6 +1,8 @@
 import {FunctionComponent, useContext, useState} from "react"
 import {voteLinear} from "../../../api/ethers/functions/Usul/voting/OzLinearVoting/ozLinearVotingApi"
+import config from "../../../config"
 import {AuthContext} from "../../../context/AuthContext"
+import useCheckNetwork from "../../../hooks/useCheckNetwork"
 import {VotingStrategyName} from "../../../types/DAO"
 import RadioButton from "../../Controls/RadioButton"
 import {toastError} from "../../UI/Toast"
@@ -14,10 +16,16 @@ const VotingModal: FunctionComponent<{
 	proposalId: number
 	afterSubmit: () => void
 	onClose: () => void
-}> = ({show, afterSubmit, onClose, strategyAddress, strategyName, proposalId}) => {
+	sideChain: boolean
+}> = ({show, afterSubmit, onClose, strategyAddress, strategyName, proposalId, sideChain}) => {
 	const {signer} = useContext(AuthContext)
 	const [processing, setProcessing] = useState(false)
 	const [vote, setVote] = useState<0 | 1 | 2 | null>(null)
+
+	const checkedVoteLinear = useCheckNetwork(
+		voteLinear,
+		sideChain ? config.SIDE_CHAIN_ID : config.CHAIN_ID
+	)
 
 	const handleVote = async () => {
 		if (!signer || vote === null) return
@@ -25,7 +33,7 @@ const VotingModal: FunctionComponent<{
 			setProcessing(true)
 			switch (strategyName) {
 				case "linearVoting":
-					await voteLinear(strategyAddress, proposalId, vote, signer)
+					await checkedVoteLinear(strategyAddress, proposalId, vote, signer)
 					break
 				default:
 					throw new Error("Unsupported voting strategy")

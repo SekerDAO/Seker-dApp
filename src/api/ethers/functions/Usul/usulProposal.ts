@@ -1,30 +1,16 @@
 import {BigNumberish} from "@ethersproject/bignumber"
 import {Contract} from "@ethersproject/contracts"
 import {JsonRpcProvider, JsonRpcSigner} from "@ethersproject/providers"
-import {AbiFunction} from "../../../../types/abi"
+import config from "../../../../config"
 import {
 	StrategyProposalState,
 	strategyProposalStates,
 	StrategyProposalVotesSummary
 } from "../../../../types/strategyProposal"
-import {prepareArguments} from "../../../../utlls"
+import AMBModule from "../../abis/AMBModule.json"
 import OZLinearVoting from "../../abis/OZLinearVoting.json"
 import Usul from "../../abis/Usul.json"
 import {buildContractCall, SafeTransaction} from "../gnosisSafe/safeUtils"
-
-const generateTxHashes = async (
-	usulAddress: string,
-	transactions: SafeTransaction[],
-	signer: JsonRpcSigner
-): Promise<string[]> => {
-	const usulProxy = new Contract(usulAddress, Usul.abi, signer)
-	return Promise.all(
-		transactions.map(
-			async (tx): Promise<string> =>
-				usulProxy.getTransactionHash(tx.to, tx.value, tx.data, tx.operation)
-		)
-	)
-}
 
 export const submitProposal = async (
 	usulAddress: string,
@@ -36,7 +22,12 @@ export const submitProposal = async (
 	new Promise(async (resolve, reject) => {
 		try {
 			const usulProxy = new Contract(usulAddress, Usul.abi, signer)
-			const hashes = await generateTxHashes(usulAddress, transactions, signer)
+			const hashes = await Promise.all(
+				transactions.map(
+					async (tx): Promise<string> =>
+						usulProxy.getTransactionHash(tx.to, tx.value, tx.data, tx.operation)
+				)
+			)
 			const userAddress = await signer.getAddress()
 
 			const eventListener = async (
@@ -68,49 +59,26 @@ export const submitProposal = async (
 		}
 	})
 
-export const buildProposalTx = (
-	contractAddress: string,
-	contractAbi: AbiFunction[],
-	selectedMethodIndex: number,
-	args: (string | string[])[],
-	providerOrSigner: JsonRpcProvider | JsonRpcSigner
-): SafeTransaction => {
-	const contract = new Contract(contractAddress, contractAbi, providerOrSigner)
-	return buildContractCall(
-		contract,
-		contractAbi[selectedMethodIndex].name,
-		prepareArguments(
-			args,
-			contractAbi[selectedMethodIndex].inputs.map(i => i.type)
-		),
+export const buildProposalTxMultiChain = async (
+	multiTx: SafeTransaction,
+	safeAddress: string,
+	bridgeAddress: string
+): Promise<SafeTransaction> => {
+	const bridge = new Contract(bridgeAddress, AMBModule.abi)
+	const amb = new Contract(config.AMB_ADDRESS, AMBModule.abi)
+
+	const bridgeCall = buildContractCall(
+		bridge,
+		"executeTransaction",
+		[safeAddress, 0, multiTx.data, 0],
 		0
 	)
-}
-
-export const executeProposalSingle = async (
-	usulAddress: string,
-	proposalId: number,
-	target: string,
-	value: number,
-	txData: string,
-	operation: number,
-	provider: JsonRpcProvider
-): Promise<void> => {
-	const usul = new Contract(usulAddress, Usul.abi, provider)
-	await usul.executeProposalByIndex(proposalId, target, value, txData, operation)
-}
-
-export const executeProposalBatch = async (
-	usulAddress: string,
-	proposalId: number,
-	targets: string[],
-	values: number[],
-	txDatas: string[],
-	operations: number[],
-	provider: JsonRpcProvider
-): Promise<void> => {
-	const usul = new Contract(usulAddress, Usul.abi, provider)
-	await usul.executeProposalBatch(proposalId, targets, values, txDatas, operations)
+	return buildContractCall(
+		amb,
+		"requireToPassMessage",
+		[bridgeAddress, bridgeCall.data, 1000000],
+		0
+	)
 }
 
 export const getProposalState = async (
@@ -141,7 +109,9 @@ export const getProposalState = async (
 					// TODO: I don't know, why we sometimes can get here despite the deadline check above
 					return {state: "active", deadline: deadline.toNumber()}
 				}
-				throw e
+				// TODO: side chain provider doesn't provide meaningful info
+				// throw e
+				return {state: "failed"}
 			}
 		}
 		return {state: "active", deadline: deadline.toNumber()}

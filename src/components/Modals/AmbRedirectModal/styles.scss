@@ -1,0 +1,16 @@
+@import "src/variables";
+
+.amb-redirect-modal {
+  display: flex;
+  flex-direction: column;
+  margin-top: 40px;
+
+  p,
+  a {
+    margin: 10px 0;
+  }
+
+  a {
+    color: $purple;
+  }
+}

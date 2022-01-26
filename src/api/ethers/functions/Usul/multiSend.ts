@@ -31,7 +31,7 @@ const encodeMultiSend = (txs: MetaTransaction[]): string =>
 export const buildMultiSendTx = async (
 	multiSendTxs: SafeTransaction[],
 	safeAddress: string,
-	signer: JsonRpcSigner,
+	signer?: JsonRpcSigner,
 	sideChain = false,
 	zeroNonce = false
 ): Promise<SafeTransaction> => {

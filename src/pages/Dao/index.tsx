@@ -199,6 +199,8 @@ const Dao: FunctionComponent = () => {
 								gnosisVotingThreshold={dao.gnosisVotingThreshold}
 								ownersCount={dao.owners.length}
 								strategies={dao.strategies}
+								usulDeployType={dao.usulDeployType}
+								bridgeAddress={dao.bridgeAddress}
 							/>
 						)}
 						{page === "collection" && (

@@ -1,16 +1,25 @@
 import {parse} from "query-string"
 import {FunctionComponent, useContext, useEffect, useState} from "react"
 import {useLocation} from "react-router-dom"
-import {executeProposalBatch} from "../../../api/ethers/functions/Usul/executeProposal"
+import {
+	executeProposalBatch,
+	executeProposalSingle
+} from "../../../api/ethers/functions/Usul/executeProposal"
+import {buildMultiSendTx} from "../../../api/ethers/functions/Usul/multiSend"
+import {buildProposalTxMultiChain} from "../../../api/ethers/functions/Usul/usulProposal"
 import {finalizeVotingLinear} from "../../../api/ethers/functions/Usul/voting/OzLinearVoting/ozLinearVotingApi"
 import {checkDelegatee} from "../../../api/ethers/functions/Usul/voting/votingApi"
+import {prebuiltTxToSafeTx} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
 import {ReactComponent as WarningIcon} from "../../../assets/icons/warning.svg"
+import config from "../../../config"
 import {AuthContext} from "../../../context/AuthContext"
 import ProviderContext from "../../../context/ProviderContext"
 import useProposalVotes from "../../../hooks/getters/useProposalVotes"
 import useSafeProposal from "../../../hooks/getters/useSafeProposal"
 import useStrategyProposal from "../../../hooks/getters/useStrategyProposal"
+import useCheckNetwork from "../../../hooks/useCheckNetwork"
 import Button from "../../Controls/Button"
+import AmbRedirectModal from "../../Modals/AmbRedirectModal"
 import VotingModal from "../../Modals/VotingModal"
 import ConnectWalletPlaceholder from "../../UI/ConnectWalletPlaceholder"
 import ErrorPlaceholder from "../../UI/ErrorPlaceholder"
@@ -62,19 +71,31 @@ const SafeProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 
 const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 	const {account, connected, signer} = useContext(AuthContext)
-	const {provider} = useContext(ProviderContext)
-	const {proposal, loading, error, refetch, userHasVoted} = useStrategyProposal(id)
+	const {provider, sideChainProvider} = useContext(ProviderContext)
+	const {proposal, loading, error, refetch, userHasVoted, multiChain} = useStrategyProposal(id)
 	const [showVotingModal, setShowVotingModal] = useState(false)
+	const [finalizeTxHash, setFinalizeTxHash] = useState("")
 	const [delegatee, setDelegatee] = useState<string | null>(null)
 	const [processing, setProcessing] = useState(false)
 	useEffect(() => {
 		if (proposal?.govTokenAddress && account) {
-			checkDelegatee(proposal.govTokenAddress, account, provider).then(res => {
+			checkDelegatee(
+				proposal.govTokenAddress,
+				account,
+				multiChain ? sideChainProvider : provider
+			).then(res => {
 				setDelegatee(res)
 			})
 		}
 	}, [proposal, account])
 	const {votes, loading: votesLoading} = useProposalVotes(proposal)
+
+	const checkedFinalizeVotingLinear = useCheckNetwork(
+		finalizeVotingLinear,
+		multiChain ? config.SIDE_CHAIN_ID : config.CHAIN_ID
+	)
+	const checkedExecuteProposalSingle = useCheckNetwork(executeProposalSingle, config.SIDE_CHAIN_ID)
+	const checkedExecuteProposalBatch = useCheckNetwork(executeProposalBatch, config.CHAIN_ID)
 
 	if (loading || !proposal) return <Loader />
 	if (error) return <ErrorPlaceholder />
@@ -85,7 +106,7 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 			setProcessing(true)
 			switch (proposal.strategyType) {
 				case "linearVoting":
-					await finalizeVotingLinear(proposal.strategyAddress, proposal.id, signer)
+					await checkedFinalizeVotingLinear(proposal.strategyAddress, proposal.id, signer)
 					break
 				default:
 					throw new Error("Strategy not supported yet")
@@ -108,9 +129,31 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 		if (!signer) return
 		setProcessing(true)
 		try {
-			await executeProposalBatch(proposal.usulAddress, proposal.id, proposal.transactions, signer)
-			toastSuccess("Proposal successfully executed")
-			refetch()
+			if (multiChain) {
+				const txs = proposal.transactions.map(tx =>
+					prebuiltTxToSafeTx(tx.address, tx.contractMethods, tx.selectedMethodIndex, tx.args)
+				)
+				const hash = await checkedExecuteProposalSingle(
+					proposal.usulAddress,
+					proposal.id,
+					await buildProposalTxMultiChain(
+						await buildMultiSendTx(txs, proposal.gnosisAddress, undefined, false, true),
+						proposal.gnosisAddress,
+						proposal.bridgeAddress!
+					),
+					signer
+				)
+				setFinalizeTxHash(hash)
+			} else {
+				await checkedExecuteProposalBatch(
+					proposal.usulAddress,
+					proposal.id,
+					proposal.transactions,
+					signer
+				)
+				toastSuccess("Proposal successfully executed")
+				refetch()
+			}
 		} catch (e) {
 			console.error(e)
 			toastError("Failed to finalize vote")
@@ -125,6 +168,14 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 
 	return (
 		<>
+			{finalizeTxHash && (
+				<AmbRedirectModal
+					hash={finalizeTxHash}
+					onClose={() => {
+						setFinalizeTxHash("")
+					}}
+				/>
+			)}
 			<VotingModal
 				show={showVotingModal}
 				strategyAddress={proposal.strategyAddress}
@@ -134,6 +185,7 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 				onClose={() => {
 					setShowVotingModal(false)
 				}}
+				sideChain={multiChain}
 			/>
 			<ProposalLayout
 				proposal={proposal}

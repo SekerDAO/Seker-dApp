@@ -4,9 +4,11 @@ import {ToastContainer} from "react-toastify"
 import "react-toastify/dist/ReactToastify.min.css"
 import Footer from "./components/Footer"
 import Header from "./components/Header"
+import MetamaskWarnModal from "./components/Modals/MetamaskWarnModal"
 import ErrorPlaceholder from "./components/UI/ErrorPlaceholder"
 import "./components/UI/Toast/styles.scss"
 import {AuthContext, useAuth} from "./context/AuthContext"
+import MetamaskWarnModalContext, {useMetamaskWarnModal} from "./context/MetamaskWarnModalContext"
 import ProviderContext, {useProvider} from "./context/ProviderContext"
 import "./default.scss"
 import Dao from "./pages/Dao"
@@ -18,23 +20,27 @@ import Profile from "./pages/Profile"
 
 const AppPure: FunctionComponent = () => {
 	const auth = useAuth()
+	const metamaskWarnModal = useMetamaskWarnModal()
 
 	return (
 		<BrowserRouter>
 			<AuthContext.Provider value={auth}>
-				<div className="main">
-					<Header />
-					<ToastContainer />
-					<Switch>
-						<Route exact path="/" component={Homepage} />
-						<Route exact path="/learn" component={Learn} />
-						<Route exact path="/nft/:id" component={NFTDetails} />
-						<Route exact path="/profile/:userId" component={Profile} />
-						<Route exact path="/dao/:address" component={Dao} />
-						<Route exact path="/daos" component={Daos} />
-					</Switch>
-					<Footer />
-				</div>
+				<MetamaskWarnModalContext.Provider value={metamaskWarnModal}>
+					<div className="main">
+						<Header />
+						<MetamaskWarnModal />
+						<ToastContainer />
+						<Switch>
+							<Route exact path="/" component={Homepage} />
+							<Route exact path="/learn" component={Learn} />
+							<Route exact path="/nft/:id" component={NFTDetails} />
+							<Route exact path="/profile/:userId" component={Profile} />
+							<Route exact path="/dao/:address" component={Dao} />
+							<Route exact path="/daos" component={Daos} />
+						</Switch>
+						<Footer />
+					</div>
+				</MetamaskWarnModalContext.Provider>
 			</AuthContext.Provider>
 		</BrowserRouter>
 	)
