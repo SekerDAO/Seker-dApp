@@ -1,4 +1,6 @@
 import {FunctionComponent, useState} from "react"
+import config from "../../../../config"
+import networks from "../../../../constants/networks"
 import {formatReadableAddress} from "../../../../utlls"
 import Button from "../../../Controls/Button"
 import Modal from "../../../Modals/Modal"
@@ -41,7 +43,9 @@ const AdminVotesCard: FunctionComponent<AdminVotesCardProps> = ({
 					{votes.map(({address, tokens}, index) => (
 						<li key={index}>
 							<a
-								href={`https://rinkeby.etherscan.io/address/${address}`}
+								href={`https://${
+									config.CHAIN_ID === 1 ? "" : `${networks[config.CHAIN_ID]}.`
+								}etherscan.io/address/${address}`}
 								target="_blank"
 								rel="noreferrer"
 							>

@@ -1,5 +1,7 @@
 import {BigNumber} from "@ethersproject/bignumber"
 import {FunctionComponent, useState} from "react"
+import config from "../../../../config"
+import networks from "../../../../constants/networks"
 import {StrategyProposalVote} from "../../../../types/strategyProposal"
 import {capitalize, formatNumber, formatReadableAddress} from "../../../../utlls"
 import Button from "../../../Controls/Button"
@@ -13,6 +15,7 @@ type StrategyVotesCardProps = {
 	totalValue: BigNumber
 	value: BigNumber
 	votes: StrategyProposalVote[]
+	sideChain: boolean
 }
 
 const StrategyVotesCard: FunctionComponent<StrategyVotesCardProps> = ({
@@ -20,7 +23,8 @@ const StrategyVotesCard: FunctionComponent<StrategyVotesCardProps> = ({
 	type,
 	value,
 	totalValue,
-	votes
+	votes,
+	sideChain
 }) => {
 	const percentageValue = totalValue.isZero()
 		? 0
@@ -50,13 +54,23 @@ const StrategyVotesCard: FunctionComponent<StrategyVotesCardProps> = ({
 					{votes.map(({voter, weight}, index) => (
 						<li key={index}>
 							<a
-								href={`https://rinkeby.etherscan.io/address/${voter}`}
+								href={
+									sideChain
+										? `https://blockscout.com/${
+												config.SIDE_CHAIN_ID === 77 ? "poa/sokol" : "xdai/aox"
+										  }/address/${voter}/transactions`
+										: `https://${
+												config.CHAIN_ID === 1 ? "" : `${networks[config.CHAIN_ID]}.`
+										  }etherscan.io/address/${voter}`
+								}
 								target="_blank"
 								rel="noreferrer"
 							>
 								{formatReadableAddress(voter)}
 							</a>
-							<span>{`${weight.div(1000).toString()}k`}</span>
+							<span>
+								{formatNumber(weight.div(BigNumber.from(Math.pow(10, 15))).toNumber() / 1000)}
+							</span>
 						</li>
 					))}
 				</ul>
@@ -71,7 +85,8 @@ const StrategyProposalVotes: FunctionComponent<StrategyVotesCardProps & {fullWid
 	value,
 	totalValue,
 	votes,
-	fullWidth
+	fullWidth,
+	sideChain
 }) => {
 	const [showModal, setShowModal] = useState(false)
 	return (
@@ -81,6 +96,7 @@ const StrategyProposalVotes: FunctionComponent<StrategyVotesCardProps & {fullWid
 				type={type}
 				value={value}
 				totalValue={totalValue}
+				sideChain={sideChain}
 			>
 				{votes.length > 3 && (
 					<Button buttonType="link" onClick={() => setShowModal(true)}>
@@ -90,7 +106,13 @@ const StrategyProposalVotes: FunctionComponent<StrategyVotesCardProps & {fullWid
 			</StrategyVotesCard>
 			{votes.length > 3 && (
 				<Modal show={showModal} onClose={() => setShowModal(false)}>
-					<StrategyVotesCard votes={votes} type={type} value={value} totalValue={totalValue} />
+					<StrategyVotesCard
+						votes={votes}
+						type={type}
+						value={value}
+						totalValue={totalValue}
+						sideChain={sideChain}
+					/>
 				</Modal>
 			)}
 		</Paper>

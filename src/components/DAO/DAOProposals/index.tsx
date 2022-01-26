@@ -11,7 +11,7 @@ import ProposalHeader from "../Proposal/ProposalHeader"
 import "./styles.scss"
 
 const DAOProposalCard: FunctionComponent<{
-	proposal: (SafeProposal | StrategyProposal) & {proposalId: string}
+	proposal: (SafeProposal | StrategyProposal) & {proposalId: string; multiChain?: boolean}
 }> = ({proposal}) => {
 	const {pathname} = useLocation()
 
@@ -22,7 +22,11 @@ const DAOProposalCard: FunctionComponent<{
 			}&id=${proposal.proposalId}`}
 		>
 			<Paper className="dao-proposals__card">
-				<ProposalHeader proposal={proposal} id={proposal.proposalId} />
+				<ProposalHeader
+					proposal={proposal}
+					id={proposal.proposalId}
+					sideChain={!!proposal.multiChain}
+				/>
 			</Paper>
 		</Link>
 	)

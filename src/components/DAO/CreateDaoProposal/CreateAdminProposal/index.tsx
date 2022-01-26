@@ -1,4 +1,5 @@
 import {FunctionComponent, useState} from "react"
+import {useHistory, useLocation} from "react-router-dom"
 import useValidation from "../../../../hooks/useValidation"
 import {SafeProposalsTypeNames, SafeProposalType} from "../../../../types/safeProposal"
 import {noSpecialCharsRegex} from "../../../../utlls"
@@ -19,11 +20,8 @@ const CreateAdminProposal: FunctionComponent<{
 		async val => (!val || noSpecialCharsRegex.test(val) ? null : "Not a valid title")
 	])
 	const [description, setDescription] = useState("")
-
-	const afterSubmit = () => {
-		setTitle("")
-		setDescription("")
-	}
+	const {push} = useHistory()
+	const {pathname} = useLocation()
 
 	return (
 		<>
@@ -64,7 +62,9 @@ const CreateAdminProposal: FunctionComponent<{
 					title={title}
 					titleValidation={validation}
 					description={description}
-					afterSubmit={afterSubmit}
+					afterSubmit={() => {
+						push(`${pathname}?page=proposals`)
+					}}
 					ownersCount={ownersCount}
 				/>
 			)}
@@ -75,7 +75,9 @@ const CreateAdminProposal: FunctionComponent<{
 					title={title}
 					titleValidation={validation}
 					description={description}
-					afterSubmit={afterSubmit}
+					afterSubmit={() => {
+						push(`${pathname}?page=proposals`)
+					}}
 				/>
 			)}
 		</>

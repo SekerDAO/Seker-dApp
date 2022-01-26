@@ -1,9 +1,11 @@
 import {isAddress} from "@ethersproject/address"
 import {FunctionComponent, useContext, useState} from "react"
 import {delegateVote} from "../../../api/ethers/functions/Usul/voting/votingApi"
+import config from "../../../config"
 import {VOTING_STRATEGIES} from "../../../constants/votingStrategies"
 import {AuthContext} from "../../../context/AuthContext"
 import useGovToken from "../../../hooks/getters/useGovToken"
+import useCheckNetwork from "../../../hooks/useCheckNetwork"
 import {VotingStrategy} from "../../../types/DAO"
 import {formatReadableAddress} from "../../../utlls"
 import Input from "../../Controls/Input"
@@ -33,6 +35,11 @@ const DelegateTokenModal: FunctionComponent<{
 	} = useGovToken(strategy.address, sideChain)
 	const [delegateeAddress, setDelegateeAddress] = useState<string>()
 
+	const checkedDelegateVote = useCheckNetwork(
+		delegateVote,
+		sideChain ? config.SIDE_CHAIN_ID : config.CHAIN_ID
+	)
+
 	if (error) return <ErrorPlaceholder />
 
 	const handleDelegateToChange = (newValue: "self" | "address") => {
@@ -48,10 +55,10 @@ const DelegateTokenModal: FunctionComponent<{
 		setProcessing(true)
 		try {
 			if (delegateTo === "self") {
-				await delegateVote(govTokenAddress, account, signer)
+				await checkedDelegateVote(govTokenAddress, account, signer)
 			} else {
 				if (delegateeAddress) {
-					await delegateVote(govTokenAddress, delegateeAddress, signer)
+					await checkedDelegateVote(govTokenAddress, delegateeAddress, signer)
 				}
 			}
 			toastSuccess("Tokens successfully delegated")

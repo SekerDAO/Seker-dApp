@@ -15,13 +15,13 @@ import {StrategyProposal} from "../../types/strategyProposal"
 const useProposals = (
 	gnosisAddress: string
 ): {
-	proposals: ((SafeProposal | StrategyProposal) & {proposalId: string})[]
+	proposals: ((SafeProposal | StrategyProposal) & {proposalId: string; sideChain?: boolean})[]
 	loading: boolean
 	error: boolean
 	refetch: () => void
 } => {
 	const [proposals, setProposals] = useState<
-		((SafeProposal | StrategyProposal) & {proposalId: string})[]
+		((SafeProposal | StrategyProposal) & {proposalId: string; sideChain?: boolean})[]
 	>([])
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
@@ -70,7 +70,8 @@ const useProposals = (
 					usulAddress,
 					p.id,
 					dao.usulDeployType === "usulMulti" ? sideChainProvider : provider
-				)
+				),
+				sideChain: dao.usulDeployType === "usulMulti"
 			}))
 		)
 	}

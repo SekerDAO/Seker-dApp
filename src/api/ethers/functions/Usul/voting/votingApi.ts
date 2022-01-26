@@ -57,33 +57,43 @@ export const checkDelegatee = async (
 export const getProposalVotesList = async (
 	strategyAddress: string,
 	proposalId: number,
-	provider: JsonRpcProvider
+	provider: JsonRpcProvider,
+	sideChain: boolean
 ): Promise<StrategyProposalVote[]> => {
 	const voting = new Contract(strategyAddress, OZLinearVoting.abi, provider)
-	// const filter = voting.filters.Voted()
-	const events = await voting.queryFilter(
-		{
-			// TODO: should be filter instead of this manually created hash, but
-			// for some reason it looks like the contract still emitting events without weight
-			address: strategyAddress,
-			topics: [id("Voted(address,uint256,uint8)")]
-		},
-		0,
-		"latest"
-	)
+	// TODO: for some reason weight is missing for kovan and rinkeby
+	const filter = sideChain
+		? voting.filters.Voted()
+		: {
+				address: strategyAddress,
+				topics: [id("Voted(address,uint256,uint8)")]
+		  }
+	const events = await voting.queryFilter(filter, 0, "latest")
 	return events
 		.map(e => {
-			// TODO: add weight here
-			const [voter, _proposalId, choice /*, weight*/] = defaultAbiCoder.decode(
-				["address", "uint256", "uint8" /*, "uint256"*/],
-				e.data
-			)
-			return {
-				voter,
-				proposalId: _proposalId.toNumber(),
-				choice: VOTE_CHOICES[choice],
-				// weight
-				weight: BigNumber.from(0)
+			if (sideChain) {
+				const [voter, _proposalId, choice, weight] = defaultAbiCoder.decode(
+					["address", "uint256", "uint8", "uint256"],
+					e.data
+				)
+				return {
+					voter,
+					proposalId: _proposalId.toNumber(),
+					choice: VOTE_CHOICES[choice],
+					weight
+				}
+			} else {
+				// TODO: fix weight
+				const [voter, _proposalId, choice] = defaultAbiCoder.decode(
+					["address", "uint256", "uint8"],
+					e.data
+				)
+				return {
+					voter,
+					proposalId: _proposalId.toNumber(),
+					choice: VOTE_CHOICES[choice],
+					weight: BigNumber.from(0)
+				}
 			}
 		})
 		.filter(e => e.proposalId === proposalId)

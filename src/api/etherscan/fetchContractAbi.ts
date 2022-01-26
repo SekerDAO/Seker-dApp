@@ -1,9 +1,10 @@
 import config from "../../config"
+import networks from "../../constants/networks"
 
 const fetchContractAbi = async (address: string): Promise<string> => {
 	const res = await fetch(
 		`https://api${
-			config.CHAIN_ID === 4 ? "-rinkeby" : ""
+			config.CHAIN_ID === 1 ? "" : `-${networks[config.CHAIN_ID]}`
 		}.etherscan.io/api?module=contract&action=getabi&address=${address}`
 	)
 	const contentType = res.headers.get("content-type")

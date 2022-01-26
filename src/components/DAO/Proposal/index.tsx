@@ -188,7 +188,7 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 				sideChain={multiChain}
 			/>
 			<ProposalLayout
-				proposal={proposal}
+				proposal={{...proposal, multiChain: !!proposal.bridgeAddress}}
 				votesThreshold={100}
 				votes={votes}
 				votesLoading={votesLoading}

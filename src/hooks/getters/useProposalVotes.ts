@@ -5,19 +5,24 @@ import ProviderContext from "../../context/ProviderContext"
 import {StrategyProposal, StrategyProposalVote} from "../../types/strategyProposal"
 
 const useProposalVotes = (
-	proposal: StrategyProposal | null
+	proposal: (StrategyProposal & {bridgeAddress?: string}) | null
 ): {
 	votes: StrategyProposalVote[]
 	loading: boolean
 } => {
 	const [votes, setVotes] = useState<StrategyProposalVote[]>([])
 	const [loading, setLoading] = useState(false)
-	const {provider} = useContext(ProviderContext)
+	const {provider, sideChainProvider} = useContext(ProviderContext)
 
-	const getData = async (_proposal: StrategyProposal) => {
+	const getData = async (_proposal: StrategyProposal & {bridgeAddress?: string}) => {
 		setLoading(true)
 		try {
-			const res = await getProposalVotesList(_proposal.strategyAddress, _proposal.id, provider)
+			const res = await getProposalVotesList(
+				_proposal.strategyAddress,
+				_proposal.id,
+				_proposal.bridgeAddress ? sideChainProvider : provider,
+				!!_proposal.bridgeAddress
+			)
 			setVotes(res)
 		} catch (e) {
 			console.error(e)

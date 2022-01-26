@@ -7,6 +7,7 @@ import ErrorPlaceholder from "../../components/UI/ErrorPlaceholder"
 import Loader from "../../components/UI/Loader"
 import {toastError, toastSuccess} from "../../components/UI/Toast"
 import config from "../../config"
+import networks from "../../constants/networks"
 import {AuthContext} from "../../context/AuthContext"
 import useNFT from "../../hooks/getters/useNFT"
 import {Auction} from "../../types/auction"
@@ -97,9 +98,9 @@ const NftDetails: FunctionComponent = () => {
 					<a
 						target="_blank"
 						rel="noopener noreferrer"
-						href={`https://${config.CHAIN_ID === 4 ? "rinkeby." : ""}etherscan.io/token/${
-							nft.address
-						}?a=${nft.id}`}
+						href={`https://${
+							config.CHAIN_ID === 1 ? "" : `${networks[config.CHAIN_ID]}.`
+						}etherscan.io/token/${nft.address}?a=${nft.id}`}
 					>
 						<Button buttonType="secondary">View on Etherscan</Button>
 					</a>

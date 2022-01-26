@@ -13,7 +13,7 @@ import AdminProposalVotes from "../ProposalVotes/AdminProposalVotes"
 import StrategyProposalVotes from "../ProposalVotes/StrategyProposalVotes"
 
 const ProposalLayout: FunctionComponent<{
-	proposal: (SafeProposal | StrategyProposal) & {proposalId: string}
+	proposal: (SafeProposal | StrategyProposal) & {proposalId: string; multiChain?: boolean}
 	votesThreshold: number
 	votes?: StrategyProposalVote[]
 	votesLoading?: boolean
@@ -24,7 +24,12 @@ const ProposalLayout: FunctionComponent<{
 
 	return (
 		<div className="proposal">
-			<ProposalHeader proposal={proposal} id={proposal.proposalId} showLinks>
+			<ProposalHeader
+				proposal={proposal}
+				id={proposal.proposalId}
+				showLinks
+				sideChain={!!proposal.multiChain}
+			>
 				<BackButton onClick={() => push(`/dao/${proposal.gnosisAddress}?page=proposals`)} />
 			</ProposalHeader>
 			<div className="proposal__content">
@@ -68,18 +73,21 @@ const ProposalLayout: FunctionComponent<{
 									value={proposal.votes.yes}
 									totalValue={proposal.votes.yes.add(proposal.votes.no).add(proposal.votes.abstain)}
 									votes={votes!.filter(v => v.choice === "yes")}
+									sideChain={!!proposal.multiChain}
 								/>
 								<StrategyProposalVotes
 									type="against"
 									value={proposal.votes.no}
 									totalValue={proposal.votes.yes.add(proposal.votes.no).add(proposal.votes.abstain)}
 									votes={votes!.filter(v => v.choice === "no")}
+									sideChain={!!proposal.multiChain}
 								/>
 								<StrategyProposalVotes
 									type="abstain"
 									value={proposal.votes.abstain}
 									totalValue={proposal.votes.yes.add(proposal.votes.no).add(proposal.votes.abstain)}
 									votes={votes!.filter(v => v.choice === "abstain")}
+									sideChain={!!proposal.multiChain}
 								/>
 							</>
 						)}

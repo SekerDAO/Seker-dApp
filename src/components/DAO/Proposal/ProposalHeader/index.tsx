@@ -1,5 +1,7 @@
 import {FunctionComponent, useEffect, useState} from "react"
 import {Link} from "react-router-dom"
+import config from "../../../../config"
+import networks from "../../../../constants/networks"
 import {isSafeProposal, SafeProposal} from "../../../../types/safeProposal"
 import {StrategyProposal} from "../../../../types/strategyProposal"
 import {capitalize, formatReadableAddress, formatTime} from "../../../../utlls"
@@ -10,7 +12,8 @@ const ProposalHeader: FunctionComponent<{
 	proposal: SafeProposal | StrategyProposal
 	id: string
 	showLinks?: boolean
-}> = ({proposal, id, children, showLinks}) => {
+	sideChain: boolean
+}> = ({proposal, id, children, showLinks, sideChain}) => {
 	const isAdminProposal = isSafeProposal(proposal)
 	const [currentDate, setCurrentDate] = useState(new Date().getTime())
 	const updateDate = () => {
@@ -67,12 +70,21 @@ const ProposalHeader: FunctionComponent<{
 					{!isAdminProposal && proposal.govTokenAddress && (
 						<p>
 							Voting Token:
-							<Link
-								to={{pathname: `https://rinkeby.etherscan.io/token/${proposal.govTokenAddress}`}}
+							<a
+								href={
+									sideChain
+										? `https://blockscout.com/${
+												config.SIDE_CHAIN_ID === 77 ? "poa/sokol" : "xdai/aox"
+										  }/token/${proposal.govTokenAddress}`
+										: `https://${
+												config.CHAIN_ID === 1 ? "" : `${networks[config.CHAIN_ID]}.`
+										  }etherscan.io/token/${proposal.govTokenAddress}`
+								}
 								target="_blank"
+								rel="noopener noreferrer"
 							>
 								{formatReadableAddress(proposal.govTokenAddress)}
-							</Link>
+							</a>
 						</p>
 					)}
 				</div>

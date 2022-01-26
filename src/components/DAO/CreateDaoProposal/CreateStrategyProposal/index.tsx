@@ -1,4 +1,5 @@
 import {FunctionComponent, useContext, useState} from "react"
+import {useHistory, useLocation} from "react-router-dom"
 import {buildMultiSendTx} from "../../../../api/ethers/functions/Usul/multiSend"
 import {
 	buildProposalTxMultiChain,
@@ -40,6 +41,8 @@ const CreateStrategyProposal: FunctionComponent<{
 		async val => (!val || noSpecialCharsRegex.test(val) ? null : "Not a valid title")
 	])
 	const [description, setDescription] = useState("")
+	const {push} = useHistory()
+	const {pathname} = useLocation()
 
 	const checkedSubmitProposal = useCheckNetwork(
 		submitProposal,
@@ -76,9 +79,8 @@ const CreateStrategyProposal: FunctionComponent<{
 				title,
 				description
 			})
-			setTitle("")
-			setDescription("")
 			toastSuccess("Proposal successfully created!")
+			push(`${pathname}?page=proposals`)
 		} catch (e) {
 			console.error(e)
 			toastError("Failed to create proposal")

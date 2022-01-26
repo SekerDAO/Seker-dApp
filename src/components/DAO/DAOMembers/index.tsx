@@ -1,5 +1,6 @@
 import {FunctionComponent, useState} from "react"
 import config from "../../../config"
+import networks from "../../../constants/networks"
 import {VOTING_STRATEGIES} from "../../../constants/votingStrategies"
 import {DAO, VotingStrategy} from "../../../types/DAO"
 import {formatReadableAddress} from "../../../utlls"
@@ -80,8 +81,15 @@ const DAOMembers: FunctionComponent<{
 									buttonType="link"
 									onClick={() =>
 										window.open(
-											`https://rinkeby.etherscan.io/token/${selectedStrategy.address}`,
-											"_blank"
+											dao.usulDeployType === "usulMulti"
+												? `https://blockscout.com/${
+														config.SIDE_CHAIN_ID === 77 ? "poa/sokol" : "xdai/aox"
+												  }/address/${selectedStrategy.govTokenAddress}/transactions`
+												: `https://${
+														config.CHAIN_ID === 1 ? "" : `${networks[config.CHAIN_ID]}.`
+												  }etherscan.io/address/${selectedStrategy.govTokenAddress}`,
+											"_blank",
+											"noopener,noreferrer"
 										)
 									}
 								>
@@ -109,9 +117,15 @@ const DAOMembers: FunctionComponent<{
 						<a
 							target="_blank"
 							rel="noopener noreferrer"
-							href={`https://${config.CHAIN_ID === 4 ? "rinkeby." : ""}etherscan.io/token/${
-								selectedStrategy.govTokenAddress
-							}#balances`}
+							href={
+								dao.usulDeployType === "usulMulti"
+									? `https://blockscout.com/${
+											config.SIDE_CHAIN_ID === 77 ? "poa/sokol" : "xdai/aox"
+									  }/token/${selectedStrategy.govTokenAddress}`
+									: `https://${
+											config.CHAIN_ID === 1 ? "" : `${networks[config.CHAIN_ID]}.`
+									  }etherscan.io/token/${selectedStrategy.govTokenAddress}#balances`
+							}
 						>
 							View holders on Etherscan
 						</a>
