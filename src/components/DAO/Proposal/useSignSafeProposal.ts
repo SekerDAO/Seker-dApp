@@ -47,9 +47,14 @@ const useSignSafeProposal = ({
 	const {signer} = useContext(AuthContext)
 
 	const checkedSignMultiSend = useCheckNetwork(signMultiSend)
+	const checkedGetMultiSendTxBuild = useCheckNetwork(getMultiSendTxBuild)
 	const checkedExecuteMultiSend = useCheckNetwork(executeMultiSend)
 	const checkedSignRegisterModule = useCheckNetwork(signRegisterModuleTx)
 	const checkedExecuteRegisterModule = useCheckNetwork(executeRegisterModuleTx)
+	const checkedSignAddOwner = useCheckNetwork(signAddOwner)
+	const checkedSignRemoveOwner = useCheckNetwork(signRemoveOwner)
+	const checkedExecuteAddOwner = useCheckNetwork(executeAddOwner)
+	const checkedExecuteRemoveOwner = useCheckNetwork(executeRemoveOwner)
 
 	const sign = async () => {
 		if (!(signer && proposal && canSign)) return
@@ -118,14 +123,14 @@ const useSignSafeProposal = ({
 					break
 				case "changeRole":
 					if (["head", "admin"].includes(proposal.newRole!)) {
-						;[signature] = await signAddOwner(
+						;[signature] = await checkedSignAddOwner(
 							proposal.gnosisAddress,
 							proposal.recipientAddress!,
 							proposal.newThreshold!,
 							signer
 						)
 						if (proposal.signatures?.length === proposal.gnosisVotingThreshold - 1) {
-							await executeAddOwner(
+							await checkedExecuteAddOwner(
 								proposal.gnosisAddress,
 								proposal.recipientAddress!,
 								proposal.newThreshold!,
@@ -135,7 +140,7 @@ const useSignSafeProposal = ({
 							executed = true
 						}
 					} else {
-						;[signature] = await signRemoveOwner(
+						;[signature] = await checkedSignRemoveOwner(
 							proposal.gnosisAddress,
 							proposal.recipientAddress!,
 							proposal.newThreshold!,
@@ -149,7 +154,7 @@ const useSignSafeProposal = ({
 								...(executed ? {newState: "executed"} : {})
 							})
 							signatureAdded = true
-							await executeRemoveOwner(
+							await checkedExecuteRemoveOwner(
 								proposal.gnosisAddress,
 								proposal.recipientAddress!,
 								proposal.newThreshold!,
@@ -220,14 +225,14 @@ const useSignSafeProposal = ({
 					if (!proposal.transactions) {
 						throw new Error("Unexpected empty transactions for general EVM proposal")
 					}
-					const multiTx = await getMultiSendTxBuild(
+					const multiTx = await checkedGetMultiSendTxBuild(
 						proposal.gnosisAddress,
 						proposal.transactions,
 						signer
 					)
-					;[signature] = await signMultiSend(multiTx, proposal.gnosisAddress, signer)
+					;[signature] = await checkedSignMultiSend(multiTx, proposal.gnosisAddress, signer)
 					if (proposal.signatures?.length === proposal.gnosisVotingThreshold - 1) {
-						await executeMultiSend(
+						await checkedExecuteMultiSend(
 							multiTx,
 							proposal.gnosisAddress,
 							[signature, ...proposal.signatures],

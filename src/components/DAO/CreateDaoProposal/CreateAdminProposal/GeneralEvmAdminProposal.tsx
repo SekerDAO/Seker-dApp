@@ -6,6 +6,7 @@ import {
 } from "../../../../api/ethers/functions/Usul/multiSend"
 import addSafeProposal from "../../../../api/firebase/safeProposal/addSafeProposal"
 import {AuthContext} from "../../../../context/AuthContext"
+import useCheckNetwork from "../../../../hooks/useCheckNetwork"
 import {PrebuiltTx} from "../../../../types/common"
 import {toastError, toastSuccess} from "../../../UI/Toast"
 import GeneralEvm from "../GeneralEvm"
@@ -21,14 +22,18 @@ const GeneralEvmAdminProposal: FunctionComponent<{
 	const {account, signer} = useContext(AuthContext)
 	const [processing, setProcessing] = useState(false)
 
+	const checkedGetMultiSendTxBuild = useCheckNetwork(getMultiSendTxBuild)
+	const checkedSignMultiSend = useCheckNetwork(signMultiSend)
+	const checkedExecuteMultiSend = useCheckNetwork(executeMultiSend)
+
 	const handleSubmit = async (txs: PrebuiltTx[]) => {
 		if (!(title && !titleValidation && signer && account)) return
 		setProcessing(true)
 		try {
-			const multiSendTx = await getMultiSendTxBuild(gnosisAddress, txs, signer)
-			const [signature, nonce] = await signMultiSend(multiSendTx, gnosisAddress, signer)
+			const multiSendTx = await checkedGetMultiSendTxBuild(gnosisAddress, txs, signer)
+			const [signature, nonce] = await checkedSignMultiSend(multiSendTx, gnosisAddress, signer)
 			if (gnosisVotingThreshold === 1) {
-				await executeMultiSend(multiSendTx, gnosisAddress, [signature], signer)
+				await checkedExecuteMultiSend(multiSendTx, gnosisAddress, [signature], signer)
 			}
 			await addSafeProposal({
 				type: "generalEVM",

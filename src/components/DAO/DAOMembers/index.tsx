@@ -62,6 +62,7 @@ const DAOMembers: FunctionComponent<{
 						<DelegateTokenModal
 							onClose={() => setDelegateModalOpen(false)}
 							strategy={selectedStrategy}
+							sideChain={dao.usulDeployType === "usulMulti"}
 						/>
 					)}
 				<div className="dao-members__body-heading">

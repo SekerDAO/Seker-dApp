@@ -54,6 +54,8 @@ const ChangeRole: FunctionComponent<{
 
 	const checkedSignAddOwner = useCheckNetwork(signAddOwner)
 	const checkedExecuteAddOwner = useCheckNetwork(executeAddOwner)
+	const checkedSignRemoveOwner = useCheckNetwork(signRemoveOwner)
+	const checkedExecuteRemoveOwner = useCheckNetwork(executeRemoveOwner)
 
 	if (error) return <ErrorPlaceholder />
 	if (!dao || loading) return <Loader />
@@ -115,14 +117,14 @@ const ChangeRole: FunctionComponent<{
 				if (!owner) {
 					throw new Error("Member not exists")
 				}
-				;[signature, nonce] = await signRemoveOwner(
+				;[signature, nonce] = await checkedSignRemoveOwner(
 					gnosisAddress,
 					address,
 					Number(newThreshold),
 					signer
 				)
 				if (gnosisVotingThreshold === 1) {
-					await executeRemoveOwner(
+					await checkedExecuteRemoveOwner(
 						gnosisAddress,
 						address,
 						Number(newThreshold),

@@ -25,7 +25,7 @@ const useProposals = (
 	>([])
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
-	const {provider} = useContext(ProviderContext)
+	const {provider, sideChainProvider} = useContext(ProviderContext)
 
 	const fetchSafeProposals = async () => {
 		const [proposalsSnapshots, nonce] = await Promise.all([
@@ -55,9 +55,22 @@ const useProposals = (
 			firebaseData.map(async p => ({
 				...p,
 				usulAddress,
-				state: (await getProposalState(usulAddress, p.id, provider)).state,
-				govTokenAddress: await getStrategyGovTokenAddress(p.strategyAddress, provider),
-				votes: await getProposalVotesSummary(usulAddress, p.id, provider)
+				state: (
+					await getProposalState(
+						usulAddress,
+						p.id,
+						dao.usulDeployType === "usulMulti" ? sideChainProvider : provider
+					)
+				).state,
+				govTokenAddress: await getStrategyGovTokenAddress(
+					p.strategyAddress,
+					dao.usulDeployType === "usulMulti" ? sideChainProvider : provider
+				),
+				votes: await getProposalVotesSummary(
+					usulAddress,
+					p.id,
+					dao.usulDeployType === "usulMulti" ? sideChainProvider : provider
+				)
 			}))
 		)
 	}

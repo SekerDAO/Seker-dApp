@@ -2,6 +2,7 @@ import {FunctionComponent, useContext, useState} from "react"
 import deployCustomDomain from "../../../api/ethers/functions/customDomain/deployCustomDomain"
 import addDomain from "../../../api/firebase/user/addDomain"
 import {AuthContext} from "../../../context/AuthContext"
+import useCheckNetwork from "../../../hooks/useCheckNetwork"
 import Button from "../../Controls/Button"
 import Input from "../../Controls/Input"
 import {toastError} from "../../UI/Toast"
@@ -18,11 +19,13 @@ const CreateCustomDomainModal: FunctionComponent<{
 	const [success, setSuccess] = useState(false)
 	const {signer} = useContext(AuthContext)
 
+	const checkedDeployCustomDomain = useCheckNetwork(deployCustomDomain)
+
 	const handleSubmit = async () => {
 		if (!(name && symbol && signer) || loading) return
 		setLoading(true)
 		try {
-			const domainAddress = await deployCustomDomain(name, symbol, signer)
+			const domainAddress = await checkedDeployCustomDomain(name, symbol, signer)
 			await addDomain({name, symbol, address: domainAddress})
 			setName("")
 			setSymbol("")

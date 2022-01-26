@@ -10,6 +10,7 @@ import uploadMedia from "../../api/ipfs/uploadMedia"
 import config from "../../config"
 import {AuthContext} from "../../context/AuthContext"
 import ProviderContext from "../../context/ProviderContext"
+import useCheckNetwork from "../../hooks/useCheckNetwork"
 import {Domain} from "../../types/user"
 import Button from "../Controls/Button"
 import Input from "../Controls/Input"
@@ -44,6 +45,9 @@ const CreateNFTForm: FunctionComponent<{
 	const [existingNftIdValidation, setExisingNftIdValidation] = useState<string | null>(null)
 	const {provider} = useContext(ProviderContext)
 	const {account, signer, connected} = useContext(AuthContext)
+
+	const checkedCreateNft = useCheckNetwork(createNFT)
+	const checkedTransferNft = useCheckNetwork(transferNFT)
 
 	if (!connected) {
 		return <ConnectWalletPlaceholder />
@@ -113,7 +117,7 @@ const CreateNFTForm: FunctionComponent<{
 					description,
 					Number(numberOfEditions)
 				)
-				const ids = await createNFT(
+				const ids = await checkedCreateNft(
 					hashes,
 					Number(numberOfEditions),
 					signer,
@@ -132,7 +136,7 @@ const CreateNFTForm: FunctionComponent<{
 				}
 				for (let i = 0; i < ids.length; i++) {
 					if (gnosisAddress) {
-						await transferNFT(
+						await checkedTransferNft(
 							account,
 							ids[i],
 							gnosisAddress,

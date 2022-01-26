@@ -6,7 +6,8 @@ import {AuthContext} from "../../context/AuthContext"
 import ProviderContext from "../../context/ProviderContext"
 
 const useGovToken = (
-	strategyAddress: string
+	strategyAddress: string,
+	sideChain: boolean
 ): {
 	govTokenAddress: string | null
 	delegateeAddress: string | null
@@ -19,14 +20,17 @@ const useGovToken = (
 	const [balance, setBalance] = useState(0)
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
-	const {provider} = useContext(ProviderContext)
+	const {provider, sideChainProvider} = useContext(ProviderContext)
 	const {account} = useContext(AuthContext)
 
 	const getGovTokenAddress = async () => {
 		if (!strategyAddress) return
 		setLoading(true)
 		try {
-			const tokenAddress = await getStrategyGovTokenAddress(strategyAddress, provider)
+			const tokenAddress = await getStrategyGovTokenAddress(
+				strategyAddress,
+				sideChain ? sideChainProvider : provider
+			)
 			setGovTokenAddress(tokenAddress)
 		} catch (e) {
 			console.error(e)
@@ -45,8 +49,8 @@ const useGovToken = (
 		setLoading(true)
 		try {
 			const [delegatee, newBalance] = await Promise.all([
-				checkDelegatee(govTokenAddress, account, provider),
-				getERC20Balance(govTokenAddress, account, provider)
+				checkDelegatee(govTokenAddress, account, sideChain ? sideChainProvider : provider),
+				getERC20Balance(govTokenAddress, account, sideChain ? sideChainProvider : provider)
 			])
 			setDelegateeAddress(delegatee)
 			setBalance(newBalance)

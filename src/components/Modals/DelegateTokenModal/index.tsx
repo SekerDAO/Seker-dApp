@@ -19,7 +19,8 @@ import "./styles.scss"
 const DelegateTokenModal: FunctionComponent<{
 	strategy: VotingStrategy
 	onClose: () => void
-}> = ({strategy, onClose}) => {
+	sideChain: boolean
+}> = ({strategy, onClose, sideChain}) => {
 	const {signer, account, connected} = useContext(AuthContext)
 	const [processing, setProcessing] = useState(false)
 	const [delegateTo, setDelegateTo] = useState<"self" | "address">("self")
@@ -29,7 +30,7 @@ const DelegateTokenModal: FunctionComponent<{
 		balance,
 		loading,
 		error
-	} = useGovToken(strategy.address)
+	} = useGovToken(strategy.address, sideChain)
 	const [delegateeAddress, setDelegateeAddress] = useState<string>()
 
 	if (error) return <ErrorPlaceholder />

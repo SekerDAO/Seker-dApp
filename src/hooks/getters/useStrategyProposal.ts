@@ -25,7 +25,7 @@ const useStrategyProposal = (
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState(false)
 	const {connected, account} = useContext(AuthContext)
-	const {provider} = useContext(ProviderContext)
+	const {provider, sideChainProvider} = useContext(ProviderContext)
 
 	const getData = async () => {
 		try {
@@ -39,22 +39,33 @@ const useStrategyProposal = (
 			if (!dao.usulAddress) {
 				throw new Error("Unexpected strategy proposal on DAO without usul address")
 			}
-			const {state, deadline} = await getProposalState(dao.usulAddress, proposalData.id, provider)
+			const {state, deadline} = await getProposalState(
+				dao.usulAddress,
+				proposalData.id,
+				dao.usulDeployType === "usulMulti" ? sideChainProvider : provider
+			)
 			setProposal({
 				...proposalData,
 				state,
 				deadline,
-				govTokenAddress: await getStrategyGovTokenAddress(proposalData.strategyAddress, provider),
+				govTokenAddress: await getStrategyGovTokenAddress(
+					proposalData.strategyAddress,
+					dao.usulDeployType === "usulMulti" ? sideChainProvider : provider
+				),
 				proposalId: id,
 				usulAddress: dao.usulAddress,
-				votes: await getProposalVotesSummary(dao.usulAddress, proposalData.id, provider)
+				votes: await getProposalVotesSummary(
+					dao.usulAddress,
+					proposalData.id,
+					dao.usulDeployType === "usulMulti" ? sideChainProvider : provider
+				)
 			})
 			if (state === "active" && account) {
 				const alreadyVoted = await hasVoted(
 					proposalData.strategyAddress,
 					proposalData.id,
 					account,
-					provider
+					dao.usulDeployType === "usulMulti" ? sideChainProvider : provider
 				)
 				setUserHasVoted(alreadyVoted)
 			}

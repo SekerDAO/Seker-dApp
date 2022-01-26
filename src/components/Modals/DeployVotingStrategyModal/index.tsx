@@ -27,23 +27,21 @@ const DeployVotingStrategyModal: FunctionComponent<{
 }> = ({strategy, onSubmit, onClose, sideChain}) => {
 	const [createTokenModalOpened, setCreateTokenModalOpened] = useState(false)
 	const {signer} = useContext(AuthContext)
-	const {provider} = useContext(ProviderContext)
+	const {provider, sideChainProvider} = useContext(ProviderContext)
 
 	const [tokenAddress, setTokenAddress] = useState("")
 	const [tokenAddressValidation, setTokenAddressValidation] = useState<string | null>(null)
+
 	useEffect(() => {
 		if (tokenAddress) {
 			if (isAddress(tokenAddress)) {
-				// TODO: for some reason check is not working on sokol
-				if (!sideChain) {
-					checkErc20Wrapped(tokenAddress, provider).then(res => {
-						if (res) {
-							setTokenAddressValidation(null)
-						} else {
-							setTokenAddressValidation("Token not wrapped")
-						}
-					})
-				}
+				checkErc20Wrapped(tokenAddress, sideChain ? sideChainProvider : provider).then(res => {
+					if (res) {
+						setTokenAddressValidation(null)
+					} else {
+						setTokenAddressValidation("Token not wrapped")
+					}
+				})
 			} else {
 				setTokenAddressValidation("Not a valid address")
 			}
