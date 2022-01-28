@@ -1,16 +1,14 @@
 import {BigNumberish} from "@ethersproject/bignumber"
 import {Contract} from "@ethersproject/contracts"
 import {JsonRpcProvider, JsonRpcSigner} from "@ethersproject/providers"
-import config from "../../../../config"
 import {
 	StrategyProposalState,
 	strategyProposalStates,
 	StrategyProposalVotesSummary
 } from "../../../../types/strategyProposal"
-import AMBModule from "../../abis/AMBModule.json"
 import OZLinearVoting from "../../abis/OZLinearVoting.json"
 import Usul from "../../abis/Usul.json"
-import {buildContractCall, SafeTransaction} from "../gnosisSafe/safeUtils"
+import {SafeTransaction} from "../gnosisSafe/safeUtils"
 
 export const submitProposal = async (
 	usulAddress: string,
@@ -58,28 +56,6 @@ export const submitProposal = async (
 			reject(err)
 		}
 	})
-
-export const buildProposalTxMultiChain = async (
-	multiTx: SafeTransaction,
-	safeAddress: string,
-	bridgeAddress: string
-): Promise<SafeTransaction> => {
-	const bridge = new Contract(bridgeAddress, AMBModule.abi)
-	const amb = new Contract(config.AMB_ADDRESS, AMBModule.abi)
-
-	const bridgeCall = buildContractCall(
-		bridge,
-		"executeTransaction",
-		[safeAddress, 0, multiTx.data, 0],
-		0
-	)
-	return buildContractCall(
-		amb,
-		"requireToPassMessage",
-		[bridgeAddress, bridgeCall.data, 1000000],
-		0
-	)
-}
 
 export const getProposalState = async (
 	usulAddress: string,

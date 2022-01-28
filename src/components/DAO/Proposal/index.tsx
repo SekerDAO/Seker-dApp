@@ -1,12 +1,12 @@
 import {parse} from "query-string"
 import {FunctionComponent, useContext, useEffect, useState} from "react"
 import {useLocation} from "react-router-dom"
+import buildBridgeTx from "../../../api/ethers/functions/AMB/buildBridgeTx"
 import {
 	executeProposalBatch,
 	executeProposalSingle
 } from "../../../api/ethers/functions/Usul/executeProposal"
 import {buildMultiSendTx} from "../../../api/ethers/functions/Usul/multiSend"
-import {buildProposalTxMultiChain} from "../../../api/ethers/functions/Usul/usulProposal"
 import {finalizeVotingLinear} from "../../../api/ethers/functions/Usul/voting/OzLinearVoting/ozLinearVotingApi"
 import {checkDelegatee} from "../../../api/ethers/functions/Usul/voting/votingApi"
 import {prebuiltTxToSafeTx} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
@@ -136,9 +136,8 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 				const hash = await checkedExecuteProposalSingle(
 					proposal.usulAddress,
 					proposal.id,
-					await buildProposalTxMultiChain(
+					await buildBridgeTx(
 						await buildMultiSendTx(txs, proposal.gnosisAddress, undefined, false, true),
-						proposal.gnosisAddress,
 						proposal.bridgeAddress!
 					),
 					signer

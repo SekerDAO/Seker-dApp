@@ -1,10 +1,8 @@
 import {FunctionComponent, useContext, useState} from "react"
 import {useHistory, useLocation} from "react-router-dom"
+import buildBridgeTx from "../../../../api/ethers/functions/AMB/buildBridgeTx"
 import {buildMultiSendTx} from "../../../../api/ethers/functions/Usul/multiSend"
-import {
-	buildProposalTxMultiChain,
-	submitProposal
-} from "../../../../api/ethers/functions/Usul/usulProposal"
+import {submitProposal} from "../../../../api/ethers/functions/Usul/usulProposal"
 import {prebuiltTxToSafeTx} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
 import addStrategyProposal from "../../../../api/firebase/strategyProposal/addStrategyProposal"
 import config from "../../../../config"
@@ -61,9 +59,8 @@ const CreateStrategyProposal: FunctionComponent<{
 				strategyAddress,
 				usulDeployType === "usulMulti"
 					? [
-							await buildProposalTxMultiChain(
+							await buildBridgeTx(
 								await buildMultiSendTx(txs, gnosisAddress, undefined, false, true),
-								gnosisAddress,
 								bridgeAddress!
 							)
 					  ]
