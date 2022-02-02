@@ -14,9 +14,7 @@ import {StrategyProposal} from "../../types/strategyProposal"
 const useStrategyProposal = (
 	id: string
 ): {
-	proposal:
-		| (StrategyProposal & {proposalId: string; usulAddress: string; bridgeAddress?: string})
-		| null
+	proposal: (StrategyProposal & {proposalId: string; bridgeAddress?: string}) | null
 	userHasVoted: boolean
 	loading: boolean
 	error: boolean
@@ -24,7 +22,7 @@ const useStrategyProposal = (
 	refetch: () => Promise<void>
 } => {
 	const [proposal, setProposal] = useState<
-		(StrategyProposal & {proposalId: string; usulAddress: string; bridgeAddress?: string}) | null
+		(StrategyProposal & {proposalId: string; bridgeAddress?: string}) | null
 	>(null)
 	const [userHasVoted, setUserHasVoted] = useState(false)
 	const [multiChain, setMultiChain] = useState(false)
@@ -42,14 +40,15 @@ const useStrategyProposal = (
 				throw new Error("Proposal not found")
 			}
 			const dao = await getDAO(proposalData.gnosisAddress)
-			if (!dao.usulAddress) {
-				throw new Error("Unexpected strategy proposal on DAO without usul address")
+			const usul = dao.usuls.find(u => u.usulAddress === proposalData.usulAddress)
+			if (!usul) {
+				throw new Error("Usul for strategy proposal not found on dao")
 			}
-			setMultiChain(dao.usulDeployType === "usulMulti")
+			setMultiChain(usul.deployType === "usulMulti")
 			const {state, deadline} = await getProposalState(
-				dao.usulAddress,
+				proposalData.usulAddress,
 				proposalData.id,
-				dao.usulDeployType === "usulMulti" ? sideChainProvider : provider
+				usul.deployType === "usulMulti" ? sideChainProvider : provider
 			)
 			setProposal({
 				...proposalData,
@@ -57,15 +56,15 @@ const useStrategyProposal = (
 				deadline,
 				govTokenAddress: await getStrategyGovTokenAddress(
 					proposalData.strategyAddress,
-					dao.usulDeployType === "usulMulti" ? sideChainProvider : provider
+					usul.deployType === "usulMulti" ? sideChainProvider : provider
 				),
 				proposalId: id,
-				usulAddress: dao.usulAddress,
-				bridgeAddress: dao.bridgeAddress,
+				usulAddress: usul.usulAddress,
+				bridgeAddress: usul.bridgeAddress,
 				votes: await getProposalVotesSummary(
-					dao.usulAddress,
+					usul.usulAddress,
 					proposalData.id,
-					dao.usulDeployType === "usulMulti" ? sideChainProvider : provider
+					usul.deployType === "usulMulti" ? sideChainProvider : provider
 				)
 			})
 			if (state === "active" && account) {
@@ -73,7 +72,7 @@ const useStrategyProposal = (
 					proposalData.strategyAddress,
 					proposalData.id,
 					account,
-					dao.usulDeployType === "usulMulti" ? sideChainProvider : provider
+					usul.deployType === "usulMulti" ? sideChainProvider : provider
 				)
 				setUserHasVoted(alreadyVoted)
 			}

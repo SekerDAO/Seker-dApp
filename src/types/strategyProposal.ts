@@ -39,6 +39,7 @@ export type StrategyProposalVote = {
 export type StrategyProposalFirebaseData = {
 	id: number
 	gnosisAddress: string
+	usulAddress: string
 	userAddress: string
 	strategyAddress: string
 	strategyType: VotingStrategyName

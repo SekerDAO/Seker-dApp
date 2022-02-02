@@ -26,17 +26,19 @@ const useDAO = (
 			const _dao = await getDAO(gnosisAddress)
 			const gnosisVotingThreshold = await getVotingThreshold(gnosisAddress, provider)
 			const owners = await getOwners(gnosisAddress, provider)
-			const strategies = _dao.usulAddress
-				? await getStrategies(
-						_dao.usulAddress,
-						_dao.usulDeployType === "usulSingle" ? provider : sideChainProvider
-				  )
-				: []
 			setDao({
 				..._dao,
 				gnosisVotingThreshold,
 				owners,
-				strategies
+				usuls: await Promise.all(
+					_dao.usuls.map(async usul => ({
+						...usul,
+						strategies: await getStrategies(
+							usul.usulAddress,
+							usul.deployType === "usulSingle" ? provider : sideChainProvider
+						)
+					}))
+				)
 			})
 		} catch (e) {
 			console.error(e)

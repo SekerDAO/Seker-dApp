@@ -69,6 +69,7 @@ const CreateStrategyProposal: FunctionComponent<{
 			)
 			await addStrategyProposal({
 				gnosisAddress,
+				usulAddress,
 				strategyAddress,
 				strategyType,
 				id: proposalId,

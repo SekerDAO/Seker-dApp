@@ -31,12 +31,6 @@ const useMyDAOs = (): {
 						const firebaseData = await getDAO(dao)
 						const gnosisVotingThreshold = await getVotingThreshold(dao, provider)
 						const owners = await getOwners(dao, provider)
-						const strategies = firebaseData.usulAddress
-							? await getStrategies(
-									firebaseData.usulAddress,
-									firebaseData.usulDeployType === "usulSingle" ? provider : sideChainProvider
-							  )
-							: []
 						const tokenSymbol = ""
 						const balance = 0
 						const fundedProjects = 0
@@ -47,7 +41,15 @@ const useMyDAOs = (): {
 							fundedProjects,
 							gnosisVotingThreshold,
 							owners,
-							strategies
+							usuls: await Promise.all(
+								firebaseData.usuls.map(async usul => ({
+									...usul,
+									strategies: await getStrategies(
+										usul.usulAddress,
+										usul.deployType === "usulSingle" ? provider : sideChainProvider
+									)
+								}))
+							)
 						}
 					})
 				)

@@ -153,11 +153,15 @@ const Dao: FunctionComponent = () => {
 											}
 									  ]
 									: []),
-								{
-									title: "Create Proposal",
-									to: `${pathname}?page=createProposal`,
-									page: "createProposal"
-								},
+								...(isAdmin || dao.usuls.length > 0
+									? [
+											{
+												title: "Create Proposal",
+												to: `${pathname}?page=createProposal`,
+												page: "createProposal"
+											}
+									  ]
+									: []),
 								{
 									title: "Expand Dao",
 									to: `${pathname}?page=expand`,
@@ -195,12 +199,9 @@ const Dao: FunctionComponent = () => {
 							<CreateDaoProposal
 								isAdmin={isAdmin}
 								gnosisAddress={dao.gnosisAddress}
-								usulAddress={dao.usulAddress}
+								usuls={dao.usuls}
 								gnosisVotingThreshold={dao.gnosisVotingThreshold}
 								ownersCount={dao.owners.length}
-								strategies={dao.strategies}
-								usulDeployType={dao.usulDeployType}
-								bridgeAddress={dao.bridgeAddress}
 							/>
 						)}
 						{page === "collection" && (
@@ -214,7 +215,6 @@ const Dao: FunctionComponent = () => {
 							<ExpandDAO
 								gnosisAddress={dao.gnosisAddress}
 								gnosisVotingThreshold={dao.gnosisVotingThreshold}
-								usulAddress={dao.usulAddress}
 								afterDeployUsul={refetch}
 								isAdmin={isAdmin}
 							/>

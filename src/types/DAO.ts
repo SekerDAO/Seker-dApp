@@ -15,10 +15,7 @@ export type DAOFirebaseData = {
 	profileImage?: string
 	headerImage?: string
 	// Created after deploying Usul module
-	usulAddress?: string
-	usulDeployType?: UsulDeployType
-	bridgeAddress?: string
-	sideNetSafeAddress?: string
+	usuls: UsulFirebaseData[]
 }
 
 export type UsulDeployType = "usulSingle" | "usulMulti"
@@ -26,10 +23,9 @@ export type UsulDeployType = "usulSingle" | "usulMulti"
 type DAOEthersData = {
 	gnosisVotingThreshold: number
 	owners: string[]
-	strategies: VotingStrategy[]
 }
 
-export type DAO = DAOFirebaseData & DAOEthersData
+export type DAO = Omit<DAOFirebaseData, "usuls"> & DAOEthersData & {usuls: Usul[]}
 
 export type DAOSnapshot = firebase.firestore.QueryDocumentSnapshot<
 	Omit<DAOFirebaseData, "gnosisAddress">
@@ -66,3 +62,16 @@ export type VotingStrategy = {
 	address: string
 	govTokenAddress: string | null
 }
+
+export type UsulFirebaseData = {
+	usulAddress: string
+	deployType: UsulDeployType
+	bridgeAddress?: string
+	sideNetSafeAddress?: string
+}
+
+export type UsulEthersData = {
+	strategies: VotingStrategy[]
+}
+
+export type Usul = UsulFirebaseData & UsulEthersData

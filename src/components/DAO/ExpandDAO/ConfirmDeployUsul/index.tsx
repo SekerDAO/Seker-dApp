@@ -12,7 +12,7 @@ import {
 	SafeSignature,
 	SafeTransaction
 } from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
-import editDAO from "../../../../api/firebase/DAO/editDAO"
+import addUsul from "../../../../api/firebase/DAO/addUsul"
 import addSafeProposal from "../../../../api/firebase/safeProposal/addSafeProposal"
 import {ReactComponent as ArrowDown} from "../../../../assets/icons/arrow-down.svg"
 import {ReactComponent as WarningIcon} from "../../../../assets/icons/warning.svg"
@@ -82,10 +82,12 @@ const ConfirmDeployUsul: FunctionComponent<{
 					;[signature] = await checkedSignMultiSend(multiTx, gnosisAddress, signer)
 					if (gnosisVotingThreshold === 1) {
 						await checkedExecuteMultiSend(multiTx, gnosisAddress, [signature], signer)
-						await editDAO({
+						await addUsul({
 							gnosisAddress,
-							usulAddress: expectedUsulAddress,
-							usulDeployType: "usulSingle"
+							usul: {
+								usulAddress: expectedUsulAddress,
+								deployType: "usulSingle"
+							}
 						})
 					}
 				}
@@ -120,12 +122,14 @@ const ConfirmDeployUsul: FunctionComponent<{
 							[registerBridgeSignature],
 							signer
 						)
-						await editDAO({
+						await addUsul({
 							gnosisAddress,
-							usulAddress: expectedUsulAddress,
-							usulDeployType: "usulMulti",
-							bridgeAddress,
-							sideNetSafeAddress
+							usul: {
+								usulAddress: expectedUsulAddress,
+								deployType: "usulMulti",
+								bridgeAddress,
+								sideNetSafeAddress
+							}
 						})
 					}
 				}

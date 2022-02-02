@@ -44,36 +44,40 @@ const useProposals = (
 
 	const fetchStrategyProposals = async () => {
 		const dao = await getDAO(gnosisAddress)
-		const usulAddress = dao.usulAddress
-		if (!usulAddress) return []
-		const proposalsSnapshots = await getStrategyProposals(gnosisAddress)
-		const firebaseData = proposalsSnapshots.docs.map(doc => ({
-			...doc.data(),
-			proposalId: doc.id
-		}))
-		return Promise.all(
-			firebaseData.map(async p => ({
-				...p,
-				usulAddress,
-				state: (
-					await getProposalState(
-						usulAddress,
-						p.id,
-						dao.usulDeployType === "usulMulti" ? sideChainProvider : provider
+		return (
+			await Promise.all(
+				dao.usuls.map(async ({usulAddress, deployType}) => {
+					const proposalsSnapshots = await getStrategyProposals(usulAddress)
+					const firebaseData = proposalsSnapshots.docs.map(doc => ({
+						...doc.data(),
+						proposalId: doc.id
+					}))
+					return Promise.all(
+						firebaseData.map(async p => ({
+							...p,
+							usulAddress,
+							state: (
+								await getProposalState(
+									usulAddress,
+									p.id,
+									deployType === "usulMulti" ? sideChainProvider : provider
+								)
+							).state,
+							govTokenAddress: await getStrategyGovTokenAddress(
+								p.strategyAddress,
+								deployType === "usulMulti" ? sideChainProvider : provider
+							),
+							votes: await getProposalVotesSummary(
+								usulAddress,
+								p.id,
+								deployType === "usulMulti" ? sideChainProvider : provider
+							),
+							sideChain: deployType === "usulMulti"
+						}))
 					)
-				).state,
-				govTokenAddress: await getStrategyGovTokenAddress(
-					p.strategyAddress,
-					dao.usulDeployType === "usulMulti" ? sideChainProvider : provider
-				),
-				votes: await getProposalVotesSummary(
-					usulAddress,
-					p.id,
-					dao.usulDeployType === "usulMulti" ? sideChainProvider : provider
-				),
-				sideChain: dao.usulDeployType === "usulMulti"
-			}))
-		)
+				})
+			)
+		).reduce((acc, cur) => [...acc, ...cur], [])
 	}
 
 	const getData = async () => {

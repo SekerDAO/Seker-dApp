@@ -6,11 +6,8 @@ import createGnosisSafe from "../../../../api/ethers/functions/gnosisSafe/create
 import {SafeTransaction} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
 import config from "../../../../config"
 import {AuthContext} from "../../../../context/AuthContext"
-import useProposals from "../../../../hooks/getters/useProposals"
 import useCheckNetwork from "../../../../hooks/useCheckNetwork"
 import {BuiltVotingStrategy, UsulDeployType} from "../../../../types/DAO"
-import {SafeProposal} from "../../../../types/safeProposal"
-import ErrorPlaceholder from "../../../UI/ErrorPlaceholder"
 import ChooseVotingStrategies from "../ChooseVotingStrategies"
 import ConfirmDeployUsul from "../ConfirmDeployUsul"
 import ExpandDaoLayout from "../ExpandDaoLayout"
@@ -48,7 +45,6 @@ const DeployUsul: FunctionComponent<{
 	const [multiTx, setMultiTx] = useState<SafeTransaction>()
 	const [expectedUsulAddress, setExpectedUsulAddress] = useState("")
 	const [expectedSideChainSafeAddress, setExpectedSideChainSafeAddress] = useState("")
-	const {proposals, error, refetch} = useProposals(gnosisAddress)
 	const {
 		push,
 		location: {pathname}
@@ -109,19 +105,10 @@ const DeployUsul: FunctionComponent<{
 		updateTransactions()
 	}, [strategies, gnosisAddress, account, signer])
 
-	useEffect(() => {
-		if (proposals) {
-			const expandProposal = proposals.find(
-				proposal => (proposal as SafeProposal).type === "decentralizeDAO"
-			)
-			if (expandProposal?.state === "executed") {
-				afterDeploy()
-				push(`${pathname}?page=collection`)
-			}
-		}
-	}, [proposals])
-
-	if (error) return <ErrorPlaceholder />
+	const afterDeployUsul = () => {
+		afterDeploy()
+		push(`${pathname}?page=collection`)
+	}
 
 	return (
 		<ExpandDaoLayout
@@ -154,7 +141,7 @@ const DeployUsul: FunctionComponent<{
 					gnosisAddress={gnosisAddress}
 					gnosisVotingThreshold={gnosisVotingThreshold}
 					expectedUsulAddress={expectedUsulAddress}
-					afterSubmit={refetch}
+					afterSubmit={afterDeployUsul}
 					deployType={deployType}
 				/>
 			)}

@@ -27,7 +27,7 @@ import {
 	signRegisterModuleTx
 } from "../../../api/ethers/functions/gnosisSafe/registerModule"
 import {SafeSignature} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
-import editDAO from "../../../api/firebase/DAO/editDAO"
+import addUsul from "../../../api/firebase/DAO/addUsul"
 import addSafeProposalSignature from "../../../api/firebase/safeProposal/addSafeProposalSignatures"
 import {AuthContext} from "../../../context/AuthContext"
 import useCheckNetwork from "../../../hooks/useCheckNetwork"
@@ -185,10 +185,12 @@ const useSignSafeProposal = ({
 								[signature, ...proposal.signatures],
 								signer
 							)
-							await editDAO({
+							await addUsul({
 								gnosisAddress: proposal.gnosisAddress,
-								usulAddress: proposal.usulAddress,
-								usulDeployType: "usulSingle"
+								usul: {
+									usulAddress: proposal.usulAddress,
+									deployType: "usulSingle"
+								}
 							})
 							executed = true
 						}
@@ -211,12 +213,14 @@ const useSignSafeProposal = ({
 								[signature, ...proposal.signatures],
 								signer
 							)
-							await editDAO({
+							await addUsul({
 								gnosisAddress: proposal.gnosisAddress,
-								usulAddress: proposal.usulAddress,
-								usulDeployType: "usulMulti",
-								bridgeAddress: proposal.bridgeAddress,
-								sideNetSafeAddress: proposal.sideNetSafeAddress
+								usul: {
+									usulAddress: proposal.usulAddress,
+									deployType: "usulMulti",
+									bridgeAddress: proposal.bridgeAddress,
+									sideNetSafeAddress: proposal.sideNetSafeAddress
+								}
 							})
 						}
 					}

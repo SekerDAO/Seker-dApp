@@ -18,11 +18,10 @@ const EXIT_MODULE_DESCRIPTION =
 
 const ExpandDAO: FunctionComponent<{
 	gnosisAddress: string
-	usulAddress?: string
 	gnosisVotingThreshold: number
 	afterDeployUsul: () => void
 	isAdmin: boolean
-}> = ({isAdmin, gnosisAddress, usulAddress, gnosisVotingThreshold, afterDeployUsul}) => {
+}> = ({isAdmin, gnosisAddress, gnosisVotingThreshold, afterDeployUsul}) => {
 	const [stage, setStage] = useState<"choose" | UsulDeployType | "bridge">("choose")
 	const [deployTypeModalOpened, setDeployTypeModalOpened] = useState(false)
 	const {connected} = useContext(AuthContext)
@@ -31,8 +30,6 @@ const ExpandDAO: FunctionComponent<{
 		return <ConnectWalletPlaceholder />
 	}
 
-	// TODO: if side chain is not added to metamask, the error will be thrown on the next stage.
-	// We should check it and display instruction for the user
 	const handleSelectUsulType = (type: UsulDeployType) => {
 		setStage(type)
 		setDeployTypeModalOpened(false)
@@ -61,12 +58,11 @@ const ExpandDAO: FunctionComponent<{
 									<h2>Usul Module</h2>
 									<p>{USUL_DESCRIPTION}</p>
 									<Button
-										disabled={!!usulAddress}
 										onClick={() => {
 											setDeployTypeModalOpened(true)
 										}}
 									>
-										{usulAddress ? "Already deployed" : "Get Started"}
+										Get Started
 									</Button>
 								</div>
 								<div className="expand-dao__module">
