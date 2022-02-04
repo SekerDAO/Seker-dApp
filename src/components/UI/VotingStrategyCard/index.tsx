@@ -11,7 +11,7 @@ const VotingStrategyCard: FunctionComponent<{
 	isActive?: boolean
 }> = ({title, description, image, onClick, isActive = true}) => (
 	<div
-		className={`voting-strategy-card${!isActive ? " voting-strategy-card--disabled" : ""}`}
+		className={`voting-strategy-card${isActive ? "" : " voting-strategy-card--disabled"}`}
 		onClick={onClick}
 	>
 		<div className="voting-strategy-card__inner">

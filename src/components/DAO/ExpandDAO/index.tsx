@@ -1,13 +1,17 @@
-import {FunctionComponent, useContext, useState} from "react"
+import {Fragment, FunctionComponent, useContext, useState} from "react"
+import {ReactComponent as ExitIcon} from "../../../assets/icons/SekerDAO_Module_Exit_Inactive.svg"
+import {ReactComponent as UsulIcon} from "../../../assets/icons/SekerDAO_Module_Usul.svg"
 import {ReactComponent as GnosisSafeIcon} from "../../../assets/icons/gnosis-safe.svg"
-import {ReactComponent as UsulIcon} from "../../../assets/icons/usul-default.svg"
+import config from "../../../config"
+import networks, {NETWORK_LOGOS} from "../../../constants/networks"
 import {AuthContext} from "../../../context/AuthContext"
-import {UsulDeployType} from "../../../types/DAO"
+import {Usul, UsulDeployType} from "../../../types/DAO"
 import Button from "../../Controls/Button"
 import DeployUsulTypeModal from "../../Modals/DeployUsulTypeModal"
 import ConnectWalletPlaceholder from "../../UI/ConnectWalletPlaceholder"
 import DeployUsul from "./DeployUsul"
 import ExpandDaoLayout from "./ExpandDaoLayout"
+import UsulStrategiesList from "./UsulStrategiesList"
 import "./styles.scss"
 
 const DESCRIPTION =
@@ -21,7 +25,8 @@ const ExpandDAO: FunctionComponent<{
 	gnosisVotingThreshold: number
 	afterDeployUsul: () => void
 	isAdmin: boolean
-}> = ({isAdmin, gnosisAddress, gnosisVotingThreshold, afterDeployUsul}) => {
+	usuls: Usul[]
+}> = ({isAdmin, gnosisAddress, gnosisVotingThreshold, afterDeployUsul, usuls}) => {
 	const [stage, setStage] = useState<"choose" | UsulDeployType | "bridge">("choose")
 	const [deployTypeModalOpened, setDeployTypeModalOpened] = useState(false)
 	const {connected} = useContext(AuthContext)
@@ -62,21 +67,47 @@ const ExpandDAO: FunctionComponent<{
 											setDeployTypeModalOpened(true)
 										}}
 									>
-										Get Started
+										{usuls.length > 0 ? "Add New" : "Get Started"}
 									</Button>
 								</div>
 								<div className="expand-dao__module">
-									<UsulIcon />
+									<ExitIcon />
 									<h2>Exit Module</h2>
 									<p>{EXIT_MODULE_DESCRIPTION}</p>
-									<Button
-										onClick={() => {
-											console.log("TODO")
-										}}
-									>
-										Get Started
-									</Button>
+									<Button disabled>Get Started</Button>
 								</div>
+							</div>
+							<div className="expand-dao__daos">
+								{usuls.map((usul, index) => {
+									const primaryNetLogo = NETWORK_LOGOS[networks[config.CHAIN_ID]] ?? (
+										<div className="expand-dao__network">{networks[config.CHAIN_ID]}</div>
+									)
+									const sideNetLogo = NETWORK_LOGOS[networks[config.SIDE_CHAIN_ID]] ?? (
+										<div className="expand-dao__network">{networks[config.SIDE_CHAIN_ID]}</div>
+									)
+									return (
+										<Fragment key={index}>
+											<div className="expand-dao__usul">
+												<div className="expand-dao__usul-network">
+													<img
+														width={120}
+														height={120}
+														src={usul.deployType === "usulMulti" ? sideNetLogo : primaryNetLogo}
+													/>
+													<Button
+														onClick={() => {
+															console.log("TODO")
+														}}
+													>
+														Add Strategy
+													</Button>
+												</div>
+												<UsulStrategiesList strategies={usul.strategies} />
+											</div>
+											{index !== usuls.length - 1 && <div className="expand-dao__separator" />}
+										</Fragment>
+									)
+								})}
 							</div>
 						</div>
 					</ExpandDaoLayout>

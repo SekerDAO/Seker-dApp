@@ -1,0 +1,33 @@
+.usul-strategies-list {
+  display: flex;
+  min-width: 620px;
+
+  &__strategy {
+    margin: 0 10px;
+  }
+
+  &__arrow {
+    width: 20px;
+    height: 40px;
+    margin-top: 60px;
+
+    &:first-child {
+      margin-right: 30px;
+    }
+
+    &:last-child {
+      margin-left: auto;
+      padding-left: 30px;
+    }
+
+    div {
+      cursor: pointer;
+    }
+
+    &--disabled {
+      div {
+        cursor: not-allowed;
+      }
+    }
+  }
+}

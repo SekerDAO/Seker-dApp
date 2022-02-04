@@ -217,6 +217,7 @@ const Dao: FunctionComponent = () => {
 								gnosisVotingThreshold={dao.gnosisVotingThreshold}
 								afterDeployUsul={refetch}
 								isAdmin={isAdmin}
+								usuls={dao.usuls}
 							/>
 						)}
 					</div>

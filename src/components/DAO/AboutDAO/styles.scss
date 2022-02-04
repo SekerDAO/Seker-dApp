@@ -63,8 +63,11 @@
 
   &__enabled-module {
     display: flex;
-    position: absolute;
-    left: -20px;
+    margin-right: auto;
+
+    &-icon {
+      margin-right: 20px;
+    }
 
     &-name {
       display: flex;
@@ -74,6 +77,21 @@
 
       h2 {
         width: 100%;
+      }
+    }
+
+    &-network {
+      background-color: $dark-grey;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      min-width: 100px;
+      margin-right: 10px;
+
+      img {
+        margin-right: 5px;
       }
     }
 
@@ -92,7 +110,7 @@
 
       &-item {
         border-bottom: 1px solid $dark-grey25;
-        padding-bottom: 10px;
+        padding: 10px 0;
 
         span {
           width: 25%;

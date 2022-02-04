@@ -188,9 +188,9 @@ const ConfirmDeployUsul: FunctionComponent<{
 				</div>
 			</div>
 			<ul className="confirm-deploy-usul__transaction-list">
-				{transactions.map(({tx, name}) => (
+				{transactions.map(({tx, name}, index) => (
 					<li
-						key={tx.data}
+						key={index}
 						className="confirm-deploy-usul__transaction-row"
 						onClick={() => setOpenedTxDetails({tx, name})}
 					>
