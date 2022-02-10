@@ -1,10 +1,17 @@
 import {formatEther} from "@ethersproject/units"
 import {FunctionComponent, useContext, useState} from "react"
 import deployBridge from "../../../../api/ethers/functions/AMB/deployBridge"
-import {executeMultiSend, signMultiSend} from "../../../../api/ethers/functions/Usul/multiSend"
+import {
+	executeMultiSend,
+	getPrebuiltMultiSend,
+	signMultiSend
+} from "../../../../api/ethers/functions/Usul/multiSend"
+import {submitProposal} from "../../../../api/ethers/functions/Usul/usulProposal"
 import createGnosisSafe from "../../../../api/ethers/functions/gnosisSafe/createGnosisSafe"
 import {
 	executeRegisterModuleTx,
+	getPrebuiltRegisterModuleTx,
+	getRegisterModuleTx,
 	signRegisterModuleTx
 } from "../../../../api/ethers/functions/gnosisSafe/registerModule"
 import {
@@ -14,12 +21,13 @@ import {
 } from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
 import addUsul from "../../../../api/firebase/DAO/addUsul"
 import addSafeProposal from "../../../../api/firebase/safeProposal/addSafeProposal"
+import addStrategyProposal from "../../../../api/firebase/strategyProposal/addStrategyProposal"
 import {ReactComponent as ArrowDown} from "../../../../assets/icons/arrow-down.svg"
 import {ReactComponent as WarningIcon} from "../../../../assets/icons/warning.svg"
 import config from "../../../../config"
 import {AuthContext} from "../../../../context/AuthContext"
 import useCheckNetwork from "../../../../hooks/useCheckNetwork"
-import {UsulDeployType} from "../../../../types/DAO"
+import {UsulDeployType, VotingStrategyName} from "../../../../types/DAO"
 import {formatReadableAddress} from "../../../../utlls"
 import Button from "../../../Controls/Button"
 import TransactionDetailsModal from "../../../Modals/TransactionDetailsModal"
@@ -37,6 +45,9 @@ const ConfirmDeployUsul: FunctionComponent<{
 	expectedUsulAddress: string
 	isAdmin: boolean
 	deployType: UsulDeployType
+	proposalModule:
+		| {usulAddress: string; strategyAddress: string; strategyType: VotingStrategyName}
+		| "admin"
 }> = ({
 	multiTx,
 	transactions,
@@ -45,7 +56,8 @@ const ConfirmDeployUsul: FunctionComponent<{
 	afterSubmit,
 	expectedUsulAddress,
 	isAdmin,
-	deployType
+	deployType,
+	proposalModule
 }) => {
 	const {account, balance, signer} = useContext(AuthContext)
 	const [openedTxDetails, setOpenedTxDetails] = useState<
@@ -66,6 +78,8 @@ const ConfirmDeployUsul: FunctionComponent<{
 	const checkedSignRegisterModule = useCheckNetwork(signRegisterModuleTx)
 	const checkedExecuteRegisterModule = useCheckNetwork(executeRegisterModuleTx)
 	const checkedGetNonce = useCheckNetwork(getNonce)
+	const checkedSubmitProposal = useCheckNetwork(submitProposal)
+	const checkedGetRegisterModuleTx = useCheckNetwork(getRegisterModuleTx)
 
 	const handleTxDetailsClose = () => {
 		setOpenedTxDetails(undefined)
@@ -76,79 +90,121 @@ const ConfirmDeployUsul: FunctionComponent<{
 		setLoading(true)
 		try {
 			if (deployType === "usulSingle") {
-				const nonce = await checkedGetNonce(gnosisAddress, signer)
-				let signature: SafeSignature
-				if (isAdmin) {
-					;[signature] = await checkedSignMultiSend(multiTx, gnosisAddress, signer)
-					if (gnosisVotingThreshold === 1) {
-						await checkedExecuteMultiSend(multiTx, gnosisAddress, [signature], signer)
-						await addUsul({
-							gnosisAddress,
-							usul: {
-								usulAddress: expectedUsulAddress,
-								deployType: "usulSingle"
-							}
-						})
+				if (proposalModule === "admin") {
+					const nonce = await checkedGetNonce(gnosisAddress, signer)
+					let signature: SafeSignature
+					if (isAdmin) {
+						;[signature] = await checkedSignMultiSend(multiTx, gnosisAddress, signer)
+						if (gnosisVotingThreshold === 1) {
+							await checkedExecuteMultiSend(multiTx, gnosisAddress, [signature], signer)
+							await addUsul({
+								gnosisAddress,
+								usul: {
+									usulAddress: expectedUsulAddress,
+									deployType: "usulSingle"
+								}
+							})
+						}
 					}
+					await addSafeProposal({
+						type: "decentralizeDAO",
+						gnosisAddress,
+						nonce,
+						multiTx,
+						usulAddress: expectedUsulAddress,
+						title: "Decentralize DAO",
+						state: gnosisVotingThreshold === 1 && isAdmin ? "executed" : "active",
+						signatures: isAdmin ? [signature!] : [],
+						usulDeployType: "usulSingle"
+					})
+				} else {
+					const proposalId = await checkedSubmitProposal(
+						proposalModule.usulAddress,
+						proposalModule.strategyAddress,
+						[multiTx],
+						signer
+					)
+					await addStrategyProposal({
+						type: "deployUsul",
+						gnosisAddress,
+						id: proposalId,
+						usulAddress: proposalModule.usulAddress,
+						strategyAddress: proposalModule.strategyAddress,
+						strategyType: proposalModule.strategyType,
+						title: "Deploy Usul",
+						transactions: [getPrebuiltMultiSend(transactions.map(t => t.tx))],
+						newUsulAddress: expectedUsulAddress
+					})
 				}
-				await addSafeProposal({
-					type: "decentralizeDAO",
-					gnosisAddress,
-					nonce,
-					multiTx,
-					usulAddress: expectedUsulAddress,
-					title: "Decentralize DAO",
-					state: gnosisVotingThreshold === 1 && isAdmin ? "executed" : "active",
-					signatures: isAdmin ? [signature!] : [],
-					usulDeployType: "usulSingle"
-				})
 			} else {
 				const sideNetSafeAddress = await checkedDeploySideNetSafe([account], 1, signer, false, true)
 				const [multiSendSignature] = await checkedSignMultiSend(multiTx, sideNetSafeAddress, signer)
 				await checkedExecuteMultiSend(multiTx, sideNetSafeAddress, [multiSendSignature], signer)
-				const nonce = await checkedGetNonce(gnosisAddress, signer)
 				const bridgeAddress = await checkedDeployBridge(gnosisAddress, sideNetSafeAddress, signer)
-				let registerBridgeSignature: SafeSignature
-				if (isAdmin) {
-					;[registerBridgeSignature] = await checkedSignRegisterModule(
-						gnosisAddress,
-						bridgeAddress,
-						signer
-					)
-					if (gnosisVotingThreshold === 1) {
-						await checkedExecuteRegisterModule(
+				if (proposalModule === "admin") {
+					const nonce = await checkedGetNonce(gnosisAddress, signer)
+					let registerBridgeSignature: SafeSignature
+					if (isAdmin) {
+						;[registerBridgeSignature] = await checkedSignRegisterModule(
 							gnosisAddress,
 							bridgeAddress,
-							[registerBridgeSignature],
 							signer
 						)
-						await addUsul({
-							gnosisAddress,
-							usul: {
-								usulAddress: expectedUsulAddress,
-								deployType: "usulMulti",
+						if (gnosisVotingThreshold === 1) {
+							await checkedExecuteRegisterModule(
+								gnosisAddress,
 								bridgeAddress,
-								sideNetSafeAddress
-							}
-						})
+								[registerBridgeSignature],
+								signer
+							)
+							await addUsul({
+								gnosisAddress,
+								usul: {
+									usulAddress: expectedUsulAddress,
+									deployType: "usulMulti",
+									bridgeAddress,
+									sideNetSafeAddress
+								}
+							})
+						}
 					}
+					await addSafeProposal({
+						type: "decentralizeDAO",
+						gnosisAddress,
+						nonce,
+						multiTx,
+						usulAddress: expectedUsulAddress,
+						sideNetSafeAddress,
+						bridgeAddress,
+						title: "Decentralize DAO",
+						state: gnosisVotingThreshold === 1 && isAdmin ? "executed" : "active",
+						signatures: isAdmin ? [registerBridgeSignature!] : [],
+						usulDeployType: "usulMulti"
+					})
+				} else {
+					const proposalId = await checkedSubmitProposal(
+						proposalModule.usulAddress,
+						proposalModule.strategyAddress,
+						[await checkedGetRegisterModuleTx(gnosisAddress, bridgeAddress, signer)],
+						signer
+					)
+					await addStrategyProposal({
+						type: "deployUsul",
+						gnosisAddress,
+						id: proposalId,
+						usulAddress: proposalModule.usulAddress,
+						strategyAddress: proposalModule.strategyAddress,
+						strategyType: proposalModule.strategyType,
+						title: "Deploy Usul",
+						transactions: [getPrebuiltRegisterModuleTx(gnosisAddress, bridgeAddress)],
+						newUsulAddress: expectedUsulAddress,
+						sideNetSafeAddress,
+						bridgeAddress
+					})
 				}
-				await addSafeProposal({
-					type: "decentralizeDAO",
-					gnosisAddress,
-					nonce,
-					multiTx,
-					usulAddress: expectedUsulAddress,
-					sideNetSafeAddress,
-					bridgeAddress,
-					title: "Decentralize DAO",
-					state: gnosisVotingThreshold === 1 && isAdmin ? "executed" : "active",
-					signatures: isAdmin ? [registerBridgeSignature!] : [],
-					usulDeployType: "usulMulti"
-				})
 			}
 			toastSuccess(
-				gnosisVotingThreshold === 1 && isAdmin
+				gnosisVotingThreshold === 1 && isAdmin && proposalModule === "admin"
 					? "Usul module successfully deployed"
 					: "Expand DAO proposal successfully created"
 			)
@@ -235,7 +291,7 @@ const ConfirmDeployUsul: FunctionComponent<{
 			>
 				{loading
 					? "Submitting..."
-					: gnosisVotingThreshold === 1 && isAdmin
+					: gnosisVotingThreshold === 1 && isAdmin && proposalModule === "admin"
 					? "Confirm and Deploy Usul"
 					: "Confirm and Create Proposal"}
 			</Button>

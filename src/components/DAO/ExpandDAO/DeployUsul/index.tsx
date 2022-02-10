@@ -7,7 +7,7 @@ import {SafeTransaction} from "../../../../api/ethers/functions/gnosisSafe/safeU
 import config from "../../../../config"
 import {AuthContext} from "../../../../context/AuthContext"
 import useCheckNetwork from "../../../../hooks/useCheckNetwork"
-import {BuiltVotingStrategy, UsulDeployType} from "../../../../types/DAO"
+import {BuiltVotingStrategy, UsulDeployType, VotingStrategyName} from "../../../../types/DAO"
 import ChooseVotingStrategies from "../ChooseVotingStrategies"
 import ConfirmDeployUsul from "../ConfirmDeployUsul"
 import ExpandDaoLayout from "../ExpandDaoLayout"
@@ -37,7 +37,10 @@ const DeployUsul: FunctionComponent<{
 	afterDeploy: () => void
 	isAdmin: boolean
 	deployType: UsulDeployType
-}> = ({isAdmin, gnosisAddress, gnosisVotingThreshold, afterDeploy, deployType}) => {
+	proposalModule:
+		| {usulAddress: string; strategyAddress: string; strategyType: VotingStrategyName}
+		| "admin"
+}> = ({isAdmin, gnosisAddress, gnosisVotingThreshold, afterDeploy, deployType, proposalModule}) => {
 	const {signer, account} = useContext(AuthContext)
 	const [stage, setStage] = useState<ExpandDaoStage>("chooseStrategies")
 	const [strategies, setStrategies] = useState<BuiltVotingStrategy[]>([])
@@ -143,6 +146,7 @@ const DeployUsul: FunctionComponent<{
 					expectedUsulAddress={expectedUsulAddress}
 					afterSubmit={afterDeployUsul}
 					deployType={deployType}
+					proposalModule={proposalModule}
 				/>
 			)}
 		</ExpandDaoLayout>

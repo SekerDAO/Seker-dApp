@@ -29,11 +29,7 @@ export const executeProposalBatch = async (
 	signer: JsonRpcSigner
 ): Promise<void> => {
 	const usulContract = new Contract(usulAddress, Usul.abi, signer)
-	const targetTxs = await Promise.all(
-		transactions.map(tx =>
-			prebuiltTxToSafeTx(tx.address, tx.contractMethods, tx.selectedMethodIndex, tx.args)
-		)
-	)
+	const targetTxs = await Promise.all(transactions.map(tx => prebuiltTxToSafeTx(tx)))
 	const transaction = await usulContract.executeProposalBatch(
 		proposalId,
 		targetTxs.map(tx => tx.to),

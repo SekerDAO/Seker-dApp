@@ -14,7 +14,7 @@ import {StrategyProposal} from "../../types/strategyProposal"
 const useStrategyProposal = (
 	id: string
 ): {
-	proposal: (StrategyProposal & {proposalId: string; bridgeAddress?: string}) | null
+	proposal: (StrategyProposal & {proposalId: string; usulBridgeAddress?: string}) | null
 	userHasVoted: boolean
 	loading: boolean
 	error: boolean
@@ -22,7 +22,7 @@ const useStrategyProposal = (
 	refetch: () => Promise<void>
 } => {
 	const [proposal, setProposal] = useState<
-		(StrategyProposal & {proposalId: string; bridgeAddress?: string}) | null
+		(StrategyProposal & {proposalId: string; usulBridgeAddress?: string}) | null
 	>(null)
 	const [userHasVoted, setUserHasVoted] = useState(false)
 	const [multiChain, setMultiChain] = useState(false)
@@ -40,7 +40,9 @@ const useStrategyProposal = (
 				throw new Error("Proposal not found")
 			}
 			const dao = await getDAO(proposalData.gnosisAddress)
-			const usul = dao.usuls.find(u => u.usulAddress === proposalData.usulAddress)
+			const usul = dao.usuls.find(
+				u => u.usulAddress.toLowerCase() === proposalData.usulAddress.toLowerCase()
+			)
 			if (!usul) {
 				throw new Error("Usul for strategy proposal not found on dao")
 			}
@@ -60,7 +62,7 @@ const useStrategyProposal = (
 				),
 				proposalId: id,
 				usulAddress: usul.usulAddress,
-				bridgeAddress: usul.bridgeAddress,
+				usulBridgeAddress: usul.bridgeAddress,
 				votes: await getProposalVotesSummary(
 					usul.usulAddress,
 					proposalData.id,

@@ -59,4 +59,4 @@ export type SafeProposal = {
 
 export const isSafeProposal = (
 	proposal: SafeProposal | StrategyProposal
-): proposal is SafeProposal => !!(proposal as SafeProposal).type
+): proposal is SafeProposal => (proposal as SafeProposal).nonce != null

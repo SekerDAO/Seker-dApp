@@ -5,7 +5,7 @@ import {ReactComponent as GnosisSafeIcon} from "../../../assets/icons/gnosis-saf
 import config from "../../../config"
 import networks, {NETWORK_LOGOS} from "../../../constants/networks"
 import {AuthContext} from "../../../context/AuthContext"
-import {Usul, UsulDeployType} from "../../../types/DAO"
+import {Usul, UsulDeployType, VotingStrategyName} from "../../../types/DAO"
 import Button from "../../Controls/Button"
 import DeployUsulTypeModal from "../../Modals/DeployUsulTypeModal"
 import ConnectWalletPlaceholder from "../../UI/ConnectWalletPlaceholder"
@@ -28,6 +28,9 @@ const ExpandDAO: FunctionComponent<{
 	usuls: Usul[]
 }> = ({isAdmin, gnosisAddress, gnosisVotingThreshold, afterDeployUsul, usuls}) => {
 	const [stage, setStage] = useState<"choose" | UsulDeployType | "bridge">("choose")
+	const [proposalModule, setProposalModule] = useState<
+		{usulAddress: string; strategyAddress: string; strategyType: VotingStrategyName} | "admin"
+	>("admin")
 	const [deployTypeModalOpened, setDeployTypeModalOpened] = useState(false)
 	const {connected} = useContext(AuthContext)
 
@@ -35,7 +38,13 @@ const ExpandDAO: FunctionComponent<{
 		return <ConnectWalletPlaceholder />
 	}
 
-	const handleSelectUsulType = (type: UsulDeployType) => {
+	const handleSelectUsulType = (
+		type: UsulDeployType,
+		module:
+			| {usulAddress: string; strategyAddress: string; strategyType: VotingStrategyName}
+			| "admin"
+	) => {
+		setProposalModule(module)
 		setStage(type)
 		setDeployTypeModalOpened(false)
 	}
@@ -48,6 +57,7 @@ const ExpandDAO: FunctionComponent<{
 					setDeployTypeModalOpened(false)
 				}}
 				onSubmit={handleSelectUsulType}
+				usuls={usuls}
 			/>
 			<section className="expand-dao">
 				{stage === "choose" && (
@@ -119,6 +129,7 @@ const ExpandDAO: FunctionComponent<{
 						gnosisVotingThreshold={gnosisVotingThreshold}
 						afterDeploy={afterDeployUsul}
 						deployType={stage as UsulDeployType}
+						proposalModule={proposalModule}
 					/>
 				)}
 			</section>

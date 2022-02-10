@@ -1,5 +1,7 @@
 import {Contract} from "@ethersproject/contracts"
 import {JsonRpcSigner} from "@ethersproject/providers"
+import {AbiFunction} from "../../../../types/abi"
+import {PrebuiltTx} from "../../../../types/common"
 import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
 import {
 	buildContractCall,
@@ -19,6 +21,16 @@ export const getRegisterModuleTx = async (
 	const nonce = zeroNonce ? 0 : await safeContract.nonce()
 	return buildContractCall(safeContract, "enableModule", [moduleAddress], nonce)
 }
+
+export const getPrebuiltRegisterModuleTx = (
+	safeAddress: string,
+	moduleAddress: string
+): PrebuiltTx => ({
+	address: safeAddress,
+	contractMethods: GnosisSafeL2.abi as AbiFunction[],
+	selectedMethodIndex: GnosisSafeL2.abi.findIndex(method => method.name === "enableModule"),
+	args: [moduleAddress]
+})
 
 export const signRegisterModuleTx = async (
 	safeAddress: string,

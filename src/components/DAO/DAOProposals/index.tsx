@@ -1,7 +1,7 @@
 import {FunctionComponent, useState} from "react"
 import {Link, useLocation} from "react-router-dom"
 import useProposals from "../../../hooks/getters/useProposals"
-import {SafeProposal, SafeProposalState} from "../../../types/safeProposal"
+import {isSafeProposal, SafeProposal, SafeProposalState} from "../../../types/safeProposal"
 import {StrategyProposal, StrategyProposalState} from "../../../types/strategyProposal"
 import Select from "../../Controls/Select"
 import ErrorPlaceholder from "../../UI/ErrorPlaceholder"
@@ -17,9 +17,9 @@ const DAOProposalCard: FunctionComponent<{
 
 	return (
 		<Link
-			to={`${pathname}?page=proposal&type=${
-				(proposal as SafeProposal).type ? "safe" : "strategy"
-			}&id=${proposal.proposalId}`}
+			to={`${pathname}?page=proposal&type=${isSafeProposal(proposal) ? "safe" : "strategy"}&id=${
+				proposal.proposalId
+			}`}
 		>
 			<Paper className="dao-proposals__card">
 				<ProposalHeader

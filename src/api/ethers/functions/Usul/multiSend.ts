@@ -3,6 +3,7 @@ import {Contract} from "@ethersproject/contracts"
 import {JsonRpcSigner} from "@ethersproject/providers"
 import {pack} from "@ethersproject/solidity"
 import config from "../../../../config"
+import {AbiFunction} from "../../../../types/abi"
 import {PrebuiltTx} from "../../../../types/common"
 import {prepareArguments} from "../../../../utlls"
 import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
@@ -50,6 +51,17 @@ export const buildMultiSendTx = async (
 		true
 	)
 }
+
+export const getPrebuiltMultiSend = (
+	multiSendTxs: SafeTransaction[],
+	sideChain = false
+): PrebuiltTx => ({
+	address: sideChain ? config.SIDE_CHAIN_MULTI_SEND_ADDRESS : config.MULTI_SEND_ADDRESS,
+	contractMethods: MultiSend.abi as AbiFunction[],
+	selectedMethodIndex: MultiSend.abi.findIndex(method => method.name === "multiSend"),
+	args: [encodeMultiSend(multiSendTxs)],
+	delegateCall: true
+})
 
 export const signMultiSend = async (
 	multiSendTx: SafeTransaction,

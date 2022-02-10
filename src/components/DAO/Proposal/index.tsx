@@ -10,6 +10,7 @@ import {buildMultiSendTx} from "../../../api/ethers/functions/Usul/multiSend"
 import {finalizeVotingLinear} from "../../../api/ethers/functions/Usul/voting/OzLinearVoting/ozLinearVotingApi"
 import {checkDelegatee} from "../../../api/ethers/functions/Usul/voting/votingApi"
 import {prebuiltTxToSafeTx} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
+import addUsul from "../../../api/firebase/DAO/addUsul"
 import {ReactComponent as WarningIcon} from "../../../assets/icons/warning.svg"
 import config from "../../../config"
 import {AuthContext} from "../../../context/AuthContext"
@@ -130,15 +131,13 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 		setProcessing(true)
 		try {
 			if (multiChain) {
-				const txs = proposal.transactions.map(tx =>
-					prebuiltTxToSafeTx(tx.address, tx.contractMethods, tx.selectedMethodIndex, tx.args)
-				)
+				const txs = proposal.transactions.map(tx => prebuiltTxToSafeTx(tx))
 				const hash = await checkedExecuteProposalSingle(
 					proposal.usulAddress,
 					proposal.id,
 					await buildBridgeTx(
 						await buildMultiSendTx(txs, proposal.gnosisAddress, undefined, false, true),
-						proposal.bridgeAddress!
+						proposal.usulBridgeAddress!
 					),
 					signer
 				)
@@ -150,6 +149,17 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 					proposal.transactions,
 					signer
 				)
+				if (proposal.type === "deployUsul") {
+					await addUsul({
+						gnosisAddress: proposal.gnosisAddress,
+						usul: {
+							usulAddress: proposal.newUsulAddress!,
+							deployType: proposal.bridgeAddress ? "usulMulti" : "usulSingle",
+							bridgeAddress: proposal.bridgeAddress,
+							sideNetSafeAddress: proposal.sideNetSafeAddress
+						}
+					})
+				}
 				toastSuccess("Proposal successfully executed")
 				refetch()
 			}
@@ -187,7 +197,7 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 				sideChain={multiChain}
 			/>
 			<ProposalLayout
-				proposal={{...proposal, multiChain: !!proposal.bridgeAddress}}
+				proposal={{...proposal, multiChain}}
 				votesThreshold={100}
 				votes={votes}
 				votesLoading={votesLoading}

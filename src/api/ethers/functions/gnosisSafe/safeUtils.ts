@@ -4,7 +4,7 @@ import {AddressZero} from "@ethersproject/constants"
 import {Contract, ContractInterface} from "@ethersproject/contracts"
 import {_TypedDataEncoder} from "@ethersproject/hash"
 import {JsonRpcProvider, JsonRpcSigner, TransactionResponse} from "@ethersproject/providers"
-import {AbiFunction} from "../../../../types/abi"
+import {PrebuiltTx} from "../../../../types/common"
 import {prepareArguments} from "../../../../utlls"
 import GnosisSafeL2 from "../../abis/GnosisSafeL2.json"
 
@@ -212,20 +212,15 @@ export const getNonce = async (
 	return nonce.toNumber()
 }
 
-export const prebuiltTxToSafeTx = (
-	contractAddress: string,
-	contractAbi: AbiFunction[],
-	selectedMethodIndex: number,
-	args: (string | string[])[]
-): SafeTransaction => {
-	const contract = new Contract(contractAddress, contractAbi)
+export const prebuiltTxToSafeTx = (tx: PrebuiltTx): SafeTransaction => {
+	const contract = new Contract(tx.address, tx.contractMethods)
 	return buildContractCall(
 		contract,
-		contractAbi[selectedMethodIndex].name,
+		tx.contractMethods[tx.selectedMethodIndex].name,
 		prepareArguments(
-			args,
-			contractAbi[selectedMethodIndex].inputs.map(i => i.type)
+			tx.args,
+			tx.contractMethods[tx.selectedMethodIndex].inputs.map(i => i.type)
 		),
-		0
+		tx.delegateCall ? 1 : 0
 	)
 }

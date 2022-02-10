@@ -51,9 +51,7 @@ const CreateStrategyProposal: FunctionComponent<{
 		if (!(title && !validation && signer && account)) return
 		setProcessing(true)
 		try {
-			const txs = transactions.map(tx =>
-				prebuiltTxToSafeTx(tx.address, tx.contractMethods, tx.selectedMethodIndex, tx.args)
-			)
+			const txs = transactions.map(tx => prebuiltTxToSafeTx(tx))
 			const proposalId = await checkedSubmitProposal(
 				usulAddress,
 				strategyAddress,
@@ -75,7 +73,8 @@ const CreateStrategyProposal: FunctionComponent<{
 				id: proposalId,
 				transactions,
 				title,
-				description
+				description,
+				type: "generalEvm"
 			})
 			toastSuccess("Proposal successfully created!")
 			push(`${pathname}?page=proposals`)

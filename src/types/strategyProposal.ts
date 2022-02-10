@@ -21,6 +21,8 @@ export type StrategyProposalState =
 	| "pending"
 	| "failed"
 
+export type StrategyProposalType = "generalEvm" | "deployUsul"
+
 export const VOTE_CHOICES = ["no", "yes", "abstain"] as const
 
 export type StrategyProposalVotesSummary = {
@@ -46,6 +48,10 @@ export type StrategyProposalFirebaseData = {
 	transactions: PrebuiltTx[]
 	title: string
 	description?: string
+	type: StrategyProposalType
+	newUsulAddress?: string
+	sideNetSafeAddress?: string
+	bridgeAddress?: string
 }
 
 type StrategyProposalEthersData = {
