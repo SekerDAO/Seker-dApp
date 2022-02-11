@@ -9,6 +9,14 @@
 }
 
 @font-face {
+  font-family: 'KarlaBold';
+  font-style: normal;
+  font-weight: 600;
+  src: url("assets/fonts/Karla-Bold.ttf");
+  font-display: swap;
+}
+
+@font-face {
   font-family: 'SairaSemiCondensed';
   font-style: normal;
   font-weight: 600;
@@ -86,6 +94,10 @@ a:hover {
 p {
   margin: 0;
   color: $dark-grey;
+}
+
+b {
+  font-family: KarlaBold, 'Open Sans', sans-serif;
 }
 
 .main {
