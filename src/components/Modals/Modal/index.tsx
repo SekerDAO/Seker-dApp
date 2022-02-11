@@ -10,6 +10,7 @@ const Modal: FunctionComponent<{
 	onClose: () => void
 	zIndex?: number
 	width?: number
+	height?: number
 	title?: string
 	submitButtonText?: string
 	submitButtonDisabled?: boolean
@@ -18,6 +19,7 @@ const Modal: FunctionComponent<{
 }> = ({
 	zIndex,
 	width,
+	height,
 	show,
 	onClose,
 	submitButtonText,
@@ -40,7 +42,8 @@ const Modal: FunctionComponent<{
 				className="modal__body"
 				style={{
 					...(zIndex ? {zIndex} : {}),
-					...(width ? {width: `${width}px`} : {})
+					...(width ? {width: `${width}px`} : {}),
+					...(height ? {height: `${height}px`} : {})
 				}}
 			>
 				<div className="modal__close" onClick={onClose}>

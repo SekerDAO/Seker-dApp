@@ -1,6 +1,6 @@
 import {FunctionComponent, useContext} from "react"
+import metamaskScreenshotInstructionsSrc from "../../../assets/images/add_sokoltestnet_screenshot.png"
 import MetamaskWarnModalContext from "../../../context/MetamaskWarnModalContext"
-import Copy from "../../UI/Copy"
 import Modal from "../Modal"
 import "./styles.scss"
 
@@ -8,17 +8,51 @@ const MetamaskWarnModal: FunctionComponent = () => {
 	const {modalOpened, close} = useContext(MetamaskWarnModalContext)
 
 	return (
-		<Modal show={modalOpened} onClose={close} title="Add chain to metamask">
+		<Modal
+			show={modalOpened}
+			onClose={close}
+			title="Wrong / Missing Network"
+			width={750}
+			height={580}
+		>
 			<div className="metamask-warning">
-				<p>Please, add chain to metamask with the following params and reload the page:</p>
-				<p>Chain ID: 77</p>
 				<p>
-					RPC endpoint: <Copy value="https://sokol.poa.network">https://sokol.poa.network</Copy>
+					In order to proceed, please navigate to your crypto wallet extension and select the
+					correct network. If you have not added the network you wish to continue on, follow the
+					steps below:
 				</p>
-				<p>
-					Block explorer (optional):{" "}
-					<Copy value="https://blockscout.com/poa/sokol">https://blockscout.com/poa/sokol</Copy>
-				</p>
+				<div className="metamask-warning__details">
+					<h3>Add the Sokol Testnet on MetaMask</h3>
+					<div className="metamask-warning__details-settings">
+						<p>
+							Step 1: <br />
+							Open up MetaMask. Under the network dropdown at the top, click on {"Add Network"}.
+						</p>
+						<p>
+							Step 2:
+							<br /> Complete the form with the following information and click {"Save"}:
+						</p>
+						<ul>
+							<li>
+								<b>Network Name:</b> Sokol
+							</li>
+							<li>
+								<b>New RPC URL:</b> https://sokol.poa.network/
+							</li>
+							<li>
+								<b>Chain ID:</b> 77
+							</li>
+						</ul>
+					</div>
+					<div className="metamask-warning__details-screenshot">
+						<img
+							src={metamaskScreenshotInstructionsSrc}
+							alt="Metamask settings instructions screenshot"
+							width={325}
+							height={290}
+						/>
+					</div>
+				</div>
 			</div>
 		</Modal>
 	)

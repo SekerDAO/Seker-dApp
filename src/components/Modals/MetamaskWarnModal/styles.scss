@@ -1,8 +1,40 @@
+@import "src/variables";
+
 .metamask-warning {
   display: flex;
   flex-direction: column;
 
   p {
-    margin: 10px 0;
+    margin: 20px 0;
+  }
+
+  h3 {
+    font-size: 20px;
+    line-height: 24px;
+    color: $dark-grey;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  &__details {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-top: 20px;
+
+    &-settings,
+    &-screenshot {
+      width: calc(50% - 10px);
+    }
+
+    p:first-of-type {
+      margin-top: 0;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 20px;
+      margin-top: 10px;
+    }
   }
 }
