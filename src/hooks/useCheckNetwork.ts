@@ -21,6 +21,7 @@ const useCheckNetwork = <T extends unknown[], R>(
 				method: "wallet_switchEthereumChain",
 				params: [
 					{
+						// TODO: revisit this part when we will be supporting more networks
 						chainId: isRinkeby ? "0x4" : BigNumber.from(requiredChainId).toHexString()
 					}
 				]
