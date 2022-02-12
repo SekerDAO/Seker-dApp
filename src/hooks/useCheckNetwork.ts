@@ -15,12 +15,13 @@ const useCheckNetwork = <T extends unknown[], R>(
 		if (!externalProvider) {
 			throw new Error("No wallet connected")
 		}
+		const isRinkeby = requiredChainId === 4
 		try {
 			await externalProvider.request!({
 				method: "wallet_switchEthereumChain",
 				params: [
 					{
-						chainId: BigNumber.from(requiredChainId).toHexString()
+						chainId: isRinkeby ? "0x4" : BigNumber.from(requiredChainId).toHexString()
 					}
 				]
 			})

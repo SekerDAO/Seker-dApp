@@ -14,6 +14,7 @@ const MetamaskWarnModal: FunctionComponent = () => {
 			title="Wrong / Missing Network"
 			width={750}
 			height={580}
+			zIndex={10}
 		>
 			<div className="metamask-warning">
 				<p>
