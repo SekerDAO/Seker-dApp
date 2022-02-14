@@ -140,6 +140,7 @@ const ConfirmDeployUsul: FunctionComponent<{
 				const sideNetSafeAddress = await checkedDeploySideNetSafe([account], 1, signer, false, true)
 				const [multiSendSignature] = await checkedSignMultiSend(multiTx, sideNetSafeAddress, signer)
 				await checkedExecuteMultiSend(multiTx, sideNetSafeAddress, [multiSendSignature], signer)
+				// TODO: burn admins
 				const bridgeAddress = await checkedDeployBridge(gnosisAddress, sideNetSafeAddress, signer)
 				if (proposalModule === "admin") {
 					const nonce = await checkedGetNonce(gnosisAddress, signer)

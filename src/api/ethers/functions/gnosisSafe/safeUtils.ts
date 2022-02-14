@@ -221,6 +221,7 @@ export const prebuiltTxToSafeTx = (tx: PrebuiltTx): SafeTransaction => {
 			tx.args,
 			tx.contractMethods[tx.selectedMethodIndex].inputs.map(i => i.type)
 		),
-		tx.delegateCall ? 1 : 0
+		0,
+		tx.delegateCall
 	)
 }

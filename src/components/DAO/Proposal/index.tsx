@@ -165,7 +165,7 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 			}
 		} catch (e) {
 			console.error(e)
-			toastError("Failed to finalize vote")
+			toastError("Failed to execute proposal")
 		}
 		setProcessing(false)
 	}
