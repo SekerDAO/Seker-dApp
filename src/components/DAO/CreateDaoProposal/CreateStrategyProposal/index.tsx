@@ -6,6 +6,7 @@ import {submitProposal} from "../../../../api/ethers/functions/Usul/usulProposal
 import {prebuiltTxToSafeTx} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
 import addStrategyProposal from "../../../../api/firebase/strategyProposal/addStrategyProposal"
 import config from "../../../../config"
+import networks from "../../../../constants/networks"
 import {AuthContext} from "../../../../context/AuthContext"
 import useCheckNetwork from "../../../../hooks/useCheckNetwork"
 import useValidation from "../../../../hooks/useValidation"
@@ -13,6 +14,7 @@ import {UsulDeployType, VotingStrategyName} from "../../../../types/DAO"
 import {PrebuiltTx} from "../../../../types/common"
 import {noSpecialCharsRegex} from "../../../../utlls"
 import Input from "../../../Controls/Input"
+import Select from "../../../Controls/Select"
 import Divider from "../../../UI/Divider"
 import {toastError, toastSuccess} from "../../../UI/Toast"
 import GeneralEvm from "../GeneralEvm"
@@ -39,6 +41,7 @@ const CreateStrategyProposal: FunctionComponent<{
 		async val => (!val || noSpecialCharsRegex.test(val) ? null : "Not a valid title")
 	])
 	const [description, setDescription] = useState("")
+	const [sideChain, setSideChain] = useState(false)
 	const {push} = useHistory()
 	const {pathname} = useLocation()
 
@@ -55,7 +58,7 @@ const CreateStrategyProposal: FunctionComponent<{
 			const proposalId = await checkedSubmitProposal(
 				usulAddress,
 				strategyAddress,
-				usulDeployType === "usulMulti"
+				usulDeployType === "usulMulti" && sideChain
 					? [
 							await buildBridgeTx(
 								await buildMultiSendTx(txs, gnosisAddress, undefined, false, true),
@@ -74,7 +77,8 @@ const CreateStrategyProposal: FunctionComponent<{
 				transactions,
 				title,
 				description,
-				type: "generalEvm"
+				type: "generalEvm",
+				sideChain
 			})
 			toastSuccess("Proposal successfully created!")
 			push(`${pathname}?page=proposals`)
@@ -87,6 +91,26 @@ const CreateStrategyProposal: FunctionComponent<{
 
 	return (
 		<>
+			{usulDeployType === "usulMulti" && (
+				<>
+					<label htmlFor="change-role-chain">Target Chain</label>
+					<Select
+						options={[
+							{
+								name: networks[config.CHAIN_ID],
+								value: config.CHAIN_ID
+							},
+							{
+								name: networks[config.SIDE_CHAIN_ID],
+								value: config.SIDE_CHAIN_ID
+							}
+						]}
+						placeholder="Select chain"
+						onChange={value => setSideChain(value === config.SIDE_CHAIN_ID)}
+						value={sideChain ? config.SIDE_CHAIN_ID : config.CHAIN_ID}
+					/>
+				</>
+			)}
 			<label htmlFor="change-role-title">Title</label>
 			<Input
 				id="change-role-title"

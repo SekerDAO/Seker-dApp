@@ -21,7 +21,7 @@ export type StrategyProposalState =
 	| "pending"
 	| "failed"
 
-export type StrategyProposalType = "generalEvm" | "deployUsul"
+export type StrategyProposalType = "generalEvm" | "deployUsul" | "addStrategies"
 
 export const VOTE_CHOICES = ["no", "yes", "abstain"] as const
 
@@ -52,6 +52,7 @@ export type StrategyProposalFirebaseData = {
 	newUsulAddress?: string
 	sideNetSafeAddress?: string
 	bridgeAddress?: string
+	sideChain?: boolean
 }
 
 type StrategyProposalEthersData = {

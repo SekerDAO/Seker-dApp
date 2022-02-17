@@ -5,7 +5,6 @@ import {VOTING_STRATEGIES} from "../../../constants/votingStrategies"
 import {Usul, UsulDeployType, VotingStrategy, VotingStrategyName} from "../../../types/DAO"
 import RadioButton from "../../Controls/RadioButton"
 import Select from "../../Controls/Select"
-import {toastError} from "../../UI/Toast"
 import Modal from "../Modal"
 import "./styles.scss"
 
@@ -41,10 +40,6 @@ const DeployUsulTypeModal: FunctionComponent<{
 	}
 
 	const handleSubmit = () => {
-		if (selectedModuleIndex !== -1 && usuls[selectedModuleIndex].deployType === "usulMulti") {
-			toastError("TODO: not supported for side net usul yet")
-			return
-		}
 		if (selectedModuleIndex !== -1 && !selectedStrategy) return
 		onSubmit(
 			type,
@@ -83,23 +78,21 @@ const DeployUsulTypeModal: FunctionComponent<{
 								value: -1
 							}
 						].concat(
-							usuls.map((usul, index) => ({
-								name: `${usul.usulAddress} (${
-									usul.deployType === "usulMulti"
-										? networks[config.SIDE_CHAIN_ID]
-										: networks[config.CHAIN_ID]
-								})`,
-								value: index
-							}))
+							usuls
+								.filter(usul => usul.deployType === "usulSingle")
+								.map((usul, index) => ({
+									name: `${usul.usulAddress} (${networks[config.CHAIN_ID]})`,
+									value: index
+								}))
 						)}
 						value={selectedModuleIndex}
 					/>
 				</div>
 				{selectedModuleIndex !== -1 && (
 					<div className="deploy-usul-type-modal__input">
-						<label htmlFor="members-strategy">Voting Strategy</label>
+						<label htmlFor="expand-dao-strategy">Voting Strategy</label>
 						<Select
-							id="members-strategy"
+							id="expand-dao-strategy"
 							fullWidth
 							onChange={handleStrategySelect}
 							placeholder="Choose One"

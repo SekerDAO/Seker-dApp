@@ -1,7 +1,6 @@
 import {defaultAbiCoder} from "@ethersproject/abi"
 import {getCreate2Address} from "@ethersproject/address"
 import {Contract} from "@ethersproject/contracts"
-import {JsonRpcSigner} from "@ethersproject/providers"
 import {keccak256} from "@ethersproject/solidity"
 import config from "../../../../config"
 import ModuleFactory from "../../abis/ModuleFactory.json"
@@ -11,7 +10,6 @@ import {buildContractCall, SafeTransaction} from "../gnosisSafe/safeUtils"
 const getUsulDeploy = (
 	safeAddress: string,
 	strategyAddresses: string[],
-	signer: JsonRpcSigner,
 	sideChain = false
 ): {tx: SafeTransaction; expectedAddress: string} => {
 	const masterAddress = sideChain
@@ -21,8 +19,8 @@ const getUsulDeploy = (
 		? config.SIDE_CHAIN_MODULE_FACTORY_ADDRESS
 		: config.MODULE_FACTORY_ADDRESS
 
-	const usulMaster = new Contract(masterAddress, Usul.abi, signer)
-	const factory = new Contract(factoryAddress, ModuleFactory.abi, signer)
+	const usulMaster = new Contract(masterAddress, Usul.abi)
+	const factory = new Contract(factoryAddress, ModuleFactory.abi)
 	const encodedInitParams = defaultAbiCoder.encode(
 		["address", "address", "address", "address[]"],
 		[safeAddress, safeAddress, safeAddress, strategyAddresses]

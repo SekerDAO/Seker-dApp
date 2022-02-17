@@ -1,15 +1,13 @@
-import {JsonRpcSigner} from "@ethersproject/providers"
 import {BuiltVotingStrategy} from "../../../../types/DAO"
 import {getRegisterModuleTx} from "../gnosisSafe/registerModule"
 import {SafeTransaction} from "../gnosisSafe/safeUtils"
 import getUsulDeploy from "./getUsulDeploy"
 import getOZLinearSetUsul from "./voting/OzLinearVoting/getOZLinearSetUsul"
 
-const buildUsulDeployTxSequence = async (
+export const buildUsulDeployTxSequence = async (
 	strategies: BuiltVotingStrategy[],
 	gnosisAddress: string,
-	signer: JsonRpcSigner,
-	sideChain = false
+	sideChain: boolean
 ): Promise<{transactions: {tx: SafeTransaction; name: string}[]; expectedUsulAddress: string}> => {
 	if (strategies.length === 0)
 		return {
@@ -19,26 +17,14 @@ const buildUsulDeployTxSequence = async (
 	const {tx: deployUsulTx, expectedAddress: expectedUsulAddress} = getUsulDeploy(
 		gnosisAddress,
 		strategies.map(strategy => strategy.expectedAddress),
-		signer,
 		sideChain
 	)
-	const setUsulTransactions = strategies.map(strategy => {
-		switch (strategy.strategy) {
-			case "linearVoting":
-				return {
-					tx: getOZLinearSetUsul(expectedUsulAddress, strategy.expectedAddress, signer, sideChain),
-					name: "OzLinearSetUsul"
-				}
-			default:
-				throw new Error("This strategy is not supported yet")
-		}
-	})
-	const registerUsulTx = await getRegisterModuleTx(
-		gnosisAddress,
+	const setUsulTransactions = buildSetUsulTransactionsTxSequence(
+		strategies,
 		expectedUsulAddress,
-		signer,
 		sideChain
 	)
+	const registerUsulTx = await getRegisterModuleTx(gnosisAddress, expectedUsulAddress)
 	return {
 		transactions: [
 			...strategies.map(strategy => ({tx: strategy.tx, name: strategy.strategy})),
@@ -50,4 +36,19 @@ const buildUsulDeployTxSequence = async (
 	}
 }
 
-export default buildUsulDeployTxSequence
+export const buildSetUsulTransactionsTxSequence = (
+	strategies: BuiltVotingStrategy[],
+	usulAddress: string,
+	sideChain: boolean
+): {tx: SafeTransaction; name: string}[] =>
+	strategies.map(strategy => {
+		switch (strategy.strategy) {
+			case "linearVoting":
+				return {
+					tx: getOZLinearSetUsul(usulAddress, strategy.expectedAddress, sideChain),
+					name: "OzLinearSetUsul"
+				}
+			default:
+				throw new Error("This strategy is not supported yet")
+		}
+	})

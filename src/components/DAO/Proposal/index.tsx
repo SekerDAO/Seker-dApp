@@ -96,7 +96,10 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 		multiChain ? config.SIDE_CHAIN_ID : config.CHAIN_ID
 	)
 	const checkedExecuteProposalSingle = useCheckNetwork(executeProposalSingle, config.SIDE_CHAIN_ID)
-	const checkedExecuteProposalBatch = useCheckNetwork(executeProposalBatch, config.CHAIN_ID)
+	const checkedExecuteProposalBatch = useCheckNetwork(
+		executeProposalBatch,
+		multiChain ? config.SIDE_CHAIN_ID : config.CHAIN_ID
+	)
 
 	if (loading || !proposal) return <Loader />
 	if (error) return <ErrorPlaceholder />
@@ -130,7 +133,7 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 		if (!signer) return
 		setProcessing(true)
 		try {
-			if (multiChain) {
+			if (multiChain && !proposal.sideChain) {
 				const txs = proposal.transactions.map(tx => prebuiltTxToSafeTx(tx))
 				const hash = await checkedExecuteProposalSingle(
 					proposal.usulAddress,

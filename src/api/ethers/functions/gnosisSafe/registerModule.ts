@@ -13,13 +13,10 @@ import {
 
 export const getRegisterModuleTx = async (
 	safeAddress: string,
-	moduleAddress: string,
-	signer: JsonRpcSigner,
-	zeroNonce = false
+	moduleAddress: string
 ): Promise<SafeTransaction> => {
-	const safeContract = new Contract(safeAddress, GnosisSafeL2.abi, signer)
-	const nonce = zeroNonce ? 0 : await safeContract.nonce()
-	return buildContractCall(safeContract, "enableModule", [moduleAddress], nonce)
+	const safeContract = new Contract(safeAddress, GnosisSafeL2.abi)
+	return buildContractCall(safeContract, "enableModule", [moduleAddress], 0)
 }
 
 export const getPrebuiltRegisterModuleTx = (

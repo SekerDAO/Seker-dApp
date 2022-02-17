@@ -215,7 +215,7 @@ const Dao: FunctionComponent = () => {
 							<ExpandDAO
 								gnosisAddress={dao.gnosisAddress}
 								gnosisVotingThreshold={dao.gnosisVotingThreshold}
-								afterDeployUsul={refetch}
+								afterDeploy={refetch}
 								isAdmin={isAdmin}
 								usuls={dao.usuls}
 							/>

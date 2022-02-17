@@ -53,7 +53,12 @@
       "destructuring": "all",
       "ignoreReadBeforeAssign": false
     }],
-    "import/extensions": ["error", {"tsx": "never", "json": "always", "scss": "always"}],
+    "import/extensions": ["error", {
+      "tsx": "never",
+      "json": "always",
+      "scss": "always",
+      "svg": "always"
+    }],
     "import/no-unresolved": "off", // does not work with foo/index.ts
     "import/imports-first": ["error", "absolute-first"],
     "filenames/match-exported": "error",
