@@ -1,4 +1,4 @@
-# Hyphal
+# Seker
 
 ## Setup
 
