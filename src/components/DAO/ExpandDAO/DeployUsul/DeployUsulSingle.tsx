@@ -66,7 +66,6 @@ const DeployUsulSingle: FunctionComponent<{
 				<ChooseVotingStrategies
 					gnosisAddress={gnosisAddress}
 					strategies={strategies}
-					transactions={transactions}
 					onStrategyAdd={strategy => {
 						setStrategies(prevState => [...prevState, strategy])
 					}}

@@ -1,6 +1,5 @@
 import {FunctionComponent, useState, useContext} from "react"
 import getOZLinearDeployTx from "../../../../api/ethers/functions/Usul/voting/OzLinearVoting/getOZLinearDeployTx"
-import {SafeTransaction} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
 import {ReactComponent as DeleteIcon} from "../../../../assets/icons/delete.svg"
 import {ReactComponent as StepDotDoneIcon} from "../../../../assets/icons/step-dot-done.svg"
 import config from "../../../../config"
@@ -20,7 +19,6 @@ import "./styles.scss"
 const ChooseVotingStrategies: FunctionComponent<{
 	gnosisAddress: string
 	strategies: BuiltVotingStrategy[]
-	transactions: {tx: SafeTransaction; name: string}[]
 	onStrategyAdd: (strategy: BuiltVotingStrategy) => void
 	onStrategyRemove: (index: number) => void
 	onSubmit: () => void

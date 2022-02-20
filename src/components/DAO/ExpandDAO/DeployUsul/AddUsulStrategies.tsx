@@ -1,6 +1,7 @@
 import {FunctionComponent, useContext, useEffect, useState} from "react"
 import {useHistory} from "react-router-dom"
 import {buildSetUsulTransactionsTxSequence} from "../../../../api/ethers/functions/Usul/buildUsulDeployTxSequence"
+import getEnableStrategy from "../../../../api/ethers/functions/Usul/getEnableStrategy"
 import {buildMultiSendTx} from "../../../../api/ethers/functions/Usul/multiSend"
 import {SafeTransaction} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
 import config from "../../../../config"
@@ -48,6 +49,10 @@ const AddUsulStrategies: FunctionComponent<{
 		if (!(account && signer)) return
 		const newTransactions = [
 			...strategies.map(strategy => ({tx: strategy.tx, name: strategy.strategy})),
+			...strategies.map(({expectedAddress}) => ({
+				tx: getEnableStrategy(usulAddress, expectedAddress),
+				name: "enableStrategy"
+			})),
 			...buildSetUsulTransactionsTxSequence(strategies, usulAddress, sideChain)
 		]
 		const newMultiTx = await checkedBuildMultiSendTx(
@@ -77,7 +82,6 @@ const AddUsulStrategies: FunctionComponent<{
 				<ChooseVotingStrategies
 					gnosisAddress={usulSafeAddress}
 					strategies={strategies}
-					transactions={transactions}
 					onStrategyAdd={strategy => {
 						setStrategies(prevState => [...prevState, strategy])
 					}}

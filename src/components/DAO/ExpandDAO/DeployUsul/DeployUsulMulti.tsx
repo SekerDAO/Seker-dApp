@@ -80,7 +80,6 @@ const DeployUsulMulti: FunctionComponent<{
 				<ChooseVotingStrategies
 					gnosisAddress={expectedSideChainSafeAddress}
 					strategies={strategies}
-					transactions={transactions}
 					onStrategyAdd={strategy => {
 						setStrategies(prevState => [...prevState, strategy])
 					}}
