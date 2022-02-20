@@ -8,7 +8,7 @@ import {hasVoted} from "../../api/ethers/functions/Usul/voting/votingApi"
 import getDAO from "../../api/firebase/DAO/getDAO"
 import getStrategyProposal from "../../api/firebase/strategyProposal/getStrategyProposal"
 import {AuthContext} from "../../context/AuthContext"
-import ProviderContext from "../../context/ProviderContext"
+import {ProviderContext} from "../../context/ProviderContext"
 import {StrategyProposal} from "../../types/strategyProposal"
 
 const useStrategyProposal = (

@@ -10,7 +10,7 @@ import Authereum from "authereum"
 import ethProvider from "eth-provider"
 import firebase from "firebase"
 import decode from "jwt-decode"
-import {createContext, useEffect, useState} from "react"
+import {createContext, FunctionComponent, useEffect, useState} from "react"
 import Web3Modal, {connectors} from "web3modal"
 import getUser from "../api/firebase/user/getUser"
 import config from "../config"
@@ -66,7 +66,7 @@ type AuthContext = {
 	chainId: number | null
 }
 
-export const useAuth = (): AuthContext => {
+const useAuth = (): AuthContext => {
 	const [account, setAccount] = useState<string | null>(null)
 	const [balance, setBalance] = useState<BigNumber | null>(null)
 	const [connected, setConnected] = useState(false)
@@ -244,3 +244,9 @@ export const useAuth = (): AuthContext => {
 }
 
 export const AuthContext = createContext<AuthContext>({} as unknown as AuthContext)
+
+export const AuthProvider: FunctionComponent = ({children}) => {
+	const auth = useAuth()
+
+	return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>
+}

@@ -1,6 +1,6 @@
 import {useContext, useEffect, useState} from "react"
 import getDAOs from "../../api/firebase/DAO/getDAOs"
-import ProviderContext from "../../context/ProviderContext"
+import {ProviderContext} from "../../context/ProviderContext"
 import {DAOQueryParams, DAOSnapshot} from "../../types/DAO"
 
 const useDAOs = ({

@@ -8,7 +8,7 @@ import {getNonce} from "../../api/ethers/functions/gnosisSafe/safeUtils"
 import getDAO from "../../api/firebase/DAO/getDAO"
 import getSafeProposals from "../../api/firebase/safeProposal/getSafeProposals"
 import getStrategyProposals from "../../api/firebase/strategyProposal/getStrategyProposals"
-import ProviderContext from "../../context/ProviderContext"
+import {ProviderContext} from "../../context/ProviderContext"
 import {SafeProposal} from "../../types/safeProposal"
 import {StrategyProposal} from "../../types/strategyProposal"
 

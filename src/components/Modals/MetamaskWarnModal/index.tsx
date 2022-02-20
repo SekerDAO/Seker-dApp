@@ -1,6 +1,6 @@
 import {FunctionComponent, useContext} from "react"
 import metamaskScreenshotInstructionsSrc from "../../../assets/images/add_sokoltestnet_screenshot.png"
-import MetamaskWarnModalContext from "../../../context/MetamaskWarnModalContext"
+import {MetamaskWarnModalContext} from "../../../context/MetamaskWarnModalContext"
 import Modal from "../Modal"
 import "./styles.scss"
 

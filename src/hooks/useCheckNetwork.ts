@@ -2,7 +2,7 @@ import {BigNumber} from "@ethersproject/bignumber"
 import {useContext} from "react"
 import config from "../config"
 import {AuthContext} from "../context/AuthContext"
-import MetamaskWarnModalContext from "../context/MetamaskWarnModalContext"
+import {MetamaskWarnModalContext} from "../context/MetamaskWarnModalContext"
 
 const useCheckNetwork = <T extends unknown[], R>(
 	func: (...args: T) => Promise<R>,

@@ -1,5 +1,5 @@
 import {InfuraProvider, JsonRpcProvider} from "@ethersproject/providers"
-import {createContext, useRef} from "react"
+import {createContext, FunctionComponent, useRef} from "react"
 import config from "../config"
 import networks from "../constants/networks"
 
@@ -8,7 +8,7 @@ type ProviderContext = {
 	sideChainProvider: JsonRpcProvider
 }
 
-export const useProvider = (): ProviderContext => {
+const useProvider = (): ProviderContext => {
 	const provider = useRef(
 		new InfuraProvider(networks[config.CHAIN_ID], {
 			projectId: config.INFURA_ID
@@ -27,6 +27,10 @@ export const useProvider = (): ProviderContext => {
 	}
 }
 
-const ProviderContext = createContext<ProviderContext>({} as ProviderContext)
+export const ProviderContext = createContext<ProviderContext>({} as ProviderContext)
 
-export default ProviderContext
+export const ProviderProvider: FunctionComponent = ({children}) => {
+	const provider = useProvider()
+
+	return <ProviderContext.Provider value={provider}>{children}</ProviderContext.Provider>
+}

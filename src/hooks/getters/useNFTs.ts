@@ -2,7 +2,7 @@ import {JsonRpcProvider} from "@ethersproject/providers"
 import {useContext, useEffect, useState} from "react"
 import getAuctionDetails from "../../api/ethers/functions/auction/getAuctionDetails"
 import getNFTs from "../../api/firebase/NFT/getNFTs"
-import ProviderContext from "../../context/ProviderContext"
+import {ProviderContext} from "../../context/ProviderContext"
 import {NFTQueryParams, NFTSnapshot, NftSort} from "../../types/NFT"
 import {Auction} from "../../types/auction"
 

@@ -5,7 +5,7 @@ import getVotingThreshold from "../../api/ethers/functions/gnosisSafe/getVotingT
 import getDAO from "../../api/firebase/DAO/getDAO"
 import getUser from "../../api/firebase/user/getUser"
 import {AuthContext} from "../../context/AuthContext"
-import ProviderContext from "../../context/ProviderContext"
+import {ProviderContext} from "../../context/ProviderContext"
 import {DAO} from "../../types/DAO"
 
 const useMyDAOs = (): {

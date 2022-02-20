@@ -9,7 +9,7 @@ import {
 import {SafeSignature} from "../../../../api/ethers/functions/gnosisSafe/safeUtils"
 import addSafeProposal from "../../../../api/firebase/safeProposal/addSafeProposal"
 import {AuthContext} from "../../../../context/AuthContext"
-import ProviderContext from "../../../../context/ProviderContext"
+import {ProviderContext} from "../../../../context/ProviderContext"
 import useDAO from "../../../../hooks/getters/useDAO"
 import useCheckNetwork from "../../../../hooks/useCheckNetwork"
 import useValidation from "../../../../hooks/useValidation"

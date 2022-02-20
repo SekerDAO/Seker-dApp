@@ -1,7 +1,7 @@
 import {useContext, useEffect, useState} from "react"
 import {getProposalVotesList} from "../../api/ethers/functions/Usul/voting/votingApi"
 import {toastError} from "../../components/UI/Toast"
-import ProviderContext from "../../context/ProviderContext"
+import {ProviderContext} from "../../context/ProviderContext"
 import {StrategyProposal, StrategyProposalVote} from "../../types/strategyProposal"
 
 const useProposalVotes = (

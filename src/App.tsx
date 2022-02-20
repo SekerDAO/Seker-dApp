@@ -7,9 +7,9 @@ import Header from "./components/Header"
 import MetamaskWarnModal from "./components/Modals/MetamaskWarnModal"
 import ErrorPlaceholder from "./components/UI/ErrorPlaceholder"
 import "./components/UI/Toast/styles.scss"
-import {AuthContext, useAuth} from "./context/AuthContext"
-import MetamaskWarnModalContext, {useMetamaskWarnModal} from "./context/MetamaskWarnModalContext"
-import ProviderContext, {useProvider} from "./context/ProviderContext"
+import {AuthProvider} from "./context/AuthContext"
+import {MetamaskWarnModalProvider} from "./context/MetamaskWarnModalContext"
+import {ProviderProvider} from "./context/ProviderContext"
 import "./default.scss"
 import Dao from "./pages/Dao"
 import Daos from "./pages/Daos"
@@ -19,9 +19,6 @@ import NFTDetails from "./pages/NftDetails"
 import Profile from "./pages/Profile"
 
 const AppPure: FunctionComponent = () => {
-	const auth = useAuth()
-	const metamaskWarnModal = useMetamaskWarnModal()
-
 	useEffect(() => {
 		if (document.getElementsByClassName("modal__overlay").length > 0) {
 			document.body.classList.add("scroll-lock")
@@ -31,36 +28,28 @@ const AppPure: FunctionComponent = () => {
 	})
 
 	return (
-		<BrowserRouter>
-			<AuthContext.Provider value={auth}>
-				<MetamaskWarnModalContext.Provider value={metamaskWarnModal}>
-					<div className="main">
-						<Header />
-						<MetamaskWarnModal />
-						<ToastContainer />
-						<Switch>
-							<Route exact path="/" component={Homepage} />
-							<Route exact path="/learn" component={Learn} />
-							<Route exact path="/nft/:id" component={NFTDetails} />
-							<Route exact path="/profile/:userId" component={Profile} />
-							<Route exact path="/dao/:address" component={Dao} />
-							<Route exact path="/daos" component={Daos} />
-						</Switch>
-						<Footer />
-					</div>
-				</MetamaskWarnModalContext.Provider>
-			</AuthContext.Provider>
-		</BrowserRouter>
-	)
-}
-
-const AppWithEthers: FunctionComponent = () => {
-	const ethers = useProvider()
-
-	return (
-		<ProviderContext.Provider value={ethers}>
-			<AppPure />
-		</ProviderContext.Provider>
+		<ProviderProvider>
+			<BrowserRouter>
+				<AuthProvider>
+					<MetamaskWarnModalProvider>
+						<div className="main">
+							<Header />
+							<MetamaskWarnModal />
+							<ToastContainer />
+							<Switch>
+								<Route exact path="/" component={Homepage} />
+								<Route exact path="/learn" component={Learn} />
+								<Route exact path="/nft/:id" component={NFTDetails} />
+								<Route exact path="/profile/:userId" component={Profile} />
+								<Route exact path="/dao/:address" component={Dao} />
+								<Route exact path="/daos" component={Daos} />
+							</Switch>
+							<Footer />
+						</div>
+					</MetamaskWarnModalProvider>
+				</AuthProvider>
+			</BrowserRouter>
+		</ProviderProvider>
 	)
 }
 
@@ -78,6 +67,6 @@ export default class App extends Component<{[k: string]: never}, {error: boolean
 		if (this.state.error) {
 			return <ErrorPlaceholder />
 		}
-		return <AppWithEthers />
+		return <AppPure />
 	}
 }

@@ -3,7 +3,7 @@ import {ChangeEvent, FunctionComponent, useContext, useEffect, useState} from "r
 import checkErc20Wrapped from "../../../api/ethers/functions/ERC20Token/checkErc20Wrapped"
 import {VOTING_STRATEGIES} from "../../../constants/votingStrategies"
 import {AuthContext} from "../../../context/AuthContext"
-import ProviderContext from "../../../context/ProviderContext"
+import {ProviderContext} from "../../../context/ProviderContext"
 import {VotingStrategyName} from "../../../types/DAO"
 import {ERC20Token} from "../../../types/ERC20Token"
 import Button from "../../Controls/Button"

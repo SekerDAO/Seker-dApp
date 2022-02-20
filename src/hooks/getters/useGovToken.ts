@@ -3,7 +3,7 @@ import getERC20Balance from "../../api/ethers/functions/ERC20Token/getERC20Balan
 import {getStrategyGovTokenAddress} from "../../api/ethers/functions/Usul/voting/usulStrategies"
 import {checkDelegatee} from "../../api/ethers/functions/Usul/voting/votingApi"
 import {AuthContext} from "../../context/AuthContext"
-import ProviderContext from "../../context/ProviderContext"
+import {ProviderContext} from "../../context/ProviderContext"
 
 const useGovToken = (
 	strategyAddress: string,

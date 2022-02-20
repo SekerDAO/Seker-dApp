@@ -5,7 +5,7 @@ import {getNonce} from "../../api/ethers/functions/gnosisSafe/safeUtils"
 import getDAO from "../../api/firebase/DAO/getDAO"
 import getSafeProposal from "../../api/firebase/safeProposal/getSafeProposal"
 import {AuthContext} from "../../context/AuthContext"
-import ProviderContext from "../../context/ProviderContext"
+import {ProviderContext} from "../../context/ProviderContext"
 import {SafeProposal, SafeProposalState} from "../../types/safeProposal"
 
 const useSafeProposal = (

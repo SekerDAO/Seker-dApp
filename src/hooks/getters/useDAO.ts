@@ -3,7 +3,7 @@ import {getStrategies} from "../../api/ethers/functions/Usul/voting/usulStrategi
 import getOwners from "../../api/ethers/functions/gnosisSafe/getOwners"
 import getVotingThreshold from "../../api/ethers/functions/gnosisSafe/getVotingThreshold"
 import getDAO from "../../api/firebase/DAO/getDAO"
-import ProviderContext from "../../context/ProviderContext"
+import {ProviderContext} from "../../context/ProviderContext"
 import {DAO} from "../../types/DAO"
 
 const useDAO = (
