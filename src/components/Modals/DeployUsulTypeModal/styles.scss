@@ -9,8 +9,15 @@
   &__input {
     margin-top: 20px;
 
-    label {
+    .radio__label {
       margin-left: 15px;
+    }
+
+    &--select {
+      label {
+        display: block;
+        margin-bottom: 10px;
+      }
     }
   }
 }

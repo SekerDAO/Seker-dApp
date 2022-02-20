@@ -48,6 +48,10 @@ body {
   line-height: 20px;
   color: $dark-grey;
   background-color: $light-grey;
+
+  &.scroll-lock {
+    overflow: hidden;
+  }
 }
 
 h1 {

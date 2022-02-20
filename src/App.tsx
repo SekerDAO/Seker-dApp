@@ -1,4 +1,4 @@
-import {Component, FunctionComponent} from "react"
+import {Component, FunctionComponent, useEffect} from "react"
 import {Switch, Route, BrowserRouter} from "react-router-dom"
 import {ToastContainer} from "react-toastify"
 import "react-toastify/dist/ReactToastify.min.css"
@@ -21,6 +21,14 @@ import Profile from "./pages/Profile"
 const AppPure: FunctionComponent = () => {
 	const auth = useAuth()
 	const metamaskWarnModal = useMetamaskWarnModal()
+
+	useEffect(() => {
+		if (document.getElementsByClassName("modal__overlay").length > 0) {
+			document.body.classList.add("scroll-lock")
+		} else {
+			document.body.classList.remove("scroll-lock")
+		}
+	})
 
 	return (
 		<BrowserRouter>

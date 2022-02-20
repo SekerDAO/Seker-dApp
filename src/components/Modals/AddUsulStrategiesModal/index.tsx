@@ -23,7 +23,7 @@ const AddUsulStrategiesModal: FunctionComponent<{
 		<Modal
 			show
 			onClose={onClose}
-			title="Select Usul Deployment Type"
+			title="Add Usul Strategies"
 			onSubmit={handleSubmit}
 			submitButtonDisabled={submitButtonDisabled}
 		>

@@ -1,4 +1,8 @@
 import {FunctionComponent, useState} from "react"
+import {ReactComponent as LeftArrowGrey} from "../../../../assets/icons/left-arrow-grey.svg"
+import {ReactComponent as LeftArrowPurple} from "../../../../assets/icons/left-arrow-purple.svg"
+import {ReactComponent as RightArrowGrey} from "../../../../assets/icons/right-arrow-grey.svg"
+import {ReactComponent as RightArrowPurple} from "../../../../assets/icons/right-arrow-purple.svg"
 import {VOTING_STRATEGIES} from "../../../../constants/votingStrategies"
 import {VotingStrategy} from "../../../../types/DAO"
 import "./styles.scss"
@@ -25,10 +29,9 @@ const UsulStrategiesList: FunctionComponent<{
 					shift === 0 ? " usul-strategies-list__arrow--disabled" : ""
 				}`}
 			>
-				<div
-					onClick={handleLeftArrowClick}
-					style={{width: "20px", height: "40px", background: "green"}}
-				/>
+				<div onClick={handleLeftArrowClick}>
+					{shift === 0 ? <LeftArrowGrey /> : <LeftArrowPurple />}
+				</div>
 			</div>
 			{strategies.slice(shift, shift + 3).map((s, index) => {
 				const strategy = VOTING_STRATEGIES.find(strat => strat.strategy === s.name)
@@ -49,10 +52,9 @@ const UsulStrategiesList: FunctionComponent<{
 					shift >= strategies.length - 3 ? " usul-strategies-list__arrow--disabled" : ""
 				}`}
 			>
-				<div
-					onClick={handleRightArrowClick}
-					style={{width: "20px", height: "40px", background: "green"}}
-				/>
+				<div onClick={handleRightArrowClick}>
+					{shift >= strategies.length - 3 ? <RightArrowGrey /> : <RightArrowPurple />}
+				</div>
 			</div>
 		</div>
 	)

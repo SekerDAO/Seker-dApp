@@ -65,7 +65,7 @@ const DeployUsulTypeModal: FunctionComponent<{
 		>
 			<div className="deploy-usul-type-modal">
 				<p>TODO: some description here</p>
-				<div className="deploy-usul-type-modal__input">
+				<div className="deploy-usul-type-modal__input deploy-usul-type-modal__input--select">
 					<label htmlFor="expand-dao-module">Module</label>
 					<Select
 						id="expand-dao-module"
@@ -89,7 +89,7 @@ const DeployUsulTypeModal: FunctionComponent<{
 					/>
 				</div>
 				{selectedModuleIndex !== -1 && (
-					<div className="deploy-usul-type-modal__input">
+					<div className="deploy-usul-type-modal__input deploy-usul-type-modal__input--select">
 						<label htmlFor="expand-dao-strategy">Voting Strategy</label>
 						<Select
 							id="expand-dao-strategy"
