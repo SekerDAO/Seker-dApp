@@ -52,28 +52,31 @@ const useProposals = (
 						...doc.data(),
 						proposalId: doc.id
 					}))
+
 					return Promise.all(
-						firebaseData.map(async p => ({
-							...p,
-							usulAddress,
-							state: (
-								await getProposalState(
-									usulAddress,
-									p.id,
-									deployType === "usulMulti" ? sideChainProvider : provider
-								)
-							).state,
-							govTokenAddress: await getStrategyGovTokenAddress(
-								p.strategyAddress,
-								deployType === "usulMulti" ? sideChainProvider : provider
-							),
-							votes: await getProposalVotesSummary(
+						firebaseData.map(async p => {
+							const {state, deadline} = await getProposalState(
 								usulAddress,
 								p.id,
 								deployType === "usulMulti" ? sideChainProvider : provider
-							),
-							sideChain: deployType === "usulMulti"
-						}))
+							)
+							return {
+								...p,
+								usulAddress,
+								state,
+								deadline,
+								govTokenAddress: await getStrategyGovTokenAddress(
+									p.strategyAddress,
+									deployType === "usulMulti" ? sideChainProvider : provider
+								),
+								votes: await getProposalVotesSummary(
+									usulAddress,
+									p.id,
+									deployType === "usulMulti" ? sideChainProvider : provider
+								),
+								sideChain: deployType === "usulMulti"
+							}
+						})
 					)
 				})
 			)

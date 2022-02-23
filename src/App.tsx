@@ -1,4 +1,4 @@
-import {Component, FunctionComponent, useEffect} from "react"
+import {Component, FunctionComponent} from "react"
 import {Switch, Route, BrowserRouter} from "react-router-dom"
 import {ToastContainer} from "react-toastify"
 import "react-toastify/dist/ReactToastify.min.css"
@@ -18,40 +18,30 @@ import Learn from "./pages/Learn"
 import NFTDetails from "./pages/NftDetails"
 import Profile from "./pages/Profile"
 
-const AppPure: FunctionComponent = () => {
-	useEffect(() => {
-		if (document.getElementsByClassName("modal__overlay").length > 0) {
-			document.body.classList.add("scroll-lock")
-		} else {
-			document.body.classList.remove("scroll-lock")
-		}
-	})
-
-	return (
-		<ProviderProvider>
-			<BrowserRouter>
-				<AuthProvider>
-					<MetamaskWarnModalProvider>
-						<div className="main">
-							<Header />
-							<MetamaskWarnModal />
-							<ToastContainer />
-							<Switch>
-								<Route exact path="/" component={Homepage} />
-								<Route exact path="/learn" component={Learn} />
-								<Route exact path="/nft/:id" component={NFTDetails} />
-								<Route exact path="/profile/:userId" component={Profile} />
-								<Route exact path="/dao/:address" component={Dao} />
-								<Route exact path="/daos" component={Daos} />
-							</Switch>
-							<Footer />
-						</div>
-					</MetamaskWarnModalProvider>
-				</AuthProvider>
-			</BrowserRouter>
-		</ProviderProvider>
-	)
-}
+const AppPure: FunctionComponent = () => (
+	<ProviderProvider>
+		<BrowserRouter>
+			<AuthProvider>
+				<MetamaskWarnModalProvider>
+					<div className="main">
+						<Header />
+						<MetamaskWarnModal />
+						<ToastContainer />
+						<Switch>
+							<Route exact path="/" component={Homepage} />
+							<Route exact path="/learn" component={Learn} />
+							<Route exact path="/nft/:id" component={NFTDetails} />
+							<Route exact path="/profile/:userId" component={Profile} />
+							<Route exact path="/dao/:address" component={Dao} />
+							<Route exact path="/daos" component={Daos} />
+						</Switch>
+						<Footer />
+					</div>
+				</MetamaskWarnModalProvider>
+			</AuthProvider>
+		</BrowserRouter>
+	</ProviderProvider>
+)
 
 export default class App extends Component<{[k: string]: never}, {error: boolean}> {
 	state = {

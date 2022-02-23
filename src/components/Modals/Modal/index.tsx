@@ -1,4 +1,4 @@
-import {FunctionComponent} from "react"
+import {FunctionComponent, useEffect} from "react"
 import {ReactComponent as CloseIcon} from "../../../assets/icons/delete.svg"
 import {ReactComponent as WarningIcon} from "../../../assets/icons/warning.svg"
 import Button from "../../Controls/Button"
@@ -29,6 +29,17 @@ const Modal: FunctionComponent<{
 	children,
 	submitButtonDisabled
 }) => {
+	const checkForModals = () => {
+		if (document.getElementsByClassName("modal__overlay").length > 0) {
+			document.body.classList.add("scroll-lock")
+		} else {
+			document.body.classList.remove("scroll-lock")
+		}
+	}
+	useEffect(() => {
+		checkForModals()
+		return checkForModals
+	})
 	if (!show) return null
 
 	return (

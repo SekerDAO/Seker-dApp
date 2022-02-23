@@ -17,7 +17,8 @@ const ProposalLayout: FunctionComponent<{
 	votesThreshold: number
 	votes?: StrategyProposalVote[]
 	votesLoading?: boolean
-}> = ({proposal, votesLoading, votesThreshold, children, votes}) => {
+	refetch?: () => void
+}> = ({proposal, votesLoading, votesThreshold, children, votes, refetch}) => {
 	const {push} = useHistory()
 
 	const isAdminProposal = isSafeProposal(proposal)
@@ -29,6 +30,7 @@ const ProposalLayout: FunctionComponent<{
 				id={proposal.proposalId}
 				showLinks
 				sideChain={!!proposal.multiChain}
+				refetch={refetch}
 			>
 				<BackButton onClick={() => push(`/dao/${proposal.gnosisAddress}?page=proposals`)} />
 			</ProposalHeader>

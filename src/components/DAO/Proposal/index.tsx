@@ -204,6 +204,7 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 				votesThreshold={100}
 				votes={votes}
 				votesLoading={votesLoading}
+				refetch={refetch}
 			>
 				{proposal.state === "active" ? (
 					account && connected ? (

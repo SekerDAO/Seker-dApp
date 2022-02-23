@@ -13,11 +13,15 @@ const ProposalHeader: FunctionComponent<{
 	id: string
 	showLinks?: boolean
 	sideChain: boolean
-}> = ({proposal, id, children, showLinks, sideChain}) => {
+	refetch?: () => void
+}> = ({proposal, id, children, showLinks, sideChain, refetch}) => {
 	const isAdminProposal = isSafeProposal(proposal)
 	const [currentDate, setCurrentDate] = useState(new Date().getTime())
 	const updateDate = () => {
 		setCurrentDate(new Date().getTime())
+		if (!isAdminProposal && refetch && proposal.deadline! * 1000 < new Date().getTime()) {
+			refetch()
+		}
 	}
 	useEffect(() => {
 		const interval = setInterval(updateDate, 1000)
