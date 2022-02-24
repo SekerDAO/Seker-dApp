@@ -41,13 +41,14 @@ const ChooseVotingStrategies: FunctionComponent<{
 		if (strategy === "linearVoting") {
 			if (
 				delay &&
-				!isNaN(Number(delay)) &&
+				!isNaN(delay) &&
+				delay >= 0 &&
 				quorumThreshold &&
 				!isNaN(quorumThreshold) &&
-				quorumThreshold > 0 && // TODO: validation
+				quorumThreshold >= 2 &&
 				votingPeriod &&
 				!isNaN(votingPeriod) &&
-				votingPeriod > 1 &&
+				votingPeriod >= 2 &&
 				signer
 			) {
 				const {tx, expectedAddress} = await checkedGetOzLinearDeployTx(

@@ -94,7 +94,7 @@ const SingleTransaction: FunctionComponent<
 				onChange={handleAddressChange}
 				validation={addressBad ? "Not a valid address" : null}
 			/>
-			{fetchingAbi && <p>TODO: fetching ABI...</p>}
+			{fetchingAbi && <p>Fetching ABI...</p>}
 			<label htmlFor="general-evm-abi">ABI</label>
 			<Textarea
 				value={abiString}

@@ -4,6 +4,7 @@ import checkErc20Wrapped from "../../../api/ethers/functions/ERC20Token/checkErc
 import {VOTING_STRATEGIES} from "../../../constants/votingStrategies"
 import {AuthContext} from "../../../context/AuthContext"
 import {ProviderContext} from "../../../context/ProviderContext"
+import useValidation from "../../../hooks/useValidation"
 import {VotingStrategyName} from "../../../types/DAO"
 import {ERC20Token} from "../../../types/ERC20Token"
 import Button from "../../Controls/Button"
@@ -50,8 +51,24 @@ const DeployVotingStrategyModal: FunctionComponent<{
 		}
 	}, [tokenAddress])
 	const [votingPeriod, setVotingPeriod] = useState("")
+	const {validation: votingPeriodValidation} = useValidation(votingPeriod, [
+		async val => (isNaN(Number(val)) ? "Not a valid number" : null),
+		async val => (Number(val) === Math.round(Number(val)) ? null : "Not an integer"),
+		async val => (val && Number(val) < 2 ? "Should be equal or greater than 2" : null)
+	])
 	const [delay, setDelay] = useState("")
+	const {validation: delayValidation} = useValidation(delay, [
+		async val => (isNaN(Number(val)) ? "Not a valid number" : null),
+		async val => (Number(val) === Math.round(Number(val)) ? null : "Not an integer"),
+		async val => (val && Number(val) < 0 ? "Should be equal or greater than 0" : null)
+	])
 	const [quorumThreshold, setQuorumThreshold] = useState("")
+	const {validation: quorumValidation} = useValidation(quorumThreshold, [
+		async val => (isNaN(Number(val)) ? "Not a valid number" : null),
+		async val => (Number(val) === Math.round(Number(val)) ? null : "Not an integer"),
+		async val => (Number(val) > 100 ? "Cannot be greater than 100" : null),
+		async val => (val && Number(val) < 2 ? "Should be equal or greater than 2" : null)
+	])
 
 	const handleTokenCreate = (token: ERC20Token) => {
 		setTokenAddress(token.address)
@@ -80,12 +97,13 @@ const DeployVotingStrategyModal: FunctionComponent<{
 	const submitButtonDisabled = !(
 		delay &&
 		!isNaN(Number(delay)) &&
+		Number(delay) >= 0 &&
 		quorumThreshold &&
 		!isNaN(Number(quorumThreshold)) &&
-		Number(quorumThreshold) > 0 && // TODO: validation
+		Number(quorumThreshold) >= 2 &&
 		votingPeriod &&
 		!isNaN(Number(votingPeriod)) &&
-		Number(votingPeriod) > 1 &&
+		Number(votingPeriod) >= 2 &&
 		signer &&
 		tokenAddress &&
 		!tokenAddressValidation
@@ -146,6 +164,7 @@ const DeployVotingStrategyModal: FunctionComponent<{
 								onChange={e => {
 									setVotingPeriod(e.target.value)
 								}}
+								validation={votingPeriodValidation}
 							/>
 						</div>
 						<div className="voting-strategy-form__col">
@@ -160,6 +179,7 @@ const DeployVotingStrategyModal: FunctionComponent<{
 								onChange={e => {
 									setDelay(e.target.value)
 								}}
+								validation={delayValidation}
 							/>
 						</div>
 					</div>
@@ -174,6 +194,7 @@ const DeployVotingStrategyModal: FunctionComponent<{
 							name="quorumThreshold"
 							value={quorumThreshold}
 							onChange={handleQuorumThresholdChange}
+							validation={quorumValidation}
 						/>
 					</div>
 					<Button disabled={submitButtonDisabled} onClick={handleSubmit}>
