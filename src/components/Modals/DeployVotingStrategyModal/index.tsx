@@ -7,6 +7,7 @@ import {ProviderContext} from "../../../context/ProviderContext"
 import useValidation from "../../../hooks/useValidation"
 import {VotingStrategyName} from "../../../types/DAO"
 import {ERC20Token} from "../../../types/ERC20Token"
+import ArrayInput from "../../Controls/ArrayInput"
 import Button from "../../Controls/Button"
 import Input from "../../Controls/Input"
 import CreateERC20TokenModal from "../CreateERC20TokenModal"
@@ -18,6 +19,7 @@ export type VotingStrategyFormValues = {
 	votingPeriod: number
 	delay: number
 	quorumThreshold: number
+	members: string[]
 }
 
 const DeployVotingStrategyModal: FunctionComponent<{
@@ -25,9 +27,11 @@ const DeployVotingStrategyModal: FunctionComponent<{
 	onSubmit: (strategy: VotingStrategyName, formValues: VotingStrategyFormValues) => void
 	onClose: () => void
 	sideChain: boolean
-}> = ({strategy, onSubmit, onClose, sideChain}) => {
+	withToken: boolean
+	withMembers: boolean
+}> = ({strategy, onSubmit, onClose, sideChain, withToken, withMembers}) => {
 	const [createTokenModalOpened, setCreateTokenModalOpened] = useState(false)
-	const {signer} = useContext(AuthContext)
+	const {signer, account} = useContext(AuthContext)
 	const {provider, sideChainProvider} = useContext(ProviderContext)
 
 	const [tokenAddress, setTokenAddress] = useState("")
@@ -69,6 +73,7 @@ const DeployVotingStrategyModal: FunctionComponent<{
 		async val => (Number(val) > 100 ? "Cannot be greater than 100" : null),
 		async val => (val && Number(val) < 2 ? "Should be equal or greater than 2" : null)
 	])
+	const [members, setMembers] = useState<string[]>(account ? [account] : [])
 
 	const handleTokenCreate = (token: ERC20Token) => {
 		setTokenAddress(token.address)
@@ -81,7 +86,8 @@ const DeployVotingStrategyModal: FunctionComponent<{
 				tokenAddress,
 				delay: Number(delay),
 				votingPeriod: Number(votingPeriod),
-				quorumThreshold: Number(quorumThreshold)
+				quorumThreshold: Number(quorumThreshold),
+				members
 			})
 		}
 	}
@@ -125,7 +131,7 @@ const DeployVotingStrategyModal: FunctionComponent<{
 					<h3>
 						{VOTING_STRATEGIES.find(votingStrategy => votingStrategy.strategy === strategy)?.title}
 					</h3>
-					{strategy === "linearVoting" && (
+					{withToken && (
 						<div className="voting-strategy-form__row">
 							<label>ERC-20 Token Address</label>
 							<Input
@@ -149,6 +155,21 @@ const DeployVotingStrategyModal: FunctionComponent<{
 									Create
 								</Button>
 							</div>
+						</div>
+					)}
+					{withMembers && (
+						<div className="voting-strategy-form__row">
+							<ArrayInput
+								onAdd={member => {
+									setMembers(prevState => [...prevState, member])
+								}}
+								onRemove={idx => {
+									setMembers(prevState => prevState.filter((_, index) => index !== idx))
+								}}
+								items={members}
+								placeholder="Members"
+								validator={value => (isAddress(value) ? null : "Not a valid address")}
+							/>
 						</div>
 					)}
 					<div className="voting-strategy-form__row">

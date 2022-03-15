@@ -7,7 +7,9 @@ import {
 	executeProposalSingle
 } from "../../../api/ethers/functions/Usul/executeProposal"
 import {buildMultiSendTx} from "../../../api/ethers/functions/Usul/multiSend"
-import {finalizeVotingLinear} from "../../../api/ethers/functions/Usul/voting/OzLinearVoting/ozLinearVotingApi"
+import {finalizeVotingMemberLinear} from "../../../api/ethers/functions/Usul/voting/MemberLinearVoting/memberLinearVotingApi"
+import {finalizeVotingOzLinear} from "../../../api/ethers/functions/Usul/voting/OzLinearVoting/ozLinearVotingApi"
+import {finalizeVotingOzSingle} from "../../../api/ethers/functions/Usul/voting/OzSingleVoting/ozSingleVotingApi"
 import {checkDelegatee} from "../../../api/ethers/functions/Usul/voting/votingApi"
 import {prebuiltTxToSafeTx} from "../../../api/ethers/functions/gnosisSafe/safeUtils"
 import addUsul from "../../../api/firebase/DAO/addUsul"
@@ -91,8 +93,16 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 	}, [proposal, account])
 	const {votes, loading: votesLoading} = useProposalVotes(proposal)
 
-	const checkedFinalizeVotingLinear = useCheckNetwork(
-		finalizeVotingLinear,
+	const checkedFinalizeVotingMemberLinear = useCheckNetwork(
+		finalizeVotingMemberLinear,
+		multiChain ? config.SIDE_CHAIN_ID : config.CHAIN_ID
+	)
+	const checkedFinalizeVotingOzLinear = useCheckNetwork(
+		finalizeVotingOzLinear,
+		multiChain ? config.SIDE_CHAIN_ID : config.CHAIN_ID
+	)
+	const checkedFinalizeVotingOzSingle = useCheckNetwork(
+		finalizeVotingOzSingle,
 		multiChain ? config.SIDE_CHAIN_ID : config.CHAIN_ID
 	)
 	const checkedExecuteProposalSingle = useCheckNetwork(executeProposalSingle, config.SIDE_CHAIN_ID)
@@ -110,7 +120,13 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 			setProcessing(true)
 			switch (proposal.strategyType) {
 				case "linearVoting":
-					await checkedFinalizeVotingLinear(proposal.strategyAddress, proposal.id, signer)
+					await checkedFinalizeVotingOzLinear(proposal.strategyAddress, proposal.id, signer)
+					break
+				case "singleVoting":
+					await checkedFinalizeVotingOzSingle(proposal.strategyAddress, proposal.id, signer)
+					break
+				case "linearVotingSimpleMembership":
+					await checkedFinalizeVotingMemberLinear(proposal.strategyAddress, proposal.id, signer)
 					break
 				default:
 					throw new Error("Strategy not supported yet")
@@ -173,6 +189,7 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 		setProcessing(false)
 	}
 
+	// TODO: add members check for members strats
 	const voteDisabled =
 		!(connected && proposal.state === "active") ||
 		(!!proposal.govTokenAddress && !delegatee) ||

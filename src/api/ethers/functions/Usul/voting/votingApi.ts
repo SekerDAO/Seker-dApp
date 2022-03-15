@@ -16,7 +16,7 @@ export const vote = async (
 	signer: JsonRpcSigner
 ): Promise<void> => {
 	const voting = new Contract(strategyAddress, contractAbi, signer)
-	const tx = await voting.vote(proposalId, support)
+	const tx = await voting.vote(proposalId, support, "0x")
 	await tx.wait()
 }
 

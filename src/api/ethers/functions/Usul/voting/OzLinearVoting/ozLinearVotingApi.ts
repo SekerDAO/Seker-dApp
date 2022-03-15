@@ -2,14 +2,14 @@ import {JsonRpcSigner} from "@ethersproject/providers"
 import OZLinearVoting from "../../../../abis/OZLinearVoting.json"
 import {finalizeVoting, vote} from "../votingApi"
 
-export const voteLinear = async (
+export const voteOzLinear = async (
 	strategyAddress: string,
 	proposalId: number,
 	support: number,
 	signer: JsonRpcSigner
 ): Promise<void> => vote(strategyAddress, proposalId, OZLinearVoting.abi, support, signer)
 
-export const finalizeVotingLinear = async (
+export const finalizeVotingOzLinear = async (
 	strategyAddress: string,
 	proposalId: number,
 	signer: JsonRpcSigner

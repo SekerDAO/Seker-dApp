@@ -56,7 +56,7 @@ const ProposalHeader: FunctionComponent<{
 			{children}
 			<div className="proposal__header-title">
 				<h1>{proposal.title}</h1>
-				<span>{isAdminProposal ? "Admin Voting" : "Linear Voting"}</span>
+				<span>{isAdminProposal ? "Admin Voting" : proposal.strategyType}</span>
 			</div>
 			<div className="proposal__header-subtitle">
 				<Tag variant={proposal.state}>{capitalize(proposal.state)}</Tag>

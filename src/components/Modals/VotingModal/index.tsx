@@ -1,5 +1,7 @@
 import {FunctionComponent, useContext, useState} from "react"
-import {voteLinear} from "../../../api/ethers/functions/Usul/voting/OzLinearVoting/ozLinearVotingApi"
+import {voteMemberLinear} from "../../../api/ethers/functions/Usul/voting/MemberLinearVoting/memberLinearVotingApi"
+import {voteOzLinear} from "../../../api/ethers/functions/Usul/voting/OzLinearVoting/ozLinearVotingApi"
+import {voteOzSingle} from "../../../api/ethers/functions/Usul/voting/OzSingleVoting/ozSingleVotingApi"
 import config from "../../../config"
 import {AuthContext} from "../../../context/AuthContext"
 import useCheckNetwork from "../../../hooks/useCheckNetwork"
@@ -22,8 +24,16 @@ const VotingModal: FunctionComponent<{
 	const [processing, setProcessing] = useState(false)
 	const [vote, setVote] = useState<0 | 1 | 2 | null>(null)
 
-	const checkedVoteLinear = useCheckNetwork(
-		voteLinear,
+	const checkedVoteMemberLinear = useCheckNetwork(
+		voteMemberLinear,
+		sideChain ? config.SIDE_CHAIN_ID : config.CHAIN_ID
+	)
+	const checkedVoteOzLinear = useCheckNetwork(
+		voteOzLinear,
+		sideChain ? config.SIDE_CHAIN_ID : config.CHAIN_ID
+	)
+	const checkedVoteOzSingle = useCheckNetwork(
+		voteOzSingle,
 		sideChain ? config.SIDE_CHAIN_ID : config.CHAIN_ID
 	)
 
@@ -33,7 +43,13 @@ const VotingModal: FunctionComponent<{
 			setProcessing(true)
 			switch (strategyName) {
 				case "linearVoting":
-					await checkedVoteLinear(strategyAddress, proposalId, vote, signer)
+					await checkedVoteOzLinear(strategyAddress, proposalId, vote, signer)
+					break
+				case "singleVoting":
+					await checkedVoteOzSingle(strategyAddress, proposalId, vote, signer)
+					break
+				case "linearVotingSimpleMembership":
+					await checkedVoteMemberLinear(strategyAddress, proposalId, vote, signer)
 					break
 				default:
 					throw new Error("Unsupported voting strategy")

@@ -1,5 +1,7 @@
 import {FunctionComponent, useState, useContext} from "react"
+import getMemberLinearDeployTx from "../../../../api/ethers/functions/Usul/voting/MemberLinearVoting/getMemberLinearDeployTx"
 import getOZLinearDeployTx from "../../../../api/ethers/functions/Usul/voting/OzLinearVoting/getOZLinearDeployTx"
+import getOZSingleDeployTx from "../../../../api/ethers/functions/Usul/voting/OzSingleVoting/getOZSingleDeployTx"
 import {ReactComponent as DeleteIcon} from "../../../../assets/icons/delete.svg"
 import {ReactComponent as StepDotDoneIcon} from "../../../../assets/icons/step-dot-done.svg"
 import config from "../../../../config"
@@ -29,17 +31,25 @@ const ChooseVotingStrategies: FunctionComponent<{
 		null
 	)
 
+	const checkedGetMemberLinearDeployTx = useCheckNetwork(
+		getMemberLinearDeployTx,
+		deployType === "usulSingle" ? config.CHAIN_ID : config.SIDE_CHAIN_ID
+	)
 	const checkedGetOzLinearDeployTx = useCheckNetwork(
 		getOZLinearDeployTx,
+		deployType === "usulSingle" ? config.CHAIN_ID : config.SIDE_CHAIN_ID
+	)
+	const checkedGetOzSingleDeployTx = useCheckNetwork(
+		getOZSingleDeployTx,
 		deployType === "usulSingle" ? config.CHAIN_ID : config.SIDE_CHAIN_ID
 	)
 
 	const handleSubmitVotingStrategy = async (
 		strategy: VotingStrategyName,
-		{tokenAddress, quorumThreshold, delay, votingPeriod}: VotingStrategyFormValues
+		{tokenAddress, quorumThreshold, delay, votingPeriod, members}: VotingStrategyFormValues
 	) => {
-		if (strategy === "linearVoting") {
-			if (
+		if (
+			!(
 				delay &&
 				!isNaN(delay) &&
 				delay >= 0 &&
@@ -50,8 +60,13 @@ const ChooseVotingStrategies: FunctionComponent<{
 				!isNaN(votingPeriod) &&
 				votingPeriod >= 2 &&
 				signer
-			) {
-				const {tx, expectedAddress} = await checkedGetOzLinearDeployTx(
+			)
+		) {
+			return
+		}
+		switch (strategy) {
+			case "linearVoting":
+				const {tx: ozLinearTx, expectedAddress: ozLinearAddress} = await checkedGetOzLinearDeployTx(
 					gnosisAddress,
 					tokenAddress,
 					quorumThreshold,
@@ -60,11 +75,40 @@ const ChooseVotingStrategies: FunctionComponent<{
 					signer,
 					deployType === "usulMulti"
 				)
-				onStrategyAdd({strategy, tx, expectedAddress})
+				onStrategyAdd({strategy, tx: ozLinearTx, expectedAddress: ozLinearAddress})
 				setAddStrategyModalOpened(null)
-			}
-		} else {
-			throw new Error("Voting Strategy is not supported yet")
+				break
+			case "linearVotingSimpleMembership":
+				if (members.length === 0) return
+				const {tx: memberLinearTx, expectedAddress: memberLinearAddress} =
+					await checkedGetMemberLinearDeployTx(
+						gnosisAddress,
+						tokenAddress,
+						quorumThreshold,
+						delay,
+						votingPeriod,
+						members,
+						signer,
+						deployType === "usulMulti"
+					)
+				onStrategyAdd({strategy, tx: memberLinearTx, expectedAddress: memberLinearAddress})
+				setAddStrategyModalOpened(null)
+				break
+			case "singleVoting":
+				const {tx: ozSingleTx, expectedAddress: ozSingleAddress} = await checkedGetOzSingleDeployTx(
+					gnosisAddress,
+					tokenAddress,
+					quorumThreshold,
+					delay,
+					votingPeriod,
+					signer,
+					deployType === "usulMulti"
+				)
+				onStrategyAdd({strategy, tx: ozSingleTx, expectedAddress: ozSingleAddress})
+				setAddStrategyModalOpened(null)
+				break
+			default:
+				throw new Error("Voting Strategy is not supported yet")
 		}
 	}
 
@@ -80,6 +124,10 @@ const ChooseVotingStrategies: FunctionComponent<{
 					onClose={() => setAddStrategyModalOpened(null)}
 					onSubmit={handleSubmitVotingStrategy}
 					sideChain={deployType === "usulMulti"}
+					withMembers={
+						VOTING_STRATEGIES.find(s => s.strategy === addStrategyModalOpened)!.withMembers
+					}
+					withToken={VOTING_STRATEGIES.find(s => s.strategy === addStrategyModalOpened)!.withToken}
 				/>
 			)}
 			<Paper className="voting-strategies">

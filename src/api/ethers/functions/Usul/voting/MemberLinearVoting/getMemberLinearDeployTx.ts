@@ -4,23 +4,24 @@ import {Contract} from "@ethersproject/contracts"
 import {JsonRpcSigner} from "@ethersproject/providers"
 import {keccak256} from "@ethersproject/solidity"
 import config from "../../../../../../config"
+import MemberLinearVoting from "../../../../abis/MemberLinearVoting.json"
 import ModuleFactory from "../../../../abis/ModuleFactory.json"
-import OZLinearVoting from "../../../../abis/OZLinearVoting.json"
 import {buildContractCall, SafeTransaction} from "../../../gnosisSafe/safeUtils"
 
 // TODO: pass usul, probably fix and abstract for various strats
-const getOZLinearDeployTx = async (
+const getMemberLinearDeployTx = async (
 	safeAddress: string,
 	governanceToken: string,
 	quorumThreshold: number,
 	delay: number,
 	votingPeriod: number,
+	members: string[],
 	signer: JsonRpcSigner,
 	sideChain = false
 ): Promise<{tx: SafeTransaction; expectedAddress: string}> => {
 	const votingMaster = new Contract(
 		sideChain ? config.SIDE_CHAIN_OZ_LINEAR_MASTER_ADDRESS : config.OZ_LINEAR_MASTER_ADDRESS,
-		OZLinearVoting.abi,
+		MemberLinearVoting.abi,
 		signer
 	)
 	const factory = new Contract(
@@ -29,7 +30,7 @@ const getOZLinearDeployTx = async (
 		signer
 	)
 	const encodedInitParams = defaultAbiCoder.encode(
-		["address", "address", "address", "uint256", "uint256", "uint256", "string"],
+		["address", "address", "address", "uint256", "uint256", "uint256", "string", "address[]"],
 		[
 			safeAddress, // owner
 			governanceToken,
@@ -37,7 +38,8 @@ const getOZLinearDeployTx = async (
 			votingPeriod,
 			quorumThreshold, // number of votes weighted to pass
 			delay, // number of days proposals are active
-			"linearVoting"
+			"linearVotingSimpleMembership",
+			members
 		]
 	)
 	const initData = votingMaster.interface.encodeFunctionData("setUp", [encodedInitParams])
@@ -56,4 +58,4 @@ const getOZLinearDeployTx = async (
 	return {tx, expectedAddress}
 }
 
-export default getOZLinearDeployTx
+export default getMemberLinearDeployTx

@@ -31,6 +31,8 @@ export const VOTING_STRATEGIES: {
 	cardImage: string
 	cardImageMini: string
 	active: boolean
+	withMembers: boolean
+	withToken: boolean
 }[] = [
 	{
 		strategy: "singleVotingSimpleMembership",
@@ -40,7 +42,9 @@ export const VOTING_STRATEGIES: {
 		descriptionMini: "Simple Membership",
 		cardImage: singleVotingSimpleMembershipCard,
 		cardImageMini: singleVotingSimpleMembershipCardMini,
-		active: false
+		active: false,
+		withToken: true,
+		withMembers: true
 	},
 	{
 		strategy: "singleVoting",
@@ -50,7 +54,9 @@ export const VOTING_STRATEGIES: {
 		descriptionMini: "No Membership",
 		cardImage: singleVotingCard,
 		cardImageMini: singleVotingCardMini,
-		active: false
+		active: false,
+		withToken: true,
+		withMembers: false
 	},
 	{
 		strategy: "linearVoting",
@@ -60,7 +66,9 @@ export const VOTING_STRATEGIES: {
 		descriptionMini: "No Membership",
 		cardImage: linearVotingCard,
 		cardImageMini: linearVotingCardMini,
-		active: true
+		active: true,
+		withToken: true,
+		withMembers: false
 	},
 	{
 		strategy: "linearVotingSimpleMembership",
@@ -70,7 +78,9 @@ export const VOTING_STRATEGIES: {
 		descriptionMini: "Simple Membership",
 		cardImage: linearVotingSimpleMembershipCard,
 		cardImageMini: linearVotingSimpleMembershipCardMini,
-		active: false
+		active: true,
+		withToken: true,
+		withMembers: true
 	},
 	{
 		strategy: "linearVotingSimpleMembershipZodiacExitModule",
@@ -80,7 +90,9 @@ export const VOTING_STRATEGIES: {
 		descriptionMini: "Simple Membership + Zodiac Exit",
 		cardImage: linearVotingSimpleMembershipZodiacExitModuleCard,
 		cardImageMini: linearVotingSimpleMembershipZodiacExitModuleCardMini,
-		active: false
+		active: false,
+		withToken: true,
+		withMembers: false
 	},
 	{
 		strategy: "quadraticVotingSimpleMembership",
@@ -90,6 +102,8 @@ export const VOTING_STRATEGIES: {
 		descriptionMini: "Simple Membership",
 		cardImage: quadraticVotingSimpleMembershipCard,
 		cardImageMini: quadraticVotingSimpleMembershipCardMini,
-		active: false
+		active: false,
+		withToken: true,
+		withMembers: false
 	}
 ]
