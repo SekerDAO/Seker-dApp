@@ -3,6 +3,7 @@ import {getRegisterModuleTx} from "../gnosisSafe/registerModule"
 import {SafeTransaction} from "../gnosisSafe/safeUtils"
 import getUsulDeploy from "./getUsulDeploy"
 import getMemberLinearSetUsul from "./voting/MemberLinearVoting/getMemberLinearSetUsul"
+import getMemberSingleSetUsul from "./voting/MemberSingleVoting/getMemberSingleSetUsul"
 import getOZLinearSetUsul from "./voting/OzLinearVoting/getOZLinearSetUsul"
 import getOZSingleSetUsul from "./voting/OzSingleVoting/getOZSingleSetUsul"
 
@@ -54,6 +55,11 @@ export const buildSetUsulTransactionsTxSequence = (
 				return {
 					tx: getMemberLinearSetUsul(usulAddress, strategy.expectedAddress, sideChain),
 					name: "MembersLinearSetUsul"
+				}
+			case "singleVotingSimpleMembership":
+				return {
+					tx: getMemberSingleSetUsul(usulAddress, strategy.expectedAddress, sideChain),
+					name: "MemberSingleSetUsul"
 				}
 			case "singleVoting":
 				return {

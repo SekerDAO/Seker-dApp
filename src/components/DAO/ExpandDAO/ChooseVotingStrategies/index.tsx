@@ -1,5 +1,6 @@
 import {FunctionComponent, useState, useContext} from "react"
 import getMemberLinearDeployTx from "../../../../api/ethers/functions/Usul/voting/MemberLinearVoting/getMemberLinearDeployTx"
+import getMemberSingleDeployTx from "../../../../api/ethers/functions/Usul/voting/MemberSingleVoting/getMemberSingleDeployTx"
 import getOZLinearDeployTx from "../../../../api/ethers/functions/Usul/voting/OzLinearVoting/getOZLinearDeployTx"
 import getOZSingleDeployTx from "../../../../api/ethers/functions/Usul/voting/OzSingleVoting/getOZSingleDeployTx"
 import {ReactComponent as DeleteIcon} from "../../../../assets/icons/delete.svg"
@@ -31,6 +32,10 @@ const ChooseVotingStrategies: FunctionComponent<{
 		null
 	)
 
+	const checkedGetMemberSingleDeployTx = useCheckNetwork(
+		getMemberSingleDeployTx,
+		deployType === "usulSingle" ? config.CHAIN_ID : config.SIDE_CHAIN_ID
+	)
 	const checkedGetMemberLinearDeployTx = useCheckNetwork(
 		getMemberLinearDeployTx,
 		deployType === "usulSingle" ? config.CHAIN_ID : config.SIDE_CHAIN_ID
@@ -105,6 +110,21 @@ const ChooseVotingStrategies: FunctionComponent<{
 					deployType === "usulMulti"
 				)
 				onStrategyAdd({strategy, tx: ozSingleTx, expectedAddress: ozSingleAddress})
+				setAddStrategyModalOpened(null)
+				break
+			case "singleVotingSimpleMembership":
+				if (members.length === 0) return
+				const {tx: memberSingleTx, expectedAddress: memberSingleAddress} =
+					await checkedGetMemberSingleDeployTx(
+						gnosisAddress,
+						quorumThreshold,
+						delay,
+						votingPeriod,
+						members,
+						signer,
+						deployType === "usulMulti"
+					)
+				onStrategyAdd({strategy, tx: memberSingleTx, expectedAddress: memberSingleAddress})
 				setAddStrategyModalOpened(null)
 				break
 			default:

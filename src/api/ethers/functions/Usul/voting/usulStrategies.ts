@@ -1,6 +1,7 @@
 import {AddressZero} from "@ethersproject/constants"
 import {Contract} from "@ethersproject/contracts"
 import {JsonRpcProvider} from "@ethersproject/providers"
+import {VOTING_STRATEGIES} from "../../../../../constants/votingStrategies"
 import {VotingStrategy} from "../../../../../types/DAO"
 import OZLinearVoting from "../../../abis/OZLinearVoting.json"
 import Usul from "../../../abis/Usul.json"
@@ -18,12 +19,15 @@ export const getStrategies = async (
 		addresses[0].map(async (address: string) => {
 			const strategy = new Contract(address, OZLinearVoting.abi, provider)
 
+			const name = await strategy.name()
 			return {
-				name: await strategy.name(),
+				name,
 				votingPeriod: Number((await strategy.votingPeriod()).toString()),
 				quorumThreshold: Number((await strategy.quorumNumerator()).toString()),
 				address,
-				govTokenAddress: await getStrategyGovTokenAddress(address, provider)
+				govTokenAddress: VOTING_STRATEGIES.find(s => s.strategy === name)?.withToken
+					? await getStrategyGovTokenAddress(address, provider)
+					: null
 			}
 		})
 	)

@@ -21,6 +21,10 @@
       margin-top: 20px;
       margin-bottom: 10px;
     }
+
+    .array-input {
+      margin-top: 20px;
+    }
   }
 
   &__col {
@@ -37,7 +41,7 @@
     }
   }
 
-  .btn {
+  > .btn {
     margin-top: 20px;
   }
 

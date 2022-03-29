@@ -4,14 +4,13 @@ import {Contract} from "@ethersproject/contracts"
 import {JsonRpcSigner} from "@ethersproject/providers"
 import {keccak256} from "@ethersproject/solidity"
 import config from "../../../../../../config"
-import MemberLinearVoting from "../../../../abis/MemberLinearVoting.json"
 import ModuleFactory from "../../../../abis/ModuleFactory.json"
+import MemberSingleVoting from "../../../../abis/SimpleMemberVoting.json"
 import {buildContractCall, SafeTransaction} from "../../../gnosisSafe/safeUtils"
 
 // TODO: pass usul, probably fix and abstract for various strats
-const getMemberLinearDeployTx = async (
+const getMemberSingleDeployTx = async (
 	safeAddress: string,
-	governanceToken: string,
 	quorumThreshold: number,
 	delay: number,
 	votingPeriod: number,
@@ -21,9 +20,9 @@ const getMemberLinearDeployTx = async (
 ): Promise<{tx: SafeTransaction; expectedAddress: string}> => {
 	const votingMaster = new Contract(
 		sideChain
-			? config.SIDE_CHAIN_MEMBER_LINEAR_MASTER_ADDRESS
-			: config.MEMBER_LINEAR_MASTER_ADDRESS,
-		MemberLinearVoting.abi,
+			? config.SIDE_CHAIN_MEMBER_SINGLE_MASTER_ADDRESS
+			: config.MEMBER_SINGLE_MASTER_ADDRESS,
+		MemberSingleVoting.abi,
 		signer
 	)
 	const factory = new Contract(
@@ -32,15 +31,14 @@ const getMemberLinearDeployTx = async (
 		signer
 	)
 	const encodedInitParams = defaultAbiCoder.encode(
-		["address", "address", "address", "uint256", "uint256", "uint256", "string", "address[]"],
+		["address", "address", "uint256", "uint256", "uint256", "string", "address[]"],
 		[
 			safeAddress, // owner
-			governanceToken,
 			"0x0000000000000000000000000000000000000001",
 			votingPeriod,
 			quorumThreshold, // number of votes weighted to pass
 			delay, // number of days proposals are active
-			"linearVotingSimpleMembership",
+			"singleVotingSimpleMembership",
 			members
 		]
 	)
@@ -60,4 +58,4 @@ const getMemberLinearDeployTx = async (
 	return {tx, expectedAddress}
 }
 
-export default getMemberLinearDeployTx
+export default getMemberSingleDeployTx

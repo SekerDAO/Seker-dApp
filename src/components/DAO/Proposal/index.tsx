@@ -8,6 +8,7 @@ import {
 } from "../../../api/ethers/functions/Usul/executeProposal"
 import {buildMultiSendTx} from "../../../api/ethers/functions/Usul/multiSend"
 import {finalizeVotingMemberLinear} from "../../../api/ethers/functions/Usul/voting/MemberLinearVoting/memberLinearVotingApi"
+import {finalizeVotingMemberSingle} from "../../../api/ethers/functions/Usul/voting/MemberSingleVoting/memberSingleVotingApi"
 import {finalizeVotingOzLinear} from "../../../api/ethers/functions/Usul/voting/OzLinearVoting/ozLinearVotingApi"
 import {finalizeVotingOzSingle} from "../../../api/ethers/functions/Usul/voting/OzSingleVoting/ozSingleVotingApi"
 import {checkDelegatee} from "../../../api/ethers/functions/Usul/voting/votingApi"
@@ -97,6 +98,10 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 		finalizeVotingMemberLinear,
 		multiChain ? config.SIDE_CHAIN_ID : config.CHAIN_ID
 	)
+	const checkedFinalizeVotingMemberSingle = useCheckNetwork(
+		finalizeVotingMemberSingle,
+		multiChain ? config.SIDE_CHAIN_ID : config.CHAIN_ID
+	)
 	const checkedFinalizeVotingOzLinear = useCheckNetwork(
 		finalizeVotingOzLinear,
 		multiChain ? config.SIDE_CHAIN_ID : config.CHAIN_ID
@@ -124,6 +129,9 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 					break
 				case "singleVoting":
 					await checkedFinalizeVotingOzSingle(proposal.strategyAddress, proposal.id, signer)
+					break
+				case "singleVotingSimpleMembership":
+					await checkedFinalizeVotingMemberSingle(proposal.strategyAddress, proposal.id, signer)
 					break
 				case "linearVotingSimpleMembership":
 					await checkedFinalizeVotingMemberLinear(proposal.strategyAddress, proposal.id, signer)

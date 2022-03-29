@@ -7,6 +7,7 @@ import {getStrategyGovTokenAddress} from "../../api/ethers/functions/Usul/voting
 import {hasVoted} from "../../api/ethers/functions/Usul/voting/votingApi"
 import getDAO from "../../api/firebase/DAO/getDAO"
 import getStrategyProposal from "../../api/firebase/strategyProposal/getStrategyProposal"
+import {VOTING_STRATEGIES} from "../../constants/votingStrategies"
 import {AuthContext} from "../../context/AuthContext"
 import {ProviderContext} from "../../context/ProviderContext"
 import {StrategyProposal} from "../../types/strategyProposal"
@@ -56,10 +57,13 @@ const useStrategyProposal = (
 				...proposalData,
 				state,
 				deadline,
-				govTokenAddress: await getStrategyGovTokenAddress(
-					proposalData.strategyAddress,
-					usul.deployType === "usulMulti" ? sideChainProvider : provider
-				),
+				govTokenAddress: VOTING_STRATEGIES.find(s => s.strategy === proposalData.strategyType)
+					?.withToken
+					? await getStrategyGovTokenAddress(
+							proposalData.strategyAddress,
+							usul.deployType === "usulMulti" ? sideChainProvider : provider
+					  )
+					: null,
 				proposalId: id,
 				usulAddress: usul.usulAddress,
 				usulBridgeAddress: usul.bridgeAddress,

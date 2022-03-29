@@ -42,8 +42,8 @@ export const VOTING_STRATEGIES: {
 		descriptionMini: "Simple Membership",
 		cardImage: singleVotingSimpleMembershipCard,
 		cardImageMini: singleVotingSimpleMembershipCardMini,
-		active: false,
-		withToken: true,
+		active: true,
+		withToken: false,
 		withMembers: true
 	},
 	{

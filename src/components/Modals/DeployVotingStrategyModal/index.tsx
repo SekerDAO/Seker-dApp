@@ -111,8 +111,9 @@ const DeployVotingStrategyModal: FunctionComponent<{
 		!isNaN(Number(votingPeriod)) &&
 		Number(votingPeriod) >= 2 &&
 		signer &&
-		tokenAddress &&
-		!tokenAddressValidation
+		(!withToken || tokenAddress) &&
+		!tokenAddressValidation &&
+		(!withMembers || members.length > 0)
 	)
 
 	return (

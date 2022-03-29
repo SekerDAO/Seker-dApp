@@ -1,5 +1,6 @@
 import {FunctionComponent, useContext, useState} from "react"
 import {voteMemberLinear} from "../../../api/ethers/functions/Usul/voting/MemberLinearVoting/memberLinearVotingApi"
+import {voteMemberSingle} from "../../../api/ethers/functions/Usul/voting/MemberSingleVoting/memberSingleVotingApi"
 import {voteOzLinear} from "../../../api/ethers/functions/Usul/voting/OzLinearVoting/ozLinearVotingApi"
 import {voteOzSingle} from "../../../api/ethers/functions/Usul/voting/OzSingleVoting/ozSingleVotingApi"
 import config from "../../../config"
@@ -28,6 +29,10 @@ const VotingModal: FunctionComponent<{
 		voteMemberLinear,
 		sideChain ? config.SIDE_CHAIN_ID : config.CHAIN_ID
 	)
+	const checkedVoteMemberSingle = useCheckNetwork(
+		voteMemberSingle,
+		sideChain ? config.SIDE_CHAIN_ID : config.CHAIN_ID
+	)
 	const checkedVoteOzLinear = useCheckNetwork(
 		voteOzLinear,
 		sideChain ? config.SIDE_CHAIN_ID : config.CHAIN_ID
@@ -44,6 +49,9 @@ const VotingModal: FunctionComponent<{
 			switch (strategyName) {
 				case "linearVoting":
 					await checkedVoteOzLinear(strategyAddress, proposalId, vote, signer)
+					break
+				case "singleVotingSimpleMembership":
+					await checkedVoteMemberSingle(strategyAddress, proposalId, vote, signer)
 					break
 				case "singleVoting":
 					await checkedVoteOzSingle(strategyAddress, proposalId, vote, signer)

@@ -8,6 +8,7 @@ import {getNonce} from "../../api/ethers/functions/gnosisSafe/safeUtils"
 import getDAO from "../../api/firebase/DAO/getDAO"
 import getSafeProposals from "../../api/firebase/safeProposal/getSafeProposals"
 import getStrategyProposals from "../../api/firebase/strategyProposal/getStrategyProposals"
+import {VOTING_STRATEGIES} from "../../constants/votingStrategies"
 import {ProviderContext} from "../../context/ProviderContext"
 import {SafeProposal} from "../../types/safeProposal"
 import {StrategyProposal} from "../../types/strategyProposal"
@@ -65,10 +66,13 @@ const useProposals = (
 								usulAddress,
 								state,
 								deadline,
-								govTokenAddress: await getStrategyGovTokenAddress(
-									p.strategyAddress,
-									deployType === "usulMulti" ? sideChainProvider : provider
-								),
+								govTokenAddress: VOTING_STRATEGIES.find(s => s.strategy === p.strategyType)
+									?.withToken
+									? await getStrategyGovTokenAddress(
+											p.strategyAddress,
+											deployType === "usulMulti" ? sideChainProvider : provider
+									  )
+									: null,
 								votes: await getProposalVotesSummary(
 									usulAddress,
 									p.id,
