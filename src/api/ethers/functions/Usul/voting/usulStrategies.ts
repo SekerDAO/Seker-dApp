@@ -5,6 +5,7 @@ import {VOTING_STRATEGIES} from "../../../../../constants/votingStrategies"
 import {VotingStrategy} from "../../../../../types/DAO"
 import OZLinearVoting from "../../../abis/OZLinearVoting.json"
 import Usul from "../../../abis/Usul.json"
+import {getStrategyMembers} from "./votingApi"
 
 export const getStrategies = async (
 	usulAddress: string,
@@ -27,6 +28,9 @@ export const getStrategies = async (
 				address,
 				govTokenAddress: VOTING_STRATEGIES.find(s => s.strategy === name)?.withToken
 					? await getStrategyGovTokenAddress(address, provider)
+					: null,
+				members: VOTING_STRATEGIES.find(s => s.strategy === name)?.withMembers
+					? await getStrategyMembers(strategy.address, provider)
 					: null
 			}
 		})

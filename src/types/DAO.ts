@@ -61,6 +61,7 @@ export type VotingStrategy = {
 	quorumThreshold: number
 	address: string
 	govTokenAddress: string | null
+	members: string[] | null
 }
 
 export type UsulFirebaseData = {

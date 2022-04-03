@@ -6,6 +6,7 @@ import {id} from "@ethersproject/hash"
 import {JsonRpcProvider, JsonRpcSigner} from "@ethersproject/providers"
 import {StrategyProposalVote, VOTE_CHOICES} from "../../../../../types/strategyProposal"
 import GovToken from "../../../abis/GovToken.json"
+import MemberLinearVoting from "../../../abis/MemberLinearVoting.json"
 import OZLinearVoting from "../../../abis/OZLinearVoting.json"
 
 export const vote = async (
@@ -108,4 +109,20 @@ export const hasVoted = async (
 ): Promise<boolean> => {
 	const voting = new Contract(strategyAddress, OZLinearVoting.abi, provider)
 	return voting.hasVoted(proposalId, userAddress)
+}
+
+export const getStrategyMembers = async (
+	strategyAddress: string,
+	provider: JsonRpcProvider
+): Promise<string[]> => {
+	const voting = new Contract(strategyAddress, MemberLinearVoting.abi, provider)
+	const addedFilter = voting.filters.MemberAdded()
+	const removedFilter = voting.filters.MemberRemoved()
+	const [addedEvents, removedEvents] = await Promise.all([
+		voting.queryFilter(addedFilter, 0, "latest"),
+		voting.queryFilter(removedFilter, 0, "latest")
+	])
+	const addedMembers = addedEvents.map(e => e.args!.member)
+	const removedMembers = removedEvents.map(e => e.args!.member)
+	return addedMembers.filter(member => !removedMembers.includes(member))
 }

@@ -7,6 +7,10 @@
   max-width: 880px;
   margin-top: 40px;
 
+  h2 {
+    margin-bottom: 20px;
+  }
+
   &__header {
     &-strategy-selector {
       margin-top: 20px;
@@ -22,6 +26,7 @@
 
     &-heading {
       display: flex;
+      align-items: center;
       justify-content: space-between;
       margin-bottom: 20px;
     }

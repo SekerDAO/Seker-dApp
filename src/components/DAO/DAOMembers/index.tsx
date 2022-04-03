@@ -82,54 +82,10 @@ const DAOMembers: FunctionComponent<{
 					</div>
 				)}
 			</div>
-			{(selectedModuleIndex === -1 || selectedStrategy) && (
-				<div className="dao-members__body">
-					{delegateModalOpen && selectedModuleIndex !== -1 && selectedStrategy?.govTokenAddress && (
-						<DelegateTokenModal
-							onClose={() => setDelegateModalOpen(false)}
-							strategy={selectedStrategy}
-							sideChain={dao.usuls[selectedModuleIndex].deployType === "usulMulti"}
-						/>
-					)}
-					<div className="dao-members__body-heading">
-						<div className="dao-members__body-heading-left">
-							<h2>
-								{selectedModuleIndex === -1
-									? "Safe Admins"
-									: VOTING_STRATEGIES.find(s => s.strategy === selectedStrategy?.name)?.title ??
-									  selectedStrategy?.name}
-							</h2>
-							{selectedModuleIndex !== -1 && selectedStrategy && (
-								<p>
-									Voting Token:
-									<Button
-										buttonType="link"
-										onClick={() =>
-											window.open(
-												dao.usuls[selectedModuleIndex].deployType === "usulMulti"
-													? `https://blockscout.com/${
-															config.SIDE_CHAIN_ID === 77 ? "poa/sokol" : "xdai/aox"
-													  }/address/${selectedStrategy.govTokenAddress}/transactions`
-													: `https://${
-															config.CHAIN_ID === 1 ? "" : `${networks[config.CHAIN_ID]}.`
-													  }etherscan.io/address/${selectedStrategy.govTokenAddress}`,
-												"_blank",
-												"noopener,noreferrer"
-											)
-										}
-									>
-										[{formatReadableAddress(selectedStrategy.address)}]
-									</Button>
-								</p>
-							)}
-						</div>
-						<div className="dao-members__body-heading-right">
-							{selectedModuleIndex !== -1 && selectedStrategy?.govTokenAddress && (
-								<Button onClick={() => setDelegateModalOpen(true)}>Delegate Vote</Button>
-							)}
-						</div>
-					</div>
-					{selectedModuleIndex === -1 ? (
+			<div className="dao-members__body">
+				{selectedModuleIndex === -1 ? (
+					<>
+						<h2>Safe Admins</h2>
 						<Table
 							columns={columns}
 							idCol="address"
@@ -137,34 +93,82 @@ const DAOMembers: FunctionComponent<{
 								address: formatReadableAddress(owner)
 							}))}
 						/>
-					) : (
-						<>
-							{selectedStrategy?.govTokenAddress && (
-								<>
-									<a
-										target="_blank"
-										rel="noopener noreferrer"
-										href={
-											dao.usuls[selectedModuleIndex].deployType === "usulMulti"
-												? `https://blockscout.com/${
-														config.SIDE_CHAIN_ID === 77 ? "poa/sokol" : "xdai/aox"
-												  }/token/${selectedStrategy.govTokenAddress}`
-												: `https://${
-														config.CHAIN_ID === 1 ? "" : `${networks[config.CHAIN_ID]}.`
-												  }etherscan.io/token/${selectedStrategy.govTokenAddress}#balances`
-										}
-									>
-										View token holders on Etherscan
-									</a>
-								</>
+					</>
+				) : selectedStrategy ? (
+					<>
+						{delegateModalOpen &&
+							selectedModuleIndex !== -1 &&
+							selectedStrategy?.govTokenAddress && (
+								<DelegateTokenModal
+									onClose={() => setDelegateModalOpen(false)}
+									strategy={selectedStrategy}
+									sideChain={dao.usuls[selectedModuleIndex].deployType === "usulMulti"}
+								/>
 							)}
-							{VOTING_STRATEGIES.find(s => s.strategy === selectedStrategy?.name)?.withMembers && (
-								<div>TODO: Strategy members</div>
-							)}
-						</>
-					)}
-				</div>
-			)}
+						<h2>Voting Token</h2>
+						{selectedModuleIndex !== -1 && selectedStrategy?.govTokenAddress && (
+							<>
+								<div className="dao-members__body-heading">
+									<div className="dao-members__body-heading-left">
+										<p>
+											Voting Token:
+											<Button
+												buttonType="link"
+												onClick={() =>
+													window.open(
+														dao.usuls[selectedModuleIndex].deployType === "usulMulti"
+															? `https://blockscout.com/${
+																	config.SIDE_CHAIN_ID === 77 ? "poa/sokol" : "xdai/aox"
+															  }/address/${selectedStrategy.govTokenAddress}/transactions`
+															: `https://${
+																	config.CHAIN_ID === 1 ? "" : `${networks[config.CHAIN_ID]}.`
+															  }etherscan.io/address/${selectedStrategy.govTokenAddress}`,
+														"_blank",
+														"noopener,noreferrer"
+													)
+												}
+											>
+												[{formatReadableAddress(selectedStrategy.address)}]
+											</Button>
+										</p>
+										<a
+											target="_blank"
+											rel="noopener noreferrer"
+											href={
+												dao.usuls[selectedModuleIndex].deployType === "usulMulti"
+													? `https://blockscout.com/${
+															config.SIDE_CHAIN_ID === 77 ? "poa/sokol" : "xdai/aox"
+													  }/token/${selectedStrategy.govTokenAddress}`
+													: `https://${
+															config.CHAIN_ID === 1 ? "" : `${networks[config.CHAIN_ID]}.`
+													  }etherscan.io/token/${selectedStrategy.govTokenAddress}#balances`
+											}
+										>
+											View token holders on Etherscan
+										</a>
+									</div>
+									<div className="dao-members__body-heading-right">
+										<Button onClick={() => setDelegateModalOpen(true)}>Delegate Vote</Button>
+									</div>
+								</div>
+								{VOTING_STRATEGIES.find(s => s.strategy === selectedStrategy?.name)
+									?.withMembers && (
+									<>
+										<h2>Strategy Members</h2>
+										<Table
+											columns={columns}
+											idCol="address"
+											data={selectedStrategy.members!.map(member => ({
+												address: formatReadableAddress(member)
+											}))}
+										/>
+									</>
+								)}
+							</>
+						)}
+					</>
+				) : null}
+			</div>
 		</div>
 	)
 }
