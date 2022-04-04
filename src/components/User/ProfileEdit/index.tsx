@@ -4,7 +4,12 @@ import editUser from "../../../api/firebase/user/editUser"
 import {AuthContext} from "../../../context/AuthContext"
 import useValidation from "../../../hooks/useValidation"
 import {User} from "../../../types/user"
-import {emailRegex, noSpecialCharsRegex, urlRegexWithoutProtocol} from "../../../utlls"
+import {
+	emailRegex,
+	noSpecialCharsAndSpacesRegex,
+	noSpecialCharsRegex,
+	urlRegexWithoutProtocol
+} from "../../../utlls"
 import Button from "../../Controls/Button"
 import Input from "../../Controls/Input"
 import {toastError, toastSuccess} from "../../UI/Toast"
@@ -31,11 +36,11 @@ const ProfileEdit: FunctionComponent<{
 	])
 	const [twitter, setTwitter] = useState(user.twitter ?? "")
 	const {validation: twitterValidation} = useValidation(twitter, [
-		async val => (!val || noSpecialCharsRegex.test(val) ? null : "Not a valid twitter")
+		async val => (!val || noSpecialCharsAndSpacesRegex.test(val) ? null : "Not a valid twitter")
 	])
 	const [instagram, setInstagram] = useState(user.instagram ?? "")
 	const {validation: instagramValidation} = useValidation(instagram, [
-		async val => (!val || noSpecialCharsRegex.test(val) ? null : "Not a valid instagram")
+		async val => (!val || noSpecialCharsAndSpacesRegex.test(val) ? null : "Not a valid instagram")
 	])
 
 	const [processing, setProcessing] = useState(false)
@@ -47,7 +52,7 @@ const ProfileEdit: FunctionComponent<{
 			throw new Error("Account not connected")
 		}
 		if (!val) return null
-		if (!noSpecialCharsRegex.test(val)) {
+		if (!noSpecialCharsAndSpacesRegex.test(val)) {
 			return "Not a valid value for URL"
 		}
 		const res = await checkUserUrl(val, account)

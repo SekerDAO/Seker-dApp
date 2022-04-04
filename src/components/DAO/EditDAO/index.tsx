@@ -2,7 +2,11 @@ import {FunctionComponent, useState} from "react"
 import editDAO from "../../../api/firebase/DAO/editDAO"
 import useValidation from "../../../hooks/useValidation"
 import {DAOFirebaseData} from "../../../types/DAO"
-import {noSpecialCharsRegex, urlRegexWithoutProtocol} from "../../../utlls"
+import {
+	noSpecialCharsAndSpacesRegex,
+	noSpecialCharsRegex,
+	urlRegexWithoutProtocol
+} from "../../../utlls"
 import Button from "../../Controls/Button"
 import Input from "../../Controls/Input"
 import {toastError, toastSuccess} from "../../UI/Toast"
@@ -25,15 +29,15 @@ const EditDAO: FunctionComponent<{
 	])
 	const [twitter, setTwitter] = useState(dao.twitter ?? "")
 	const {validation: twitterValidation} = useValidation(twitter, [
-		async val => (!val || noSpecialCharsRegex.test(val) ? null : "Not a valid twitter")
+		async val => (!val || noSpecialCharsAndSpacesRegex.test(val) ? null : "Not a valid twitter")
 	])
 	const [telegram, setTelegram] = useState(dao.telegram ?? "")
 	const {validation: telegramValidation} = useValidation(telegram, [
-		async val => (!val || noSpecialCharsRegex.test(val) ? null : "Not a valid telegram")
+		async val => (!val || noSpecialCharsAndSpacesRegex.test(val) ? null : "Not a valid telegram")
 	])
 	const [discord, setDiscord] = useState(dao.discord ?? "")
 	const {validation: discordValidation} = useValidation(twitter, [
-		async val => (!val || noSpecialCharsRegex.test(val) ? null : "Not a valid discord")
+		async val => (!val || noSpecialCharsAndSpacesRegex.test(val) ? null : "Not a valid discord")
 	])
 
 	const handleSave = async () => {

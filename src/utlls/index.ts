@@ -130,7 +130,9 @@ export const urlRegex =
 
 export const emailRegex = /^\s*[\w.-]+@[\w.-]+\.\w+\s*$/
 
-export const noSpecialCharsRegex = /^[a-zA-Z\d_-]*$/
+export const noSpecialCharsAndSpacesRegex = /^[a-zA-Z\d_-]*$/
+
+export const noSpecialCharsRegex = /^[a-zA-Z\d\s_-]*$/
 
 export const urlRegexWithoutProtocol =
 	/^[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/

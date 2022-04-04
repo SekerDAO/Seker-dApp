@@ -118,6 +118,7 @@ const CreateStrategyProposal: FunctionComponent<{
 					setTitle(e.target.value)
 				}}
 				value={title}
+				validation={validation}
 			/>
 			<label htmlFor="change-role-desc">Description</label>
 			<Input
