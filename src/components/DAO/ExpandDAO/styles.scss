@@ -65,13 +65,16 @@
       margin: 20px 0 auto 0;
     }
 
+    button {
+      align-self: stretch;
+    }
+
     &-buttons {
       display: flex;
       justify-content: space-around;
       width: 100%;
 
       button {
-        align-self: stretch;
         width: calc(50% - 5px);
       }
     }
