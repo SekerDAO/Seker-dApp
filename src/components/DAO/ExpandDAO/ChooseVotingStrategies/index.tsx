@@ -63,7 +63,7 @@ const ChooseVotingStrategies: FunctionComponent<{
 				quorumThreshold >= 2 &&
 				votingPeriod &&
 				!isNaN(votingPeriod) &&
-				votingPeriod >= 2 &&
+				votingPeriod >= 0 &&
 				signer
 			)
 		) {
