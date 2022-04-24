@@ -19,7 +19,7 @@ const buildBridgeTx = async (
 	return buildContractCall(
 		amb,
 		"requireToPassMessage",
-		[bridgeAddress, bridgeCall.data, 5000000],
+		[bridgeAddress, bridgeCall.data, 3000000],
 		0
 	)
 }
