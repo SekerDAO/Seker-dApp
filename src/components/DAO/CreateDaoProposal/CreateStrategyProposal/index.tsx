@@ -58,7 +58,7 @@ const CreateStrategyProposal: FunctionComponent<{
 			const proposalId = await checkedSubmitProposal(
 				usulAddress,
 				strategyAddress,
-				usulDeployType === "usulMulti" && sideChain
+				usulDeployType === "usulMulti" && !sideChain
 					? [
 							await buildBridgeTx(
 								await buildMultiSendTx(txs, gnosisAddress, undefined, false, true),
