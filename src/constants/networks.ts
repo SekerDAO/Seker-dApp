@@ -17,7 +17,7 @@ export const NETWORK_LOGOS: Record<string, string> = {
 	mainnet: mainnetLogo,
 	kovan: kovanLogo,
 	sokol: sokolLogo,
-	gnosis: gnosisLogo
+	dai: gnosisLogo
 }
 
 export const NETWORK_LOGOS_SMALL: Record<string, string> = {
