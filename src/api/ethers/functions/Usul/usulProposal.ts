@@ -86,6 +86,8 @@ export const getProposalState = async (
 					return {state: "active", deadline: deadline.toNumber()}
 				}
 				// TODO: side chain provider doesn't provide meaningful info
+				// TODO: looks like a provider issue, if you fetch the state right after proposal changes
+				// its state to "pending", you get this error
 				return {state: "failed"}
 			}
 		}
