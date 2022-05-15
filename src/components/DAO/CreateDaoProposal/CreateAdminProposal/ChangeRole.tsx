@@ -17,7 +17,7 @@ import Button from "../../../Controls/Button"
 import Input from "../../../Controls/Input"
 import Select from "../../../Controls/Select"
 import ErrorPlaceholder from "../../../UI/ErrorPlaceholder"
-import Loader from "../../../UI/Loader"
+import Loader from "../../../UI/Skeleton"
 import {toastError, toastSuccess} from "../../../UI/Toast"
 
 const ChangeRole: FunctionComponent<{

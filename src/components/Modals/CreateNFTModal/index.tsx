@@ -3,7 +3,7 @@ import useUser from "../../../hooks/getters/useUser"
 import Button from "../../Controls/Button"
 import CreateNFTForm from "../../CreateNFTForm"
 import ErrorPlaceholder from "../../UI/ErrorPlaceholder"
-import Loader from "../../UI/Loader"
+import Loader from "../../UI/Skeleton"
 import Modal from "../Modal"
 
 const CreateNFTModal: FunctionComponent<{

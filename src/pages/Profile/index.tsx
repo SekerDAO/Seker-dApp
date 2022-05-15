@@ -12,12 +12,13 @@ import NFTGallery from "../../components/NFTGallery"
 import DashboardHeader from "../../components/UI/DashboardHeader"
 import DashboardMenu from "../../components/UI/DashboardMenu"
 import ErrorPlaceholder from "../../components/UI/ErrorPlaceholder"
-import Loader from "../../components/UI/Loader"
 import ProfileDAOs from "../../components/User/ProfileDAOs"
 import ProfileEdit from "../../components/User/ProfileEdit"
 import {AuthContext} from "../../context/AuthContext"
 import useUser from "../../hooks/getters/useUser"
+import {UserWithAccount} from "../../types/user"
 import {formatReadableAddress} from "../../utlls"
+import ProfileSkeleton from "./ProfileSkeleton"
 import "./styles.scss"
 
 type ProfilePage = "nfts" | "edit" | "daos" | "profile"
@@ -40,7 +41,7 @@ const Profile: FunctionComponent = () => {
 	const page: ProfilePage = (isOwner && (parse(search).page as ProfilePage)) || "nfts"
 
 	if (error) return <ErrorPlaceholder />
-	if (!user) return <Loader />
+	if (!user) return <ProfileSkeleton />
 
 	const updateGallery = () => {
 		setGalleryKey(Math.random())
@@ -60,13 +61,13 @@ const Profile: FunctionComponent = () => {
 
 	return (
 		<>
-			<DashboardHeader background={user.headerImage}>
+			<DashboardHeader background={user?.headerImage}>
 				{isOwner && page === "edit" && (
 					<UploadImageModal
 						titleText="Edit Header Image"
 						buttonName="Edit Header"
 						onUpload={handleUploadHeaderImage}
-						initialUrl={user.headerImage}
+						initialUrl={user?.headerImage}
 						successToastText="Header image successfully updated!"
 						errorToastText="Failed to update header image"
 					/>
@@ -77,9 +78,9 @@ const Profile: FunctionComponent = () => {
 					<div
 						className="profile__photo"
 						style={
-							user.profileImage
+							user?.profileImage
 								? {
-										backgroundImage: `url("${user.profileImage}")`
+										backgroundImage: `url("${user?.profileImage}")`
 								  }
 								: {}
 						}
@@ -89,40 +90,40 @@ const Profile: FunctionComponent = () => {
 								titleText="Edit Profile Image"
 								buttonName="Edit Image"
 								onUpload={handleUploadProfileImage}
-								initialUrl={user.profileImage}
+								initialUrl={user?.profileImage}
 								successToastText="Image successfully updated!"
 								errorToastText="Failed to update image"
 							/>
 						)}
 					</div>
 					<div className="profile__info">
-						<h2>{user.name || "Unnamed user"}</h2>
-						<p>{formatReadableAddress(user.account)}</p>
-						<p>{user.location}</p>
-						<a target="_blank" rel="noopener noreferrer" href={`mailto:${user.email}`}>
-							{user.email}
+						<h2>{user?.name || "Unnamed user"}</h2>
+						<p>{formatReadableAddress(user?.account)}</p>
+						<p>{user?.location}</p>
+						<a target="_blank" rel="noopener noreferrer" href={`mailto:${user?.email}`}>
+							{user?.email}
 						</a>
-						{user.website && (
-							<a href={`https://${user.website}`} target="_blank" rel="noopener noreferrer">
-								{user.website}
+						{user?.website && (
+							<a href={`https://${user?.website}`} target="_blank" rel="noopener noreferrer">
+								{user?.website}
 							</a>
 						)}
-						<p>{user.bio}</p>
+						<p>{user?.bio}</p>
 						<div className="profile__socials">
-							{user.twitter && (
+							{user?.twitter && (
 								<a
 									target="_blank"
 									rel="noopener noreferrer"
-									href={`https://twitter.com/${user.twitter}`}
+									href={`https://twitter.com/${user?.twitter}`}
 								>
 									<TwitterIcon width="24px" height="20px" />
 								</a>
 							)}
-							{user.instagram && (
+							{user?.instagram && (
 								<a
 									target="_blank"
 									rel="noopener noreferrer"
-									href={`https://instagram.com/${user.twitter}`}
+									href={`https://instagram.com/${user?.twitter}`}
 								>
 									<InstagramIcon width="24px" height="20px" />
 								</a>
@@ -160,19 +161,19 @@ const Profile: FunctionComponent = () => {
 						{page === "nfts" && isOwner && userAccount && (
 							<div className="profile__edit-buttons">
 								<CreateCustomDomainModal afterCreate={refetch} />
-								<CreateNFTModal afterCreate={updateGallery} account={userAccount} />
+								<CreateNFTModal afterCreate={updateGallery} account={userAccount as string} />
 							</div>
 						)}
 						{["nfts", "profile"].includes(page) && (
 							<NFTGallery
 								key={galleryKey}
-								account={user.account}
+								account={user?.account as string}
 								canDelete={isOwner && page === "nfts"}
 							/>
 						)}
 						{page === "edit" && (
 							<ProfileEdit
-								user={user}
+								user={user as UserWithAccount}
 								afterSubmit={() => {
 									refetch()
 									push(pathname)
