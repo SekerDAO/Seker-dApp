@@ -62,12 +62,12 @@ const CreateCustomDomainModal: FunctionComponent<{
 				title={success ? "Success!" : "Create a Custom Domain"}
 				warningMessages={
 					success
-						? [
+						? undefined
+						: [
 								`This request will incur a gas fee. If you would like to proceed, please click "Submit" below.`
 						  ]
-						: undefined
 				}
-				onSubmit={handleSubmit}
+				onSubmit={success ? undefined : handleSubmit}
 				submitButtonDisabled={!(name && symbol) || loading}
 				submitButtonText={success ? undefined : loading ? "Processing..." : "Submit"}
 			>
