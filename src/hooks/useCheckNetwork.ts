@@ -15,20 +15,45 @@ const useCheckNetwork = <T extends unknown[], R>(
 		if (!externalProvider) {
 			throw new Error("No wallet connected")
 		}
-		const isRinkeby = requiredChainId === 4
+		let requiredChainIdHex = BigNumber.from(requiredChainId).toHexString()
+		if (requiredChainIdHex.startsWith("0x0")) {
+			requiredChainIdHex = `0x${requiredChainIdHex.slice(3)}`
+		}
 		try {
 			await externalProvider.request!({
 				method: "wallet_switchEthereumChain",
 				params: [
 					{
-						// TODO: revisit this part when we will be supporting more networks
-						chainId: isRinkeby ? "0x4" : BigNumber.from(requiredChainId).toHexString()
+						chainId: requiredChainIdHex
 					}
 				]
 			})
 		} catch (e) {
-			open()
-			throw e
+			if (requiredChainId === 100) {
+				try {
+					await externalProvider.request!({
+						method: "wallet_addEthereumChain",
+						params: [
+							{
+								chainId: requiredChainIdHex,
+								chainName: "Gnosis Chain (formerly xDai)",
+								nativeCurrency: {
+									symbol: "xDAI",
+									decimals: 18
+								},
+								rpcUrls: ["https://rpc.gnosischain.com"],
+								blockExplorerUrls: ["https://blockscout.com/xdai/mainnet"]
+							}
+						]
+					})
+				} catch (err) {
+					open()
+					throw err
+				}
+			} else {
+				open()
+				throw e
+			}
 		}
 		return func(...args)
 	}

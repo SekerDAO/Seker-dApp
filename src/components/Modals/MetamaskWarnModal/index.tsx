@@ -23,25 +23,31 @@ const MetamaskWarnModal: FunctionComponent = () => {
 					steps below:
 				</p>
 				<div className="metamask-warning__details">
-					<h3>Add the Sokol Testnet on MetaMask</h3>
+					<h3>Add the Gnosis Chain on MetaMask</h3>
 					<div className="metamask-warning__details-settings">
 						<p>
-							Step 1: <br />
+							<b>Step 1:</b> <br />
 							Open up MetaMask. Under the network dropdown at the top, click on {"Add Network"}.
 						</p>
 						<p>
-							Step 2:
+							<b>Step 2:</b>
 							<br /> Complete the form with the following information and click {"Save"}:
 						</p>
 						<ul>
 							<li>
-								<b>Network Name:</b> Sokol
+								<b>Network Name:</b> Gnosis Chain (formerly xDai)
 							</li>
 							<li>
-								<b>New RPC URL:</b> https://sokol.poa.network/
+								<b>New RPC URL:</b> https://rpc.gnosischain.com
 							</li>
 							<li>
-								<b>Chain ID:</b> 77
+								<b>Chain ID:</b> 100
+							</li>
+							<li>
+								<b>Currency Symbol:</b> xDAI
+							</li>
+							<li>
+								<b>Block Explorer URL:</b> https://blockscout.com/poa/sokol
 							</li>
 						</ul>
 					</div>
