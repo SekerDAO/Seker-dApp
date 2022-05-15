@@ -1,0 +1,11 @@
+@import "src/variables";
+
+.error-placeholder {
+  width: 100%;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  color: $error;
+  font-size: 32px;
+}

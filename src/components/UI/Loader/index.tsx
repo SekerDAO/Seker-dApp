@@ -1,6 +1,23 @@
 import {FunctionComponent} from "react"
+import "./styles.scss"
 
-// TODO
-const Loader: FunctionComponent = () => <div>Loading...</div>
+const Loader: FunctionComponent = () => (
+	<div className="loader">
+		<div className="lds-default">
+			<div />
+			<div />
+			<div />
+			<div />
+			<div />
+			<div />
+			<div />
+			<div />
+			<div />
+			<div />
+			<div />
+			<div />
+		</div>
+	</div>
+)
 
 export default Loader

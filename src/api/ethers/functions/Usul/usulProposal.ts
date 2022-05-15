@@ -86,7 +86,6 @@ export const getProposalState = async (
 					return {state: "active", deadline: deadline.toNumber()}
 				}
 				// TODO: side chain provider doesn't provide meaningful info
-				// throw e
 				return {state: "failed"}
 			}
 		}
