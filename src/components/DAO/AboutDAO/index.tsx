@@ -8,6 +8,7 @@ import {formatReadableAddress} from "../../../utlls"
 import Button from "../../Controls/Button"
 import Expandable from "../../UI/Expandable"
 import Paper from "../../UI/Paper"
+import {toastWarning} from "../../UI/Toast"
 import "./styles.scss"
 
 const AboutDAO: FunctionComponent<{
@@ -19,7 +20,13 @@ const AboutDAO: FunctionComponent<{
 				<h3>DAO Treasury</h3>
 				<p>$ TODO</p>
 			</div>
-			<Button buttonType="primary" onClick={() => console.log("TODO: Implement me")}>
+			{/* TODO */}
+			<Button
+				buttonType="primary"
+				onClick={() => {
+					toastWarning("Not implemented yet")
+				}}
+			>
 				View Assets
 			</Button>
 		</div>
