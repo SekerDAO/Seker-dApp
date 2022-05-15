@@ -105,9 +105,9 @@ const DAOMembers: FunctionComponent<{
 									sideChain={dao.usuls[selectedModuleIndex].deployType === "usulMulti"}
 								/>
 							)}
-						<h2>Voting Token</h2>
 						{selectedModuleIndex !== -1 && selectedStrategy?.govTokenAddress && (
 							<>
+								<h2>Voting Token</h2>
 								<div className="dao-members__body-heading">
 									<div className="dao-members__body-heading-left">
 										<p>
@@ -151,19 +151,18 @@ const DAOMembers: FunctionComponent<{
 										<Button onClick={() => setDelegateModalOpen(true)}>Delegate Vote</Button>
 									</div>
 								</div>
-								{VOTING_STRATEGIES.find(s => s.strategy === selectedStrategy?.name)
-									?.withMembers && (
-									<>
-										<h2>Strategy Members</h2>
-										<Table
-											columns={columns}
-											idCol="address"
-											data={selectedStrategy.members!.map(member => ({
-												address: formatReadableAddress(member)
-											}))}
-										/>
-									</>
-								)}
+							</>
+						)}
+						{VOTING_STRATEGIES.find(s => s.strategy === selectedStrategy?.name)?.withMembers && (
+							<>
+								<h2>Strategy Members</h2>
+								<Table
+									columns={columns}
+									idCol="address"
+									data={selectedStrategy.members!.map(member => ({
+										address: formatReadableAddress(member)
+									}))}
+								/>
 							</>
 						)}
 					</>
