@@ -1,6 +1,8 @@
 import {FunctionComponent} from "react"
+import "./styles.scss"
 
-// TODO
-const ErrorPlaceholder: FunctionComponent = () => <div>Error!</div>
+const ErrorPlaceholder: FunctionComponent = () => (
+	<div className="error-placeholder">Something went wrong.</div>
+)
 
 export default ErrorPlaceholder

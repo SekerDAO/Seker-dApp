@@ -28,7 +28,7 @@ const AddUsulStrategiesModal: FunctionComponent<{
 			submitButtonDisabled={submitButtonDisabled}
 		>
 			<div className="add-usul-strategies-modal">
-				<p>TODO: some description here</p>
+				<p>Add Usul Strategies</p>
 				<div className="add-usul-strategies-modal__input">
 					<label htmlFor="add-strategies-strategy">Voting Strategy</label>
 					<Select

@@ -62,9 +62,12 @@ const DeployUsulTypeModal: FunctionComponent<{
 			title="Select Usul Deployment Type"
 			onSubmit={handleSubmit}
 			submitButtonDisabled={submitButtonDisabled}
+			submitButtonText="Continue"
+			warningMessages={[
+				`After you select "Continue" below, you will be prompted to switch networks in your wallet's popup window if you are not on the correct one.`
+			]}
 		>
 			<div className="deploy-usul-type-modal">
-				<p>TODO: some description here</p>
 				<div className="deploy-usul-type-modal__input deploy-usul-type-modal__input--select">
 					<label htmlFor="expand-dao-module">Module</label>
 					<Select

@@ -109,7 +109,7 @@ const NftDetails: FunctionComponent = () => {
 					<div className="nft__main">
 						<div className="nft__image">
 							{nft.media.mimeType.startsWith("video") ? (
-								<video src={nft.thumbnail} autoPlay muted />
+								<video src={nft.thumbnail} autoPlay muted loop />
 							) : (
 								<img src={nft.thumbnail} />
 							)}

@@ -4,7 +4,7 @@ import {ReactComponent as DiscordGrayscale} from "../../assets/icons/discord-gra
 import {ReactComponent as GitHubGrayscale} from "../../assets/icons/github-grayscale.svg"
 import {ReactComponent as Logo} from "../../assets/icons/logo-white.svg"
 import {ReactComponent as MediumGrayscale} from "../../assets/icons/medium-grayscale.svg"
-import {ReactComponent as TelegramGrayscale} from "../../assets/icons/telegram-grayscale.svg"
+// import {ReactComponent as TelegramGrayscale} from "../../assets/icons/telegram-grayscale.svg"
 import {ReactComponent as TwitterGrayscale} from "../../assets/icons/twitter-grayscale.svg"
 import Divider from "../UI/Divider"
 import "./styles.scss"
@@ -44,9 +44,9 @@ const Footer: FunctionComponent = () => (
 						<DiscordGrayscale width="24px" height="20px" />
 					</a>
 					{/* TODO: Add link for Telegram once we will set it up. Keep icon for now to match the design */}
-					<a target="_blank" rel="noopener noreferrer">
-						<TelegramGrayscale width="24px" height="20px" />
-					</a>
+					{/*<a target="_blank" rel="noopener noreferrer">*/}
+					{/*	<TelegramGrayscale width="24px" height="20px" />*/}
+					{/*</a>*/}
 					<a target="_blank" rel="noopener noreferrer" href="https://github.com/SekerDAO">
 						<GitHubGrayscale width="24px" height="20px" />
 					</a>

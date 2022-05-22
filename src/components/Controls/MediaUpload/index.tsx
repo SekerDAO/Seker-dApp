@@ -1,4 +1,5 @@
 import {FunctionComponent, useRef, useState} from "react"
+import {ReactComponent as VideoIcon} from "../../../assets/icons/video.svg"
 import {imageTypes, videoTypes} from "../../../constants/mimeTypes"
 import useFileDrop from "../../../hooks/useFileDrop"
 import {toastError} from "../../UI/Toast"
@@ -55,8 +56,15 @@ const MediaUpload: FunctionComponent<{
 				<label>Upload File</label>
 			</Button>
 			<div className={`image-upload__preview${imageUrl ? "" : " image-upload__preview--empty"}`}>
-				{imageUrl ? <img src={imageUrl} /> : "Drop File Here"}
-				{isVideo && <div className="image-upload__icon">TODO: video icon</div>}
+				{imageUrl ? (
+					<img src={imageUrl} />
+				) : isVideo ? (
+					<div className="image-upload__icon">
+						<VideoIcon />
+					</div>
+				) : (
+					"Drop File Here"
+				)}
 			</div>
 		</label>
 	)

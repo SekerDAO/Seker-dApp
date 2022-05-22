@@ -17,9 +17,10 @@ export const NETWORK_LOGOS: Record<string, string> = {
 	mainnet: mainnetLogo,
 	kovan: kovanLogo,
 	sokol: sokolLogo,
-	gnosis: gnosisLogo
+	dai: gnosisLogo
 }
 
+// TODO: add mainnet, dai
 export const NETWORK_LOGOS_SMALL: Record<string, string> = {
 	kovan: kovanLogoSmall,
 	sokol: sokolLogoSmall

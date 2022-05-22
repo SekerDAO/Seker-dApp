@@ -197,10 +197,11 @@ const StrategyProposalContent: FunctionComponent<{id: string}> = ({id}) => {
 		setProcessing(false)
 	}
 
-	// TODO: add members check for members strats
 	const voteDisabled =
-		!(connected && proposal.state === "active") ||
+		!(connected && account && proposal.state === "active") ||
 		(!!proposal.govTokenAddress && !delegatee) ||
+		(proposal.members &&
+			!proposal.members.map(m => m.toLowerCase()).includes(account.toLowerCase())) ||
 		userHasVoted
 
 	return (

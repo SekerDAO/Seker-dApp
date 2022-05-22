@@ -4,7 +4,7 @@ import {
 	getProposalVotesSummary
 } from "../../api/ethers/functions/Usul/usulProposal"
 import {getStrategyGovTokenAddress} from "../../api/ethers/functions/Usul/voting/usulStrategies"
-import {hasVoted} from "../../api/ethers/functions/Usul/voting/votingApi"
+import {getStrategyMembers, hasVoted} from "../../api/ethers/functions/Usul/voting/votingApi"
 import getDAO from "../../api/firebase/DAO/getDAO"
 import getStrategyProposal from "../../api/firebase/strategyProposal/getStrategyProposal"
 import {VOTING_STRATEGIES} from "../../constants/votingStrategies"
@@ -15,7 +15,13 @@ import {StrategyProposal} from "../../types/strategyProposal"
 const useStrategyProposal = (
 	id: string
 ): {
-	proposal: (StrategyProposal & {proposalId: string; usulBridgeAddress?: string}) | null
+	proposal:
+		| (StrategyProposal & {
+				proposalId: string
+				usulBridgeAddress?: string
+				members: string[] | null
+		  })
+		| null
 	userHasVoted: boolean
 	loading: boolean
 	error: boolean
@@ -23,7 +29,12 @@ const useStrategyProposal = (
 	refetch: () => Promise<void>
 } => {
 	const [proposal, setProposal] = useState<
-		(StrategyProposal & {proposalId: string; usulBridgeAddress?: string}) | null
+		| (StrategyProposal & {
+				proposalId: string
+				usulBridgeAddress?: string
+				members: string[] | null
+		  })
+		| null
 	>(null)
 	const [userHasVoted, setUserHasVoted] = useState(false)
 	const [multiChain, setMultiChain] = useState(false)
@@ -60,6 +71,12 @@ const useStrategyProposal = (
 				govTokenAddress: VOTING_STRATEGIES.find(s => s.strategy === proposalData.strategyType)
 					?.withToken
 					? await getStrategyGovTokenAddress(
+							proposalData.strategyAddress,
+							usul.deployType === "usulMulti" ? sideChainProvider : provider
+					  )
+					: null,
+				members: VOTING_STRATEGIES.find(s => s.strategy === proposalData.strategyType)?.withMembers
+					? await getStrategyMembers(
 							proposalData.strategyAddress,
 							usul.deployType === "usulMulti" ? sideChainProvider : provider
 					  )

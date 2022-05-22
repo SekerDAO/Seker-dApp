@@ -19,7 +19,7 @@ const ProposalHeader: FunctionComponent<{
 	const [currentDate, setCurrentDate] = useState(new Date().getTime())
 	const updateDate = () => {
 		setCurrentDate(new Date().getTime())
-		if (!isAdminProposal && refetch && proposal.deadline! * 1000 < new Date().getTime()) {
+		if (!isAdminProposal && refetch && proposal.deadline! * 1000 < new Date().getTime() - 5000) {
 			refetch()
 		}
 	}
@@ -44,7 +44,7 @@ const ProposalHeader: FunctionComponent<{
 						: ""
 				}${
 					timeDiff.days === 0 && timeDiff.hours === 0 && timeDiff.minutes < 10
-						? `${timeDiff.minutes > 0 ? ", " : ""}${timeDiff.seconds} Seconds`
+						? `${timeDiff.minutes > 0 ? ", " : ""}${Math.max(0, timeDiff.seconds)} Seconds`
 						: ""
 				} Left`}</span>
 			</>

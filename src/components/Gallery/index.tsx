@@ -30,7 +30,11 @@ const GalleryItem: FunctionComponent<NFTGalleryItemProps> = ({
 							<CloseIcon />
 						</div>
 					)}
-					{isVideo ? <video src={thumbnail} autoPlay muted /> : <img src={thumbnail} alt={name} />}
+					{isVideo ? (
+						<video src={thumbnail} autoPlay muted loop />
+					) : (
+						<img src={thumbnail} alt={name} />
+					)}
 				</Link>
 			</div>
 
