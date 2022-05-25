@@ -9,7 +9,6 @@ import Select from "../Controls/Select"
 import Gallery from "../Gallery"
 import ConfirmationModal from "../Modals/ConfirmationModal"
 import ErrorPlaceholder from "../UI/ErrorPlaceholder"
-import Loader from "../UI/Loader"
 import {toastError, toastSuccess} from "../UI/Toast"
 
 const NFTGallery: FunctionComponent<{
@@ -24,7 +23,6 @@ const NFTGallery: FunctionComponent<{
 	const {NFTs, loading, error} = useNFTs({user: account, after: cursor, sort})
 
 	if (error) return <ErrorPlaceholder />
-	if (loading) return <Loader />
 
 	const handleLoadMore = () => {
 		setCursor(NFTs.data[NFTs.data.length - 1])
@@ -64,7 +62,7 @@ const NFTGallery: FunctionComponent<{
 				/>
 			)}
 			<div className="profile__controls">
-				<SearchInput />
+				<SearchInput disabled={loading} />
 				<Select<string>
 					value={sort}
 					placeholder="Sort By"
@@ -75,9 +73,11 @@ const NFTGallery: FunctionComponent<{
 						{name: "Name (Z-A)", value: "nameDesc"}
 					]}
 					onChange={handleSortChange}
+					disabled={loading}
 				/>
 			</div>
 			<Gallery
+				loading={loading}
 				items={NFTs.data
 					.filter(doc => !deletedNfts.includes(doc.id))
 					.map(doc => {

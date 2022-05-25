@@ -5,8 +5,8 @@ import {isSafeProposal, SafeProposal, SafeProposalState} from "../../../types/sa
 import {StrategyProposal, StrategyProposalState} from "../../../types/strategyProposal"
 import Select from "../../Controls/Select"
 import ErrorPlaceholder from "../../UI/ErrorPlaceholder"
-import Loader from "../../UI/Loader"
 import Paper from "../../UI/Paper"
+import Loader from "../../UI/Skeleton"
 import ProposalHeader from "../Proposal/ProposalHeader"
 import "./styles.scss"
 
